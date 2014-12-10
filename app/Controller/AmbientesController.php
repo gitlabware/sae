@@ -10,78 +10,58 @@ class AmbientesController extends AppController {
         $this->Auth->allow();
     }
     public function index() {
-        $edificios = $this->Ambiente->find('all');
-        $this->set(compact('edificios'));
+        $ambientes = $this->Ambiente->find('all');
+        $this->set(compact('ambientes'));
     }
-    public function edificio($idEdificio = null) {
+    public function edificio($idEdificio = NULL)
+    {
+        $edificio = $this->Edificio->findByid($idEdificio,NULL,NULL,-1);
+        $pisos = $this->Piso->find('all',array('conditions' => array('Piso.edificio_id' => $idEdificio)));
+        $this->set(compact('pisos','edificio'));
+    }
+    public function get_ambientes($idEdificio = NULL,$idPiso = NULL)
+    {
+        return $this->Ambiente->find('all',array(
+            'recursive' => -1,'order' => 'Ambiente.id ASC',
+            'conditions' => array('Ambiente.edificio_id' => $idEdificio,'Ambiente.piso_id' => $idPiso)
+            ));
+    }
+
+    public function ambiente($idPiso = null,$idAmbiente = null) {
         $this->layout = 'ajax';
-        $this->Edificio->id = $idEdificio;
-        $this->request->data = $this->Edificio->read();
+        $this->Ambiente->id = $idAmbiente;
+        $this->request->data = $this->Ambiente->read();
         $catambientes = $this->Categoriasambiente->find('list',array('fields' => 'Categoriasambiente.nombre'));
-        $this->set(compact('catambientes'));
+        $piso = $this->Piso->findByid($idPiso);
+        $this->set(compact('catambientes','piso'));
     }
-    public function guarda_edificio() {
+    public function guarda_ambiente() {
         if (!empty($this->request->data)) {
-            $this->Edificio->create();
-            $valida = $this->validar('Edificio');
+            $this->Ambiente->create();
+            $valida = $this->validar('Ambiente');
             if (empty($valida)) {
-                if ($this->Edificio->save($this->request->data['Edificio'])) {
-                    if(empty($this->request->data['Edificio']['id']))
-                    {
-                        $idEdificio = $this->Edificio->getLastInsertID();
-                        $this->genera_pisos($idEdificio);
-                    }
+                if ($this->Ambiente->save($this->request->data['Ambiente'])) {
+                    
                     $this->Session->setFlash('Se registro correctamente los datos!!!', 'msgbueno');
                 } else {
-                    $this->Session->setFlash('NO se pudo registrar los datos del edificio!!!', 'msgerror');
+                    $this->Session->setFlash('NO se pudo registrar los datos del ambiente!!!', 'msgerror');
                 }
             } else {
                 $this->Session->setFlash($valida, 'msgerror');
             }
         } else {
-            $this->Session->setFlash('NO se pudo registrar los datos del edificio!!!', 'msgerror');
+            $this->Session->setFlash('NO se pudo registrar los datos del ambiente!!!', 'msgerror');
         }
-        $this->redirect(array('action' => 'index'));
+        $this->redirect($this->referer());
     }
-    //genera los pisos con sus respectivos ambientes cuando es nuevo
-    public function genera_pisos($idEdificio = NULL)
-    {
-        $nro_pisos = $this->request->data['Edificio']['pisos'];
-        $nro_ambientes = $this->request->data['Edificio']['ambientes'];
-        $a_util = $this->request->data['Edificio']['area_util'];
-        $a_comun = $this->request->data['Edificio']['area_comun'];
-        $catambiente = $this->request->data['Edificio']['categoriasambiente_id'];
-        for($i=1;$i<=$nro_pisos;$i++)
-        {
-            $this->Piso->create();
-            $this->request->data['Piso']['nombre'] = "P".$i;
-            $this->request->data['Piso']['edificio_id'] = $idEdificio;
-            $this->Piso->save($this->request->data['Piso']);
-            $idPiso = $this->Piso->getLastInsertID();
-            $this->genera_ambientes($idEdificio,$idPiso, $nro_ambientes,$a_util,$a_comun,$catambiente);
-        }
-    }
-    public function genera_ambientes($idEdificio = null, $idPiso = null, $numero = null,$a_util = null,$a_comun = null,$catambiente = NULL)
-    {
-        for($i=1;$i<=$numero;$i++)
-        {
-            $this->Ambiente->create();
-            $this->request->data['Ambiente']['categoriasambiente_id'] = $catambiente;
-            $this->request->data['Ambiente']['edificio_id'] = $idEdificio;
-            $this->request->data['Ambiente']['piso_id'] = $idPiso;
-            $this->request->data['Ambiente']['nombre'] = "A".$i;
-            $this->request->data['Ambiente']['area_util'] = $a_util;
-            $this->request->data['Ambiente']['area_comun'] = $a_comun;
-            $this->Ambiente->save($this->request->data['Ambiente']);
-        }
-    }
-    public function eliminar($idEdificio = null) {
-        if ($this->Edificio->delete($idEdificio)) {
+    public function eliminar($idAmbiente = null) {
+        if ($this->Ambiente->delete($idAmbiente)) {
             $this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
         } else {
-            $this->Session->setFlash('No se pudo eliminar, verifique que el edificio exista!!!', 'msgerror');
+            $this->Session->setFlash('No se pudo eliminar, verifique que el ambiente exista!!!', 'msgerror');
         }
-        $this->redirect(array('action' => 'index'));
+        $this->redirect($this->referer());
     }
+    
 }
 
