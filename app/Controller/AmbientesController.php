@@ -2,7 +2,7 @@
 App::uses('AppController', 'Controller');
 class AmbientesController extends AppController {
 
-    public $uses = array('Edificio','Piso','Ambiente','Categoriasambiente');
+    public $uses = array('Edificio','Piso','Ambiente','Categoriasambiente','Categoriaspago','User');
     public $layout = 'sae';
 
     public function beforeFilter() {
@@ -32,8 +32,11 @@ class AmbientesController extends AppController {
         $this->Ambiente->id = $idAmbiente;
         $this->request->data = $this->Ambiente->read();
         $catambientes = $this->Categoriasambiente->find('list',array('fields' => 'Categoriasambiente.nombre'));
+        $catpagos = $this->Categoriaspago->find('list',array('fields' => 'Categoriaspago.nombre'));
+        $usuarios = $this->User->find('list',array('fields' => 'User.nombre'));
         $piso = $this->Piso->findByid($idPiso);
-        $this->set(compact('catambientes','piso'));
+        $this->set(compact('catambientes','piso','catpagos','usuarios'));
+        
     }
     public function guarda_ambiente() {
         if (!empty($this->request->data)) {

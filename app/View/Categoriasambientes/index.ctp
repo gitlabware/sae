@@ -16,7 +16,7 @@
     <!-- END Example Title -->
     <div class="table-options clearfix">
         <div class="btn-group btn-group-sm pull-right">
-            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'edificio')); ?>');" class="btn btn-primary" title="Adicionar nuevo Usuario">NUEVO</a>
+            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'categoria')); ?>');" class="btn btn-primary" title="Adicionar nuevo Usuario">NUEVO</a>
         </div>
     </div>
     <!-- Example Content -->

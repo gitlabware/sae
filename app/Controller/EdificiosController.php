@@ -2,7 +2,7 @@
 App::uses('AppController', 'Controller');
 class EdificiosController extends AppController {
 
-    public $uses = array('Edificio','Piso','Ambiente','Categoriasambiente');
+    public $uses = array('Edificio','Piso','Ambiente','Categoriasambiente','Categoriaspago');
     public $layout = 'sae';
 
     public function beforeFilter() {
@@ -18,7 +18,8 @@ class EdificiosController extends AppController {
         $this->Edificio->id = $idEdificio;
         $this->request->data = $this->Edificio->read();
         $catambientes = $this->Categoriasambiente->find('list',array('fields' => 'Categoriasambiente.nombre'));
-        $this->set(compact('catambientes'));
+        $catpagos = $this->Categoriaspago->find('list',array('fields' => 'Categoriaspago.nombre'));
+        $this->set(compact('catambientes','catpagos'));
     }
     public function guarda_edificio() {
         if (!empty($this->request->data)) {
@@ -51,6 +52,7 @@ class EdificiosController extends AppController {
         $a_util = $this->request->data['Edificio']['area_util'];
         $a_comun = $this->request->data['Edificio']['area_comun'];
         $catambiente = $this->request->data['Edificio']['categoriasambiente_id'];
+        $catpago = $this->request->data['Edificio']['categoriaspago_id'];
         for($i=1;$i<=$nro_pisos;$i++)
         {
             $this->Piso->create();
@@ -58,20 +60,22 @@ class EdificiosController extends AppController {
             $this->request->data['Piso']['edificio_id'] = $idEdificio;
             $this->Piso->save($this->request->data['Piso']);
             $idPiso = $this->Piso->getLastInsertID();
-            $this->genera_ambientes($idEdificio,$idPiso, $nro_ambientes,$a_util,$a_comun,$catambiente);
+            $this->genera_ambientes($idEdificio,$idPiso, $nro_ambientes,$a_util,$a_comun,$catambiente,$catpago);
         }
     }
-    public function genera_ambientes($idEdificio = null, $idPiso = null, $numero = null,$a_util = null,$a_comun = null,$catambiente = NULL)
+    public function genera_ambientes($idEdificio = null, $idPiso = null, $numero = null,$a_util = null,$a_comun = null,$catambiente = NULL,$catpago = NULL)
     {
         for($i=1;$i<=$numero;$i++)
         {
             $this->Ambiente->create();
             $this->request->data['Ambiente']['categoriasambiente_id'] = $catambiente;
+            $this->request->data['Ambiente']['categoriasambiente_id'] = $catpago;
             $this->request->data['Ambiente']['edificio_id'] = $idEdificio;
             $this->request->data['Ambiente']['piso_id'] = $idPiso;
             $this->request->data['Ambiente']['nombre'] = "A".$i;
             $this->request->data['Ambiente']['area_util'] = $a_util;
             $this->request->data['Ambiente']['area_comun'] = $a_comun;
+            $this->request->data['Ambiente']['mantenimiento'] = $this->calcula_mantenimiento();
             $this->Ambiente->save($this->request->data['Ambiente']);
         }
     }
@@ -83,4 +87,14 @@ class EdificiosController extends AppController {
         }
         $this->redirect(array('action' => 'index'));
     }
+    public function calcula_mantenimiento()
+    {
+        $cambiente = $this->Categoriasambiente->findByid($this->request->data['Edificio']['categoriasambiente_id'],NULL,NULL,-1);
+        $cpago = $this->Categoriaspago->findByid($this->request->data['Edificio']['categoriaspago_id'],NULL,NULL,-1);
+        $totalmt = $this->request->data['Ambiente']['area_util'] + $this->request->data['Ambiente']['area_comun'];
+        $costob = $totalmt*$cambiente['Categoriasambiente']['constante'];
+        $mantenimiento = $costob+$cpago['Categoriaspago']['constante'];
+        return $mantenimiento;
+    }
+    
 }

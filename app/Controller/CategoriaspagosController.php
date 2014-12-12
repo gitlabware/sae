@@ -1,8 +1,8 @@
 <?php
 App::uses('AppController', 'Controller');
-class CategoriasambienteController extends AppController {
+class CategoriaspagosController extends AppController {
 
-    public $uses = array('Categoriasambiente');
+    public $uses = array('Categoriaspago');
     public $layout = 'sae';
 
     public function beforeFilter() {
@@ -10,20 +10,20 @@ class CategoriasambienteController extends AppController {
         $this->Auth->allow();
     }
     public function index() {
-        $categorias = $this->Categoriasambiente->find('all');
+        $categorias = $this->Categoriaspago->find('all');
         $this->set(compact('categorias'));
     }
     public function categoria($idCategoria = NULL) {
         $this->layout = 'ajax';
-        $this->Categoriasambiente->id = $idCategoria;
-        $this->request->data = $this->Categoriasambiente->read();
+        $this->Categoriaspago->id = $idCategoria;
+        $this->request->data = $this->Categoriaspago->read();
     }
     public function guarda_categoria() {
         if (!empty($this->request->data)) {
-            $this->Categoriasambiente->create();
-            $valida = $this->validar('Categoriasambiente');
+            $this->Categoriaspago->create();
+            $valida = $this->validar('Categoriaspago');
             if (empty($valida)) {
-                if ($this->Categoriasambiente->save($this->request->data['Categoriasambiente'])) {
+                if ($this->Categoriaspago->save($this->request->data['Categoriaspago'])) {
                     
                     $this->Session->setFlash('Se registro correctamente los datos!!!', 'msgbueno');
                 } else {
@@ -37,8 +37,8 @@ class CategoriasambienteController extends AppController {
         }
         $this->redirect($this->referer());
     }
-    public function eliminar($idCategoriasambiente = null) {
-        if ($this->Categoriasambiente->delete($idCategoriasambiente)) {
+    public function eliminar($idCategoriaspago = null) {
+        if ($this->Categoriaspago->delete($idCategoriaspago)) {
             $this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
         } else {
             $this->Session->setFlash('No se pudo eliminar, verifique que la categoria exista!!!', 'msgerror');

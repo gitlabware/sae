@@ -37,7 +37,25 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 control-label" for="user-settings-email">Area Comun</label>
+            <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->select('categoriaspago_id',$catpagos, array('class' => 'form-control', 'required')); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="user-settings-email">Usuario</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->select('user_id',$usuarios, array('class' => 'form-control')); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="user-settings-email">Costo Mantenimiento</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->text('mantenimiento', array('class' => 'form-control', 'required','type' => 'number','step' => 'any')); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="user-settings-email">Descripcion</label>
             <div class="col-md-8">
                 <?php echo $this->Form->textarea('descripcion', array('class' => 'form-control', 'placeholder' => 'Descripcion')); ?>
             </div>

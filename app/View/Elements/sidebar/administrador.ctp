@@ -34,7 +34,10 @@
                     <a href="<?php echo $this->Html->url(array('controller' => 'Edificios','action' => 'index'));?>"><i class="gi gi-building sidebar-nav-icon"></i>Edificios</a>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Categoriasambiente','action' => 'index'));?>"><i class="gi gi-vector_path_all sidebar-nav-icon"></i>Categoria de Ambiente</a>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Categoriasambientes','action' => 'index'));?>"><i class="gi gi-vector_path_all sidebar-nav-icon"></i>Categoria de Ambiente</a>
+                </li>
+                <li>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Categoriaspagos','action' => 'index'));?>"><i class="gi gi-money sidebar-nav-icon"></i>Categoria de Pagos</a>
                 </li>
                 <li>
                     <a href="<?php echo $this->Html->url(array('controller' => 'Users','action' => 'index'));?>"><i class="gi gi-user sidebar-nav-icon"></i>Usuarios</a>
