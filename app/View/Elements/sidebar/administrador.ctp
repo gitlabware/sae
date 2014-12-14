@@ -14,7 +14,7 @@
             <div class="sidebar-section sidebar-user clearfix">
                 <div class="sidebar-user-avatar">
                     <a href="page_ready_user_profile.html">
-                        <img src="img/placeholders/avatars/avatar2.jpg" alt="avatar">
+                        <img src="<?php echo $this->webroot;?>img/placeholders/avatars/avatar2.jpg" alt="avatar">
                     </a>
                 </div>
                 <div class="sidebar-user-name">John Doe</div>

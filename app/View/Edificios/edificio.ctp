@@ -6,9 +6,10 @@
 <!-- Modal Body -->
 <div class="modal-body">
     <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered')); ?>
+    
     <div class="row">
         <div class="col-md-12">
-            
+
             <fieldset>
                 <legend>Informacion de Edificio </legend>
                 <div class="form-group">

@@ -270,8 +270,8 @@
                 <!-- END Wrapper for scrolling functionality -->
             </div>
             <!-- END Alternative Sidebar -->
-            
-            <?php echo $this->element("sidebar/administrador");?>
+
+            <?php echo $this->element("sidebar/administrador"); ?>
 
             <!-- Main Container -->
             <div id="main-container">
@@ -374,7 +374,13 @@
 
         <!-- Scroll to top link, initialized in js/app.js - scrollToTop() -->
         <a href="#" id="to-top"><i class="fa fa-angle-double-up"></i></a>
-
+        <style>
+            .modal .modal-body {
+                max-height: 500px;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        </style>
         <!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
         <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
@@ -393,6 +399,26 @@
             </div>
         </div>
         <!-- END User Settings -->
+        
+        <!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
+        <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div  id="div_barra_cargando2">
+                        <div class="progress progress-striped active progress-sm">
+                            <div style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="45" role="progressbar" class="progress-bar progress-bar-success">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divmodal2" style="display: none;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END User Settings -->
+
 
         <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -417,6 +443,26 @@
                                         }
                                         else {
                                             $("#div_barra_cargando").hide(800);
+                                        }
+                                    });
+
+                                }
+        </script>
+        
+        <script>
+                                function cargarmodal2(urll)
+                                {
+                                    $("#div_barra_cargando2").show();
+                                    $("#myModal2").modal('show');
+                                    $("#divmodal2").show();
+                                    $("#divmodal2").load(urll, function (responseText, textStatus, req) {
+                                        if (textStatus == "error")
+                                        {
+                                            $("#divmodal2").hide();
+                                            alert("error!!!");
+                                        }
+                                        else {
+                                            $("#div_barra_cargando2").hide(800);
                                         }
                                     });
 

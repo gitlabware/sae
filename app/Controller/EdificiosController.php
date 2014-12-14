@@ -69,7 +69,7 @@ class EdificiosController extends AppController {
         {
             $this->Ambiente->create();
             $this->request->data['Ambiente']['categoriasambiente_id'] = $catambiente;
-            $this->request->data['Ambiente']['categoriasambiente_id'] = $catpago;
+            $this->request->data['Ambiente']['categoriaspago_id'] = $catpago;
             $this->request->data['Ambiente']['edificio_id'] = $idEdificio;
             $this->request->data['Ambiente']['piso_id'] = $idPiso;
             $this->request->data['Ambiente']['nombre'] = "A".$i;
