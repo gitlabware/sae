@@ -45,7 +45,7 @@
         </div>
         <div class="form-group">
             <div id="selectpropietario">
-                <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Usuario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'usuario',$idPiso)); ?>')">Usuario</a></label>
+                <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Propietario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'usuario',$idPiso)); ?>')">Propietario</a></label>
                 <div class="col-md-8">
                     <?php echo $this->Form->select('user_id', $usuarios, array('class' => 'form-control')); ?>
                 </div>

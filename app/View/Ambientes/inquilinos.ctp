@@ -75,7 +75,7 @@
                         <?php foreach ($inquilinos as $in):?>
                         <tr>
                             <td><?php echo $in['User']['nombre']?></td>
-                            <td>Quitar</td>
+                            <td><a title="Quitar inquilino" href="javascript:" class="label label-danger" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'quita_inquilino',$in['Inquilino']['user_id'],$idAmbiente))?>');">Quitar</a></td>
                         </tr>
                         <?php endforeach;?>
                     </tbody>

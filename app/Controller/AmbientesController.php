@@ -53,8 +53,8 @@ class AmbientesController extends AppController {
             $this->Ambiente->id = $idAmbiente;
             $this->request->data = $this->Ambiente->read();
         }
-        $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre'));
-        $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre'));
+        $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre_completo'));
+        $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre_completo'));
         $categoria_ambientes = $this->Categoriasambiente->find('all');
         $categoria_pagos = $this->Categoriaspago->find('all');
         $usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Propietario')));
@@ -126,8 +126,9 @@ class AmbientesController extends AppController {
         $this->layout = 'ajax';
         $sql = "SELECT * FROM "
                 . "(SELECT user_id,estado FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
-                . " AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id)  WHERE (Inquilino.estado = 1) GROUP BY user_id";
-        $inquilinos = $this->Inquilino->query($sql);
+                . " AS Inquilino WHERE 1 GROUP BY user_id";
+        $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
+        $inquilinos = $this->Inquilino->query($sql2);
         $select_inquilinos = $this->User->find('list',array('fields' => 'User.nombre','conditions' => array('User.role' => 'Inquilino')));
         $this->set(compact('inquilinos','select_inquilinos','idAmbiente'));
     }
@@ -147,5 +148,14 @@ class AmbientesController extends AppController {
         $this->Inquilino->create();
         $this->Inquilino->save($this->request->data['Inquilino']);
         exit;
+    }
+    public function  quita_inquilino($idUser = NULL,$idAmbiente= NULL)
+    {
+        $this->Inquilino->create();
+        $this->request->data['Inquilino']['user_id'] = $idUser;
+        $this->request->data['Inquilino']['ambiente_id'] = $idAmbiente;
+        $this->request->data['Inquilino']['estado'] = 0;
+        $this->Inquilino->save($this->request->data['Inquilino']);
+        $this->redirect(array('action' => 'inquilinos',$idAmbiente));
     }
 }

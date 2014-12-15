@@ -428,7 +428,9 @@
         <script src="<?php echo $this->webroot; ?>js/vendor/bootstrap.min.js"></script>
         <script src="<?php echo $this->webroot; ?>js/plugins.js"></script>
         <script src="<?php echo $this->webroot; ?>js/app.js"></script>
-
+        <script>
+        $('#form-edificio').validate();
+        </script>
         <script>
                                 function cargarmodal(urll)
                                 {

@@ -5,7 +5,7 @@
                     <div class="form-group">
                         <div class="col-xs-12">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="gi gi-envelope"></i></span>
+                                <span class="input-group-addon"><i class="gi gi-user"></i></span>
                                 <?php echo $this->Form->text('username',array('class' => 'form-control input-lg','placeholder' => 'Nombre de Usuario','required'));?>
                             </div>
                         </div>

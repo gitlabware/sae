@@ -10,7 +10,7 @@ class UsersController extends AppController {
         $this->Auth->allow();
     }
     public function index() {
-        $usuarios = $this->User->find('all');
+        $usuarios = $this->User->find('all',array('conditions' => array('User.role' => 'Administrador')));
         $this->set(compact('usuarios'));
     }
 

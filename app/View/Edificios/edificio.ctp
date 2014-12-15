@@ -5,7 +5,7 @@
 <!-- END Modal Header -->
 <!-- Modal Body -->
 <div class="modal-body">
-    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered')); ?>
+    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered','id' => 'form-edificio')); ?>
     
     <div class="row">
         <div class="col-md-12">
