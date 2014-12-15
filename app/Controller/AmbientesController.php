@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class AmbientesController extends AppController {
 
     var $components = array('RequestHandler');
-    public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User');
+    public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User','Inquilino');
     public $layout = 'sae';
 
     public function beforeFilter() {
@@ -123,7 +123,29 @@ class AmbientesController extends AppController {
     }
 
     public function inquilinos($idAmbiente = NULL) {
-        
+        $this->layout = 'ajax';
+        $sql = "SELECT * FROM "
+                . "(SELECT user_id,estado FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
+                . " AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id)  WHERE (Inquilino.estado = 1) GROUP BY user_id";
+        $inquilinos = $this->Inquilino->query($sql);
+        $select_inquilinos = $this->User->find('list',array('fields' => 'User.nombre','conditions' => array('User.role' => 'Inquilino')));
+        $this->set(compact('inquilinos','select_inquilinos','idAmbiente'));
     }
-
+    public function guarda_nuevo_inquilino()
+    {
+        $this->User->create();
+        $this->request->data['User'];
+        $this->User->save($this->request->data['User']);
+        $idUsuario = $this->User->getLastInsertID();
+        $this->Inquilino->create();
+        $this->request->data['Inquilino']['user_id'] = $idUsuario;
+        $this->Inquilino->save($this->request->data['Inquilino']);
+        exit;
+    }
+    public function guarda_inquilino()
+    {
+        $this->Inquilino->create();
+        $this->Inquilino->save($this->request->data['Inquilino']);
+        exit;
+    }
 }
