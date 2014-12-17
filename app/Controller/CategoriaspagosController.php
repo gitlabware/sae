@@ -10,7 +10,8 @@ class CategoriaspagosController extends AppController {
         $this->Auth->allow();
     }
     public function index() {
-        $categorias = $this->Categoriaspago->find('all');
+        $idEdificio = $this->Session->read('Auth.User.edificio_id');
+        $categorias = $this->Categoriaspago->findAllByedificio_id($idEdificio);
         $this->set(compact('categorias'));
     }
     public function categoria($idCategoria = NULL) {
@@ -20,6 +21,7 @@ class CategoriaspagosController extends AppController {
     }
     public function guarda_categoria() {
         if (!empty($this->request->data)) {
+            $this->request->data['Categoriaspago']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
             $this->Categoriaspago->create();
             $valida = $this->validar('Categoriaspago');
             if (empty($valida)) {

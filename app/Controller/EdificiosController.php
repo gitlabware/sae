@@ -170,5 +170,12 @@ class EdificiosController extends AppController {
             }
         }
     }
-
+    public function datos()
+    {
+        $edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'));
+        $nro_pisos = $this->Piso->find('count',array('conditions' => array('Piso.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
+        $nro_ambientes = $this->Ambiente->find('count',array('conditions' => array('Ambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
+        $this->set(compact('edificio','nro_pisos','nro_ambientes'));
+        
+    }
 }

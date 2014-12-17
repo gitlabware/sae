@@ -10,7 +10,7 @@ class UsersController extends AppController {
         $this->Auth->allow();
     }
     public function index() {
-        $usuarios = $this->User->find('all',array('conditions' => array('User.role' => 'Administrador')));
+        $usuarios = $this->User->find('all',array('conditions' => array('User.role' => 'Super Administrador')));
         $this->set(compact('usuarios'));
     }
 
@@ -57,8 +57,10 @@ class UsersController extends AppController {
             {
                 $role = $this->Session->read('Auth.User.role');
                 switch ($role) {
-                    case 'Administrador':
+                    case 'Super Administrador':
                         $this->redirect(array('controller' => 'Users','action' => 'index'));
+                    case 'Administrador':
+                        $this->redirect(array('controller' => 'Edificios','action' => 'datos'));
                     default:
                         break;
                 }

@@ -270,9 +270,17 @@
                 <!-- END Wrapper for scrolling functionality -->
             </div>
             <!-- END Alternative Sidebar -->
-
-            <?php echo $this->element("sidebar/administrador"); ?>
-
+            <?php $role = $this->Session->read('Auth.User.role'); ?>
+            <?php
+            if ($role == "Super Administrador") {
+                echo $this->element("sidebar/super_administrador");
+            } elseif ($role == 'Administrador') {
+                echo $this->element("sidebar/administrador");
+            }
+            else{
+                
+            }
+            ?>
             <!-- Main Container -->
             <div id="main-container">
                 <!-- Header -->
@@ -399,7 +407,7 @@
             </div>
         </div>
         <!-- END User Settings -->
-        
+
         <!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
         <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
@@ -430,46 +438,46 @@
         <script src="<?php echo $this->webroot; ?>js/app.js"></script>
         <script type="text/javascript" src="<?php echo $this->webroot; ?>js/jquery.scrollTo.js"></script>
         <script>
-        $('#form-edificio').validate();
+                                $('#form-edificio').validate();
         </script>
         <script>
-                                function cargarmodal(urll)
-                                {
-                                    $("#div_barra_cargando").show();
-                                    $("#myModal").modal('show');
-                                    $("#divmodal").show();
-                                    $("#divmodal").load(urll, function (responseText, textStatus, req) {
-                                        if (textStatus == "error")
-                                        {
-                                            $("#divmodal").hide();
-                                            alert("error!!!");
-                                        }
-                                        else {
-                                            $("#div_barra_cargando").hide(800);
-                                        }
-                                    });
+            function cargarmodal(urll)
+            {
+                $("#div_barra_cargando").show();
+                $("#myModal").modal('show');
+                $("#divmodal").show();
+                $("#divmodal").load(urll, function (responseText, textStatus, req) {
+                    if (textStatus == "error")
+                    {
+                        $("#divmodal").hide();
+                        alert("error!!!");
+                    }
+                    else {
+                        $("#div_barra_cargando").hide(800);
+                    }
+                });
 
-                                }
+            }
         </script>
-        
-        <script>
-                                function cargarmodal2(urll)
-                                {
-                                    $("#div_barra_cargando2").show();
-                                    $("#myModal2").modal('show');
-                                    $("#divmodal2").show();
-                                    $("#divmodal2").load(urll, function (responseText, textStatus, req) {
-                                        if (textStatus == "error")
-                                        {
-                                            $("#divmodal2").hide();
-                                            alert("error!!!");
-                                        }
-                                        else {
-                                            $("#div_barra_cargando2").hide(800);
-                                        }
-                                    });
 
-                                }
+        <script>
+            function cargarmodal2(urll)
+            {
+                $("#div_barra_cargando2").show();
+                $("#myModal2").modal('show');
+                $("#divmodal2").show();
+                $("#divmodal2").load(urll, function (responseText, textStatus, req) {
+                    if (textStatus == "error")
+                    {
+                        $("#divmodal2").hide();
+                        alert("error!!!");
+                    }
+                    else {
+                        $("#div_barra_cargando2").hide(800);
+                    }
+                });
+
+            }
         </script>
     </body>
 </html>

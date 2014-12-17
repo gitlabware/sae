@@ -25,7 +25,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="user-settings-email">Role</label>
                 <div class="col-md-8">
-                    <?php echo $this->Form->select('role', array('Administrador' => 'Administrador'), array('class' => 'form-control', 'required')); ?>
+                    <?php echo $this->Form->select('role', array('Super Administrador' => 'Super Administrador','Administrador' => 'Administrador'), array('class' => 'form-control', 'required')); ?>
                 </div>
             </div>
             <?php

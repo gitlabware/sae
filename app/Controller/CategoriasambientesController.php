@@ -10,7 +10,8 @@ class CategoriasambientesController extends AppController {
         $this->Auth->allow();
     }
     public function index() {
-        $categorias = $this->Categoriasambiente->find('all');
+        $idEdificio = $this->Session->read('Auth.User.edificio_id');
+        $categorias = $this->Categoriasambiente->findAllByedificio_id($idEdificio);
         $this->set(compact('categorias'));
     }
     public function categoria($idCategoria = NULL) {
@@ -20,6 +21,7 @@ class CategoriasambientesController extends AppController {
     }
     public function guarda_categoria() {
         if (!empty($this->request->data)) {
+            $this->request->data['Categoriasambiente']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
             $this->Categoriasambiente->create();
             $valida = $this->validar('Categoriasambiente');
             if (empty($valida)) {
