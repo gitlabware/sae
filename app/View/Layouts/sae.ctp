@@ -428,6 +428,7 @@
         <script src="<?php echo $this->webroot; ?>js/vendor/bootstrap.min.js"></script>
         <script src="<?php echo $this->webroot; ?>js/plugins.js"></script>
         <script src="<?php echo $this->webroot; ?>js/app.js"></script>
+        <script type="text/javascript" src="<?php echo $this->webroot; ?>js/jquery.scrollTo.js"></script>
         <script>
         $('#form-edificio').validate();
         </script>

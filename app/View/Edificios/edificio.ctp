@@ -5,8 +5,8 @@
 <!-- END Modal Header -->
 <!-- Modal Body -->
 <div class="modal-body">
-    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered','id' => 'form-edificio')); ?>
-    
+    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered', 'id' => 'form-edificio')); ?>
+
     <div class="row">
         <div class="col-md-12">
 
@@ -32,45 +32,47 @@
                     </div>
                 </div>
                 <!-- solo cuando sea nuevo edificio -->
-                <?php if (empty($this->request->data['Edificio']['id'])): ?>
+                <?php if (empty($this->request->data['Edificio']['id']) || $pisos == 0): ?>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="user-settings-email">Pisos</label>
                         <div class="col-md-8">
-                            <?php echo $this->Form->text('pisos', array('class' => 'form-control', 'required', 'placeholder' => 'Nro de pisos', 'type' => 'number')); ?>
+                            <?php echo $this->Form->text('pisos', array('class' => 'form-control', 'placeholder' => 'Nro de pisos', 'type' => 'number')); ?>
                         </div>
                     </div>
                 <?php endif; ?>
             </fieldset>
             <fieldset>
-                <legend>Informacion de ambientes por defecto</legend>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Nro ambientes x piso</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->text('ambientes', array('class' => 'form-control', 'required', 'placeholder' => 'Ambientes por piso', 'type' => 'number')); ?>
+                <legend align="center"><button class="btn btn-default" type="button" onclick="$('#form-ambientes-defecto').toggle(400);">Informacion de ambientes por defecto</button></legend>
+                <div id="form-ambientes-defecto" style="display: none;">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Nro ambientes x piso</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->text('ambientes', array('class' => 'form-control', 'placeholder' => 'Ambientes por piso', 'type' => 'number')); ?>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Area Util</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->text('area_util', array('class' => 'form-control', 'required', 'placeholder' => 'Area Util', 'type' => 'number', 'step' => 'any')); ?>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Area Util</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->text('area_util', array('class' => 'form-control', 'placeholder' => 'Area Util', 'type' => 'number', 'step' => 'any')); ?>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Area Comun</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->text('area_comun', array('class' => 'form-control', 'required', 'placeholder' => 'Area Comun', 'type' => 'number', 'step' => 'any')); ?>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Area Comun</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->text('area_comun', array('class' => 'form-control', 'placeholder' => 'Area Comun', 'type' => 'number', 'step' => 'any')); ?>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Categoria Ambiente</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->select('categoriasambiente_id', $catambientes, array('class' => 'form-control', 'required')); ?>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Categoria Ambiente</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->select('categoriasambiente_id', $catambientes, array('class' => 'form-control')); ?>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control', 'required')); ?>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control')); ?>
+                        </div>
                     </div>
                 </div>
             </fieldset>
