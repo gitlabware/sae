@@ -67,7 +67,6 @@ class AmbientesController extends AppController {
             $valida = $this->validar('Ambiente');
             if (empty($valida)) {
                 if ($this->Ambiente->save($this->request->data['Ambiente'])) {
-
                     $this->Session->setFlash('Se registro correctamente los datos!!!', 'msgbueno');
                 } else {
                     $this->Session->setFlash('NO se pudo registrar los datos del ambiente!!!', 'msgerror');

@@ -59,7 +59,7 @@
                     <i class="fa fa-users"></i>
                 </div>
                 <h3 class="widget-content text-right animation-pullDown">
-                    5 <strong>Usuarios</strong>
+                    <?php echo $nro_usuarios;?> <strong>Usuarios</strong>
                     <small>Support Center</small>
                 </h3>
             </div>
