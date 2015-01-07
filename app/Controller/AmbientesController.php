@@ -157,4 +157,5 @@ class AmbientesController extends AppController {
         $this->Inquilino->save($this->request->data['Inquilino']);
         $this->redirect(array('action' => 'inquilinos',$idAmbiente));
     }
+    
 }
