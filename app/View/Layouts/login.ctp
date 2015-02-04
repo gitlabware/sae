@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8">
 
-        <title>ProUI - Responsive Bootstrap Admin Template</title>
+        <title>Mesi Sistema Gestion de Edificios</title>
 
         <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
         <meta name="author" content="pixelcave">
@@ -56,7 +56,7 @@
             <?php echo $this->Session->flash(); ?>
             <!-- Login Title -->
             <div class="login-title text-center">
-                <h1><i class="gi gi-flash"></i> <strong>ProUI</strong><br><small>Please <strong>Login</strong> or <strong>Register</strong></small></h1>
+                <h1><i class="gi gi-flash"></i> <strong>MESI</strong><br><small>Ingrese <strong>Usuario</strong> y <strong>Password</strong></small></h1>
             </div>
             <!-- END Login Title -->
             
@@ -64,7 +64,7 @@
 
             <!-- Footer -->
             <footer class="text-muted text-center">
-                <small><span id="year-copy"></span> &copy; <a href="http://goo.gl/TDOSuC" target="_blank">ProUI 2.1</a></small>
+                <small><span id="year-copy"></span> &copy; <a href="http://goo.gl/TDOSuC" target="_blank">Mesi</a></small>
             </footer>
             <!-- END Footer -->
         </div>
