@@ -437,8 +437,11 @@
         <script src="<?php echo $this->webroot; ?>js/plugins.js"></script>
         <script src="<?php echo $this->webroot; ?>js/app.js"></script>
         <script type="text/javascript" src="<?php echo $this->webroot; ?>js/jquery.scrollTo.js"></script>
+        
+        <script src="<?php echo $this->webroot; ?>js/pages/tablesDatatables.js"></script>
+        <script>$(function(){ TablesDatatables.init(); });</script>
         <script>
-                                $('#form-edificio').validate();
+            $('#form-edificio').validate();
         </script>
         <script>
             function cargarmodal(urll)

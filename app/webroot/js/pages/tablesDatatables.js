@@ -13,9 +13,11 @@ var TablesDatatables = function() {
 
             /* Initialize Datatables */
             $('#example-datatable').dataTable({
-                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1, 5 ] } ],
-                "iDisplayLength": 10,
-                "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
+                "aoColumnDefs": [ { "bSortable": false
+                        //, "aTargets": [ 1, 5 ] 
+                    } ],
+                "iDisplayLength": 10
+                //"aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
             });
 
             /* Add placeholder attribute to the search input */

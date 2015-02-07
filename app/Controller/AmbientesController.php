@@ -5,12 +5,12 @@ App::uses('AppController', 'Controller');
 class AmbientesController extends AppController {
 
     var $components = array('RequestHandler');
-    public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User','Inquilino');
+    public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago','Ambienteconcepto','Concepto');
     public $layout = 'sae';
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow();
+        //$this->Auth->allow();
     }
 
     public function index() {
@@ -128,11 +128,11 @@ class AmbientesController extends AppController {
                 . " AS Inquilino WHERE 1 GROUP BY user_id";
         $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
         $inquilinos = $this->Inquilino->query($sql2);
-        $select_inquilinos = $this->User->find('list',array('fields' => 'User.nombre','conditions' => array('User.role' => 'Inquilino')));
-        $this->set(compact('inquilinos','select_inquilinos','idAmbiente'));
+        $select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Inquilino')));
+        $this->set(compact('inquilinos', 'select_inquilinos', 'idAmbiente'));
     }
-    public function guarda_nuevo_inquilino()
-    {
+
+    public function guarda_nuevo_inquilino() {
         $this->User->create();
         $this->request->data['User'];
         $this->User->save($this->request->data['User']);
@@ -142,20 +142,74 @@ class AmbientesController extends AppController {
         $this->Inquilino->save($this->request->data['Inquilino']);
         exit;
     }
-    public function guarda_inquilino()
-    {
-        $this->Inquilino->create();
-        $this->Inquilino->save($this->request->data['Inquilino']);
+
+    public function guarda_inquilino() {
+        if(!empty($this->request->data['Inquilino']['user_id']) && $this->request->data['Inquilino']['ambiente_id'])
+        {
+            $inquilino = $this->Inquilino->find('first', array(
+                'conditions' => array('Inquilino.user_id' => $this->request->data['Inquilino']['user_id'], 'Inquilino.ambiente_id' => $this->request->data['Inquilino']['ambiente_id'])
+            ));
+            if (empty($inquilino)) {
+                $this->Inquilino->create();
+                $this->Inquilino->save($this->request->data['Inquilino']);
+            }
+        }
         exit;
     }
-    public function  quita_inquilino($idUser = NULL,$idAmbiente= NULL)
-    {
+
+    public function quita_inquilino($idUser = NULL, $idAmbiente = NULL) {
         $this->Inquilino->create();
         $this->request->data['Inquilino']['user_id'] = $idUser;
         $this->request->data['Inquilino']['ambiente_id'] = $idAmbiente;
         $this->request->data['Inquilino']['estado'] = 0;
         $this->Inquilino->save($this->request->data['Inquilino']);
-        $this->redirect(array('action' => 'inquilinos',$idAmbiente));
+        $this->redirect(array('action' => 'inquilinos', $idAmbiente));
+    }
+
+    public function pagos($idAmbiente = null) {
+        $pagos = $this->Pago->find('all', array(
+            'conditions' => array('Pago.ambiente_id' => $idAmbiente)
+            , 'group' => array('Pago.fecha', 'Pago.concepto_id')
+            , 'fields' => array('Concepto.descripcion', 'Pago.fecha', 'SUM(Pago.monto) totalmonto','Pago.concepto_id')
+        ));
+        $ambiente = $this->Ambiente->find('first',array('recursive' => -1,'conditions' => array('Ambiente.id' => $idAmbiente)));
+        
+        $this->set(compact('pagos','ambiente'));
+    }
+
+    public function pago($idAmbiente = null) {
+        $ambiente = $this->Ambiente->find('first',array('recursive' => -1,'conditions' => array('Ambiente.id' => $idAmbiente)));
+        $conceptos = $this->Ambienteconcepto->find('list',array('recursive' => 0,'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente),'fields' => 'Concepto.nombre'));
+        $inquilinos = $this->Inquilino->find('list', array('recursive' => 0,'fields' => 'User.nombre','conditions' => array('Inquilino.ambiente_id' => $idAmbiente)));
+        //debug($inquilinos);exit;
+        $this->set(compact('inquilinos','ambiente','conceptos','idAmbiente'));
     }
     
+    public function guarda_pago()
+    {
+        if(!empty($this->request->data))
+        {
+            $this->Pago->create();
+            $this->Pago->save($this->request->data['Pago']);
+            $this->Session->setFlash('Se registro correctamente!!','msgbueno');
+        }  else {
+            $this->Session->setFlash('No se pudo registrar el pago!!','msgbueno');
+        }
+        $this->redirect(array('action' => 'pagos',  $this->request->data['Pago']['ambiente_id']));
+        //debug($this->request->data);exit;
+    }
+    public function detalles_pago($fecha = null,$idConcepto = null,$idAmbiente = null)
+    {
+        $this->layout = 'ajax';
+        $concepto = $this->Concepto->findByid($idConcepto,null,null,-1);
+        $ambiente = $this->Ambiente->findByid($idAmbiente,null,null,-1);
+        $pagosd = $this->Pago->find('all',array('conditions' => array('Pago.fecha' => $fecha,'Pago.concepto_id' => $idConcepto)));
+        $this->set(compact('pagosd','ambiente','concepto','fecha'));
+    }
+    public function elimina_pago($idPago = null,$idAmbiente = null)
+    {
+        $this->Pago->delete($idPago);
+        $this->Session->setFlash("Se elimino correctamente!!",'msgbueno');
+        $this->redirect(array('action' => 'pagos',$idAmbiente));
+    }
 }
