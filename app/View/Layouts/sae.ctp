@@ -5,9 +5,9 @@
     <head>
         <meta charset="utf-8">
 
-        <title>ProUI - Responsive Bootstrap Admin Template</title>
+        <title>Mesi Gestion Edificios</title>
 
-        <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+        <meta name="description" content="Mesi">
         <meta name="author" content="pixelcave">
         <meta name="robots" content="noindex, nofollow">
 
@@ -55,7 +55,7 @@
         <!-- Preloader functionality (initialized in js/app.js) - pageLoading() -->
         <!-- Used only if page preloader is enabled from inc/config (PHP version) or the class 'page-loading' is added in body element (HTML version) -->
         <div class="preloader themed-background">
-            <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+            <h1 class="push-top-bottom text-light text-center"><strong>ME</strong>SI</h1>
             <div class="inner">
                 <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
                 <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>

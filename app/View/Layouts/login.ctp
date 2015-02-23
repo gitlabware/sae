@@ -5,9 +5,9 @@
     <head>
         <meta charset="utf-8">
 
-        <title>Mesi Sistema Gestion de Edificios</title>
+        <title>Mesi Gestion Edificios</title>
 
-        <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+        <meta name="description" content="MESI">
         <meta name="author" content="pixelcave">
         <meta name="robots" content="noindex, nofollow">
 
@@ -48,7 +48,7 @@
         <!-- Login Background -->
         <div id="login-background">
             <!-- For best results use an image with a resolution of 2560x400 pixels (prefer a blurred image for smaller file size) -->
-            <img src="<?php echo $this->webroot; ?>img/placeholders/headers/login_header.jpg" alt="Login Background" class="animation-pulseSlow">
+            <img src="<?php echo $this->webroot; ?>img/placeholders/headers/login_header.jpg" alt="Login Background">
         </div>
         <!-- END Login Background -->
         <!-- Login Container -->
@@ -64,7 +64,7 @@
 
             <!-- Footer -->
             <footer class="text-muted text-center">
-                <small><span id="year-copy"></span> &copy; <a href="http://goo.gl/TDOSuC" target="_blank">Mesi</a></small>
+                <small><span id="year-copy"></span> &copy; <a href="http://www.mesi.co" target="_blank">Mesi</a></small>
             </footer>
             <!-- END Footer -->
         </div>

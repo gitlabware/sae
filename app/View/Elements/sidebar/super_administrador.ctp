@@ -6,7 +6,7 @@
         <div class="sidebar-content">
             <!-- Brand -->
             <a href="index.html" class="sidebar-brand">
-                <i class="gi gi-flash"></i><strong>Pro</strong>UI
+                <i class="gi gi-flash"></i><strong>ME</strong>SI
             </a>
             <!-- END Brand -->
             
