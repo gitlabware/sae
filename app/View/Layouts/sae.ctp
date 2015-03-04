@@ -40,6 +40,10 @@
         <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
         <link rel="stylesheet" href="<?php echo $this->webroot; ?>css/themes.css">
         <!-- END Stylesheets -->
+        
+        <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
 
         <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
         <script src="<?php echo $this->webroot; ?>js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
@@ -425,12 +429,7 @@
                 </div>
             </div>
         </div>
-        <!-- END User Settings -->
-
-
-        <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+        <!-- END User Settings -->      
 
         <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
         <script src="<?php echo $this->webroot; ?>js/vendor/bootstrap.min.js"></script>

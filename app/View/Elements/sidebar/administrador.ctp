@@ -29,6 +29,9 @@
             <!-- Sidebar Navigation -->
             <ul class="sidebar-nav">
                 <li>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'datos'));?>"><i class="gi gi-charts sidebar-nav-icon"></i>Panel de Control</a>
+                </li>
+                <li>
                     <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio',$this->Session->read('Auth.User.edificio_id')));?>"><i class="gi gi-tags sidebar-nav-icon"></i>Ambientes</a>
                 </li>
                 <li>

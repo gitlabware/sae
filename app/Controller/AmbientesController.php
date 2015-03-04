@@ -212,4 +212,22 @@ class AmbientesController extends AppController {
         $this->Session->setFlash("Se elimino correctamente!!",'msgbueno');
         $this->redirect(array('action' => 'pagos',$idAmbiente));
     }
+    
+    public function buscador()
+    {
+      if($this->request->is('post'))
+      {
+        debug($this->request->data);die;
+      }  
+      
+    }
+    
+    public function ajaxresultados()
+    {
+      $this->layout = 'ajax';
+      if($this->request->is('post'))
+      {
+        debug($this->request->data);
+      }
+    }  
 }
