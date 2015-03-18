@@ -40,11 +40,11 @@
         <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
         <link rel="stylesheet" href="<?php echo $this->webroot; ?>css/themes.css">
         <!-- END Stylesheets -->
-        
+                
         <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
-
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>-->
+        <script src="<?php echo $this->webroot; ?>js/vendor/jquery-1.11.1.min.js"></script>
         <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
         <script src="<?php echo $this->webroot; ?>js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
     </head>
@@ -372,10 +372,10 @@
                 <!-- Footer -->
                 <footer class="clearfix">
                     <div class="pull-right">
-                        Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://goo.gl/vNS3I" target="_blank">pixelcave</a>
+                        Derechos Reservados <i class="fa fa-heart text-danger"></i> para Mesi <a href="#" target="_blank"></a>
                     </div>
                     <div class="pull-left">
-                        <span id="year-copy"></span> &copy; <a href="http://goo.gl/TDOSuC" target="_blank">ProUI 2.1</a>
+                        <span id="year-copy"></span> &copy; <a href="#" target="_blank">VirtualWare</a>
                     </div>
                 </footer>
                 <!-- END Footer -->

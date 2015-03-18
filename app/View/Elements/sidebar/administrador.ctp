@@ -35,6 +35,9 @@
                     <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio',$this->Session->read('Auth.User.edificio_id')));?>"><i class="gi gi-tags sidebar-nav-icon"></i>Ambientes</a>
                 </li>
                 <li>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'buscador'));?>"><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>
+                </li>
+                <li>
                     <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos','action' => 'eservicios', $this->Session->read('Auth.User.edificio_id'))); ?>');"><i class="gi gi-briefcase sidebar-nav-icon"></i>Servicios</a>
                 </li>
                 <li>

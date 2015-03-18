@@ -1,66 +1,110 @@
-<!-- Blank Header -->
-<div class="content-header">
-    <div class="header-section">
-        <h1>
-            <i class="gi gi-brush"></i>Buscador de Ambientes<br>
-        </h1>
-    </div>
-</div>
-
-<!-- END Blank Header -->
 <!-- Example Block -->
+<div class="row">
 
-<!-- END Example Title -->
-<div class="col-sm-4">
-    <!-- Input Groups - Dropdowns Block -->
+    <!-- Interactive Block -->
     <div class="block">
-        <!-- Input Groups - Dropdowns Title -->
+        <!-- Interactive Title -->
         <div class="block-title">
-            <h2><strong>Dropdowns</strong> Groups</h2>
+            <!-- Interactive block controls (initialized in js/app.js -> interactiveBlocks()) -->
+            <div class="block-options pull-right">
+                <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content"><i class="fa fa-arrows-v"></i></a>
+                <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-fullscreen"><i class="fa fa-desktop"></i></a>
+                <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-hide"><i class="fa fa-times"></i></a>
+            </div>
+            <h2><strong>Formularios de</strong> Busqueda</h2>
         </div>
-        <!-- END Input Groups - Dropdowns Title -->
+        <!-- END Interactive Title -->
 
-        <!-- Input Groups - Dropdowns Content -->
+        <!-- Interactive Content -->
+        <!-- The content you will put inside div.block-content, will be toggled -->
+        <div class="block-content">
+            <div class="col-sm-4">
+                <div class="block">
+                    <div class="block-title"><h4>Por Ambiente</h4></div>
+                    <?php echo $this->Form->create('Ambiente', array('action' => 'ajaxresultados', 'class' => 'form-horizontal form-bordered', 'id' => 'crtform')); ?>  
+                    <div class="form-group">
+                        <div class="col-md-12">   
+                            <div class="input-group">
+                                <input type="text" id="example-input2-group2" name="data[Ambiente][criterio]" class="form-control" placeholder="Ingrese el Ambiente">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">Buscar</button>
+                                </span>
+                            </div>
+                            <?php //echo $this->Form->text('criterio', array('class' => 'form-control', 'required')) ?>
+                            <?php echo $this->Form->hidden('opcion', array('value' => '1')); ?>
+                        </div>                        
+                    </div>            
 
-        <?php echo $this->Form->create('Ambiente', array('action' => 'ajaxresultados', 'class' => 'form-horizontal form-bordered', 'id' => 'crtform')); ?>  
-        <div class="form-group">
-            <div class="col-md-7">
-                <input type="text" class="form-control" required="">
-            </div>
-            <div class="col-md-5">
-                <select id="example-select" name="tipo" class="form-control" size="1">
-                    <option value="0">Seleccione</option>
-                    <option value="1">Ambiente</option>
-                    <option value="2">Inquilino</option>
-                    <option value="3">Propietario</option>
-                </select>
-            </div>
-        </div>            
 
-        <div class="form-group form-actions">
-            <div class="col-xs-12">
-                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Buscar </button>
+                    </form>
+                </div>
             </div>
+            <div class="col-sm-4">
+                <div class="block">
+                    <div class="block-title"><h4>Por Propietario</h4></div>
+                    <div class="form-group">
+                        <div class="col-md-12">                
+                            <?php echo $this->Form->text('criterio', array('class' => 'form-control', 'id' => 'txtpropietario', 'required')) ?>                            
+                        </div>                        
+                    </div>            
+                    <div id="listadoPropietarios">
+                        &nbsp;    
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="block">
+                    <div class="block-title"><h4>Por Inquilino</h4></div>
+                    <div class="form-group">
+                        <div class="col-md-12">                
+                            <?php echo $this->Form->text('criterio', array('class' => 'form-control', 'id' => 'txtpinquilino', 'required')) ?>                            
+                        </div>                        
+                    </div>            
+                    <div id="listadoPropietarios">
+                        &nbsp;    
+                    </div>
+                </div>
+            </div>            
         </div>
-        </form>
-        <!-- END Input Groups - Dropdowns Content -->
+        <p class="text-muted">You can also have content that ignores toggling..</p>
+        <!-- END Interactive Content -->
     </div>
-    <!-- END Input Groups - Dropdowns Block -->
+    <!-- END Interactive Block -->
 </div>
 
-<div class="col-sm-8">
-    <!-- Input Groups - Dropdowns Block -->
-    <div class="block">
-        <!-- Input Groups - Dropdowns Title -->
-        <div class="block-title">
-            <h2><strong>Dropdowns</strong> Groups</h2>
-        </div>
-        <!-- END Input Groups - Dropdowns Title -->
-        <div id="ajax_loader">Aqui</div>  
+<div class="row">   
+    <div class="col-sm-12">
+        <!-- Input Groups - Dropdowns Block -->
+        <div class="block">
+            <!-- Input Groups - Dropdowns Title -->
+            <div class="block-title">
+                <h2><strong>Resultados</strong> </h2>
+            </div>
+            <!-- END Input Groups - Dropdowns Title -->
+            <div id="ajax_loader">
+                Seleccione un criterio de busqueda
+                <p>&nbsp;</p>
+            </div>  
 
+        </div>
+        <!-- END Input Groups - Dropdowns Block -->
     </div>
-    <!-- END Input Groups - Dropdowns Block -->
 </div>
+
+<script type="text/javascript">
+//<![CDATA[
+  $("#txtpropietario").bind("keyup", function (event) {
+      $.ajax({
+          async: true,
+          data: $("#txtpropietario").serialize(),
+          dataType: "html",
+          success: function (data, textStatus) {
+              $("#listadoPropietarios").html(data);
+          }, type: "post", url: "<?php echo $this->Html->url(array('action' => 'ajaxbuscapropietario')); ?>"});
+      return false;
+  });
+//]]>
+</script>
 
 <script>
   $('#crtform').submit(function () { //en el evento submit del fomulario

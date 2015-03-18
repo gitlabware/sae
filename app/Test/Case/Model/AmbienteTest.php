@@ -15,7 +15,14 @@ class AmbienteTest extends CakeTestCase {
 	public $fixtures = array(
 		'app.ambiente',
 		'app.categoriasambiente',
-		'app.edificio'
+		'app.categoriaspago',
+		'app.edificio',
+		'app.piso',
+		'app.user',
+		'app.ambienteconcepto',
+		'app.concepto',
+		'app.inquilino',
+		'app.pago'
 	);
 
 /**

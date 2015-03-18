@@ -30,4 +30,15 @@ App::uses('Helper', 'View');
  * @package       app.View.Helper
  */
 class AppHelper extends Helper {
+  public function SpanishDate($fecha=null) {
+  $arr = explode('-', $val);
+  debug($arr);
+  $ano = date('Y');
+  $mes = date('n');
+  $dia = date('d');
+  $mesesN = array(1 => "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+    "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+  //debug("$dia/" . $mesesN[$mes] . "/$ano");exit;
+  return "$dia/" . $mesesN[$mes] . "/$ano";
+}
 }

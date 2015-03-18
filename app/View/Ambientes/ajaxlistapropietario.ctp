@@ -10,7 +10,7 @@ $modeloInquilino = new Inquilino();
         <thead>
             <tr>
                 <th style="width: 150px;" class="text-center">Nombre</th>
-                <th><div id="pro">Propietario</div></th>
+                <th>Propietario</th>
                 <th>Inquilino(s)</th>
                 <th>Piso</th>                
                 <th style="width: 150px;" class="text-center">Actions</th>
@@ -53,8 +53,3 @@ $modeloInquilino = new Inquilino();
         </tbody>
     </table>
 </div>
-<script>
-  $('#pro').click(function(){
-    console.log('si funciona ajax');
-  });
-</script>  
