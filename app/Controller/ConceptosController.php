@@ -42,7 +42,7 @@ class ConceptosController extends AppController {
     {
         $this->layout = 'ajax';
         $servicios = $this->Ambienteconcepto->findAllByambiente_id($idAmbiente);
-        $conceptos = $this->Concepto->find('list',array('fields' => 'Concepto.nombre','conditions' => array('Concepto.edificio_id' => $idEdificio)));
+        $conceptos = $this->Concepto->find('list',array('fields' => 'Concepto.nombre'));
         $this->set(compact('servicios','idEdificio','conceptos','idAmbiente'));
     }
     public function guarda_nuevo_servicio_a()

@@ -240,7 +240,7 @@ class AmbientesController extends AppController {
           ));
           //debug($ambientes);
           $this->set(compact('ambientes'));
-          break;        
+          break;
         case 3:
           $ambientes = $this->Ambiente->find('all', array(
             'recursive' => 0,
@@ -257,16 +257,24 @@ class AmbientesController extends AppController {
   }
 
   public function pay($idAmbiente = null) {
-    
     $datosAmbiente = $this->Ambiente->findById($idAmbiente, null, null, 0);
     //debug($datosAmbiente);
-
     $ultimoPago = $this->Pago->find('first', array(
       'recursive' => -1,
       'conditions' => array('Pago.ambiente_id' => $idAmbiente),
       'order' => 'id DESC'
     ));
-    $this->set(compact('datosAmbiente', 'ultimoPago'));
+    $inquilinos = $this->Inquilino->find('list', array('recursive' => 0
+      , 'fields' => 'User.nombre'
+      , 'conditions' => array('Inquilino.ambiente_id' => $idAmbiente)
+    ));
+    $conceptos = $this->Ambienteconcepto->find('list', array(
+      'fields' => array('Ambienteconcepto.concepto_id', 'Ambienteconcepto.monto'),
+      'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente)
+    ));
+    /* debug($conceptos);
+      exit; */
+    $this->set(compact('datosAmbiente', 'ultimoPago', 'inquilinos', 'conceptos'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {
@@ -298,8 +306,8 @@ class AmbientesController extends AppController {
     $this->set(compact('propietarios'));
     //debug($propietarios);
   }
-  
-  public function listadopago(){
+
+  public function listadopago() {
     
   }
 
