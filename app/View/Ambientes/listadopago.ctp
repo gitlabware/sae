@@ -1,143 +1,75 @@
+<?php
+App::import('Model', 'Pago');
+$Pago = new Pago();
+?>
 <!-- Example Block -->
 <div class="block">
     <!-- Example Title -->
     <div class="block-title">
         <h2>Detalle de Pagos</h2>
     </div>
-    <center><h1>RECIBO # 435</h1></center>
-    <b>Propietario: </b>Pedro<br />
-    <b>Arrendatario: </b>Juan Perez<br />
+    <center><h1>RECIBO # <?php echo $recibo['Recibo']['numero'] ?></h1></center>
+    <b>Propietario: </b><?php echo $recibo['Propietario']['nombre'] ?><br />
+    <?php if (!empty($recibo['Recibo']['inquilino_id'])): ?>
+      <b>Pagador: </b><?php echo $recibo['Inquilino']['User']['nombre'] ?><br />
+    <?php else: ?>
+      <b>Pagador: </b><?php echo $recibo['Propietario']['nombre'] ?><br />
+    <?php endif; ?>
     <b>Fecha: </b>2015-03-17<br />
     <p>&nbsp;</p>
+    <?php
+    $pagos = $Pago->find('all', array(
+      'conditions' => array('Pago.recibo_id' => $recibo['Recibo']['id'])
+    ));
+    ?>
     <!-- Example Content -->
-    <b>Pago por Mantenimiento </b>
+    <b>Listado y detalle de pagos </b>
     <div class="table-responsive">
         <table id="general-table" class="table table-striped table-vcenter table-hover">
             <thead>
                 <tr>
-                    <th>Oficina</th>
+                    <th>Ambiente</th>
+                    <th>Concepto</th>
                     <th>Monto</th>
                     <th>Fecha</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-04-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-05-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-06-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-07-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-
+            <tbody> 
+                <?php $total = 0.00;?>
+                <?php foreach ($pagos as $man): ?>
+                  <tr>                                        
+                      <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
+                      <td><?php echo $man['Concepto']['nombre'];?></td>
+                      <td><?php echo $man['Pago']['monto']; ?></td>
+                      <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
+                      <td class="text-center">
+                          <div class="btn-group btn-group-xs">
+                              <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'quitar_pago',$man['Pago']['id']),array('class' => 'btn btn-danger','title' => 'Quitar de la lista','confirm' => 'Esta seguro de quitar este pago??','escape' => FALSE))?>
+                              
+                          </div>
+                      </td>
+                  </tr>
+                  <?php $total = $total + $man['Pago']['monto'];?>
+                <?php endforeach; ?>
+                  <tr>
+                      <td></td>
+                      <td>TOTAL:</td>
+                      <td><?php echo $total;?></td>
+                      <td></td>
+                      <td></td>
+                  </tr>
             </tbody>
         </table>
     </div>
     <!-- END Example Content -->
-    
-    <p>&nbsp;</p>
-    <b>Pago por Alquiler </b>
-    <div class="table-responsive">
-        <table id="general-table" class="table table-striped table-vcenter table-hover">
-            <thead>
-                <tr>
-                    <th>Oficina</th>
-                    <th>Monto</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-04-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-05-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-06-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>                                        
-                    <td><a href="page_ready_user_profile.html">a1</a></td>
-                    <td>12</td>
-                    <td><a href="javascript:void(0)" class="label label-warning">2015-07-01</a></td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-xs">
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                        </div>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="col-md-6">
+            <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'buscador'));?>'">Ir a pagos</button>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo',$recibo['Recibo']['id']));?>'">Terminar Pago</button>
+        </div>
     </div>
 </div>
 <!-- END Example Block -->
