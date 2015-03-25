@@ -72,7 +72,56 @@
 <div class="block">
     <table class="CSSTableGenerator">
         <tr>
-            
+            <td></td>
+            <td>
+                <span class="text-success" style="font-size: 16px;">RECIBO</span><br>
+                <span class="text-success" style="font-size: 14px;">INGRESO POR MANTENIMIENTO Y OTROS</span>
+            </td>
+        </tr>
+    </table>
+    <table class="CSSTableGenerator" style="margin-top:-1px;">
+        <tr>
+            <td><span class="text-success">Propietario: </span></td>
+            <td><?php echo $recibo['Propietario']['nombre'];?></td>
+            <td>
+                <span class="text-success">FECHA: <?php echo date('d/m/Y');?></span>
+            </td>
+        </tr>
+    </table>
+    <table class="CSSTableGenerator" style="margin-top:-1px;">
+        <tr>
+            <td><span class="text-success">Pagador: </span></td>
+            <td><?php 
+            if(!empty($recibo['Recibo']['inquilino'])){
+              echo $recibo['Inquilino']['User']['nombre'].' (Inquilino)';
+            }else{
+              echo $recibo['Propietario']['nombre'].' (Propietario)';
+            }
+            ?></td>
+            <td>
+                <span class="text-success">Nro: <?php echo $recibo['Recibo']['numero'];?></span>
+            </td>
+        </tr>
+    </table>
+    <table class="CSSTableGenerator" style="margin-top:-1px;">
+        <tr>
+            <td><span>Nro</span></td>
+            <td><span>Concepto</span></td>
+            <td><span>Importe Total Bs</span></td>
+        </tr>
+        <?php $i = 0;$total_i = 0.00;?>
+        <?php foreach ($pagos as $pa):$i++;?>
+        <tr>
+            <td><?php echo $i;?></td>
+            <td><?php echo $pa['Concepto']['nombre'];?></td>
+            <td><?php echo $pa[0]['imp_total'];?></td>
+        </tr>
+        <?php $total_i = $total_i + $pa[0]['imp_total'];?>
+        <?php endforeach;?>
+        <tr>
+            <td></td>
+            <td>TOTAL BOLIVIANOS</td>
+            <td><?php echo $total_i;?></td>
         </tr>
     </table>
 </div>

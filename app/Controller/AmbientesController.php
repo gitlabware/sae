@@ -431,8 +431,19 @@ class AmbientesController extends AppController {
       $cuotas_man--;
     }
   }
-  public function recibo($idRecibo = null){
+  public function recibo($idRecibo = null,$terminar= null){
+    if($terminar){
+      $this->Recibo->id = $idRecibo;
+      $this->request->data['Recibo']['estado'] = 'Terminado';
+      $this->Recibo->save($this->request->data['Recibo']);
+    }
     $recibo = $this->Recibo->findByid($idRecibo,null,null,2);
-    $this->set(compact('recibo'));
+    $pagos = $this->Pago->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Pago.recibo_id' => $idRecibo),
+      'group' => array('Pago.concepto_id'),
+      'fields' => array('Concepto.nombre','SUM(Pago.monto) as imp_total')
+    ));
+    $this->set(compact('recibo','pagos'));
   }
 }
