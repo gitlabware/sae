@@ -25,22 +25,37 @@
                 <div class="widget-main">
                     <div class="list-group remove-margin">
                         <a href="javascript:void(0)" class="list-group-item">
-                            <span class="pull-right"><strong id="manteminientoAmbiente"><?php //echo $datosAmbiente['Ambiente']['mantenimiento'];    ?></strong></span>
-                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> Mantenimiento</h4>
+                            <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
+                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Ultimos Pagos</b></h4>
                         </a>
                         <a href="javascript:void(0)" class="list-group-item">
                             <span class="pull-right">
                                 <strong>
-                                    <?php if (!empty($ultimoPago)): ?>
+                                    <?php if (!empty($ultimoPago_mantenimiento)): ?>
                                       <?php
-                                      echo $ultimoPago['Pago']['created'];
+                                      echo $ultimoPago_mantenimiento['Pago']['fecha'];
                                       ?>
                                     <?php else: ?>
                                       N/T
                                     <?php endif; ?>
                                 </strong>
                             </span>
-                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> Ultimo Pago</h4>
+                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i>Mantenimiento</h4>
+                            <p class="list-group-item-text"></p>
+                        </a>
+                        <a href="javascript:void(0)" class="list-group-item">
+                            <span class="pull-right">
+                                <strong>
+                                    <?php if (!empty($ultimoPago_alquiler)): ?>
+                                      <?php
+                                      echo $ultimoPago_alquiler['Pago']['fecha'];
+                                      ?>
+                                    <?php else: ?>
+                                      N/T
+                                    <?php endif; ?>
+                                </strong>
+                            </span>
+                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i>Alquiler</h4>
                             <p class="list-group-item-text"></p>
                         </a>
 
@@ -113,38 +128,31 @@
                       <!-- END Input Grid Title -->
                       <!-- Block Tabs Title -->
                       <div class="block-content-1" style="display: none;">
-                          <div class="block-title">                
-                              <ul class="nav nav-tabs" data-toggle="tabs">
-                                  <li class="active"><a href="#11">Monto Efectivo</a></li>                    
-                              </ul>
-                          </div>
-                          <!-- END Block Tabs Title -->
-                          <!-- Tabs Content -->
-                          <div class="tab-content">
-                              <div class="tab-pane active" id="11">
-                                  <?php echo $this->Form->hidden('Pago.referencia_mantenimiento', array('value' => $conceptos[10], 'id' => 'idrefer_mantenimiento')); ?>
-                                  <div class="form-group">                    
-                                      <div class="col-md-4">
-                                          <label for="monto-pe">Monto</label>
-                                          <input type="number" class="form-control" id="monto-pe-mantenimiento" name="data[Mantenimiento][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas();">
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label for="crt2">Cantidad Cuotas</label>
-                                          <input type="text" class="form-control" id="cantidad-pe-mantenimiento" name="data[Mantenimiento][cuotas]" placeholder="0" onkeyup="calcula_monto();">
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label for="crt2">Cambio</label>
-                                          <input type="text" class="form-control" id="cambio-pe-mantenimiento" name="data[Mantenimiento][cambio]" placeholder="0">
-                                      </div>
-                                  </div>
-                              </div>               
+
+                          <?php echo $this->Form->hidden('Pago.referencia_mantenimiento', array('value' => $conceptos[10], 'id' => 'idrefer_mantenimiento')); ?>
+                          <div class="form-group">                    
+                              <div class="col-md-3">
+                                  <label for="monto-pe">Monto</label>
+                                  <input type="number" class="form-control" id="monto-pe-mantenimiento" name="data[Mantenimiento][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas();">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="crt2">Cantidad Cuotas</label>
+                                  <input type="text" class="form-control" id="cantidad-pe-mantenimiento" name="data[Mantenimiento][cuotas]" placeholder="0" onkeyup="calcula_monto();">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="crt2">Cambio</label>
+                                  <input type="text" class="form-control" id="cambio-pe-mantenimiento" name="data[Mantenimiento][cambio]" placeholder="0">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="crt2">Fecha</label>
+                                  <?php echo $this->Form->date('Mantenimiento.fecha_inicio',array('class' => 'form-control','value' => $fecha_mantenimiento));?>
+                              </div>
                           </div>
                           <div class="checkbox">
                               <label for="mantenimiento">
                                   <input type="checkbox" id="mantenimiento-pagar" name="data[Mantenimiento][pagar]"  onclick="calcula_total();"> Pagar Mantenimiento
                               </label>
-                          </div>                
-                          <!-- END Tabs Content -->
+                          </div>
                       </div>
                   </div>
                   <!-- END Input Grid Block -->
@@ -165,39 +173,30 @@
                       <!-- END Input Grid Title -->
                       <!-- Block Tabs Title -->
                       <div class="block-content-2" style="display: none;">
-                          <div class="block-title">                
-                              <ul class="nav nav-tabs" data-toggle="tabs">
-                                  <li class="active"><a href="#21">Monto Efectivo</a></li>                    
-                              </ul>
-                          </div>
-                          <!-- END Block Tabs Title -->
-                          <!-- Tabs Content -->
-                          <div class="tab-content">
-                              <div class="tab-pane active" id="21">
-
-                                  <?php echo $this->Form->hidden('Pago.referencia_alquileres', array('value' => $conceptos[11], 'id' => 'idrefer_alquiler')); ?>
-                                  <div class="form-group">                    
-                                      <div class="col-md-4">
-                                          <label for="monto-pe">Monto</label>
-                                          <input type="number" class="form-control" id="monto-pe-alquiler" name="data[Alquiler][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas_alqui();">
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label for="crt2">Cantidad Cuotas</label>
-                                          <input type="text" class="form-control" id="cantidad-pe-alquiler" name="data[Alquiler][cuotas]" placeholder="0" onkeyup="calcula_monto_alqui();">
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label for="crt2">Cambio</label>
-                                          <input type="text" class="form-control" id="cambio-pe-alquiler" name="data[Alquiler][cambio]" placeholder="0">
-                                      </div>
-                                  </div>
-                              </div>               
+                          <?php echo $this->Form->hidden('Pago.referencia_alquileres', array('value' => $conceptos[11], 'id' => 'idrefer_alquiler')); ?>
+                          <div class="form-group">                    
+                              <div class="col-md-3">
+                                  <label for="monto-pe">Monto</label>
+                                  <input type="number" class="form-control" id="monto-pe-alquiler" name="data[Alquiler][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas_alqui();">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="crt2">Cantidad Cuotas</label>
+                                  <input type="text" class="form-control" id="cantidad-pe-alquiler" name="data[Alquiler][cuotas]" placeholder="0" onkeyup="calcula_monto_alqui();">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="crt2">Cambio</label>
+                                  <input type="text" class="form-control" id="cambio-pe-alquiler" name="data[Alquiler][cambio]" placeholder="0">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="crt2">Fecha</label>
+                                  <?php echo $this->Form->date('Alquiler.fecha_inicio',array('class' => 'form-control','value' => $fecha_alquiler));?>
+                              </div>
                           </div>
                           <div class="checkbox">
                               <label for="mantenimiento">
                                   <input type="checkbox" id="alquiler-pagar" name="data[Alquiler][pagar]" onclick="calcula_total();"> Pagar ALquiler
                               </label>
-                          </div>                
-                          <!-- END Tabs Content -->
+                          </div>
                       </div>
                   </div>
                   <!-- END Input Grid Block -->

@@ -32,7 +32,7 @@ $Pago = new Pago();
                     <th>Concepto</th>
                     <th>Monto</th>
                     <th>Fecha</th>
-                    <th>Acciones</th>
+                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody> 
@@ -44,10 +44,7 @@ $Pago = new Pago();
                       <td><?php echo $man['Pago']['monto']; ?></td>
                       <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
                       <td class="text-center">
-                          <div class="btn-group btn-group-xs">
-                              <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'quitar_pago',$man['Pago']['id']),array('class' => 'btn btn-danger','title' => 'Quitar de la lista','confirm' => 'Esta seguro de quitar este pago??','escape' => FALSE))?>
-                              
-                          </div>
+                          <?php echo $man['Pago']['estado'];?>
                       </td>
                   </tr>
                   <?php $total = $total + $man['Pago']['monto'];?>
@@ -68,7 +65,7 @@ $Pago = new Pago();
             <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'buscador'));?>'">Ir a pagos</button>
         </div>
         <div class="col-md-6">
-            <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo',$recibo['Recibo']['id']));?>'">Terminar Pago</button>
+            <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo',$recibo['Recibo']['id'],1));?>'">Terminar Pago</button>
         </div>
     </div>
 </div>

@@ -259,11 +259,28 @@ class AmbientesController extends AppController {
   public function pay($idAmbiente = null) {
     $datosAmbiente = $this->Ambiente->findById($idAmbiente, null, null, 0);
     //debug($datosAmbiente);
-    $ultimoPago = $this->Pago->find('first', array(
+    $ultimoPago_mantenimiento = $this->Pago->find('first', array(
       'recursive' => -1,
-      'conditions' => array('Pago.ambiente_id' => $idAmbiente),
+      'fields' => array('Pago.fecha'),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.concepto_id' => 10, 'Pago.estado' => 'Pagado'),
       'order' => 'id DESC'
     ));
+    $ultimoPago_alquiler = $this->Pago->find('first', array(
+      'recursive' => -1,
+      'fields' => array('Pago.fecha'),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.concepto_id' => 11, 'Pago.estado' => 'Pagado'),
+      'order' => 'id DESC'
+    ));
+    if (!empty($ultimoPago_mantenimiento)) {
+      $fecha_mantenimiento = $ultimoPago_mantenimiento['Pago']['fecha'];
+    } else {
+      $fecha_mantenimiento = $datosAmbiente['Ambiente']['fecha_ocupacion'];
+    }
+    if (!empty($ultimoPago_alquiler)) {
+      $fecha_alquiler = $ultimoPago_alquiler['Pago']['fecha'];
+    } else {
+      $fecha_alquiler = $datosAmbiente['Ambiente']['fecha_ocupacion'];
+    }
     $inquilinos = $this->Inquilino->find('list', array('recursive' => 0
       , 'fields' => 'User.nombre'
       , 'conditions' => array('Inquilino.ambiente_id' => $idAmbiente)
@@ -274,7 +291,7 @@ class AmbientesController extends AppController {
     ));
     /* debug($conceptos);
       exit; */
-    $this->set(compact('datosAmbiente', 'ultimoPago', 'inquilinos', 'conceptos', 'idAmbiente'));
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {
@@ -313,8 +330,8 @@ class AmbientesController extends AppController {
   }
 
   public function registra_pagos() {
-    /*debug($this->request->data);
-    exit;*/
+    /* debug($this->request->data);
+      exit; */
     $idInquilino = $this->request->data['Pago']['inquilino_id'];
     // Genera el recibo
     $numero = 1;
@@ -323,15 +340,18 @@ class AmbientesController extends AppController {
       $numero = $ultimo_recibo['Recibo']['numero'] + 1;
     }
     if (!empty($idInquilino)) {
+      $inquilino = $this->Inquilino->findByid($idInquilino, null, null, -1);
       $recibo = $this->Recibo->find('first', array(
-        'recursive' => -1,
+        'recursive' => 0,
         'order' => 'Recibo.id DESC',
-        'conditions' => array('Recibo.inquilino_id' => $idInquilino, 'Recibo.estado' => 'Creado')
+        'fields' => array('Recibo.id'),
+        'conditions' => array('Inquilino.user_id' => $inquilino['Inquilino']['user_id'], 'Recibo.estado' => 'Creado')
       ));
     } else {
       $recibo = $this->Recibo->find('first', array(
-        'recursive' => -1,
+        'recursive' => 0,
         'order' => 'Recibo.id DESC',
+        'fields' => array('Recibo.id'),
         'conditions' => array('Recibo.propietario_id' => $this->request->data['Ambiente']['propietario_id'], 'Recibo.estado' => 'Creado')
       ));
     }
@@ -349,12 +369,11 @@ class AmbientesController extends AppController {
     }
     $this->request->data['Pago']['recibo_id'] = $idRecibo;
     //termina Parte de recibos
-    $ambiente = $this->Ambiente->findByid($this->request->data['Ambiente']['id'], NULL, NULL, -1);
     if (!empty($this->request->data['Mantenimiento']['pagar'])) {
-      $this->pagar_m_a(10, $this->request->data['Mantenimiento']['cuotas'], $this->request->data['Pago']['referencia_mantenimiento'], $ambiente);
+      $this->pagar_m_a(10, $this->request->data['Mantenimiento']['cuotas'], $this->request->data['Pago']['referencia_mantenimiento'], $this->request->data['Mantenimiento']['fecha_inicio']);
     }
     if (!empty($this->request->data['Alquiler']['pagar'])) {
-      $this->pagar_m_a(11, $this->request->data['Alquiler']['cuotas'], $this->request->data['Pago']['referencia_alquileres'], $ambiente);
+      $this->pagar_m_a(11, $this->request->data['Alquiler']['cuotas'], $this->request->data['Pago']['referencia_alquileres'], $this->request->data['Alquiler']['fecha_inicio']);
     }
     if (!empty($this->request->data['Ascensor']['pagar'])) {
       $this->pagar_otros(13, 'Ascensor');
@@ -365,14 +384,12 @@ class AmbientesController extends AppController {
     if (!empty($this->request->data['Otros']['pagar'])) {
       $this->pagar_otros(15, 'Otros');
     }
-
-
     $this->redirect(array('action' => 'listadopago', $idRecibo));
   }
 
   public function pagar_otros($idConcepto = null, $tipo = null) {
     $this->Pago->create();
-    $this->request->data['Pago']['estado'] = 'Pagado';
+    $this->request->data['Pago']['estado'] = 'Por pagar';
     $this->request->data['Pago']['ambiente_id'] = $this->request->data['Ambiente']['id'];
     $this->request->data['Pago']['user_id'] = $this->Session->read('Auth.User.id');
     $this->request->data['Pago']['propietario_id'] = $this->request->data['Ambiente']['propietario_id'];
@@ -383,44 +400,39 @@ class AmbientesController extends AppController {
     $this->Pago->save($this->request->data['Pago']);
   }
 
-  public function pagar_m_a($idConcepto = null, $cuotas_man = NULL, $referencia = null, $ambiente = array()) {
-    if (!empty($ambiente['Ambiente']['fecha_ocupacion'])) {
-      $nuevafecha = $ambiente['Ambiente']['fecha_ocupacion'];
+  public function pagar_m_a($idConcepto = null, $cuotas_man = NULL, $referencia = null, $fecha_u = NULL) {
+    if (!empty($fecha_u)) {
+      $nuevafecha = $fecha_u;
     } else {
-      $this->Session->setFlash('No se encontro la fecha de ocupacion', 'msgerror');
+      $this->Session->setFlash('Es necesario ingresar la fecha', 'msgerror');
       $this->redirect(array('action' => 'pay', $this->request->data['Ambiente']['id']));
     }
     $mantenimientos = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.estado' => 'Debe', 'Pago.ambiente_id' => $this->request->data['Ambiente']['id'], 'Pago.concepto_id' => $idConcepto)
+      'conditions' => array('Pago.estado' => 'Debe', 
+        'Pago.ambiente_id' => $this->request->data['Ambiente']['id'], 
+        'Pago.concepto_id' => $idConcepto),
+        'Pago.fecha >=' => $nuevafecha
     ));
     foreach ($mantenimientos as $ma) {
       if ($cuotas_man > 0) {
-        $nuevafecha = strtotime('+1 month', strtotime(date('Y-m-01', strtotime($nuevafecha))));
-        $nuevafecha = date('Y-m-j', $nuevafecha);
         $this->Pago->id = $ma['Pago']['id'];
-        $this->request->data['Pago']['estado'] = 'Pagado';
+        //$this->request->data['Pago']['estado'] = 'Pagado';
         $this->Pago->save($this->request->data['Pago']);
         $cuotas_man--;
       } else {
         break;
       }
     }
-    $ultima_fecha = $this->Pago->find('first', array(
-      'recursive' => -1,
-      'order' => 'Pago.id DESC',
-      'fields' => array('Pago.fecha'),
-      'conditions' => array('Pago.estado' => 'Pagado', 'Pago.ambiente_id' => $this->request->data['Ambiente']['id'], 'Pago.concepto_id' => $idConcepto)
-    ));
-    if (!empty($ultima_fecha)) {
-      $nuevafecha = $ultima_fecha['Pago']['fecha'];
+    if(!empty($mantenimientos)){
+      $ultimo_pago = array_pop($mantenimientos);
+      $nuevafecha = $ultimo_pago['Pago']['fecha'];
     }
-
     while ($cuotas_man > 0) {
       $nuevafecha = strtotime('+1 month', strtotime(date('Y-m-01', strtotime($nuevafecha))));
       $nuevafecha = date('Y-m-j', $nuevafecha);
       $this->Pago->create();
-      $this->request->data['Pago']['estado'] = 'Pagado';
+      $this->request->data['Pago']['estado'] = 'Por pagar';
       $this->request->data['Pago']['ambiente_id'] = $this->request->data['Ambiente']['id'];
       $this->request->data['Pago']['user_id'] = $this->Session->read('Auth.User.id');
       $this->request->data['Pago']['propietario_id'] = $this->request->data['Ambiente']['propietario_id'];
@@ -431,19 +443,35 @@ class AmbientesController extends AppController {
       $cuotas_man--;
     }
   }
-  public function recibo($idRecibo = null,$terminar= null){
-    if($terminar){
-      $this->Recibo->id = $idRecibo;
-      $this->request->data['Recibo']['estado'] = 'Terminado';
-      $this->Recibo->save($this->request->data['Recibo']);
-    }
-    $recibo = $this->Recibo->findByid($idRecibo,null,null,2);
-    $pagos = $this->Pago->find('all',array(
+
+  public function recibo($idRecibo = null, $terminar = null) {
+    $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
       'group' => array('Pago.concepto_id'),
-      'fields' => array('Concepto.nombre','SUM(Pago.monto) as imp_total')
+      'fields' => array('Concepto.nombre', 'SUM(Pago.monto) as imp_total')
     ));
-    $this->set(compact('recibo','pagos'));
+    $todos_pagos = $this->Pago->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Pago.recibo_id' => $idRecibo),
+      'fields' => array('Pago.id')
+    ));
+    if ($terminar) {
+      $this->Recibo->id = $idRecibo;
+      $this->request->data['Recibo']['estado'] = 'Terminado';
+      $this->Recibo->save($this->request->data['Recibo']);
+      foreach ($todos_pagos as $pa) {
+        $this->Pago->id = $pa['Pago']['id'];
+        $this->request->data['Pago']['estado'] = 'Pagado';
+        $this->Pago->save($this->request->data['Pago']);
+      }
+    }
+    $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
+    $this->set(compact('recibo', 'pagos'));
   }
+
+  public function cancelar_pago($idPago = NULL) {
+    
+  }
+
 }
