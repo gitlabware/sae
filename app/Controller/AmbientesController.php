@@ -4,13 +4,16 @@ App::uses('AppController', 'Controller');
 
 class AmbientesController extends AppController {
 
-  var $components = array('RequestHandler');
-  public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo');
+  var $components = array('RequestHandler', 'DataTable');
+  public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo');
   public $layout = 'sae';
 
   public function beforeFilter() {
     parent::beforeFilter();
-    //$this->Auth->allow();
+    if ($this->RequestHandler->responseType() == 'json') {
+      $this->RequestHandler->setContent('json', 'application/json');
+    }
+    //debug($this->RequestHandler->responseType());
   }
 
   public function index() {
@@ -140,17 +143,26 @@ class AmbientesController extends AppController {
     $this->Inquilino->create();
     $this->request->data['Inquilino']['user_id'] = $idUsuario;
     $this->Inquilino->save($this->request->data['Inquilino']);
+    $this->actualiza_inquilinos($this->request->data['Inquilino']['ambiente_id']);
     exit;
   }
 
   public function guarda_inquilino() {
     if (!empty($this->request->data['Inquilino']['user_id']) && $this->request->data['Inquilino']['ambiente_id']) {
       $inquilino = $this->Inquilino->find('first', array(
+        'order' => 'Inquilino.id DESC',
         'conditions' => array('Inquilino.user_id' => $this->request->data['Inquilino']['user_id'], 'Inquilino.ambiente_id' => $this->request->data['Inquilino']['ambiente_id'])
       ));
       if (empty($inquilino)) {
         $this->Inquilino->create();
         $this->Inquilino->save($this->request->data['Inquilino']);
+        $this->actualiza_inquilinos($this->request->data['Inquilino']['ambiente_id']);
+      } else {
+        if ($inquilino['Inquilino']['estado'] != 1) {
+          $this->Inquilino->create();
+          $this->Inquilino->save($this->request->data['Inquilino']);
+          $this->actualiza_inquilinos($this->request->data['Inquilino']['ambiente_id']);
+        }
       }
     }
     exit;
@@ -162,7 +174,23 @@ class AmbientesController extends AppController {
     $this->request->data['Inquilino']['ambiente_id'] = $idAmbiente;
     $this->request->data['Inquilino']['estado'] = 0;
     $this->Inquilino->save($this->request->data['Inquilino']);
+    $this->actualiza_inquilinos($idAmbiente);
     $this->redirect(array('action' => 'inquilinos', $idAmbiente));
+  }
+
+  public function actualiza_inquilinos($idAmbiente = null) {
+    $sql = "SELECT * FROM "
+      . "(SELECT user_id,estado FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
+      . " AS Inquilino WHERE 1 GROUP BY user_id";
+    $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
+    $inquilinos = $this->Inquilino->query($sql2);
+    $text_inquilinos = '';
+    foreach ($inquilinos as $inq) {
+      $text_inquilinos = $text_inquilinos . $inq['User']['nombre'] . '<br>';
+    }
+    $this->Ambiente->id = $idAmbiente;
+    $this->request->data['Ambiente']['lista_inquilinos'] = $text_inquilinos;
+    $this->Ambiente->save($this->request->data['Ambiente']);
   }
 
   public function pagos($idAmbiente = null) {
@@ -211,14 +239,30 @@ class AmbientesController extends AppController {
   }
 
   public function buscador() {
+
     $edificioId = $this->Session->read('Auth.User.edificio_id');
-    $ambientes = $this->Ambiente->find('all', array(
-      'recursive' => 0,
-      'conditions' => array(
-        'Ambiente.edificio_id' => $edificioId
-      )
-    ));
-    //debug($ambientes);
+
+
+    if ($this->RequestHandler->responseType() == 'json') {
+      $pagos = '<button class="btn btn-success" type="button" title="Pagos" onclick="ir_pagos(' . "',Ambiente.id,'" . ')"><i class="fa fa-dollar"></i></button>';
+      //$imprimir = '<button class="btn btn-inverse btn-xs" type="button" onclick="imprimirt(' . "',Trabajo.id,'" . ')"><i class="icon ico-print"></i>Imprimir</button>';
+      //$produccion = '<button class="btn btn-success btn-xs" type="button" onclick="produccion(' . "',Trabajo.id,'" . ')"><i class="icon ico-cogs"></i>Produccion</button>';
+      //$elimina = '<button class="btn btn-danger btn-xs" type="button" onclick="eliminart(' . "',Trabajo.id,'" . ')"><i class="icon ico-remove3"></i>Eliminar</button>';
+      $acciones = '<div class="btn-group btn-group-sm"> '.$pagos.' </div>';
+      $this->Ambiente->virtualFields = array(
+        'acciones' => "CONCAT('$acciones')"
+      );
+      $this->paginate = array(
+        'fields' => array('Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Piso.nombre', 'Ambiente.acciones'),
+        'conditions' => array('Ambiente.edificio_id' => $edificioId),
+        'recursive' => 0,
+        'order' => 'Ambiente.nombre ASC'
+      );
+      $this->DataTable->fields = array('Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Piso.nombre', 'Ambiente.acciones');
+      $this->DataTable->emptyEleget_usuarios_adminments = 1;
+      $this->set('ambientes', $this->DataTable->getResponse());
+      $this->set('_serialize', 'ambientes');
+    }
   }
 
   public function ajaxresultados() {
@@ -409,10 +453,10 @@ class AmbientesController extends AppController {
     }
     $mantenimientos = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.estado' => 'Debe', 
-        'Pago.ambiente_id' => $this->request->data['Ambiente']['id'], 
+      'conditions' => array('Pago.estado' => 'Debe',
+        'Pago.ambiente_id' => $this->request->data['Ambiente']['id'],
         'Pago.concepto_id' => $idConcepto),
-        'Pago.fecha >=' => $nuevafecha
+      'Pago.fecha >=' => $nuevafecha
     ));
     foreach ($mantenimientos as $ma) {
       if ($cuotas_man > 0) {
@@ -424,7 +468,7 @@ class AmbientesController extends AppController {
         break;
       }
     }
-    if(!empty($mantenimientos)){
+    if (!empty($mantenimientos)) {
       $ultimo_pago = array_pop($mantenimientos);
       $nuevafecha = $ultimo_pago['Pago']['fecha'];
     }
