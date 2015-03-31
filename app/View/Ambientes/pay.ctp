@@ -107,7 +107,13 @@
                           <div class="form-group">
                               <label class="col-md-3 control-label">Inquilino: </label>
                               <div class="col-md-9">
-                                  <?php echo $this->Form->select('Pago.inquilino_id', $inquilinos, array('class' => 'form-control')); ?>
+                                  <select class="form-control" name="data[Pago][inquilino_id]">
+                                      <option value="">Seleccione al inquilino</option>
+                                      <?php foreach ($inquilinos as $inq):?>
+                                      <option value="<?php echo $inq['Inquilino']['id'];?>"><?php echo $inq['User']['nombre']?></option>
+                                      <?php endforeach;?>
+                                  </select>
+                                  <?php //echo $this->Form->select('Pago.inquilino_id', $inquilinos, array('class' => 'form-control')); ?>
                               </div>
                           </div>
                       </div>
@@ -145,14 +151,26 @@
                               </div>
                               <div class="col-md-3">
                                   <label for="crt2">Fecha</label>
-                                  <?php echo $this->Form->date('Mantenimiento.fecha_inicio',array('class' => 'form-control','value' => $fecha_mantenimiento));?>
+                                  <?php echo $this->Form->date('Mantenimiento.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_mantenimiento)); ?>
                               </div>
                           </div>
-                          <div class="checkbox">
-                              <label for="mantenimiento">
-                                  <input type="checkbox" id="mantenimiento-pagar" name="data[Mantenimiento][pagar]"  onclick="calcula_total();"> Pagar Mantenimiento
-                              </label>
+                          <div class="form-group">
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="mantenimiento-pagar" name="data[Mantenimiento][pagar]"  onclick="calcula_total();"> Pagar Mantenimiento
+                                      </label>
+                                  </div>
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="mantenimiento-iva" name="data[Mantenimiento][pagar]"  onclick="calcula_total();"> IVA
+                                      </label>
+                                  </div>
+                              </div>
                           </div>
+
                       </div>
                   </div>
                   <!-- END Input Grid Block -->
@@ -189,14 +207,26 @@
                               </div>
                               <div class="col-md-3">
                                   <label for="crt2">Fecha</label>
-                                  <?php echo $this->Form->date('Alquiler.fecha_inicio',array('class' => 'form-control','value' => $fecha_alquiler));?>
+                                  <?php echo $this->Form->date('Alquiler.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_alquiler)); ?>
                               </div>
                           </div>
-                          <div class="checkbox">
-                              <label for="mantenimiento">
-                                  <input type="checkbox" id="alquiler-pagar" name="data[Alquiler][pagar]" onclick="calcula_total();"> Pagar ALquiler
-                              </label>
+                          <div class="form-group">
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="alquiler-pagar" name="data[Alquiler][pagar]" onclick="calcula_total();"> Pagar ALquiler
+                                      </label>
+                                  </div>
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="alquiler-iva" name="data[Alquiler][pagar]" onclick="calcula_total();"> IVA
+                                      </label>
+                                  </div>
+                              </div>
                           </div>
+
                       </div>
                   </div>
                   <!-- END Input Grid Block -->
@@ -227,12 +257,23 @@
                                 <input type="text" class="form-control" id="cambio-pe-interes" name="data[Interes][cambio]" placeholder="0">
                             </div>
                         </div>  
-                        <p>&nbsp;</p>
-                        <div class="checkbox">
-                            <label for="mantenimiento">
-                                <input type="checkbox" id="interes-pagar" name="data[Interes][monto]" onclick="calcula_total();"> Pagar Intereses
-                            </label>
-                        </div>  
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="checkbox">
+                                    <label for="mantenimiento">
+                                        <input type="checkbox" id="interes-pagar" name="data[Interes][monto]" onclick="calcula_total();"> Pagar Intereses
+                                    </label>
+                                </div>  
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkbox">
+                                    <label for="mantenimiento">
+                                        <input type="checkbox" id="interes-iva" name="data[Interes][monto]" onclick="calcula_total();"> IVA
+                                    </label>
+                                </div>  
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <!-- END Input Grid Block -->
@@ -259,12 +300,23 @@
                                   <input type="text" class="form-control" id="observacion-pe-ascensor" name="data[Ascensor][onservacion]" placeholder="Ingrese una observacion">
                               </div>
                           </div>  
-                          <p>&nbsp;</p>
-                          <div class="checkbox">
-                              <label for="mantenimiento">
-                                  <input type="checkbox" id="ascensor-pagar" name="data[Ascensor][pagar]" onclick="calcula_total();"> Pagar Ascensor
-                              </label>
-                          </div> 
+                          <div class="form-group">
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="ascensor-pagar" name="data[Ascensor][pagar]" onclick="calcula_total();"> Pagar Ascensor
+                                      </label>
+                                  </div> 
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="ascensor-iva" name="data[Ascensor][pagar]" onclick="calcula_total();"> IVA
+                                      </label>
+                                  </div> 
+                              </div>
+                          </div>
+
                       </div>
                   </div>
                   <!-- END Input Grid Block -->
@@ -292,13 +344,23 @@
                                   <input type="text" class="form-control" id="observacion-pe-multas" name="data[Multas][onservacion]" placeholder="Ingrese una observacion">
                               </div>
                           </div>  
+                          <div class="form-group">
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="multas-pagar" name="data[Multas][pagar]" onclick="calcula_total();"> Pagar Multas
+                                      </label>
+                                  </div> 
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="multas-iva" name="data[Multas][pagar]" onclick="calcula_total();"> IVA
+                                      </label>
+                                  </div> 
+                              </div>
+                          </div>
 
-                          <p>&nbsp;</p>
-                          <div class="checkbox">
-                              <label for="mantenimiento">
-                                  <input type="checkbox" id="multas-pagar" name="data[Multas][pagar]" onclick="calcula_total();"> Pagar Multas
-                              </label>
-                          </div> 
                       </div>
                   </div>
                   <!-- END Input Grid Block -->
@@ -328,13 +390,23 @@
                                   <input type="text" class="form-control" id="observacion-pe-otros" name="data[Otros][onservacion]" placeholder="Ingrese una observacion">
                               </div>
                           </div>  
+                          <div class="form-group">
+                              <div class="col-md-6">
+                                  <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="otros-pagar" name="data[Otros][pagar]" onclick="calcula_total();"> Pagar Otros
+                                      </label>
+                                  </div> 
+                              </div>
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                      <label for="mantenimiento">
+                                          <input type="checkbox" id="otros-iva" name="data[Otros][pagar]" onclick="calcula_total();"> IVA
+                                      </label>
+                                  </div>F
+                              </div>
+                          </div>
 
-                          <p>&nbsp;</p>
-                          <div class="checkbox">
-                              <label for="mantenimiento">
-                                  <input type="checkbox" id="otros-pagar" name="data[Otros][pagar]" onclick="calcula_total();"> Pagar Otros
-                              </label>
-                          </div> 
                       </div>
                   </div>
                   <!-- END Input Grid Block -->

@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class AmbientesController extends AppController {
 
-  var $components = array('RequestHandler', 'DataTable');
+  var $components = array('RequestHandler', 'DataTable', 'Montoliteral');
   public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo');
   public $layout = 'sae';
 
@@ -245,10 +245,7 @@ class AmbientesController extends AppController {
 
     if ($this->RequestHandler->responseType() == 'json') {
       $pagos = '<button class="btn btn-success" type="button" title="Pagos" onclick="ir_pagos(' . "',Ambiente.id,'" . ')"><i class="fa fa-dollar"></i></button>';
-      //$imprimir = '<button class="btn btn-inverse btn-xs" type="button" onclick="imprimirt(' . "',Trabajo.id,'" . ')"><i class="icon ico-print"></i>Imprimir</button>';
-      //$produccion = '<button class="btn btn-success btn-xs" type="button" onclick="produccion(' . "',Trabajo.id,'" . ')"><i class="icon ico-cogs"></i>Produccion</button>';
-      //$elimina = '<button class="btn btn-danger btn-xs" type="button" onclick="eliminart(' . "',Trabajo.id,'" . ')"><i class="icon ico-remove3"></i>Eliminar</button>';
-      $acciones = '<div class="btn-group btn-group-sm"> '.$pagos.' </div>';
+      $acciones = '<div class="btn-group btn-group-sm"> ' . $pagos . ' </div>';
       $this->Ambiente->virtualFields = array(
         'acciones' => "CONCAT('$acciones')"
       );
@@ -325,10 +322,16 @@ class AmbientesController extends AppController {
     } else {
       $fecha_alquiler = $datosAmbiente['Ambiente']['fecha_ocupacion'];
     }
-    $inquilinos = $this->Inquilino->find('list', array('recursive' => 0
+    /* $inquilinos = $this->Inquilino->find('list', array('recursive' => 0
       , 'fields' => 'User.nombre'
       , 'conditions' => array('Inquilino.ambiente_id' => $idAmbiente)
-    ));
+      )); */
+
+    $sql = "SELECT * FROM "
+      . "(SELECT user_id,estado,id FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
+      . " AS Inquilino WHERE 1 GROUP BY user_id";
+    $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
+    $inquilinos = $this->Inquilino->query($sql2);
     $conceptos = $this->Ambienteconcepto->find('list', array(
       'fields' => array('Ambienteconcepto.concepto_id', 'Ambienteconcepto.monto'),
       'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente)
@@ -495,6 +498,7 @@ class AmbientesController extends AppController {
       'group' => array('Pago.concepto_id'),
       'fields' => array('Concepto.nombre', 'SUM(Pago.monto) as imp_total')
     ));
+
     $todos_pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
@@ -511,11 +515,34 @@ class AmbientesController extends AppController {
       }
     }
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
-    $this->set(compact('recibo', 'pagos'));
+    $detalles = $this->Pago->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) >=' => date('Y')),
+    ));
+    $detalles_a = $this->Pago->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) <' => date('Y')),
+    ));
+    $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a'));
   }
 
-  public function cancelar_pago($idPago = NULL) {
-    
+  public function get_monto_literal($monto = null) {
+    return $this->Montoliteral->getMontoLiteral($monto);
+  }
+
+  public function cancelar_pago($idRecibo = NULL) {
+    $pagos = $this->Pago->find('all', array('conditions' => array('Pago.recibo_id' => $idRecibo)));
+    foreach ($pagos as $pa) {
+      if ($pa['Pago']['estado'] == 'Por pagar') {
+        $this->Pago->delete($pa['Pago']['id']);
+      } else {
+        $this->Pago->id = $pa['Pago']['id'];
+        $this->request->data['Pago']['recibo_id'] = NULL;
+        $this->Pago->save($this->request->data['Pago']);
+      }
+    }
+    $this->Session->setFlash('Se cancelo correctamente!!','msgbueno');
+    $this->redirect(array('action' => 'buscador'));
   }
 
 }

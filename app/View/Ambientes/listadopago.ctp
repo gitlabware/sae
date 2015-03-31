@@ -36,36 +36,39 @@ $Pago = new Pago();
                 </tr>
             </thead>
             <tbody> 
-                <?php $total = 0.00;?>
+                <?php $total = 0.00; ?>
                 <?php foreach ($pagos as $man): ?>
                   <tr>                                        
                       <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
-                      <td><?php echo $man['Concepto']['nombre'];?></td>
+                      <td><?php echo $man['Concepto']['nombre']; ?></td>
                       <td><?php echo $man['Pago']['monto']; ?></td>
                       <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
                       <td class="text-center">
-                          <?php echo $man['Pago']['estado'];?>
+                          <?php echo $man['Pago']['estado']; ?>
                       </td>
                   </tr>
-                  <?php $total = $total + $man['Pago']['monto'];?>
+                  <?php $total = $total + $man['Pago']['monto']; ?>
                 <?php endforeach; ?>
-                  <tr>
-                      <td></td>
-                      <td>TOTAL:</td>
-                      <td><?php echo $total;?></td>
-                      <td></td>
-                      <td></td>
-                  </tr>
+                <tr>
+                    <td></td>
+                    <td>TOTAL:</td>
+                    <td><?php echo $total; ?></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
     </div>
     <!-- END Example Content -->
     <div class="row">
-        <div class="col-md-6">
-            <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'buscador'));?>'">Ir a pagos</button>
+        <div class="col-md-4">
+            <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'buscador')); ?>'">Ir a pagos</button>
         </div>
-        <div class="col-md-6">
-            <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo',$recibo['Recibo']['id'],1));?>'">Terminar Pago</button>
+        <div class="col-md-4">
+            <button class="btn btn-block btn-danger" type="button" onclick="if(confirm('Esta seguro de cancelar los pagos de este recibo??')){window.location = '<?php echo $this->Html->url(array('action' => 'cancelar_pago', $recibo['Recibo']['id'])); ?>'}">Cancelar Pagos</button>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo', $recibo['Recibo']['id'], 1)); ?>'">Terminar Pago</button>
         </div>
     </div>
 </div>

@@ -73,7 +73,7 @@
     <table class="CSSTableGenerator">
         <tr>
             <td></td>
-            <td>
+            <td style="width: 60%;">
                 <span class="text-success" style="font-size: 16px;">RECIBO</span><br>
                 <span class="text-success" style="font-size: 14px;">INGRESO POR MANTENIMIENTO Y OTROS</span>
             </td>
@@ -81,7 +81,7 @@
     </table>
     <table class="CSSTableGenerator" style="margin-top:-1px;">
         <tr>
-            <td><span class="text-success">Propietario: </span></td>
+            <td><span class="text-success" style="font-size:12px;">Propietario: </span></td>
             <td><?php echo $recibo['Propietario']['nombre'];?></td>
             <td>
                 <span class="text-success">FECHA: <?php echo date('d/m/Y');?></span>
@@ -90,9 +90,9 @@
     </table>
     <table class="CSSTableGenerator" style="margin-top:-1px;">
         <tr>
-            <td><span class="text-success">Pagador: </span></td>
+            <td><span class="text-success" style="font-size:12px;">Pagador: </span></td>
             <td><?php 
-            if(!empty($recibo['Recibo']['inquilino'])){
+            if(!empty($recibo['Recibo']['inquilino_id'])){
               echo $recibo['Inquilino']['User']['nombre'].' (Inquilino)';
             }else{
               echo $recibo['Propietario']['nombre'].' (Propietario)';
@@ -105,9 +105,9 @@
     </table>
     <table class="CSSTableGenerator" style="margin-top:-1px;">
         <tr>
-            <td><span>Nro</span></td>
-            <td><span>Concepto</span></td>
-            <td><span>Importe Total Bs</span></td>
+            <td style="background-color: #B7B7B7;"><span>Nro</span></td>
+            <td style="background-color: #B7B7B7;"><span>Concepto</span></td>
+            <td style="background-color: #B7B7B7;"><span>Importe Total Bs</span></td>
         </tr>
         <?php $i = 0;$total_i = 0.00;?>
         <?php foreach ($pagos as $pa):$i++;?>
@@ -119,9 +119,64 @@
         <?php $total_i = $total_i + $pa[0]['imp_total'];?>
         <?php endforeach;?>
         <tr>
-            <td></td>
-            <td>TOTAL BOLIVIANOS</td>
-            <td><?php echo $total_i;?></td>
+            <td style="background-color: #B7B7B7;"></td>
+            <td style="background-color: #B7B7B7;">TOTAL BOLIVIANOS</td>
+            <td style="background-color: #B7B7B7;"><?php echo $total_i;?></td>
+        </tr>
+    </table>
+    DETALLE DE LAS CUOTAS
+    <table class="CSSTableGenerator">
+        <tr>
+            <td style="background-color: #B7B7B7;">Id</td>
+            <td style="background-color: #B7B7B7;">Fecha</td>
+            <td style="background-color: #B7B7B7;">Ambiente</td>
+            <td style="background-color: #B7B7B7;">Monto</td>
+        </tr>
+        <?php $total_det = 0.00;?>
+        <?php foreach ($detalles as $det):?>
+        <?php $total_det = $total_det + $det['Pago']['monto'];?>
+        <tr>
+            <td><?php echo $det['Pago']['id']?></td>
+            <td><?php echo $det['Pago']['fecha']?></td>
+            <td><?php echo $det['Ambiente']['nombre']?></td>
+            <td><?php echo $det['Pago']['monto']?></td>
+        </tr>
+        <?php endforeach;?>
+        <tr>
+            <td style="background-color: #B7B7B7;"></td>
+            <td style="background-color: #B7B7B7;"></td>
+            <td style="background-color: #B7B7B7;">Total</td>
+            <td style="background-color: #B7B7B7;"><?php echo $total_det;?></td>
+        </tr>
+    </table>
+    GESTIONES ANTERIORES DE DETALLE DE LAS CUOTAS
+    <table class="CSSTableGenerator">
+        <tr>
+            <td style="background-color: #B7B7B7;">Id</td>
+            <td style="background-color: #B7B7B7;">Fecha</td>
+            <td style="background-color: #B7B7B7;">Ambiente</td>
+            <td style="background-color: #B7B7B7;">Monto</td>
+        </tr>
+        <?php $total_det_a = 0.00;?>
+        <?php foreach ($detalles_a as $det):?>
+        <?php $total_det = $total_det + $det['Pago']['monto'];?>
+        <tr>
+            <td><?php echo $det['Pago']['id']?></td>
+            <td><?php echo $det['Pago']['fecha']?></td>
+            <td><?php echo $det['Ambiente']['nombre']?></td>
+            <td><?php echo $det['Pago']['monto']?></td>
+        </tr>
+        <?php endforeach;?>
+        <tr>
+            <td style="background-color: #B7B7B7;"></td>
+            <td style="background-color: #B7B7B7;"></td>
+            <td style="background-color: #B7B7B7;">Total</td>
+            <td style="background-color: #B7B7B7;"><?php echo $total_det_a;?></td>
+        </tr>
+    </table>
+    <table class="CSSTableGenerator" style="margin-top:-1px;">
+        <tr>
+            <td>Son: <?php echo $this->requestAction(array('action' => 'get_monto_literal',$total_i));?> Bolivianos</td>
         </tr>
     </table>
 </div>
