@@ -416,38 +416,69 @@ class AmbientesController extends AppController {
     }
     $this->request->data['Pago']['recibo_id'] = $idRecibo;
     //termina Parte de recibos
+    $edificio = $this->Edificio->find('first', array(
+      'conditions' => array('Edificio.id' => $this->Session->read('Auth.User.edificio_id')),
+      'fields' => array('Edificio.retencion')
+    ));
     if (!empty($this->request->data['Mantenimiento']['pagar'])) {
-      $this->pagar_m_a(10, $this->request->data['Mantenimiento']['cuotas'], $this->request->data['Pago']['referencia_mantenimiento'], $this->request->data['Mantenimiento']['fecha_inicio']);
+      if (!empty($this->request->data['Mantenimiento']['retencion'])) {
+        $this->pagar_m_a(10, $idRecibo, $this->request->data['Mantenimiento']['cuotas'], $this->request->data['Mantenimiento']['referencia_mantenimiento'], $this->request->data['Mantenimiento']['fecha_inicio'], $edificio['Edificio']['retencion']);
+      } else {
+        $this->pagar_m_a(10, $idRecibo, $this->request->data['Mantenimiento']['cuotas'], $this->request->data['Mantenimiento']['referencia_mantenimiento'], $this->request->data['Mantenimiento']['fecha_inicio'], NULL);
+      }
     }
     if (!empty($this->request->data['Alquiler']['pagar'])) {
-      $this->pagar_m_a(11, $this->request->data['Alquiler']['cuotas'], $this->request->data['Pago']['referencia_alquileres'], $this->request->data['Alquiler']['fecha_inicio']);
+      if (!empty($this->request->data['Alquiler']['retencion'])) {
+        $this->pagar_m_a(11, $idRecibo, $this->request->data['Alquiler']['cuotas'], $this->request->data['Alquiler']['referencia_alquileres'], $this->request->data['Alquiler']['fecha_inicio'], $edificio['Edificio']['retencion']);
+      } else {
+        $this->pagar_m_a(11, $idRecibo, $this->request->data['Alquiler']['cuotas'], $this->request->data['Alquiler']['referencia_alquileres'], $this->request->data['Alquiler']['fecha_inicio'], NULL);
+      }
     }
     if (!empty($this->request->data['Ascensor']['pagar'])) {
-      $this->pagar_otros(13, 'Ascensor');
+      if (!empty($this->request->data['Ascensor']['retencion'])) {
+        $this->pagar_otros(13, $idRecibo, 'Ascensor', $edificio['Edificio']['retencion']);
+      } else {
+        $this->pagar_otros(13, $idRecibo, 'Ascensor', NULL);
+      }
     }
     if (!empty($this->request->data['Multas']['pagar'])) {
-      $this->pagar_otros(14, 'Multas');
+      if (!empty($this->request->data['Multas']['retencion'])) {
+        $this->pagar_otros(14, $idRecibo, 'Multas', $edificio['Edificio']['retencion']);
+      } else {
+        $this->pagar_otros(14, $idRecibo, 'Multas', NULL);
+      }
     }
     if (!empty($this->request->data['Otros']['pagar'])) {
-      $this->pagar_otros(15, 'Otros');
+      if (!empty($this->request->data['Otros']['retencion'])) {
+        $this->pagar_otros(15, $idRecibo, 'Otros', $edificio['Edificio']['retencion']);
+      } else {
+        $this->pagar_otros(15, $idRecibo, 'Otros', NULL);
+      }
     }
     $this->redirect(array('action' => 'listadopago', $idRecibo));
   }
 
-  public function pagar_otros($idConcepto = null, $tipo = null) {
+  public function pagar_otros($idConcepto = null, $idRecibo = null, $tipo = null, $retencion = NULL) {
+    $this->request->data['Pago'] = NULL;
     $this->Pago->create();
     $this->request->data['Pago']['estado'] = 'Por pagar';
     $this->request->data['Pago']['ambiente_id'] = $this->request->data['Ambiente']['id'];
     $this->request->data['Pago']['user_id'] = $this->Session->read('Auth.User.id');
     $this->request->data['Pago']['propietario_id'] = $this->request->data['Ambiente']['propietario_id'];
     $this->request->data['Pago']['concepto_id'] = $idConcepto;
+    $this->request->data['Pago']['recibo_id'] = $idRecibo;
     $this->request->data['Pago']['monto'] = $this->request->data[$tipo]['monto'];
+    if ($retencion != NULL) {
+      $this->request->data['Pago']['retencion'] = $retencion;
+    } else {
+      $this->request->data['Pago']['retencion'] = NULL;
+    }
     $this->request->data['Pago']['observacion'] = $this->request->data[$tipo]['onservacion'];
     $this->request->data['Pago']['fecha'] = date('Y-m-d');
     $this->Pago->save($this->request->data['Pago']);
   }
 
-  public function pagar_m_a($idConcepto = null, $cuotas_man = NULL, $referencia = null, $fecha_u = NULL) {
+  public function pagar_m_a($idConcepto = null, $idRecibo = null, $cuotas_man = NULL, $referencia = null, $fecha_u = NULL, $retencion = NULL) {
     if (!empty($fecha_u)) {
       $nuevafecha = $fecha_u;
     } else {
@@ -461,11 +492,17 @@ class AmbientesController extends AppController {
         'Pago.concepto_id' => $idConcepto),
       'Pago.fecha >=' => $nuevafecha
     ));
+    if ($retencion != NULL) {
+      $this->request->data['Pago']['retencion'] = $retencion;
+    } else {
+      $this->request->data['Pago']['retencion'] = NULL;
+    }
     foreach ($mantenimientos as $ma) {
       if ($cuotas_man > 0) {
         $this->Pago->id = $ma['Pago']['id'];
-        //$this->request->data['Pago']['estado'] = 'Pagado';
+        $this->request->data['Pago']['recibo_id'] = $idRecibo;
         $this->Pago->save($this->request->data['Pago']);
+        $this->request->data['Pago'] = NULL;
         $cuotas_man--;
       } else {
         break;
@@ -484,10 +521,12 @@ class AmbientesController extends AppController {
       $this->request->data['Pago']['user_id'] = $this->Session->read('Auth.User.id');
       $this->request->data['Pago']['propietario_id'] = $this->request->data['Ambiente']['propietario_id'];
       $this->request->data['Pago']['concepto_id'] = $idConcepto;
+      $this->request->data['Pago']['recibo_id'] = $idRecibo;
       $this->request->data['Pago']['monto'] = $referencia;
       $this->request->data['Pago']['fecha'] = $nuevafecha;
       $this->Pago->save($this->request->data['Pago']);
       $cuotas_man--;
+      $this->request->data['Pago'] = NULL;
     }
   }
 
@@ -541,8 +580,109 @@ class AmbientesController extends AppController {
         $this->Pago->save($this->request->data['Pago']);
       }
     }
-    $this->Session->setFlash('Se cancelo correctamente!!','msgbueno');
+    $this->Session->setFlash('Se cancelo correctamente!!', 'msgbueno');
     $this->redirect(array('action' => 'buscador'));
+  }
+
+  public function generar_pagos() {
+    $ambientes = $this->Ambiente->find('all', array(
+      'recursive' => -1,
+      'fields' => array('Ambiente.id', 'Ambiente.fecha_ocupacion', 'Ambiente.user_id')
+      , 'conditions' => array('Ambiente.fecha_ocupacion !=' => NULL)
+    ));
+    foreach ($ambientes as $am) {
+      $monto_mantenimiento = $this->Ambienteconcepto->find('first', array(
+        'conditions' => array('Ambienteconcepto.ambiente_id' => $am['Ambiente']['id'], 'Ambienteconcepto.concepto_id' => 10)
+        , 'recursive' => -1
+      ));
+      if (!empty($monto_mantenimiento)) {
+        $ultimo_pago_mantenimiento = $this->Pago->find('first', array(
+          'order' => 'Pago.id DESC',
+          'conditions' => array('Pago.concepto_id' => 10, 'Pago.ambiente_id' => $am['Ambiente']['id']),
+          'fields' => array('Pago.fecha')
+        ));
+        if (!empty($ultimo_pago_mantenimiento)) {
+          $fecha_ini_m = $ultimo_pago_mantenimiento['Pago']['fecha'];
+        } else {
+          $fecha_ini_m = $am['Ambiente']['fecha_ocupacion'];
+        }
+        if (!empty($fecha_ini_m)) {
+          if ($fecha_ini_m <= date('Y-m-d')) {
+            foreach ($this->genera_meses($fecha_ini_m, date('Y-m-d')) as $gme) {
+              $this->Pago->create();
+              $this->request->data['Pago']['estado'] = 'Debe';
+              $this->request->data['Pago']['ambiente_id'] = $am['Ambiente']['id'];
+              $this->request->data['Pago']['propietario_id'] = $am['Ambiente']['user_id'];
+              $this->request->data['Pago']['concepto_id'] = 10;
+              $this->request->data['Pago']['monto'] = $monto_mantenimiento['Ambienteconcepto']['monto'];
+              $this->request->data['Pago']['fecha'] = $gme['fecha'];
+              $this->Pago->save($this->request->data['Pago']);
+            }
+          }
+        }
+      }
+      $monto_alquiler = $this->Ambienteconcepto->find('first', array(
+        'conditions' => array('Ambienteconcepto.ambiente_id' => $am['Ambiente']['id'], 'Ambienteconcepto.concepto_id' => 11)
+        , 'recursive' => -1
+      ));
+      if (!empty($monto_alquiler)) {
+        $ultimo_pago_alquiler = $this->Pago->find('first', array(
+          'order' => 'Pago.id DESC',
+          'conditions' => array('Pago.concepto_id' => 11, 'Pago.ambiente_id' => $am['Ambiente']['id']),
+          'fields' => array('Pago.fecha')
+        ));
+        if (!empty($ultimo_pago_alquiler)) {
+          $fecha_ini_a = $ultimo_pago_alquiler['Pago']['fecha'];
+        } else {
+          $fecha_ini_a = $am['Ambiente']['fecha_ocupacion'];
+        }
+        if (!empty($fecha_ini_a)) {
+          if ($fecha_ini_a <= date('Y-m-d')) {
+            foreach ($this->genera_meses($fecha_ini_a, date('Y-m-d')) as $gme) {
+              $this->Pago->create();
+              $this->request->data['Pago']['estado'] = 'Debe';
+              $this->request->data['Pago']['ambiente_id'] = $am['Ambiente']['id'];
+              $this->request->data['Pago']['propietario_id'] = $am['Ambiente']['user_id'];
+              $this->request->data['Pago']['concepto_id'] = 11;
+              $this->request->data['Pago']['monto'] = $monto_alquiler['Ambienteconcepto']['monto'];
+              $this->request->data['Pago']['fecha'] = $gme['fecha'];
+              $this->Pago->save($this->request->data['Pago']);
+            }
+          }
+        }
+      }
+    }
+    exit;
+  }
+
+  public function genera_meses($fInicial = null, $fFinal = null) {
+    if (!empty($fInicial) && !empty($fFinal)) {
+      $fInicial = explode('-', $fInicial);
+      $fFinal = explode('-', $fFinal);
+      $fi = $fInicial[0] . '-' . $fInicial[1] . '-' . '01';
+      $ff = $fFinal[0] . '-' . $fFinal[1] . '-' . '01';
+      $fIni = new DateTime($fi);
+      $fFin = new DateTime($ff);
+      $diferencia = $fIni->diff($fFin);
+      $meses = ($diferencia->y * 12) + $diferencia->m;
+      $fechai = explode("-", $fi);
+      $cMeses = $fechai[1];
+      $cAnos = $fechai[0];
+      $array = array();
+      for ($i = 0; $i < $meses; $i++) {
+        $cMeses++;
+        if ($cMeses == 13) {
+          $cAnos++;
+          $cMeses = 1;
+        }
+        $cFecha = date("Y-m-d", mktime(0, 0, 0, $cMeses, 1, $cAnos));
+        $array[$i]['fecha'] = $cFecha;
+      }
+      //debug($array);exit;
+      return $array;
+    } else {
+      return array();
+    }
   }
 
 }

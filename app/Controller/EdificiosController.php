@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class EdificiosController extends AppController {
 
     var $components = array('RequestHandler');
-    public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User', 'Edificioconcepto', 'Ambienteconcepto');
+    public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User', 'Edificioconcepto', 'Ambienteconcepto','Retencione');
     public $layout = 'sae';
 
     public function beforeFilter() {
@@ -178,4 +178,5 @@ class EdificiosController extends AppController {
         $nro_usuarios = $this->User->find('count',array('conditions' => array('User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
         $this->set(compact('edificio','nro_pisos','nro_ambientes','nro_usuarios'));
     }
+    
 }

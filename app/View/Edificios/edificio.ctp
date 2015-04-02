@@ -33,12 +33,12 @@
                 </div>
                 <!-- solo cuando sea nuevo edificio -->
                 <?php if (empty($this->request->data['Edificio']['id']) || $pisos == 0): ?>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="user-settings-email">Pisos</label>
-                        <div class="col-md-8">
-                            <?php echo $this->Form->text('pisos', array('class' => 'form-control', 'placeholder' => 'Nro de pisos', 'type' => 'number')); ?>
-                        </div>
-                    </div>
+                  <div class="form-group">
+                      <label class="col-md-4 control-label" for="user-settings-email">Pisos</label>
+                      <div class="col-md-8">
+                          <?php echo $this->Form->text('pisos', array('class' => 'form-control', 'placeholder' => 'Nro de pisos', 'type' => 'number')); ?>
+                      </div>
+                  </div>
                 <?php endif; ?>
             </fieldset>
             <fieldset>
@@ -72,6 +72,12 @@
                         <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
                         <div class="col-md-8">
                             <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Retencion</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->text('retencion', array('class' => 'form-control', 'placeholder' => 'Ingrese el porcentaje de retencion', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
                         </div>
                     </div>
                 </div>

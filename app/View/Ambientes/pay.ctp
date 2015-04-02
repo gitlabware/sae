@@ -124,7 +124,6 @@
                   <!-- Input Grid Block -->
                   <div class="block">
                       <!-- Input Grid Title -->   
-
                       <div class="block-title">  
                           <div class="block-options pull-right">
                               <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content1" onclick="oculta(1)"><i class="fa fa-arrows-v"></i></a>                            
@@ -135,7 +134,7 @@
                       <!-- Block Tabs Title -->
                       <div class="block-content-1" style="display: none;">
 
-                          <?php echo $this->Form->hidden('Pago.referencia_mantenimiento', array('value' => $conceptos[10], 'id' => 'idrefer_mantenimiento')); ?>
+                          <?php echo $this->Form->hidden('Mantenimiento.referencia_mantenimiento', array('value' => $conceptos[10], 'id' => 'idrefer_mantenimiento')); ?>
                           <div class="form-group">                    
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
@@ -154,6 +153,7 @@
                                   <?php echo $this->Form->date('Mantenimiento.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_mantenimiento)); ?>
                               </div>
                           </div>
+                          
                           <div class="form-group">
                               <div class="col-md-6">
                                   <div class="checkbox">
@@ -165,7 +165,7 @@
                               <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="mantenimiento-iva" name="data[Mantenimiento][pagar]"  onclick="calcula_total();"> IVA
+                                          <input type="checkbox" id="mantenimiento-retencion" name="data[Mantenimiento][retencion]"> RETENCION
                                       </label>
                                   </div>
                               </div>
@@ -191,7 +191,7 @@
                       <!-- END Input Grid Title -->
                       <!-- Block Tabs Title -->
                       <div class="block-content-2" style="display: none;">
-                          <?php echo $this->Form->hidden('Pago.referencia_alquileres', array('value' => $conceptos[11], 'id' => 'idrefer_alquiler')); ?>
+                          <?php echo $this->Form->hidden('Alquiler.referencia_alquileres', array('value' => $conceptos[11], 'id' => 'idrefer_alquiler')); ?>
                           <div class="form-group">                    
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
@@ -221,7 +221,7 @@
                               <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="alquiler-iva" name="data[Alquiler][pagar]" onclick="calcula_total();"> IVA
+                                          <input type="checkbox" id="alquiler-retencion" name="data[Alquiler][retencion]"> RETENCION
                                       </label>
                                   </div>
                               </div>
@@ -261,14 +261,14 @@
                             <div class="col-md-6">
                                 <div class="checkbox">
                                     <label for="mantenimiento">
-                                        <input type="checkbox" id="interes-pagar" name="data[Interes][monto]" onclick="calcula_total();"> Pagar Intereses
+                                        <input type="checkbox" id="interes-pagar" name="data[Interes][pagar]" onclick="calcula_total();"> Pagar Intereses
                                     </label>
                                 </div>  
                             </div>
                             <div class="col-md-6">
                                 <div class="checkbox">
                                     <label for="mantenimiento">
-                                        <input type="checkbox" id="interes-iva" name="data[Interes][monto]" onclick="calcula_total();"> IVA
+                                        <input type="checkbox" id="interes-retencion" name="data[Interes][retencion]"> RETENCION
                                     </label>
                                 </div>  
                             </div>
@@ -311,7 +311,7 @@
                               <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="ascensor-iva" name="data[Ascensor][pagar]" onclick="calcula_total();"> IVA
+                                          <input type="checkbox" id="ascensor-retencion" name="data[Ascensor][retencion]"> RETENCION
                                       </label>
                                   </div> 
                               </div>
@@ -355,7 +355,7 @@
                               <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="multas-iva" name="data[Multas][pagar]" onclick="calcula_total();"> IVA
+                                          <input type="checkbox" id="multas-retencion" name="data[Multas][retencion]"> RETENCION
                                       </label>
                                   </div> 
                               </div>
@@ -401,7 +401,7 @@
                               <div class="col-md-6">
                                 <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="otros-iva" name="data[Otros][pagar]" onclick="calcula_total();"> IVA
+                                          <input type="checkbox" id="otros-retencion" name="data[Otros][retencion]"> RETENCION
                                       </label>
                                   </div>F
                               </div>
