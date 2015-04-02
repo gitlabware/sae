@@ -684,5 +684,18 @@ class AmbientesController extends AppController {
       return array();
     }
   }
-
+  
+  public function editar_monto($idPago = NULL,$idRecibo = null){
+    $this->Pago->id = $idPago;
+    $this->request->data = $this->Pago->read();
+    $this->set(compact('idRecibo'));
+  }
+  public function registra_monto_pago($idRecibo = NULL){
+    if(!empty($this->request->data['Pago']['id'])){
+      $this->Pago->create();
+      $this->Pago->save($this->request->data['Pago']);
+    }
+    $this->Session->setFlash('Se edito correctamente el monto!!!','msgbueno');
+    $this->redirect(array('action' => 'listadopago',$idRecibo));
+  }
 }

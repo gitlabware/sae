@@ -33,6 +33,7 @@ $Pago = new Pago();
                     <th>Monto</th>
                     <th>Fecha</th>
                     <th>Estado</th>
+                    <th>Accion</th>
                 </tr>
             </thead>
             <tbody> 
@@ -41,10 +42,15 @@ $Pago = new Pago();
                   <tr>                                        
                       <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
                       <td><?php echo $man['Concepto']['nombre']; ?></td>
-                      <td><?php echo $man['Pago']['monto']; ?></td>
+                      <td>
+                          <?php echo $man['Pago']['monto']; ?>
+                      </td>
                       <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
                       <td class="text-center">
                           <?php echo $man['Pago']['estado']; ?>
+                      </td>
+                      <td class="text-center">
+                          <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto',$man['Pago']['id'],$recibo['Recibo']['id']));?>');"><i class="gi gi-pencil"></i></button>
                       </td>
                   </tr>
                   <?php $total = $total + $man['Pago']['monto']; ?>
@@ -65,7 +71,9 @@ $Pago = new Pago();
             <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'buscador')); ?>'">Ir a pagos</button>
         </div>
         <div class="col-md-4">
-            <button class="btn btn-block btn-danger" type="button" onclick="if(confirm('Esta seguro de cancelar los pagos de este recibo??')){window.location = '<?php echo $this->Html->url(array('action' => 'cancelar_pago', $recibo['Recibo']['id'])); ?>'}">Cancelar Pagos</button>
+            <button class="btn btn-block btn-danger" type="button" onclick="if (confirm('Esta seguro de cancelar los pagos de este recibo??')) {
+                      window.location = '<?php echo $this->Html->url(array('action' => 'cancelar_pago', $recibo['Recibo']['id'])); ?>'
+                  }">Cancelar Pagos</button>
         </div>
         <div class="col-md-4">
             <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo', $recibo['Recibo']['id'], 1)); ?>'">Terminar Pago</button>
