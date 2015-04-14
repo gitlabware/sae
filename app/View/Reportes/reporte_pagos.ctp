@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-md-3">
                         <label class="control-label">Tipo</label>
-                        <?php echo $this->Form->select('tipo', array('Debe' => 'Debe', 'Pagado' => 'Pagado'), array('class' => 'form-control')); ?>
+                        <?php echo $this->Form->select('tipo', array('Debe' => 'Debe', 'Pagado' => 'Pagado','Todos' => 'Todos'), array('class' => 'form-control')); ?>
                     </div>
 
                     <div class="col-md-3">

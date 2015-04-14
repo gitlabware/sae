@@ -21,9 +21,10 @@
                   <td><?php echo $pa['Ambiente']['nombre'];?></td>
                   <td><?php echo $pa['Pago']['piso'];?></td>
                   <td><?php echo $pa['Propietario']['nombre'];?></td>
-                  <td><?php echo $pa['Inquilino']['nombre'];?></td>
+                  <td><?php echo $pa['Pago']['inquilino'];?></td>
+                  <td><?php echo $pa['Pago']['fecha'];?></td>
                   <td><?php echo $pa['Concepto']['nombre'];?></td>
-                  <td><?php echo $pa['Pagp']['monto'];?></td>
+                  <td><?php echo $pa['Pago']['monto'];?></td>
               </tr>
             <?php endforeach; ?>
         </tbody>

@@ -49,6 +49,14 @@
                 <li>
                     <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'usuarios', $this->Session->read('Auth.User.edificio_id'))); ?>');"><i class="gi gi-user sidebar-nav-icon"></i>Usuarios</a>
                 </li>
+                <li>
+                    <a href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-notes_2 sidebar-nav-icon"></i>Reportes</a>
+                    <ul>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'reporte_pagos')); ?>">Reporte de pagos</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <!-- END Sidebar Navigation -->
         </div>

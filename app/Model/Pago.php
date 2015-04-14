@@ -40,6 +40,13 @@ class Pago extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
+    'User' => array(
+			'className' => 'Inquilino',
+			'foreignKey' => 'inquilino_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Concepto' => array(
 			'className' => 'Concepto',
 			'foreignKey' => 'concepto_id',
