@@ -322,11 +322,28 @@ class AmbientesController extends AppController {
     } else {
       $fecha_alquiler = $datosAmbiente['Ambiente']['fecha_ocupacion'];
     }
+    $ultimas_deudas_man = $this->Pago->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Pago.estado' => 'Debe', 'Pago.concepto_id' => 10, 'Pago.ambiente_id' => $idAmbiente),
+      'limit' => 5,
+      'order' => 'Pago.id DESC'
+    ));
+    $ultimas_deudas_alq = $this->Pago->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Pago.estado' => 'Debe', 'Pago.concepto_id' => 11, 'Pago.ambiente_id' => $idAmbiente),
+      'limit' => 5,
+      'order' => 'Pago.id DESC'
+    ));
+    $ultimos_pagos = $this->Pago->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Pago.estado' => 'Pagado', 'Pago.ambiente_id' => $idAmbiente),
+      'limit' => 5,
+      'order' => 'Pago.id DESC'
+    ));
     /* $inquilinos = $this->Inquilino->find('list', array('recursive' => 0
       , 'fields' => 'User.nombre'
       , 'conditions' => array('Inquilino.ambiente_id' => $idAmbiente)
       )); */
-
     $sql = "SELECT * FROM "
       . "(SELECT user_id,estado,id FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
       . " AS Inquilino WHERE 1 GROUP BY user_id";
@@ -336,9 +353,9 @@ class AmbientesController extends AppController {
       'fields' => array('Ambienteconcepto.concepto_id', 'Ambienteconcepto.monto'),
       'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente)
     ));
-    /* debug($conceptos);
+    /* debug($ultimos_pagos);
       exit; */
-    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler'));
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq','ultimos_pagos'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {
@@ -535,7 +552,7 @@ class AmbientesController extends AppController {
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
       'group' => array('Pago.concepto_id'),
-      'fields' => array('Concepto.nombre', 'SUM(Pago.monto) as imp_total')
+      'fields' => array('Concepto.nombre', "SUM((Pago.monto+(IF((Pago.retencion != 'NULL'),((Pago.retencion/100)*Pago.monto),0)))) as imp_total")
     ));
 
     $todos_pagos = $this->Pago->find('all', array(
@@ -553,6 +570,11 @@ class AmbientesController extends AppController {
         $this->Pago->save($this->request->data['Pago']);
       }
     }
+    $sql2 = "SELECT user_id FROM inquilinos WHERE (inquilinos.id = Recibo.inquilino_id) LIMIT 1";
+    $sql1 = "SELECT nombre FROM users WHERE (users.id = ($sql2)) LIMIT 1";
+      $this->Recibo->virtualFields = array(
+        'usuario_inquilino' => "CONCAT(($sql1))"
+      );
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     $detalles = $this->Pago->find('all', array(
       'recursive' => 0,
@@ -562,6 +584,7 @@ class AmbientesController extends AppController {
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) <' => date('Y')),
     ));
+    //debug($detalles);exit;
     $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a'));
   }
 
@@ -684,33 +707,36 @@ class AmbientesController extends AppController {
       return array();
     }
   }
-  
-  public function editar_monto($idPago = NULL,$idRecibo = null){
+
+  public function editar_monto($idPago = NULL, $idRecibo = null) {
     $this->Pago->id = $idPago;
     $this->request->data = $this->Pago->read();
     $this->set(compact('idRecibo'));
   }
-  public function registra_monto_pago($idRecibo = NULL){
-    if(!empty($this->request->data['Pago']['id'])){
+
+  public function registra_monto_pago($idRecibo = NULL) {
+    if (!empty($this->request->data['Pago']['id'])) {
       $this->Pago->create();
       $this->Pago->save($this->request->data['Pago']);
     }
-    $this->Session->setFlash('Se edito correctamente el monto!!!','msgbueno');
-    $this->redirect(array('action' => 'listadopago',$idRecibo));
+    $this->Session->setFlash('Se edito correctamente el monto!!!', 'msgbueno');
+    $this->redirect(array('action' => 'listadopago', $idRecibo));
   }
-  public function registra_nombre(){
+
+  public function registra_nombre() {
     $valida = $this->validar('Piso');
     $array['msgerror'] = '';
-    if(empty($valida)){
+    if (empty($valida)) {
       $this->Piso->create();
       $this->Piso->save($this->request->data['Piso']);
-    }else{
+    } else {
       $array['msgerror'] = $valida;
     }
     $array['nombre_amb'] = $this->request->data['Piso']['nombre'];
-    
+
     $this->respond($array, true);
-    /*debug($this->request->data);
-    exit;*/
+    /* debug($this->request->data);
+      exit; */
   }
+
 }

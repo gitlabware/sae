@@ -93,7 +93,7 @@
             <td><span class="text-success" style="font-size:12px;">Pagador: </span></td>
             <td><?php 
             if(!empty($recibo['Recibo']['inquilino_id'])){
-              echo $recibo['Inquilino']['User']['nombre'].' (Inquilino)';
+              echo $recibo['Recibo']['usuario_inquilino'].' (Inquilino)';
             }else{
               echo $recibo['Propietario']['nombre'].' (Propietario)';
             }
@@ -134,12 +134,12 @@
         </tr>
         <?php $total_det = 0.00;?>
         <?php foreach ($detalles as $det):?>
-        <?php $total_det = $total_det + $det['Pago']['monto'];?>
+        <?php $total_det = $total_det + $det['Pago']['monto_total'];?>
         <tr>
             <td><?php echo $det['Pago']['id']?></td>
             <td><?php echo $det['Pago']['fecha']?></td>
             <td><?php echo $det['Ambiente']['nombre']?></td>
-            <td><?php echo $det['Pago']['monto']?></td>
+            <td><?php echo $det['Pago']['monto_total']?></td>
         </tr>
         <?php endforeach;?>
         <tr>
@@ -159,12 +159,12 @@
         </tr>
         <?php $total_det_a = 0.00;?>
         <?php foreach ($detalles_a as $det):?>
-        <?php $total_det = $total_det + $det['Pago']['monto'];?>
+        <?php $total_det = $total_det + $det['Pago']['monto_total'];?>
         <tr>
             <td><?php echo $det['Pago']['id']?></td>
             <td><?php echo $det['Pago']['fecha']?></td>
             <td><?php echo $det['Ambiente']['nombre']?></td>
-            <td><?php echo $det['Pago']['monto']?></td>
+            <td><?php echo $det['Pago']['monto_total']?></td>
         </tr>
         <?php endforeach;?>
         <tr>

@@ -1,7 +1,4 @@
-
 <div class="row">
-
-
     <div class="col-md-4">
         <!-- Advanced Active Theme Color Widget Alternative -->
         <div class="widget">
@@ -26,38 +23,24 @@
                     <div class="list-group remove-margin">
                         <a href="javascript:void(0)" class="list-group-item">
                             <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
-                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Ultimos Pagos</b></h4>
+                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Ultimas Deudas Mantenimiento</b></h4>
                         </a>
+                        <?php foreach ($ultimas_deudas_man as $ul): ?>
+                          <a href="javascript:void(0)" class="list-group-item">
+                              <span class="pull-right"><strong id="manteminientoAmbiente"><?php echo $ul['Pago']['monto']; ?></strong></span>
+                              <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo $ul['Pago']['fecha']; ?></h4>
+                          </a>
+                        <?php endforeach; ?>
                         <a href="javascript:void(0)" class="list-group-item">
-                            <span class="pull-right">
-                                <strong>
-                                    <?php if (!empty($ultimoPago_mantenimiento)): ?>
-                                      <?php
-                                      echo $ultimoPago_mantenimiento['Pago']['fecha'];
-                                      ?>
-                                    <?php else: ?>
-                                      N/T
-                                    <?php endif; ?>
-                                </strong>
-                            </span>
-                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i>Mantenimiento</h4>
-                            <p class="list-group-item-text"></p>
+                            <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
+                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Ultimas Deudas Alquileres</b></h4>
                         </a>
-                        <a href="javascript:void(0)" class="list-group-item">
-                            <span class="pull-right">
-                                <strong>
-                                    <?php if (!empty($ultimoPago_alquiler)): ?>
-                                      <?php
-                                      echo $ultimoPago_alquiler['Pago']['fecha'];
-                                      ?>
-                                    <?php else: ?>
-                                      N/T
-                                    <?php endif; ?>
-                                </strong>
-                            </span>
-                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i>Alquiler</h4>
-                            <p class="list-group-item-text"></p>
-                        </a>
+                        <?php foreach ($ultimas_deudas_alq as $ul): ?>
+                          <a href="javascript:void(0)" class="list-group-item">
+                              <span class="pull-right"><strong id="manteminientoAmbiente"><?php echo $ul['Pago']['monto']; ?></strong></span>
+                              <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo $ul['Pago']['fecha']; ?></h4>
+                          </a>
+                        <?php endforeach; ?>
 
                         <!-- pagos -->
                         <a href="javascript:void(0)" class="list-group-item">
@@ -66,22 +49,12 @@
                         </a>
 
                         <div id="muestra-pagos" style="display: block;">
-                            <a href="javascript:void(0)" class="list-group-item">
-                                <span class="pull-right"><strong id="manteminientoAmbiente">234</strong></span>
-                                <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> 2014-10-12</h4>
-                            </a>
-                            <a href="javascript:void(0)" class="list-group-item">
-                                <span class="pull-right"><strong id="manteminientoAmbiente">245</strong></span>
-                                <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> 2014-09-08</h4>
-                            </a>
-                            <a href="javascript:void(0)" class="list-group-item">
-                                <span class="pull-right"><strong id="manteminientoAmbiente">234</strong></span>
-                                <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> 2014-08-10</h4>
-                            </a>
-                            <a href="javascript:void(0)" class="list-group-item">
-                                <span class="pull-right"><strong id="manteminientoAmbiente">254</strong></span>
-                                <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> 2014-07-09</h4>
-                            </a>
+                            <?php foreach ($ultimos_pagos as $ul): ?>
+                              <a href="javascript:void(0)" class="list-group-item">
+                                  <span class="pull-right"><strong id="manteminientoAmbiente"><?php echo ' |Rec. '.$ul['Recibo']['numero'].' | '.$ul['Pago']['monto']; ?></strong></span>
+                                  <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo $ul['Pago']['fecha']; ?></h4>
+                              </a>
+                            <?php endforeach; ?>
                         </div>    
                         <!-- fin pagos -->
                     </div>
@@ -109,9 +82,9 @@
                               <div class="col-md-9">
                                   <select class="form-control" name="data[Pago][inquilino_id]">
                                       <option value="">Seleccione al inquilino</option>
-                                      <?php foreach ($inquilinos as $inq):?>
-                                      <option value="<?php echo $inq['Inquilino']['id'];?>"><?php echo $inq['User']['nombre']?></option>
-                                      <?php endforeach;?>
+                                      <?php foreach ($inquilinos as $inq): ?>
+                                        <option value="<?php echo $inq['Inquilino']['id']; ?>"><?php echo $inq['User']['nombre'] ?></option>
+                                      <?php endforeach; ?>
                                   </select>
                                   <?php //echo $this->Form->select('Pago.inquilino_id', $inquilinos, array('class' => 'form-control')); ?>
                               </div>
@@ -153,7 +126,7 @@
                                   <?php echo $this->Form->date('Mantenimiento.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_mantenimiento)); ?>
                               </div>
                           </div>
-                          
+
                           <div class="form-group">
                               <div class="col-md-6">
                                   <div class="checkbox">
@@ -399,7 +372,7 @@
                                   </div> 
                               </div>
                               <div class="col-md-6">
-                                <div class="checkbox">
+                                  <div class="checkbox">
                                       <label for="mantenimiento">
                                           <input type="checkbox" id="otros-retencion" name="data[Otros][retencion]"> RETENCION
                                       </label>
