@@ -698,4 +698,18 @@ class AmbientesController extends AppController {
     $this->Session->setFlash('Se edito correctamente el monto!!!','msgbueno');
     $this->redirect(array('action' => 'listadopago',$idRecibo));
   }
+  public function registra_nombre(){
+    $valida = $this->validar('Ambiente');
+    if(empty($valida)){
+      $this->Ambiente->create();
+      $this->Ambiente->save($this->request->data['Ambiente']);
+    }else{
+      $array['msgerror'] = $valida;
+    }
+    $array['nombre_amb'] = $this->request->data['Ambiente']['nombre'];
+    
+    $this->respond($array, true);
+    debug($this->request->data);
+    exit;
+  }
 }

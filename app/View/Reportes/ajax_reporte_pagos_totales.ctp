@@ -7,7 +7,6 @@
                 <td>Piso</td>
                 <td>Propietario</td>
                 <td>Inquilinos</td>
-                <td>Fecha</td>
                 <td>Concepto</td>
                 <td>Costo</td>
             </tr>
@@ -22,9 +21,8 @@
                   <td><?php echo $pa['Pago']['piso'];?></td>
                   <td><?php echo $pa['Propietario']['nombre'];?></td>
                   <td><?php echo $pa['Ambiente']['lista_inquilinos'];?></td>
-                  <td><?php echo $pa['Pago']['fecha'];?></td>
                   <td><?php echo $pa['Concepto']['nombre'];?></td>
-                  <td><?php echo $pa['Pago']['monto'];?></td>
+                  <td><?php echo $pa[0]['monto_total'];?></td>
               </tr>
             <?php endforeach; ?>
         </tbody>

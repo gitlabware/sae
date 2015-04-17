@@ -55,6 +55,9 @@
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'reporte_pagos')); ?>">Reporte de pagos</a>
                         </li>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'reporte_pagos_totales')); ?>">Reporte de pagos totales</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
