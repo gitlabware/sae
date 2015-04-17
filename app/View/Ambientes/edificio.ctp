@@ -11,15 +11,20 @@
       <!-- Example Title -->
       <div class="block-title">
           <h2>
-              <div id="div-nombre-amb-<?php echo $pi['Piso']['id']; ?>">
-                  <span id="idnombre-span-amb-<?php echo $pi['Piso']['id']; ?>" title="EDITAR" onclick="$('#div-nombre-amb-<?php echo $pi['Piso']['id']; ?>').toggle(200);
-                    $('#edita-ambiente-<?php echo $pi['Piso']['id']; ?>').toggle(200);"><?php echo $pi['Piso']['nombre']; ?></span> - AMBIENTES <span id="iderror-amb-<?php echo $pi['Piso']['id']; ?>"></span>
+              <div id="div-nombre-edi-<?php echo $pi['Piso']['id']; ?>">
+                  <span id="idnombre-span-amb-<?php echo $pi['Piso']['id']; ?>" title="EDITAR" onclick="$('#div-nombre-edi-<?php echo $pi['Piso']['id']; ?>').toggle(200);
+                        $('#edita-edificio-<?php echo $pi['Piso']['id']; ?>').toggle(200);"><?php echo $pi['Piso']['nombre']; ?></span> - AMBIENTES <span id="iderror-amb-<?php echo $pi['Piso']['id']; ?>"></span>
               </div>
-              <div id="edita-ambiente-<?php echo $pi['Piso']['id']; ?>" style="display: none;">
+              <div id="edita-edificio-<?php echo $pi['Piso']['id']; ?>" style="display: none;">
                   <?php echo $this->Form->create('Ambiente', array('action' => 'registra_nombre', 'id' => 'form-ambiente-' . $pi['Piso']['id'])); ?>
-                  <?php echo $this->Form->text('Ambiente.nombre', array('placeholder' => 'Nombre del ambiente', 'id' => 'idnombret-' . $pi['Piso']['id'], 'value' => $pi['Piso']['nombre'])); ?> 
-                  <button class="btn btn-xs btn-success" type="button" onclick="guarda_ambiente(<?php echo $pi['Piso']['id']; ?>);">Guardar</button>  - AMBIENTES
+                  <?php echo $this->Form->hidden('Piso.id', array('value' => $pi['Piso']['id'])); ?>
+                  <?php echo $this->Form->hidden('Piso.edificio_id', array('value' => $pi['Piso']['edificio_id'])); ?>
+                  <?php echo $this->Form->text('Piso.nombre', array('placeholder' => 'Nombre del ambiente', 'id' => 'idnombret-' . $pi['Piso']['id'], 'value' => $pi['Piso']['nombre'])); ?> 
+                  <button class="btn btn-xs btn-success" type="button" onclick="guarda_edificio(<?php echo $pi['Piso']['id']; ?>);">Guardar</button>  - AMBIENTES
                   <?php echo $this->Form->end(); ?>
+              </div>
+              <div id="idloadnombre-<?php echo $pi['Piso']['id']; ?>" style="display: none;">
+                  <i class="fa fa-asterisk fa-spin fa-2x text-info"></i>
               </div>
           </h2>
       </div>
@@ -38,34 +43,51 @@
       <br>
   </div>
 <?php endforeach; ?>
+<script src="<?php echo $this->webroot; ?>js/pages/uiProgress.js"></script>
 <script>
-  function guarda_ambiente(id_piso) {
-      var postData = $('#form-ambiente-' + id_piso).serializeArray();
-      var formURL = $('#form-ambiente-' + id_piso).attr("action");
-      $.ajax(
-              {
-                  url: formURL,
-                  type: "POST",
-                  data: postData,
-                  /*beforeSend:function (XMLHttpRequest) {
-                   alert("antes de enviar");
-                   },
-                   complete:function (XMLHttpRequest, textStatus) {
-                   alert('despues de enviar');
-                   },*/
-                  success: function (data, textStatus, jqXHR)
-                  {
-                    
-                      //data: return data from server
-                      //$("#parte").html(data);
-                  },
-                  error: function (jqXHR, textStatus, errorThrown)
-                  {
-                      //if fails   
-                      alert("error");
-                  }
-              });
-  }
-
-
+              function guarda_edificio(id_piso) {
+                  var postData = $('#form-ambiente-' + id_piso).serializeArray();
+                  var formURL = $('#form-ambiente-' + id_piso).attr("action");
+                  $.ajax(
+                          {
+                              url: formURL,
+                              type: "POST",
+                              data: postData,
+                              beforeSend: function (XMLHttpRequest) {
+                                  $('#edita-edificio-' + id_piso).toggle();
+                                  $('#idloadnombre-<?php echo $pi['Piso']['id']; ?>').toggle();
+                              },
+                              /*complete: function (XMLHttpRequest, textStatus) {
+                               //alert('despues de enviar');
+                               },*/
+                              success: function (data, textStatus, jqXHR)
+                              {
+                                  if ($.parseJSON(data).msgerror == '') {
+                                      $('#idnombre-span-amb-' + id_piso).html($.parseJSON(data).nombre_amb);
+                                      var growlType = 'success';
+                                      $.bootstrapGrowl('<h4>Excelente!</h4> <p>Se registro correctamente!!</p>', {
+                                          type: growlType,
+                                          delay: 2500,
+                                          allow_dismiss: true
+                                      });
+                                      $(this).prop('disabled', true);
+                                  } else {
+                                      var growlType = 'danger';
+                                      $.bootstrapGrowl('<h4>Error!</h4> <p>' + $.parseJSON(data).msgerror + '</p>', {
+                                          type: growlType,
+                                          delay: 2500,
+                                          allow_dismiss: true
+                                      });
+                                      $(this).prop('disabled', true);
+                                  }
+                                  $('#idloadnombre-<?php echo $pi['Piso']['id']; ?>').toggle();
+                                  $('#div-nombre-edi-' + id_piso).toggle(200);
+                              },
+                              error: function (jqXHR, textStatus, errorThrown)
+                              {
+                                  //if fails   
+                                  alert("error");
+                              }
+                          });
+              }
 </script>

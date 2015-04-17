@@ -699,17 +699,18 @@ class AmbientesController extends AppController {
     $this->redirect(array('action' => 'listadopago',$idRecibo));
   }
   public function registra_nombre(){
-    $valida = $this->validar('Ambiente');
+    $valida = $this->validar('Piso');
+    $array['msgerror'] = '';
     if(empty($valida)){
-      $this->Ambiente->create();
-      $this->Ambiente->save($this->request->data['Ambiente']);
+      $this->Piso->create();
+      $this->Piso->save($this->request->data['Piso']);
     }else{
       $array['msgerror'] = $valida;
     }
-    $array['nombre_amb'] = $this->request->data['Ambiente']['nombre'];
+    $array['nombre_amb'] = $this->request->data['Piso']['nombre'];
     
     $this->respond($array, true);
-    debug($this->request->data);
-    exit;
+    /*debug($this->request->data);
+    exit;*/
   }
 }
