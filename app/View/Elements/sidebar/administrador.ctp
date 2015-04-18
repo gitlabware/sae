@@ -37,9 +37,9 @@
                 <li>
                     <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'buscador')); ?>"><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>
                 </li>
-                <li>
+                <!--<li>
                     <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'eservicios', $this->Session->read('Auth.User.edificio_id'))); ?>');"><i class="gi gi-briefcase sidebar-nav-icon"></i>Servicios</a>
-                </li>
+                </li>-->
                 <li>
                     <a  href="<?php echo $this->Html->url(array('controller' => 'Categoriasambientes', 'action' => 'index')); ?>"><i class="gi gi-vector_path_all sidebar-nav-icon"></i>Categoria de Ambiente</a>
                 </li>

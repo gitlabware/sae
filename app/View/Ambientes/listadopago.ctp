@@ -43,7 +43,7 @@ $Pago = new Pago();
                       <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
                       <td><?php echo $man['Concepto']['nombre']; ?></td>
                       <td>
-                          <?php echo $man['Pago']['monto']; ?>
+                          <?php echo $man['Pago']['monto_total']; ?>
                       </td>
                       <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
                       <td class="text-center">
@@ -53,7 +53,7 @@ $Pago = new Pago();
                           <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto',$man['Pago']['id'],$recibo['Recibo']['id']));?>');"><i class="gi gi-pencil"></i></button>
                       </td>
                   </tr>
-                  <?php $total = $total + $man['Pago']['monto']; ?>
+                  <?php $total = $total + $man['Pago']['monto_total']; ?>
                 <?php endforeach; ?>
                 <tr>
                     <td></td>

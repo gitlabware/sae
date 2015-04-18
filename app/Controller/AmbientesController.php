@@ -509,15 +509,11 @@ class AmbientesController extends AppController {
         'Pago.concepto_id' => $idConcepto),
       'Pago.fecha >=' => $nuevafecha
     ));
-    if ($retencion != NULL) {
-      $this->request->data['Pago']['retencion'] = $retencion;
-    } else {
-      $this->request->data['Pago']['retencion'] = NULL;
-    }
     foreach ($mantenimientos as $ma) {
       if ($cuotas_man > 0) {
         $this->Pago->id = $ma['Pago']['id'];
         $this->request->data['Pago']['recibo_id'] = $idRecibo;
+        $this->request->data['Pago']['retencion'] = $retencion;
         $this->Pago->save($this->request->data['Pago']);
         $this->request->data['Pago'] = NULL;
         $cuotas_man--;
@@ -541,6 +537,7 @@ class AmbientesController extends AppController {
       $this->request->data['Pago']['recibo_id'] = $idRecibo;
       $this->request->data['Pago']['monto'] = $referencia;
       $this->request->data['Pago']['fecha'] = $nuevafecha;
+      $this->request->data['Pago']['retencion'] = $retencion;
       $this->Pago->save($this->request->data['Pago']);
       $cuotas_man--;
       $this->request->data['Pago'] = NULL;
