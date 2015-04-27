@@ -1,25 +1,10 @@
-<!-- Blank Header -->
-<div class="content-header">
-    <div class="header-section">
-        <h1>
-            <i class="gi gi-brush"></i>Usuarios<br>
-        </h1>
-    </div>
-</div>
-
 <!-- END Blank Header -->
 <!-- Example Block -->
 <div class="block">
     <!-- Example Title -->
     <div class="block-title">
         <h2>Listado de Usuarios</h2>
-    </div>
-    <!-- END Example Title -->
-    <div class="table-options clearfix">
-        <div class="btn-group btn-group-sm pull-right">
-            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'usuario')); ?>');" class="btn btn-primary" title="Adicionar nuevo Usuario">NUEVO</a>
-        </div>
-    </div>
+    </div>    
     <!-- Example Content -->
     <div class="table-responsive">
         <table id="general-table" class="table table-striped table-vcenter table-hover">
