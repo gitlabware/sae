@@ -47,6 +47,7 @@ class AmbientesController extends AppController {
       } else {
         $this->request->data['Ambiente'] = $piso['Edificio'];
         $this->request->data['Ambiente']['nombre'] = "";
+        $this->request->data['Ambiente']['id'] = NULL;
         if ($sw) {
           $this->request->data = $this->Session->read('fambiente');
           $this->Session->delete('fambiente');
