@@ -57,8 +57,12 @@ class AmbientesController extends AppController {
       $this->Ambiente->id = $idAmbiente;
       $this->request->data = $this->Ambiente->read();
     }
-    $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre_completo'));
-    $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre_completo'));
+    $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre_completo',
+      'conditions' => array('Categoriasambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'))
+    ));
+    $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre_completo',
+      'conditions' => array('Categoriaspago.edificio_id' => $this->Session->read('Auth.User.edificio_id'))
+    ));
     $categoria_ambientes = $this->Categoriasambiente->find('all');
     $categoria_pagos = $this->Categoriaspago->find('all');
     $usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Propietario')));
@@ -71,6 +75,10 @@ class AmbientesController extends AppController {
       $valida = $this->validar('Ambiente');
       if (empty($valida)) {
         if ($this->Ambiente->save($this->request->data['Ambiente'])) {
+          if (empty($this->request->data['Ambiente']['id'])) {
+            $idAmbiente = $this->Ambiente->getLastInsertID();
+            $this->registra_mantenimiento($idAmbiente);
+          }
           $this->Session->setFlash('Se registro correctamente los datos!!!', 'msgbueno');
         } else {
           $this->Session->setFlash('NO se pudo registrar los datos del ambiente!!!', 'msgerror');
@@ -82,6 +90,29 @@ class AmbientesController extends AppController {
       $this->Session->setFlash('NO se pudo registrar los datos del ambiente!!!', 'msgerror');
     }
     $this->redirect($this->referer());
+  }
+
+  public function registra_mantenimiento($idAmbiente = null) {
+    $catambiente = $this->request->data['Ambiente']['categoriasambiente_id'];
+    $catpago = $this->request->data['Ambiente']['categoriaspago_id'];
+    $a_util = $this->request->data['Ambiente']['area_util'];
+    $a_comun = $this->request->data['Ambiente']['area_comun'];
+    if (!empty($catambiente) && !empty($catpago) && $a_comun != NULL && $a_util != NULL) {
+      $this->request->data['Ambienteconcepto']['ambiente_id'] = $idAmbiente;
+      $this->request->data['Ambienteconcepto']['concepto_id'] = 10;
+      $this->request->data['Ambienteconcepto']['mantenimiento'] = $this->calcula_mantenimiento();
+      $this->Ambienteconcepto->create();
+      $this->Ambienteconcepto->save();
+    }
+  }
+
+  public function calcula_mantenimiento() {
+    $cambiente = $this->Categoriasambiente->findByid($this->request->data['Ambiente']['categoriasambiente_id'], NULL, NULL, -1);
+    $cpago = $this->Categoriaspago->findByid($this->request->data['Ambiente']['categoriaspago_id'], NULL, NULL, -1);
+    $totalmt = $this->request->data['Ambiente']['area_util'] + $this->request->data['Ambiente']['area_comun'];
+    $costob = $totalmt * $cambiente['Categoriasambiente']['constante'];
+    $mantenimiento = $costob + $cpago['Categoriaspago']['constante'];
+    return $mantenimiento;
   }
 
   public function eliminar($idAmbiente = null) {
@@ -356,7 +387,7 @@ class AmbientesController extends AppController {
     ));
     /* debug($ultimos_pagos);
       exit; */
-    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq','ultimos_pagos'));
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq', 'ultimos_pagos'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {
@@ -570,9 +601,9 @@ class AmbientesController extends AppController {
     }
     $sql2 = "SELECT user_id FROM inquilinos WHERE (inquilinos.id = Recibo.inquilino_id) LIMIT 1";
     $sql1 = "SELECT nombre FROM users WHERE (users.id = ($sql2)) LIMIT 1";
-      $this->Recibo->virtualFields = array(
-        'usuario_inquilino' => "CONCAT(($sql1))"
-      );
+    $this->Recibo->virtualFields = array(
+      'usuario_inquilino' => "CONCAT(($sql1))"
+    );
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     $detalles = $this->Pago->find('all', array(
       'recursive' => 0,

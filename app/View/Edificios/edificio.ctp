@@ -62,18 +62,42 @@
                             <?php echo $this->Form->text('area_comun', array('class' => 'form-control', 'placeholder' => 'Area Comun', 'type' => 'number', 'step' => 'any')); ?>
                         </div>
                     </div>
+                    <?php if(!empty($this->request->data['Edificio']['id'])):?>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Categoria Ambiente</label>
+                        <div class="col-md-4">
+                            <?php echo $this->Form->select('gcategoriasambiente_id', $catambientes, array('class' => 'form-control')); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo $this->Form->text('Categoriasambiente.constante',array('class' => 'form-control','placeholder' => 'Constante','type' => 'number','step' => 'any'));?>
+                        </div>
+                    </div>
+                    <?php else:?>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="user-settings-email">Categoria Ambiente</label>
                         <div class="col-md-8">
                             <?php echo $this->Form->select('categoriasambiente_id', $catambientes, array('class' => 'form-control')); ?>
                         </div>
                     </div>
+                    <?php endif;?>
+                    <?php if(!empty($this->request->data['Edificio']['id'])):?>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
+                        <div class="col-md-4">
+                            <?php echo $this->Form->select('gcategoriaspago_id', $catpagos, array('class' => 'form-control')); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo $this->Form->text('Categoriaspago.constante',array('class' => 'form-control','placeholder' => 'Constante','type' => 'number','step' => 'any'));?>
+                        </div>
+                    </div>
+                    <?php else:?>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
                         <div class="col-md-8">
-                            <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control')); ?>
+                            <?php echo $this->Form->select('gcategoriaspago_id', $catpagos, array('class' => 'form-control')); ?>
                         </div>
                     </div>
+                    <?php endif;?>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="user-settings-email">Retencion</label>
                         <div class="col-md-8">
