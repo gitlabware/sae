@@ -62,7 +62,7 @@
                             <?php echo $this->Form->text('area_comun', array('class' => 'form-control', 'placeholder' => 'Area Comun', 'type' => 'number', 'step' => 'any')); ?>
                         </div>
                     </div>
-                    <?php if(!empty($this->request->data['Edificio']['id'])):?>
+                    <?php if(empty($this->request->data['Edificio']['id'])):?>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="user-settings-email">Categoria Ambiente</label>
                         <div class="col-md-4">
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <?php endif;?>
-                    <?php if(!empty($this->request->data['Edificio']['id'])):?>
+                    <?php if(empty($this->request->data['Edificio']['id'])):?>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
                         <div class="col-md-4">

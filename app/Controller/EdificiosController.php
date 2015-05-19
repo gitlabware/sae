@@ -70,6 +70,7 @@ class EdificiosController extends AppController {
       $this->Categoriasambiente->create();
       $this->Categoriasambiente->save($this->request->data['Categoriasambiente']);
       $datos_e['categoriasambiente_id'] = $this->Categoriasambiente->getLastInsertID();
+      $this->request->data['Edificio']['categoriasambiente_id'] = $datos_e['categoriasambiente_id'];
     }
     if (!empty($this->request->data['Edificio']['gcategoriasambiente_id'])) {
       $categoria_pago = $this->GenCategoriaspago->findByid($this->request->data['Edificio']['gcategoriaspago_id'], null, null, -1);
@@ -78,6 +79,7 @@ class EdificiosController extends AppController {
       $this->Categoriaspago->create();
       $this->Categoriaspago->save($this->request->data['Categoriaspago']);
       $datos_e['categoriaspago_id'] = $this->Categoriaspago->getLastInsertID();
+      $this->request->data['Edificio']['categoriaspago_id'] = $datos_e['categoriaspago_id'];
     }
     $this->Edificio->id = $idEdificio;
     $this->Edificio->save($datos_e);
@@ -89,8 +91,8 @@ class EdificiosController extends AppController {
     $nro_ambientes = $this->request->data['Edificio']['ambientes'];
     $a_util = $this->request->data['Edificio']['area_util'];
     $a_comun = $this->request->data['Edificio']['area_comun'];
-    $catambiente = $this->request->data['Edificio']['categoriasambiente_id'];
-    $catpago = $this->request->data['Edificio']['categoriaspago_id'];
+    //$catambiente = $this->request->data['Edificio']['categoriasambiente_id'];
+    //$catpago = $this->request->data['Edificio']['categoriaspago_id'];
     for ($i = 1; $i <= $nro_pisos; $i++) {
       $this->Piso->create();
       $this->request->data['Piso']['nombre'] = "P" . $i;
@@ -209,5 +211,7 @@ class EdificiosController extends AppController {
     $nro_usuarios = $this->User->find('count', array('conditions' => array('User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('edificio', 'nro_pisos', 'nro_ambientes', 'nro_usuarios'));
   }
+  
+  
 
 }
