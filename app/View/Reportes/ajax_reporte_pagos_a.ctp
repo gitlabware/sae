@@ -7,7 +7,6 @@
                 <td>Piso</td>
                 <td>Propietario</td>
                 <td>Inquilinos</td>
-                <td>Fecha</td>
                 <td>Concepto</td>
                 <td>Estado</td>
                 <td>Costo</td>
@@ -17,7 +16,7 @@
             <?php $i = 0;?>
             <?php $total_monto = 0.00;?>
             <?php foreach ($pagos as $pa): ?>
-            <?php $total_monto = $total_monto + $pa['Pago']['monto'];?>
+            <?php $total_monto = $total_monto + $pa[0]['monto_total'];?>
             <?php $i++;?>
               <tr>
                   <td><?php echo $i;?></td>
@@ -25,10 +24,9 @@
                   <td><?php echo $pa['Pago']['piso'];?></td>
                   <td><?php echo $pa['Propietario']['nombre'];?></td>
                   <td><?php echo $pa['Ambiente']['lista_inquilinos'];?></td>
-                  <td><?php echo $pa['Pago']['fecha'];?></td>
                   <td><?php echo $pa['Concepto']['nombre'];?></td>
                   <td><?php echo $pa['Pago']['estado'];?></td>
-                  <td><?php echo $pa['Pago']['monto'];?></td>
+                  <td><?php echo $pa[0]['monto_total'];?></td>
               </tr>
             <?php endforeach; ?>
               <tr>

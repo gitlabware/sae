@@ -58,10 +58,10 @@ class AmbientesController extends AppController {
       $this->request->data = $this->Ambiente->read();
     }
     $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre_completo',
-      'conditions' => array('Categoriasambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'))
+      'conditions' => array('Categoriasambiente.edificio_id' => $piso['Edificio']['id'])
     ));
     $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre_completo',
-      'conditions' => array('Categoriaspago.edificio_id' => $this->Session->read('Auth.User.edificio_id'))
+      'conditions' => array('Categoriaspago.edificio_id' => $piso['Edificio']['id'])
     ));
     $categoria_ambientes = $this->Categoriasambiente->find('all');
     $categoria_pagos = $this->Categoriaspago->find('all');
@@ -100,9 +100,9 @@ class AmbientesController extends AppController {
     if (!empty($catambiente) && !empty($catpago) && $a_comun != NULL && $a_util != NULL) {
       $this->request->data['Ambienteconcepto']['ambiente_id'] = $idAmbiente;
       $this->request->data['Ambienteconcepto']['concepto_id'] = 10;
-      $this->request->data['Ambienteconcepto']['mantenimiento'] = $this->calcula_mantenimiento();
+      $this->request->data['Ambienteconcepto']['monto'] = $this->calcula_mantenimiento();
       $this->Ambienteconcepto->create();
-      $this->Ambienteconcepto->save();
+      $this->Ambienteconcepto->save($this->request->data['Ambienteconcepto']);
     }
   }
 

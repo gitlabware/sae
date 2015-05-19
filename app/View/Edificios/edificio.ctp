@@ -94,7 +94,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
                         <div class="col-md-8">
-                            <?php echo $this->Form->select('gcategoriaspago_id', $catpagos, array('class' => 'form-control')); ?>
+                            <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control')); ?>
                         </div>
                     </div>
                     <?php endif;?>
