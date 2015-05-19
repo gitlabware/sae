@@ -27,7 +27,7 @@ class EdificiosController extends AppController {
       $catpagos = $this->GenCategoriaspago->find('list', array('fields' => 'GenCategoriaspago.nombre'));
     }else{
       $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre','conditions' => array('Categoriasambiente.edificio_id' => $idEdificio)));
-      $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre',array('conditions' => array('Categoriaspago.edificio_id' => $idEdificio))));
+      $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre','conditions' => array('Categoriaspago.edificio_id' => $idEdificio)));
     }
     $pisos = $this->Piso->find('count', array('conditions' => array('Piso.edificio_id' => $idEdificio)));
     $this->set(compact('catambientes', 'catpagos', 'pisos'));
@@ -91,8 +91,8 @@ class EdificiosController extends AppController {
     $nro_ambientes = $this->request->data['Edificio']['ambientes'];
     $a_util = $this->request->data['Edificio']['area_util'];
     $a_comun = $this->request->data['Edificio']['area_comun'];
-    //$catambiente = $this->request->data['Edificio']['categoriasambiente_id'];
-    //$catpago = $this->request->data['Edificio']['categoriaspago_id'];
+    $catambiente = $this->request->data['Edificio']['categoriasambiente_id'];
+    $catpago = $this->request->data['Edificio']['categoriaspago_id'];
     for ($i = 1; $i <= $nro_pisos; $i++) {
       $this->Piso->create();
       $this->request->data['Piso']['nombre'] = "P" . $i;
@@ -120,7 +120,7 @@ class EdificiosController extends AppController {
         $this->request->data['Ambienteconcepto']['ambiente_id'] = $this->Ambiente->getLastInsertID();
         $this->request->data['Ambienteconcepto']['concepto_id'] = 10;
         $this->request->data['Ambienteconcepto']['mantenimiento'] = $this->calcula_mantenimiento();
-        $this->Ambienteconcepto->create();
+        $this->Ambienteconcepto->create($this->request->data['Ambienteconcepto']);
         $this->Ambienteconcepto->save();
       }
     }
