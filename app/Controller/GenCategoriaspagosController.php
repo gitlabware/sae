@@ -2,9 +2,9 @@
 
 App::uses('AppController', 'Controller');
 
-class GenCategoriasambientesController extends AppController {
+class GenCategoriaspagosController extends AppController {
 
-    public $uses = 'GenCategoriasambiente';
+    public $uses = 'GenCategoriaspago';
     public $layout = 'sae';
 
     public function beforeFilter() {
@@ -13,22 +13,22 @@ class GenCategoriasambientesController extends AppController {
     }
 
     public function index() {
-        $gen_ambientes = $this->GenCategoriasambiente->find('all');
-        $this->set(compact('gen_ambientes'));
+        $gen_pago = $this->GenCategoriaspago->find('all');
+        $this->set(compact('gen_pago'));
     }
 
-    public function gencategoria($idCategoria = NULL) {
+    public function gencategoriapago($idCategoria = NULL) {
         $this->layout = 'ajax';
-        $this->GenCategoriasambiente->id = $idCategoria;
-        $this->request->data = $this->GenCategoriasambiente->read();
+        $this->GenCategoriaspago->id = $idCategoria;
+        $this->request->data = $this->GenCategoriaspago->read();
     }
 
-    public function guarda_gencategoria() {
+    public function guarda_gencategoriapago() {
         if (!empty($this->request->data)) {
-            $this->GenCategoriasambiente->create();
-            $genvalida = $this->validar('GenCategoriasambiente');
+            $this->GenCategoriaspago->create();
+            $genvalida = $this->validar('GenCategoriaspago');
             if (empty($genvalida)) {
-                if ($this->GenCategoriasambiente->save($this->request->data['GenCategoriasambiente'])) {
+                if ($this->GenCategoriaspago->save($this->request->data['GenCategoriaspago'])) {
                     $this->Session->setFlash('Se registro correctamente los datos!!!', 'msgbueno');
                 } else {
                     $this->Session->setFlash('NO se pudo registrar los datos del usuario!!!', 'msgerror');
@@ -42,8 +42,8 @@ class GenCategoriasambientesController extends AppController {
         $this->redirect(array('action' => 'index'));
     }
 
-    public function delete ($idGenCategoriasambiente = null) {
-        if ($this->GenCategoriasambiente->delete($idGenCategoriasambiente)) {
+    public function delete ($idGenCategoriaspago = null) {
+        if ($this->GenCategoriaspago->delete($idGenCategoriaspago)) {
             $this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
         } else {
             $this->Session->setFlash('No se pudo eliminar, verifique que la categoria exista!!!', 'msgerror');

@@ -30,14 +30,14 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($gen_ambientes as $gen): ?>
+                <?php foreach ($gen_pago as $gen): ?>
                     <tr>
-                        <td><?php echo $gen['GenCategoriasambiente']['nombre'] ?></td>
-                        <td><?php echo $gen['GenCategoriasambiente']['descripcion']; ?></td>
+                        <td><?php echo $gen['GenCategoriaspago']['nombre'] ?></td>
+                        <td><?php echo $gen['GenCategoriaspago']['descripcion']; ?></td>
                         <td class="text-center">
                             <div class="btn-group btn-group-xs">
-                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'gencategoria', $gen['GenCategoriasambiente']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                    <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'delete', $gen['GenCategoriasambiente']['id']), array('class' => 'btn btn-danger', 'title' => 'Eliminar Categoria', 'confirm' => 'Esta seguro de eliminar la categoria ' . $gen['GenCategoriasambiente']['nombre'] . '??', 'escape' => FALSE)) ?>
+                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'gencategoriapago', $gen['GenCategoriaspago']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                    <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'delete', $gen['GenCategoriaspago']['id']), array('class' => 'btn btn-danger', 'title' => 'Eliminar Categoria pago', 'confirm' => 'Esta seguro de eliminar la categoria ' . $gen['GenCategoriaspago']['nombre'] . '??', 'escape' => FALSE)) ?>
                             </div>
                         </td>
                     </tr>
@@ -48,4 +48,3 @@
     <!-- END Example Content -->
 </div>
 <!-- END Example Block -->
-
