@@ -14,7 +14,6 @@
                 <div class="row text-center">
                     <h2 class="animation-hatch">
                         <strong>EDIFICIO <?php echo strtoupper($edificio['Edificio']['nombre']); ?></strong><br>
-
                     </h2>
                 </div>
             </div>

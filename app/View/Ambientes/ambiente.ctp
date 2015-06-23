@@ -69,10 +69,11 @@
             
             <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cerrar</button>
             <?php if(!empty($idAmbiente)):?>
+            
             <button type="button" class="btn btn-sm btn-info" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos','action' => 'aservicios',$idAmbiente,$piso['Edificio']['id']))?>');">Servicios</button>
             <button type="button" class="btn btn-sm btn-warning" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'inquilinos',$idAmbiente))?>');">Inquilinos</button>
             <button type="button" class="btn btn-sm btn-success" onclick="window.location = ('<?php echo $this->Html->url(array('action' => 'pagos',$idAmbiente))?>');">Pagos</button>
-            
+            <?php echo $this->Html->link("Por cobrar",array('action' => 'xcobrar',$idAmbiente),array('class' => 'btn btn-sm btn-warning'))?>
             <?php endif;?>
             <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
         </div>

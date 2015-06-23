@@ -27,6 +27,15 @@ class AmbientesController extends AppController {
     $this->set(compact('pisos', 'edificio'));
   }
 
+  public function lista_ambientes() {
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $ambientes = $this->Ambiente->find('all', array('recursive' => 0, 'conditions' => array('Piso.edificio_id' => $idEdificio)));
+    $edificio = $this->Edificio->findByid($idEdificio, NULL, NULL, -1);
+    /* debug($ambientes);
+      exit; */
+    $this->set(compact('edificio', 'ambientes'));
+  }
+
   public function get_ambientes($idEdificio = NULL, $idPiso = NULL) {
     return $this->Ambiente->find('all', array(
         'recursive' => -1, 'order' => 'Ambiente.id ASC',
@@ -766,6 +775,60 @@ class AmbientesController extends AppController {
     $this->respond($array, true);
     /* debug($this->request->data);
       exit; */
+  }
+
+  public function xcobrar($idAmbiente = null) {
+    $ambiente = $this->Ambiente->find('first', array(
+      'recursive' => 0,
+      'conditions' => array('Ambiente.id' => $idAmbiente),
+      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'Ambiente.id', 'Ambiente.user_id','Ambiente.fecha_ocupacion')
+    ));
+    $conceptos = $this->Concepto->find('list', array('fields' => 'nombre','conditions' => array("Concepto.id" => array(10,11))));
+    if (!empty($this->request->data)) {
+      $fecha_ini = $this->request->data['Dato']['fecha_ini'];
+      $fecha_fin_m = $this->request->data['Dato']['fecha_fin'];
+      $concepto = $this->request->data['Dato']['concepto'];
+      $fecha_ini_m = NULL;
+      $monto_concepto = $this->Ambienteconcepto->find('first', array(
+        'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente, 'Ambienteconcepto.concepto_id' => $concepto)
+        , 'recursive' => -1
+      ));
+      if (!empty($monto_concepto)) {
+        $ultimo_pago_concepto = $this->Pago->find('first', array(
+          'order' => 'Pago.id DESC',
+          'conditions' => array('Pago.concepto_id' => $concepto, 'Pago.ambiente_id' => $idAmbiente),
+          'fields' => array('Pago.fecha')
+        ));
+        if (!empty($ultimo_pago_concepto)) {
+          $fecha_ini_m = $ultimo_pago_concepto['Pago']['fecha'];
+        } elseif(!empty($ambiente['Ambiente']['fecha_ocupacion'])) {
+          $fecha_ini_m = $ambiente['Ambiente']['fecha_ocupacion'];
+        }
+        if (empty($fecha_ini_m) || $fecha_ini > $fecha_fin_m) {
+          $fecha_ini_m = $fecha_ini;
+        }
+        /*debug($fecha_ini);
+        debug($fecha_ini_m);exit;*/
+        if ($fecha_ini_m <= $fecha_fin_m) {
+          foreach ($this->genera_meses($fecha_ini_m, $fecha_fin_m) as $gme) {
+            $this->Pago->create();
+            $this->request->data['Pago']['estado'] = 'Debe';
+            $this->request->data['Pago']['ambiente_id'] = $idAmbiente;
+            $this->request->data['Pago']['propietario_id'] = $ambiente['Ambiente']['user_id'];
+            $this->request->data['Pago']['concepto_id'] = $concepto;
+            $this->request->data['Pago']['monto'] = $monto_concepto['Ambienteconcepto']['monto'];
+            $this->request->data['Pago']['fecha'] = $gme['fecha'];
+            $this->Pago->save($this->request->data['Pago']);
+          }
+        }
+      }
+    }
+    $pagos = $this->Pago->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente),
+      'order' => 'Pago.fecha DESC','limit' => 20
+    ));
+    $this->set(compact('ambiente', 'conceptos','pagos'));
   }
 
 }

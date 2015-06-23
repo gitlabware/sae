@@ -197,7 +197,7 @@ class EdificiosController extends AppController {
           $this->Ambienteconcepto->create();
           $this->request->data['Ambienteconcepto']['ambiente_id'] = $am['Ambiente']['id'];
           $this->request->data['Ambienteconcepto']['concepto_id'] = $ed['Edificioconcepto']['concepto_id'];
-          $this->request->data['Ambienteconcepto']['monto'] = $ed['Edificioconcepto']['monto'];
+          $this->request->data['Ambienteconcepto']['monto'] = $ed['Edificioconcepto']['monto'];          
           $this->Ambienteconcepto->save($this->request->data['Ambienteconcepto']);
         }
       }
