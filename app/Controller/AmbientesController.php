@@ -145,15 +145,22 @@ class AmbientesController extends AppController {
   }
 
   public function guarda_propietario() {
+    if (!empty($this->request->data['User']['email'])) {
+      $this->request->data['User']['username'] = $this->request->data['User']['email'];
+    }
     $this->User->create();
+    if (!empty($this->request->data['User']['email'])) {
+      $this->request->data['User']['username'] = $this->request->data['User']['email'];
+      $this->request->data['User']['password'] = $this->request->data['User']['ci'];
+    }
     $this->request->data['User']['role'] = 'Propietario';
+    $this->request->data['User']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
     $this->User->save($this->request->data['User']);
     $idUsuario = $this->User->getLastInsertID();
-
     $array['usuario'] = $idUsuario;
     $this->respond($array, true);
   }
-
+  
   function respond($message = null, $json = false) {
     if ($message != null) {
       if ($json == true) {
@@ -165,7 +172,7 @@ class AmbientesController extends AppController {
     $this->render('message');
   }
 
-  public function inquilinos($idAmbiente = NULL) {
+  public function inquilinos($idAmbiente = NULL, $idPiso = NULL) {
     $this->layout = 'ajax';
     $sql = "SELECT * FROM "
       . "(SELECT user_id,estado FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
@@ -173,12 +180,30 @@ class AmbientesController extends AppController {
     $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
     $inquilinos = $this->Inquilino->query($sql2);
     $select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Inquilino')));
-    $this->set(compact('inquilinos', 'select_inquilinos', 'idAmbiente'));
+    $this->set(compact('inquilinos', 'select_inquilinos', 'idAmbiente', 'idPiso'));
+  }
+
+  public function busca_usuario() {
+    $this->layout = 'ajax';
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $nombre = $this->request->data['Inquilino']['user'];
+    $usuarios = $this->User->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role LIKE' => 'Inquilino'),
+      'fields' => array('User.id', 'User.ci', 'User.nombre'),
+      'limit' => 5,
+      'order' => 'User.nombre'
+    ));
+    $this->set(compact('usuarios'));
   }
 
   public function guarda_nuevo_inquilino() {
+    if (!empty($this->request->data['User']['email'])) {
+      $this->request->data['User']['username'] = $this->request->data['User']['email'];
+      $this->request->data['User']['password'] = $this->request->data['User']['ci'];
+    }
+    $this->request->data['User']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
     $this->User->create();
-    $this->request->data['User'];
     $this->User->save($this->request->data['User']);
     $idUsuario = $this->User->getLastInsertID();
     $this->Inquilino->create();
@@ -194,7 +219,14 @@ class AmbientesController extends AppController {
         'order' => 'Inquilino.id DESC',
         'conditions' => array('Inquilino.user_id' => $this->request->data['Inquilino']['user_id'], 'Inquilino.ambiente_id' => $this->request->data['Inquilino']['ambiente_id'])
       ));
+
       if (empty($inquilino)) {
+        if (!empty($this->request->data['User']['email'])) {
+          $this->request->data['User']['username'] = $this->request->data['User']['email'];
+        }
+        $this->User->create();
+        $this->User->save($this->request->data['User']);
+
         $this->Inquilino->create();
         $this->Inquilino->save($this->request->data['Inquilino']);
         $this->actualiza_inquilinos($this->request->data['Inquilino']['ambiente_id']);
@@ -781,9 +813,9 @@ class AmbientesController extends AppController {
     $ambiente = $this->Ambiente->find('first', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.id' => $idAmbiente),
-      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'Ambiente.id', 'Ambiente.user_id','Ambiente.fecha_ocupacion')
+      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'Ambiente.id', 'Ambiente.user_id', 'Ambiente.fecha_ocupacion')
     ));
-    $conceptos = $this->Concepto->find('list', array('fields' => 'nombre','conditions' => array("Concepto.id" => array(10,11))));
+    $conceptos = $this->Concepto->find('list', array('fields' => 'nombre', 'conditions' => array("Concepto.id" => array(10, 11))));
     if (!empty($this->request->data)) {
       $fecha_ini = $this->request->data['Dato']['fecha_ini'];
       $fecha_fin_m = $this->request->data['Dato']['fecha_fin'];
@@ -801,14 +833,14 @@ class AmbientesController extends AppController {
         ));
         if (!empty($ultimo_pago_concepto)) {
           $fecha_ini_m = $ultimo_pago_concepto['Pago']['fecha'];
-        } elseif(!empty($ambiente['Ambiente']['fecha_ocupacion'])) {
+        } elseif (!empty($ambiente['Ambiente']['fecha_ocupacion'])) {
           $fecha_ini_m = $ambiente['Ambiente']['fecha_ocupacion'];
         }
         if (empty($fecha_ini_m) || $fecha_ini > $fecha_fin_m) {
           $fecha_ini_m = $fecha_ini;
         }
-        /*debug($fecha_ini);
-        debug($fecha_ini_m);exit;*/
+        /* debug($fecha_ini);
+          debug($fecha_ini_m);exit; */
         if ($fecha_ini_m <= $fecha_fin_m) {
           foreach ($this->genera_meses($fecha_ini_m, $fecha_fin_m) as $gme) {
             $this->Pago->create();
@@ -823,12 +855,12 @@ class AmbientesController extends AppController {
         }
       }
     }
-    $pagos = $this->Pago->find('all',array(
+    $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.ambiente_id' => $idAmbiente),
-      'order' => 'Pago.fecha DESC','limit' => 20
+      'order' => 'Pago.fecha DESC', 'limit' => 20
     ));
-    $this->set(compact('ambiente', 'conceptos','pagos'));
+    $this->set(compact('ambiente', 'conceptos', 'pagos'));
   }
 
 }

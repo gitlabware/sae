@@ -63,6 +63,16 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-user sidebar-nav-icon"></i>Inquilinos y prop</a>
+                    <ul>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuarios')); ?>">Listado</a>
+                            
+                        </li>
+                        <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuario')); ?>');">Usuarios</a>
+                    </ul>
+                </li>
             </ul>
             <!-- END Sidebar Navigation -->
         </div>
