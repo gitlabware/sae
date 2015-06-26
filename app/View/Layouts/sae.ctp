@@ -284,8 +284,8 @@
             } elseif ($role == 'Administrador') {
                 echo $this->element("sidebar/administrador");
             }
-            else{
-                
+            elseif($role == 'Propietario' || $role == "Inquilino"){
+                echo $this->element("sidebar/usuarios");
             }
             ?>
             <!-- Main Container -->

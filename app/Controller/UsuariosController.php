@@ -4,7 +4,7 @@ App::uses("AppController", "Controller");
 
 class UsuariosController extends AppController {
 
-  var $uses = array('Pago', 'Inquilino', 'User');
+  var $uses = array('Pago', 'Inquilino', 'User','Ambiente');
   var $components = array('RequestHandler', 'DataTable');
   var $layout = 'sae';
 
@@ -21,10 +21,28 @@ class UsuariosController extends AppController {
 
   public function ambientes() {
     $idUser = $this->Session->read('Auth.User.id');
-    $sql1 = "SELECT inq.ambiente_id as idamb, ambientes.nombre as nombreamb FROM inquilinos inq LEFT JOIN ambientes ON inq.ambiente_id = ambientes.id WHERE inq.user_id = $idUser UNION ALL SELECT amb.id as idamb, amb.nombre as nombreamb FROM ambientes amb WHERE amb.user_id = $idUser";
-    $ambientes = $this->Inquilino->query($sql1);
+    /*$sql3 = "SELECT amb.id as idamb, amb.nombre as nombreamb,amb.piso_id FROM ambientes amb WHERE amb.user_id = $idUser";
+    $sql2 = "SELECT inq.ambiente_id as idamb, ambientes.nombre as nombreamb, ambientes.piso_id FROM inquilinos inq LEFT JOIN ambientes ON inq.ambiente_id = ambientes.id WHERE inq.user_id = $idUser";
+    $sql1 = "$sql2 UNION ALL $sql3";
+    $sql4 = "SELECT Ambiente.*, Piso.nombre FROM ($sql1) Ambiente LEFT JOIN pisos Piso ON Ambiente.piso_id = Piso.id";
+    $ambientes = $this->Inquilino->query($sql4);*/
     //debug($ambientes);exit;
-    $this->set(compact('ambientes'));
+    $sql_1 = "SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id";
+    $this->Inquilino->virtualFields = array(
+      'piso' => "CONCAT(($sql_1))"
+    );
+    $ambientes_inq = $this->Inquilino->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Inquilino.user_id' => $idUser),
+      'fields' => array('Ambiente.id','Ambiente.nombre','Inquilino.piso')
+    ));
+    $ambientes_prop = $this->Ambiente->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Ambiente.user_id' => $idUser),
+      'fields' => array('Ambiente.id','Ambiente.nombre','Piso.nombre')
+    ));
+    //debug($ambientes_inq);exit;
+    $this->set(compact('ambientes_inq','ambientes_prop'));
   }
 
   public function usuarios() {
@@ -58,6 +76,7 @@ class UsuariosController extends AppController {
       if(!empty($this->request->data['User']['password2'])){
         $this->request->data['User']['password'] = $this->request->data['User']['password2'];
       }
+      $this->request->data['User']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
       $this->User->create();
       $this->User->save($this->request->data);
       $this->Session->setFlash("Se regsitro correctamente!!",'msgbueno');
@@ -67,5 +86,31 @@ class UsuariosController extends AppController {
     $this->redirect($this->referer());
   }
   
-
+  public function pagados($idAmbiente = null){
+    $this->Pago->virtualFields = array(
+      'monto_ret' => "CONCAT(((Pago.retencion/100)*Pago.monto))",
+      'monto_total' => "CONCAT(IF(ISNULL(((Pago.retencion/100)*Pago.monto)),0,((Pago.retencion/100)*Pago.monto))+Pago.monto)"
+    );
+    $pagados = $this->Pago->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente,'Pago.estado LIKE' => 'Pagado'),
+      'fields' => array('Pago.modified','Concepto.nombre','Pago.fecha','Pago.monto','Pago.monto_ret','Pago.monto_total'),
+      'order' => array('Pago.modified DESC','Pago.fecha DESC')
+    ));
+    /*debug($pagados);
+    exit;*/
+    $this->set(compact('pagados'));
+  }
+  
+  public function nopagados($idAmbiente = null){
+    $nopagados = $this->Pago->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente,'Pago.estado LIKE' => 'Debe'),
+      'fields' => array('Concepto.nombre','Pago.fecha','Pago.monto'),
+      'order' => array('Pago.fecha DESC')
+    ));
+    $this->set(compact('nopagados'));
+  }
+  
+  
 }

@@ -45,12 +45,14 @@
                     <?php echo $this->Form->text('User.username', array('class' => 'form-control', 'placeholder' => 'Ingrese el Username')); ?>
                 </div>
             </div>
+            <?php if($this->Session->read('Auth.User.role') == "Administrator"):?>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="user-settings-email">Role</label>
                 <div class="col-md-8">
                     <?php echo $this->Form->select('User.role', array('Propietario' => 'Propietario','Inquilino' => 'Inquilino'), array('class' => 'form-control')); ?>
                 </div>
             </div>
+            <?php endif;?>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="user-settings-email">Contrase&ntilde;a</label>
                 <div class="col-md-8">

@@ -189,7 +189,7 @@ class AmbientesController extends AppController {
     $nombre = $this->request->data['Inquilino']['user'];
     $usuarios = $this->User->find('all', array(
       'recursive' => -1,
-      'conditions' => array('User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role LIKE' => 'Inquilino'),
+      'conditions' => array('User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role LIKE' => array('Inquilino','Propietario')),
       'fields' => array('User.id', 'User.ci', 'User.nombre'),
       'limit' => 5,
       'order' => 'User.nombre'
