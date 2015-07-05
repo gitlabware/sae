@@ -38,7 +38,7 @@ class AmbientesController extends AppController {
 
   public function get_ambientes($idEdificio = NULL, $idPiso = NULL) {
     return $this->Ambiente->find('all', array(
-        'recursive' => -1, 'order' => 'Ambiente.id ASC',
+        'recursive' => 0, 'order' => 'Ambiente.id ASC',
         'conditions' => array('Ambiente.edificio_id' => $idEdificio, 'Ambiente.piso_id' => $idPiso)
     ));
   }
@@ -189,7 +189,7 @@ class AmbientesController extends AppController {
     $nombre = $this->request->data['Inquilino']['user'];
     $usuarios = $this->User->find('all', array(
       'recursive' => -1,
-      'conditions' => array('User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role LIKE' => array('Inquilino','Propietario')),
+      'conditions' => array('User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role LIKE' => 'Inquilino'),
       'fields' => array('User.id', 'User.ci', 'User.nombre'),
       'limit' => 5,
       'order' => 'User.nombre'

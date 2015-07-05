@@ -32,7 +32,9 @@
       <div class="row">
           <?php foreach ($ambientes as $am): ?>
             <div class="col-md-3">
-                <a class="btn btn-info col-md-10" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'], $am['Ambiente']['id'])); ?>');"><?php echo $am['Ambiente']['nombre'] ?></a> 
+                <?php //debug($am); ?>
+                <a class="btn btn-info col-md-8" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'], $am['Ambiente']['id'])); ?>');"><?php echo $am['User']['nombre'] ?></a> 
+                <a class="btn btn-warning col-md-2"><?php echo $am['Ambiente']['nombre'] ?></a> 
                 <?php echo $this->Html->link('<i class="gi gi-circle_remove"></i>', array('action' => 'eliminar', $am['Ambiente']['id']), array('class' => 'btn btn-danger col-md-2', 'escape' => FALSE, 'confirm' => 'Esta seguro de quitar el ambiente', 'title' => 'Quitar ambiente')) ?>
             </div> 
           <?php endforeach; ?>
