@@ -112,5 +112,4 @@ class UsuariosController extends AppController {
     $this->set(compact('nopagados'));
   }
   
-  
 }
