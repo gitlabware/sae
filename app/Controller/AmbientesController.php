@@ -38,7 +38,7 @@ class AmbientesController extends AppController {
 
   public function get_ambientes($idEdificio = NULL, $idPiso = NULL) {
     return $this->Ambiente->find('all', array(
-        'recursive' => -1, 'order' => 'Ambiente.id ASC',
+        'recursive' => 0, 'order' => 'Ambiente.id ASC',
         'conditions' => array('Ambiente.edificio_id' => $idEdificio, 'Ambiente.piso_id' => $idPiso)
     ));
   }
