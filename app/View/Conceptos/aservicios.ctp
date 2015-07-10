@@ -80,7 +80,12 @@
             </div>
         </div>
     </div>
-    
+    <div class="form-group form-actions">
+        <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-sm btn-primary" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'ambiente', $idPiso, $idAmbiente)) ?>');">Atras</button>
+        </div>
+    </div>
 </div>
 <!-- END Modal Body -->
 <script>

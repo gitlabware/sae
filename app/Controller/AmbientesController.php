@@ -87,6 +87,9 @@ class AmbientesController extends AppController {
           if (empty($this->request->data['Ambiente']['id'])) {
             $idAmbiente = $this->Ambiente->getLastInsertID();
             $this->registra_mantenimiento($idAmbiente);
+          } else {
+            $idAmbiente = $this->request->data['Ambiente']['id'];
+            $this->registra_mantenimiento($idAmbiente);
           }
           $this->Session->setFlash('Se registro correctamente los datos!!!', 'msgbueno');
         } else {
@@ -106,6 +109,7 @@ class AmbientesController extends AppController {
     $catpago = $this->request->data['Ambiente']['categoriaspago_id'];
     $a_util = $this->request->data['Ambiente']['area_util'];
     $a_comun = $this->request->data['Ambiente']['area_comun'];
+    
     if (!empty($catambiente) && !empty($catpago) && $a_comun != NULL && $a_util != NULL) {
       $this->request->data['Ambienteconcepto']['ambiente_id'] = $idAmbiente;
       $this->request->data['Ambienteconcepto']['concepto_id'] = 10;
@@ -160,7 +164,7 @@ class AmbientesController extends AppController {
     $array['usuario'] = $idUsuario;
     $this->respond($array, true);
   }
-  
+
   function respond($message = null, $json = false) {
     if ($message != null) {
       if ($json == true) {
@@ -189,7 +193,7 @@ class AmbientesController extends AppController {
     $nombre = $this->request->data['Inquilino']['user'];
     $usuarios = $this->User->find('all', array(
       'recursive' => -1,
-      'conditions' => array('User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role IN' => array('Inquilino','Propietario')),
+      'conditions' => array('User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role IN' => array('Inquilino', 'Propietario')),
       'fields' => array('User.id', 'User.ci', 'User.nombre'),
       'limit' => 5,
       'order' => 'User.nombre'

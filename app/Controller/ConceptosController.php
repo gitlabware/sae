@@ -2,7 +2,7 @@
 App::uses('AppController', 'Controller');
 class ConceptosController extends AppController {
     
-    public $uses = array('Concepto','Edificioconcepto','Ambienteconcepto','User');
+    public $uses = array('Concepto','Edificioconcepto','Ambienteconcepto','User','Ambiente');
     public $layout = 'sae';
 
     public function beforeFilter() {
@@ -41,9 +41,11 @@ class ConceptosController extends AppController {
     public function aservicios($idAmbiente = NULL,$idEdificio = NULL)
     {
         $this->layout = 'ajax';
+        $ambiente = $this->Ambiente->find('first',array('recursive' => -1,'conditions' => array('Ambiente.id' => $idAmbiente),'fields' => array('Ambiente.piso_id')));
+        $idPiso = $ambiente['Ambiente']['piso_id'];
         $servicios = $this->Ambienteconcepto->findAllByambiente_id($idAmbiente);
         $conceptos = $this->Concepto->find('list',array('fields' => 'Concepto.nombre'));
-        $this->set(compact('servicios','idEdificio','conceptos','idAmbiente'));
+        $this->set(compact('servicios','idEdificio','conceptos','idAmbiente','idPiso'));
     }
     public function guarda_nuevo_servicio_a()
     {
