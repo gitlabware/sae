@@ -51,7 +51,7 @@
                         <div id="muestra-pagos" style="display: block;">
                             <?php foreach ($ultimos_pagos as $ul): ?>
                               <a href="javascript:void(0)" class="list-group-item">
-                                  <span class="pull-right"><strong id="manteminientoAmbiente"><?php echo ' |Rec. '.$ul['Recibo']['numero'].' | '.$ul['Pago']['monto']; ?></strong></span>
+                                  <span class="pull-right"><strong id="manteminientoAmbiente"><?php echo ' |Rec. ' . $ul['Recibo']['numero'] . ' | ' . $ul['Pago']['monto']; ?></strong></span>
                                   <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo $ul['Pago']['fecha']; ?></h4>
                               </a>
                             <?php endforeach; ?>
@@ -101,7 +101,7 @@
                           <div class="block-options pull-right">
                               <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content1" onclick="oculta(1)"><i class="fa fa-arrows-v"></i></a>                            
                           </div>
-                          <h2>Pago por Mantenimiento</h2> <label class="text-info">Monto mensual: <?php echo $conceptos[10] ?></label>
+                          <h2>Pago por Mantenimiento</h2> <label class="text-success">Monto mensual: <?php echo $conceptos[10] ?></label> <label class="text-info">Retencion: <?php echo round($conceptos[10] * ($this->Session->read('Auth.User.Edificio.retencion') / 100), 2) ?></label>
                       </div>
                       <!-- END Input Grid Title -->
                       <!-- Block Tabs Title -->
@@ -111,13 +111,17 @@
                           <div class="form-group">                    
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
-                                  <input type="number" class="form-control" id="monto-pe-mantenimiento" name="data[Mantenimiento][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas();">
+                                  <input type="number" step="any" class="form-control" id="monto-pe-mantenimiento" name="data[Mantenimiento][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas();">
                               </div>
-                              <div class="col-md-3">
-                                  <label for="crt2">Cantidad Cuotas</label>
+                              <div class="col-md-2">
+                                  <label for="crt2">Reten.</label>
+                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-mantenimiento" name="data[Mantenimiento][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                              </div>
+                              <div class="col-md-2">
+                                  <label for="crt2"># Cuotas</label>
                                   <input type="text" class="form-control" id="cantidad-pe-mantenimiento" name="data[Mantenimiento][cuotas]" placeholder="0" onkeyup="calcula_monto();">
                               </div>
-                              <div class="col-md-3">
+                              <div class="col-md-2">
                                   <label for="crt2">Cambio</label>
                                   <input type="text" class="form-control" id="cambio-pe-mantenimiento" name="data[Mantenimiento][cambio]" placeholder="0">
                               </div>
@@ -138,7 +142,7 @@
                               <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="mantenimiento-retencion" name="data[Mantenimiento][retencion]"> RETENCION
+                                          <input type="checkbox" id="mantenimiento-retencion" name="data[Mantenimiento][retencion]" onclick="calc_ret_man();"> RETENCION
                                       </label>
                                   </div>
                               </div>
@@ -159,7 +163,7 @@
                           <div class="block-options pull-right">
                               <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content1" onclick="oculta(2)"><i class="fa fa-arrows-v"></i></a>                            
                           </div>
-                          <h2>Pago por Alquileres</h2> <label class="text-info">Monto mensual: <?php echo $conceptos[11] ?></label>
+                          <h2>Pago por Alquileres</h2> <label class="text-success">Monto mensual: <?php echo $conceptos[11] ?></label> <label class="text-info">Retencion: <?php echo round($conceptos[11] * ($this->Session->read('Auth.User.Edificio.retencion') / 100), 2) ?></label>
                       </div>
                       <!-- END Input Grid Title -->
                       <!-- Block Tabs Title -->
@@ -168,13 +172,17 @@
                           <div class="form-group">                    
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
-                                  <input type="number" class="form-control" id="monto-pe-alquiler" name="data[Alquiler][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas_alqui();">
+                                  <input type="number" step="any" class="form-control" id="monto-pe-alquiler" name="data[Alquiler][monto]" placeholder="Introdusca el monto" onkeyup="calcula_cuotas_alqui();">
                               </div>
-                              <div class="col-md-3">
-                                  <label for="crt2">Cantidad Cuotas</label>
+                              <div class="col-md-2">
+                                  <label for="crt2">Reten.</label>
+                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-alquiler" name="data[Alquiler][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                              </div>
+                              <div class="col-md-2">
+                                  <label for="crt2"># Cuotas</label>
                                   <input type="text" class="form-control" id="cantidad-pe-alquiler" name="data[Alquiler][cuotas]" placeholder="0" onkeyup="calcula_monto_alqui();">
                               </div>
-                              <div class="col-md-3">
+                              <div class="col-md-2">
                                   <label for="crt2">Cambio</label>
                                   <input type="text" class="form-control" id="cambio-pe-alquiler" name="data[Alquiler][cambio]" placeholder="0">
                               </div>
@@ -194,7 +202,7 @@
                               <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="alquiler-retencion" name="data[Alquiler][retencion]"> RETENCION
+                                          <input type="checkbox" id="alquiler-retencion" name="data[Alquiler][retencion]" onclick="calc_ret_alq();"> RETENCION
                                       </label>
                                   </div>
                               </div>
@@ -222,12 +230,11 @@
                         <div class="form-group">                    
                             <div class="col-md-6">
                                 <label for="monto-pe">Monto</label>
-                                <input type="number" class="form-control" id="monto-pe-interes" name="data[Interes][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
+                                <input type="number" step="any" class="form-control" id="monto-pe-interes" name="data[Interes][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
                             </div>
-
                             <div class="col-md-6">
-                                <label for="crt2">Cambio</label>
-                                <input type="text" class="form-control" id="cambio-pe-interes" name="data[Interes][cambio]" placeholder="0">
+                                <label for="crt2">Reten.</label>
+                                <input type="text" class="form-control" disabled="true" id="retencion-pe-interes" name="data[Interes][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
                             </div>
                         </div>  
                         <div class="form-group">
@@ -241,7 +248,7 @@
                             <div class="col-md-6">
                                 <div class="checkbox">
                                     <label for="mantenimiento">
-                                        <input type="checkbox" id="interes-retencion" name="data[Interes][retencion]"> RETENCION
+                                        <input type="checkbox" id="interes-retencion" name="data[Interes][retencion]" onclick="calc_ret_int();"> RETENCION
                                     </label>
                                 </div>  
                             </div>
@@ -266,9 +273,13 @@
                           <div class="form-group">                    
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
-                                  <input type="number" class="form-control" id="monto-pe-ascensor" name="data[Ascensor][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
+                                  <input type="number" step="any" class="form-control" id="monto-pe-ascensor" name="data[Ascensor][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
                               </div>
-                              <div class="col-md-9">
+                              <div class="col-md-2">
+                                  <label for="crt2">Reten.</label>
+                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-ascensor" name="data[Ascensor][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                              </div>
+                              <div class="col-md-7">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-ascensor" name="data[Ascensor][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -310,9 +321,13 @@
                           <div class="form-group">                    
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
-                                  <input type="number" class="form-control" id="monto-pe-multas" name="data[Multas][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
+                                  <input type="number" step="any" class="form-control" id="monto-pe-multas" name="data[Multas][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
                               </div>
-                              <div class="col-md-9">
+                              <div class="col-md-2">
+                                  <label for="crt2">Reten.</label>
+                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-multas" name="data[Multas][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                              </div>
+                              <div class="col-md-7">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-multas" name="data[Multas][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -355,10 +370,13 @@
                           <div class="form-group">                    
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
-                                  <input type="number" class="form-control" id="monto-pe-otros" name="data[Otros][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
+                                  <input type="number" step="any" class="form-control" id="monto-pe-otros" name="data[Otros][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
                               </div>
-
-                              <div class="col-md-9">
+                              <div class="col-md-2">
+                                  <label for="crt2">Reten.</label>
+                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-otros" name="data[Otros][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                              </div>
+                              <div class="col-md-7">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-otros" name="data[Otros][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -376,7 +394,7 @@
                                       <label for="mantenimiento">
                                           <input type="checkbox" id="otros-retencion" name="data[Otros][retencion]"> RETENCION
                                       </label>
-                                  </div>F
+                                  </div>
                               </div>
                           </div>
 
@@ -389,8 +407,13 @@
                 <!-- Input Grid Block -->
                 <div class="block">
                     <!-- Input Grid Title -->            
-                    <div class="block-title">        
-                        <h2 class="text-success">Total: <span id="idtotal">0.00</span></h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="text-success">Total: <span id="idtotal">0.00</span></h4>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="text-info">Cambio T.: <span id="id_cambio_total">0.00</span></h4>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -404,18 +427,41 @@
 </div>
 
 <script>
-
+  var retencion = 0.00;
+<?php if (!empty($this->Session->read('Auth.User.Edificio.retencion'))): ?>
+    retencion = <?php echo $this->Session->read('Auth.User.Edificio.retencion') ?> / 100;
+<?php endif; ?>
   function calcula_cuotas() {
-
       $('#cantidad-pe-mantenimiento').val(parseInt($('#monto-pe-mantenimiento').val() / $('#idrefer_mantenimiento').val()));
       var cambio = $('#monto-pe-mantenimiento').val() - ($('#cantidad-pe-mantenimiento').val() * $('#idrefer_mantenimiento').val());
-      $('#cambio-pe-mantenimiento').val(cambio);
+      $('#cambio-pe-mantenimiento').val(Math.round(cambio * 100) / 100);
+      calc_ret_man();
+      calcula_total();
+  }
+  function calc_ret_man() {
+      if ($('#mantenimiento-retencion').prop('checked')) {
+          var cambio = $('#monto-pe-mantenimiento').val() - ($('#cantidad-pe-mantenimiento').val() * $('#idrefer_mantenimiento').val());
+          $('#cambio-pe-mantenimiento').val(Math.round(cambio * 100) / 100);
+          $('#retencion-pe-mantenimiento').val(Math.round((($('#cantidad-pe-mantenimiento').val() * $('#idrefer_mantenimiento').val()) * retencion) * 100) / 100);
+          cambio = parseFloat($('#cambio-pe-mantenimiento').val()) - parseFloat($('#retencion-pe-mantenimiento').val());
+          if (cambio < 0) {
+              var monto = parseFloat($('#monto-pe-mantenimiento').val()) + (cambio) * (-1);
+              $('#monto-pe-mantenimiento').val(Math.round(monto * 100) / 100);
+          } else {
+              $('#cambio-pe-mantenimiento').val(Math.round(cambio * 100) / 100);
+          }
+      } else {
+          $('#retencion-pe-mantenimiento').val(0);
+          var cambio = $('#monto-pe-mantenimiento').val() - ($('#cantidad-pe-mantenimiento').val() * $('#idrefer_mantenimiento').val());
+          $('#cambio-pe-mantenimiento').val(Math.round(cambio * 100) / 100);
+      }
       calcula_total();
   }
 
   function calcula_monto() {
       $('#monto-pe-mantenimiento').val($('#cantidad-pe-mantenimiento').val() * $('#idrefer_mantenimiento').val());
       $('#cambio-pe-mantenimiento').val(0);
+      calc_ret_man();
       calcula_total();
   }
 
@@ -423,26 +469,82 @@
 
       $('#cantidad-pe-alquiler').val(parseInt($('#monto-pe-alquiler').val() / $('#idrefer_alquiler').val()));
       var cambio = $('#monto-pe-alquiler').val() - ($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val());
-      $('#cambio-pe-alquiler').val(cambio);
+      $('#cambio-pe-alquiler').val(Math.round(cambio * 100) / 100);
+      calc_ret_alq();
+      calcula_total();
+  }
+
+  function calc_ret_alq() {
+      if ($('#alquiler-retencion').prop('checked')) {
+          var cambio = $('#monto-pe-alquiler').val() - ($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val());
+          $('#cambio-pe-alquiler').val(Math.round(cambio * 100) / 100);
+          $('#retencion-pe-alquiler').val(Math.round((($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val()) * retencion) * 100) / 100);
+          cambio = parseFloat($('#cambio-pe-alquiler').val()) - parseFloat($('#retencion-pe-alquiler').val());
+          if (cambio < 0) {
+              var monto = parseFloat($('#monto-pe-alquiler').val()) + (cambio) * (-1);
+              $('#monto-pe-alquiler').val(Math.round(monto * 100) / 100);
+          } else {
+              $('#cambio-pe-alquiler').val(Math.round(cambio * 100) / 100);
+          }
+      } else {
+          $('#retencion-pe-alquiler').val(0);
+          var cambio = $('#monto-pe-alquiler').val() - ($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val());
+          $('#cambio-pe-alquiler').val(Math.round(cambio * 100) / 100);
+      }
       calcula_total();
   }
 
   function calcula_monto_alqui() {
       $('#monto-pe-alquiler').val($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val());
       $('#cambio-pe-alquiler').val(0);
+      calc_ret_alq();
+      calcula_total();
+  }
+  
+  function calc_ret_int() {
+      if ($('#alquiler-retencion').prop('checked')) {
+          var cambio = $('#monto-pe-alquiler').val() - ($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val());
+          $('#cambio-pe-alquiler').val(Math.round(cambio * 100) / 100);
+          $('#retencion-pe-alquiler').val(Math.round((($('#cantidad-pe-alquiler').val() * $('#idrefer_interes').val()) * retencion) * 100) / 100);
+          cambio = parseFloat($('#cambio-pe-alquiler').val()) - parseFloat($('#retencion-pe-alquiler').val());
+          if (cambio < 0) {
+              var monto = parseFloat($('#monto-pe-alquiler').val()) + (cambio) * (-1);
+              $('#monto-pe-alquiler').val(Math.round(monto * 100) / 100);
+          } else {
+              $('#cambio-pe-alquiler').val(Math.round(cambio * 100) / 100);
+          }
+      } else {
+          $('#retencion-pe-alquiler').val(0);
+          var cambio = $('#monto-pe-alquiler').val() - ($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val());
+          $('#cambio-pe-alquiler').val(Math.round(cambio * 100) / 100);
+      }
       calcula_total();
   }
 
   function calcula_total() {
       var suma_total = 0.00;
+      var sum_cam_tot = 0.00;
       if ($('#mantenimiento-pagar').prop('checked')) {
           if ($('#monto-pe-mantenimiento').val() != null && $('#monto-pe-mantenimiento').val() != '') {
               suma_total = suma_total + parseFloat($('#cantidad-pe-mantenimiento').val() * $('#idrefer_mantenimiento').val());
           }
+          if ($('#mantenimiento-retencion').prop('checked')) {
+              suma_total = suma_total + parseFloat($('#retencion-pe-mantenimiento').val());
+          }
+          if ($('#cambio-pe-mantenimiento').val() != null && $('#cambio-pe-mantenimiento').val() != '') {
+              sum_cam_tot = sum_cam_tot + parseFloat($('#cambio-pe-mantenimiento').val());
+          }
       }
+
       if ($('#alquiler-pagar').prop('checked')) {
           if ($('#monto-pe-alquiler').val() != null && $('#monto-pe-alquiler').val() != '') {
               suma_total = suma_total + parseFloat($('#cantidad-pe-alquiler').val() * $('#idrefer_alquiler').val());
+          }
+          if ($('#alquiler-retencion').prop('checked')) {
+              suma_total = suma_total + parseFloat($('#retencion-pe-alquiler').val());
+          }
+          if ($('#cambio-pe-alquiler').val() != null && $('#cambio-pe-alquiler').val() != '') {
+              sum_cam_tot = sum_cam_tot + parseFloat($('#cambio-pe-alquiler').val());
           }
       }
       if ($('#interes-pagar').prop('checked')) {
@@ -465,10 +567,12 @@
               suma_total = suma_total + parseFloat($('#monto-pe-otros').val());
           }
       }
+      sum_cam_tot = Math.round(sum_cam_tot * 100) / 100;
+      suma_total = Math.round(suma_total * 100) / 100;
       $('#idtotal').html(suma_total);
+      $('#id_cambio_total').html(sum_cam_tot);
+      $('#id_dat_cambio').val(sum_cam_tot);
   }
-
-
 
   function ocultapagos() {
       console.log('Hizo click');

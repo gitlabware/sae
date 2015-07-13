@@ -50,7 +50,8 @@ $Pago = new Pago();
                           <?php echo $man['Pago']['estado']; ?>
                       </td>
                       <td class="text-center">
-                          <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto',$man['Pago']['id'],$recibo['Recibo']['id']));?>');"><i class="gi gi-pencil"></i></button>
+                          <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto', $man['Pago']['id'], $recibo['Recibo']['id'])); ?>');"><i class="gi gi-pencil"></i></button>
+                          <?php echo $this->Html->link('<i class="gi gi-remove"></i>',['action' => 'quita_pago',$man['Pago']['id']],['class' => 'btn btn-xs btn-danger','confirm' => 'Esta seguro de quitar pago?','escape' => FALSE,'title' => 'Quitar pago'])?>
                       </td>
                   </tr>
                   <?php $total = $total + $man['Pago']['monto_total']; ?>
@@ -66,6 +67,25 @@ $Pago = new Pago();
         </table>
     </div>
     <!-- END Example Content -->
+    <?php //echo $this->Form->create('Ambiente', ['action' => 'recibo/' . $recibo['Recibo']['id'] . '/1']); ?>
+    <!--<div class="row">
+        <div class="col-md-4">
+            <label>Total</label>
+            <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
+        </div>
+        <div class="col-md-4">
+            <label>Cambio</label>
+            <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
+        </div>
+        <div class="col-md-4">
+            <label>&nbsp;</label>
+            <div class="checkbox">
+                <label for="mantenimiento">
+                    <input type="checkbox" id="idformquedcambio" name="data[Dato][quedar_cambio]"> Quedar Cambio
+                </label>
+            </div>
+        </div>
+    </div><br>-->
     <div class="row">
         <div class="col-md-4">
             <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'buscador')); ?>'">Ir a pagos</button>
@@ -79,5 +99,6 @@ $Pago = new Pago();
             <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo', $recibo['Recibo']['id'], 1)); ?>'">Terminar Pago</button>
         </div>
     </div>
+    <?php //echo $this->Form->end(); ?>
 </div>
 <!-- END Example Block -->

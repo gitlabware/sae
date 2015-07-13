@@ -1,0 +1,155 @@
+
+@media print {
+
+
+    #sidebar, #sidebar-alt, .content-header, .breadcrumb-top, .block-title .block-options, #page-content + footer, #to-top, .ocultar-imp {
+        display:none !important;
+    }
+    body, #page-container, #page-content, #main-container {
+        float: none !important;
+        width: auto !important;
+        margin:  0 !important;
+        padding: 0 !important;
+        background: white;
+    }
+    * {
+        text-shadow: none !important;
+        box-shadow: none !important;
+        
+    }
+    .sidebar-partial #sidebar:hover + #main-container, .sidebar-visible-lg #main-container {
+        margin-left: 0px !important;
+    }
+    block, .block.full {border: none !important; padding: 0 !important;}
+    .navbar {
+        display: none
+    }
+    #login-alt-container {
+        display: block;
+    }
+
+    /* Sidebar Animations */
+    .sidebar-no-animations #sidebar,
+    .sidebar-no-animations #sidebar-alt {
+        -webkit-transition: opacity 0.0s linear, background-color 0.0s ease-out;
+        transition: opacity 0.0s linear, background-color 0.0s ease-out;
+    }
+
+    .sidebar-no-animations #main-container,
+    .sidebar-no-animations.header-fixed-top header.navbar-fixed-top,
+    .sidebar-no-animations.header-fixed-bottom header.navbar-fixed-bottom,
+    .sidebar-no-animations.footer-fixed #page-content + footer {
+        -webkit-transition: none;
+        transition: none;
+    }
+
+    /* Reset sidebar classes used only on small screens */
+    .sidebar-visible-xs #sidebar,
+    .sidebar-alt-visible-xs #sidebar-alt {
+        width: 0;
+    }
+
+    .sidebar-visible-xs #main-container,
+    .sidebar-alt-visible-xs #main-container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .sidebar-visible-xs.header-fixed-top header.navbar-fixed-top,
+    .sidebar-visible-xs.header-fixed-bottom header.navbar-fixed-bottom,
+    .sidebar-alt-visible-xs.header-fixed-top header.navbar-fixed-top,
+    .sidebar-alt-visible-xs.header-fixed-bottom header.navbar-fixed-bottom,
+    .sidebar-visible-xs.footer-fixed #page-content + footer,
+    .sidebar-alt-visible-xs.footer-fixed #page-content + footer {
+        right: 0;
+        left: 0;
+    }
+
+    /* Both Sidebars */
+    #sidebar,
+    #sidebar-alt,
+    .sidebar-partial #sidebar,
+    .sidebar-alt-partial #sidebar-alt {
+        width: 0;
+        opacity: 0.2;
+        filter: alpha(opacity=20);
+    }
+
+    .sidebar-partial #sidebar,
+    .sidebar-alt-partial #sidebar-alt {
+        width: 0px;
+    }
+
+    .sidebar-partial #sidebar:hover,
+    .sidebar-visible-lg #sidebar,
+    .sidebar-visible-lg.sidebar-partial #sidebar,
+    .sidebar-alt-partial #sidebar-alt:hover,
+    .sidebar-alt-visible-lg #sidebar-alt,
+    .sidebar-alt-visible-lg.sidebar-alt-partial #sidebar-alt {
+        width: 0px;
+        opacity: 1;
+        filter: alpha(opacity=100);
+    }
+
+    .sidebar-partial #sidebar .sidebar-brand i,
+    .sidebar-alt-partial #sidebar-alt .sidebar-brand i {
+        display: none;
+    }
+
+    .sidebar-partial #sidebar:hover .sidebar-brand i,
+    .sidebar-visible-lg #sidebar .sidebar-brand i,
+    .sidebar-alt-partial #sidebar-alt:hover .sidebar-brand i,
+    .sidebar-alt-visible-lg #sidebar-alt .sidebar-brand i {
+        display: inline-block;
+    }
+
+    /* Main Sidebar */
+    .sidebar-partial #main-container {
+        margin-left: 0px;
+    }
+
+    .sidebar-partial #sidebar:hover + #main-container,
+    .sidebar-visible-lg #main-container {
+        margin-left: 0px;
+    }
+
+    .sidebar-partial.footer-fixed #main-container #page-content + footer,
+    .sidebar-partial.header-fixed-top header.navbar-fixed-top,
+    .sidebar-partial.header-fixed-bottom header.navbar-fixed-bottom {
+        left: 0px;
+    }
+
+    .sidebar-partial #sidebar:hover + #main-container header.navbar-fixed-top,
+    .sidebar-partial #sidebar:hover + #main-container header.navbar-fixed-bottom,
+    .sidebar-partial #sidebar:hover + #main-container #page-content + footer,
+    .sidebar-visible-lg.header-fixed-top header.navbar-fixed-top,
+    .sidebar-visible-lg.header-fixed-bottom header.navbar-fixed-bottom,
+    .sidebar-visible-lg.footer-fixed #main-container #page-content + footer {
+        left: 0px;
+    }
+
+    /* Alternative Sidebar */
+    .sidebar-alt-partial #main-container {
+        margin-right: 0px;
+    }
+
+    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container,
+    .sidebar-alt-visible-lg #main-container {
+        margin-right: 0px;
+    }
+
+    .sidebar-alt-partial.footer-fixed #main-container #page-content + footer,
+    .sidebar-alt-partial.header-fixed-top header.navbar-fixed-top,
+    .sidebar-alt-partial.header-fixed-bottom header.navbar-fixed-bottom {
+        right: 0px;
+    }
+
+    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container header.navbar-fixed-top,
+    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container header.navbar-fixed-bottom,
+    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container #page-content + footer,
+    .sidebar-alt-visible-lg.header-fixed-top header.navbar-fixed-top,
+    .sidebar-alt-visible-lg.header-fixed-bottom header.navbar-fixed-bottom,
+    .sidebar-alt-visible-lg.footer-fixed #main-container #page-content + footer {
+        right: 0px;
+    }
+}

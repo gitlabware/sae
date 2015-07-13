@@ -89,7 +89,7 @@ body {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #394263;
     font-size: 13px;
-    background-color: #394263;
+    background-color: #222222;
 }
 
 #page-container,
@@ -3111,7 +3111,7 @@ fieldset[disabled] .btn-info.active {
 
 /* Pre, Code */
 pre {
-    background: #FFF427;
+    background: #151515;
     overflow: scroll;
 }
 
@@ -3835,10 +3835,3 @@ only screen and (min-device-pixel-ratio: 1.5) {
 =================================================================
 */
 
-@media print {
-    #sidebar, #sidebar-alt, .content-header, .breadcrumb-top, .block-title .block-options, #page-content + footer, #to-top {display: none !important;}
-    #page-content {min-height: 0 !important; height: auto !important; padding: 0 !important;}
-    #main-container {margin: 0 !important;}
-    .block, .block.full {border: none !important; padding: 0 !important;}
-    .block-title {margin: 0 0 20px !important;}
-}

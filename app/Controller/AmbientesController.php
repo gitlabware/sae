@@ -467,11 +467,12 @@ class AmbientesController extends AppController {
 
   public function listadopago($idRecibo = null) {
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
+    //debug($recibo);exit;
     $this->set(compact('recibo'));
   }
 
   public function registra_pagos() {
-    /* debug($this->request->data);
+     /*debug($this->request->data);
       exit; */
     $idInquilino = $this->request->data['Pago']['inquilino_id'];
     // Genera el recibo
@@ -766,16 +767,17 @@ class AmbientesController extends AppController {
       $cMeses = $fechai[1];
       $cAnos = $fechai[0];
       $array = array();
-      for ($i = 0; $i < $meses; $i++) {
-        $cMeses++;
+      //debug($cMeses);exit;
+      for ($i = 0; $i <= $meses; $i++) {
+        
         if ($cMeses == 13) {
           $cAnos++;
           $cMeses = 1;
         }
         $cFecha = date("Y-m-d", mktime(0, 0, 0, $cMeses, 1, $cAnos));
         $array[$i]['fecha'] = $cFecha;
+        $cMeses++;
       }
-      //debug($array);exit;
       return $array;
     } else {
       return array();
@@ -865,6 +867,16 @@ class AmbientesController extends AppController {
       'order' => 'Pago.fecha DESC', 'limit' => 20
     ));
     $this->set(compact('ambiente', 'conceptos', 'pagos'));
+  }
+  
+  public function quita_pago($idPago = null){
+    $this->Pago->id = $idPago;
+    $dpago['retencion'] = 0.00;
+    $dpago['recibo_id'] = NULL;
+    $dpago['estado'] = 'Debe';
+    $this->Pago->save($dpago);
+    $this->Session->setFlash("Se quito correctamente el pago!!",'msgbueno');
+    $this->redirect($this->referer());
   }
 
 }

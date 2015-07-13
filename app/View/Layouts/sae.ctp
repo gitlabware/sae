@@ -39,6 +39,7 @@
 
         <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
         <link rel="stylesheet" href="<?php echo $this->webroot; ?>css/themes.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot; ?>css/cssprint.css" media="print">
         <!-- END Stylesheets -->
                 
         <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
@@ -110,81 +111,7 @@
                             <i class="gi gi-comments pull-right"></i> <strong>Chat</strong>UI
                         </a>
                         <!-- Chat Users -->
-                        <ul class="chat-users clearfix">
-                            <li>
-                                <a href="javascript:void(0)" class="chat-user-online">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar12.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="chat-user-online">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar15.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="chat-user-online">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar10.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="chat-user-online">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar4.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="chat-user-away">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar7.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="chat-user-away">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar9.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="chat-user-busy">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar16.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar4.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar3.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar13.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <span></span>
-                                    <img src="img/placeholders/avatars/avatar5.jpg" alt="avatar" class="img-circle">
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- END Chat Users -->
+                        
 
                         <!-- Chat Talk -->
                         <div class="chat-talk display-none">
@@ -484,5 +411,6 @@
 
             }
         </script>
+        
     </body>
 </html>

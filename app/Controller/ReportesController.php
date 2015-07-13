@@ -54,12 +54,27 @@ class ReportesController extends AppController {
     $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => $condiciones
-      , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha','Pago.estado')
+      , 'group' => ['Pago.ambiente_id', 'Pago.estado', 'Pago.concepto_id']
+      , 'fields' => ['Pago.ambiente_id', 'Pago.estado', 'Pago.concepto_id', 'SUM(Pago.monto) as monto_total']
+      //, 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha','Pago.estado')
     ));
-    //debug($pagos);exit;
+    
+    foreach ($pagos as $key => $pa) {
+      $condiciones2 = $condiciones;
+      $condiciones2['Pago.ambiente_id'] = $pa['Pago']['ambiente_id'];
+      $condiciones2['Pago.estado'] = $pa['Pago']['estado'];
+      $condiciones2['Pago.concepto_id'] = $pa['Pago']['concepto_id'];
+      $pagos[$key]['Pago']['pagos'] = $this->Pago->find('all', array(
+        'recursive' => 0,
+        'conditions' => $condiciones2
+        , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha', 'Pago.estado')
+      ));
+    }
+    /*debug($pagos);
+    exit;*/
     $this->set(compact('pagos'));
   }
-  
+
   public function reporte_pagos_a() {
     $conceptos = $this->Concepto->find('list', array('fields' => 'Concepto.nombre'));
 
@@ -107,8 +122,8 @@ class ReportesController extends AppController {
     $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => $condiciones
-      , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'SUM(Pago.monto) as monto_total','Ambiente.piso_id','Pago.estado')
-      ,'group' => array('Pago.concepto_id','Pago.ambiente_id','Pago.estado')
+      , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'SUM(Pago.monto) as monto_total', 'Ambiente.piso_id', 'Pago.estado')
+      , 'group' => array('Pago.concepto_id', 'Pago.ambiente_id', 'Pago.estado')
     ));
     //debug($pagos);exit;
     $this->set(compact('pagos'));
@@ -196,6 +211,7 @@ class ReportesController extends AppController {
     $conceptos['Todos'] = 'Todos';
     $this->set(compact('conceptos'));
   }
+
   public function ajax_reporte_pagos_totales() {
     $this->layout = 'ajax';
     $fecha_ini = $this->request->data['Reporte']['fecha_ini'];
@@ -221,9 +237,10 @@ class ReportesController extends AppController {
       'recursive' => 0,
       'conditions' => $condiciones
       , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'SUM(Pago.monto) AS monto_total')
-      ,'group' => array('Pago.concepto_id')
+      , 'group' => array('Pago.concepto_id')
     ));
     //debug($pagos);exit;
     $this->set(compact('pagos'));
   }
+
 }
