@@ -75,7 +75,14 @@ class AmbientesController extends AppController {
     $categoria_ambientes = $this->Categoriasambiente->find('all');
     $categoria_pagos = $this->Categoriaspago->find('all');
     $usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Propietario')));
-    $this->set(compact('catambientes', 'piso', 'catpagos', 'usuarios', 'categoria_ambientes', 'categoria_pagos', 'idAmbiente', 'idPiso', 'sw'));
+    
+    $sql = "SELECT * FROM "
+      . "(SELECT user_id,estado FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
+      . " AS Inquilino WHERE 1 GROUP BY user_id";
+    $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
+    $inquilinos = $this->Inquilino->query($sql2);
+    $select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Inquilino')));
+    $this->set(compact('inquilinos','select_inquilinos','catambientes', 'piso', 'catpagos', 'usuarios', 'categoria_ambientes', 'categoria_pagos', 'idAmbiente', 'idPiso', 'sw'));
   }
 
   public function guarda_ambiente() {
@@ -188,6 +195,7 @@ class AmbientesController extends AppController {
   }
 
   public function busca_usuario() {
+    
     $this->layout = 'ajax';
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $nombre = $this->request->data['Inquilino']['user'];

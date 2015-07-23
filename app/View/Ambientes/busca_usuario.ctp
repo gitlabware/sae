@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="general-table" class="table table-striped table-vcenter table-hover">
+    <table id="general-tablet" class="table table-striped table-vcenter table-hover">
         <thead>
             <tr>
                 <th>ID</th>

@@ -13,7 +13,7 @@
                 <?php echo $this->Form->hidden('Inquilino.ambiente_id', array('value' => $idAmbiente)) ?>
                 <?php echo $this->Form->hidden('Inquilino.estado', array('value' => 1)) ?>
                 <?php echo $this->Form->hidden("Inquilino.user_id", array('id' => 'id-user_id-user')) ?>
-                <?php echo $this->Form->text('Inquilino.user', array('class' => 'form-control', 'required', 'id' => 'id-nombre-user','placeholder' => 'Escriba el nombre del usuario')); ?>
+                <?php echo $this->Form->text('Inquilino.user', array('class' => 'form-control', 'required', 'id' => 'id-nombre-user', 'placeholder' => 'Escriba el nombre del usuario')); ?>
             </div>
             <div class="col-md-2">
                 <button class="btn btn-success" type="button" onclick="$('#divforminquilino').toggle(400);">Nuevo</button>
@@ -27,7 +27,7 @@
         </div>
     </div>
     <div id="divforminquilino" style="display: none;">
-        <?php echo $this->Form->create('Ambiente', array('action' => 'guarda_nuevo_inquilino', 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
+        <?php echo $this->Form->create('Ambiente', array('action' => "guarda_nuevo_inquilino", 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
         <fieldset>
             <legend>Nuevo Inquilino</legend>
             <div class="form-group">
@@ -106,7 +106,7 @@
   function cambia_usuario(idUsuario) {
       $('#id-user_id-user').val(idUsuario);
       /*$('#div-usuarios').html("");
-      $('#id-nombre-user').val("");*/
+       $('#id-nombre-user').val("");*/
       var postData = $("#ajaxforminquilino").serializeArray();
       var formURL = $("#ajaxforminquilino").attr("action");
       $.ajax(
@@ -173,7 +173,7 @@
                    },*/
                   success: function (data, textStatus, jqXHR)
                   {
-                      direccion = '<?php echo $this->Html->url(array('action' => 'inquilinos', $idAmbiente)) ?>';
+                      direccion = '<?php echo $this->Html->url(array('action' => 'inquilinos', $idPiso, $idAmbiente)) ?>';
                       cargarmodal(direccion);
                   },
                   error: function (jqXHR, textStatus, errorThrown)
