@@ -9,19 +9,23 @@
     <?php //echo $this->Form->hidden("Dato.ambiente",array('value' => $ambiente['Ambiente']['id']));?>
     <div class="form-bordered">
         <div class="form-group">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label>Fecha Inicio</label>
                 <?php echo $this->Form->date("Dato.fecha_ini", array('required', 'class' => 'form-control')); ?>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label>Fecha Fin</label>
                 <?php echo $this->Form->date("Dato.fecha_fin", array('required', 'class' => 'form-control')); ?>
             </div>
             <div class="col-md-3">
                 <label>Tipo</label>
-                <?php echo $this->Form->select("Dato.concepto", $conceptos, array('required', 'class' => 'form-control')); ?>
+                <?php echo $this->Form->select("Dato.concepto", $conceptos, array('required', 'class' => 'form-control', 'id' => 'concepto')); ?>
             </div>
             <div class="col-md-3">
+                <label>Monto</label>
+                <?php echo $this->Form->text("Dato.monto",['class' => 'form-control','type' => 'number','step' => 'any','id' => 'monto','required']);?>
+            </div>
+            <div class="col-md-2">
                 <label>&nbsp;</label>
                 <?php echo $this->Form->submit("Generar", array('class' => 'btn btn-sm btn-primary col-md-12')); ?>
             </div>
@@ -60,3 +64,15 @@
     <!-- END Example Content -->
 </div>
 <!-- END Example Block -->
+
+<script>
+  var conceptos = [];
+<?php foreach ($conceptos_mon as $key => $co): ?>
+    conceptos[<?php echo $key ?>] = <?php echo $co; ?>;
+<?php endforeach; ?>
+
+  $('#concepto').change(function () {
+      var monto = conceptos[$(this).val()];
+      $('#monto').val(monto);
+  });
+</script>

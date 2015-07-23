@@ -26,51 +26,54 @@
 
         </div>
     </div>
-    <div id="divforminquilino" style="display: none;">
-        <?php echo $this->Form->create('Ambiente', array('action' => "guarda_nuevo_inquilino", 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
-        <fieldset>
-            <legend>Nuevo Inquilino</legend>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Nombre</label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->hidden('User.id'); ?>
-                    <?php echo $this->Form->hidden('User.role', array('value' => 'Inquilino')) ?>
-                    <?php echo $this->Form->hidden('Inquilino.ambiente_id', array('value' => $idAmbiente)) ?>
-                    <?php echo $this->Form->hidden('Inquilino.estado', array('value' => 1)) ?>
-                    <?php echo $this->Form->text('User.nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de Propietario', 'required')); ?>
+    <div class="row" id="divforminquilino" style="display: none;">
+        <div class="col-md-12">
+            <?php echo $this->Form->create('Ambiente', array('action' => "guarda_nuevo_inquilino", 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
+            <fieldset>
+                <legend>Nuevo Inquilino</legend>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Nombre</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->hidden('User.id'); ?>
+                        <?php echo $this->Form->hidden('User.role', array('value' => 'Inquilino')) ?>
+                        <?php echo $this->Form->hidden('Inquilino.ambiente_id', array('value' => $idAmbiente)) ?>
+                        <?php echo $this->Form->hidden('Inquilino.estado', array('value' => 1)) ?>
+                        <?php echo $this->Form->text('User.nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de Propietario', 'required')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="user-settings-email">C.I.:</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->text('User.ci', array('class' => 'form-control', 'placeholder' => 'Ingrese el C.I.', 'required')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="user-settings-email">Telefonos</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control', 'placeholder' => 'Ingrese los telefonos')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="user-settings-email">Direccion</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->text('User.direccion', array('class' => 'form-control', 'placeholder' => 'Ingrese la direccion')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="user-settings-email">E-mail</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->text('User.email', array('class' => 'form-control', 'placeholder' => 'Ingrese correo electronico')); ?>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group form-actions">
+                <div class="col-xs-12 text-right">
+                    <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">C.I.:</label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->text('User.ci', array('class' => 'form-control', 'placeholder' => 'Ingrese el C.I.', 'required')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">Telefonos</label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control', 'placeholder' => 'Ingrese los telefonos')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">Direccion</label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->text('User.direccion', array('class' => 'form-control', 'placeholder' => 'Ingrese la direccion')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">E-mail</label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->text('User.email', array('class' => 'form-control', 'placeholder' => 'Ingrese correo electronico')); ?>
-                </div>
-            </div>
-        </fieldset>
-        <div class="form-group form-actions">
-            <div class="col-xs-12 text-right">
-                <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
-            </div>
+            <?php echo $this->Form->end(); ?>
         </div>
-        <?php echo $this->Form->end(); ?>
+
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -173,7 +176,7 @@
                    },*/
                   success: function (data, textStatus, jqXHR)
                   {
-                      direccion = '<?php echo $this->Html->url(array('action' => 'inquilinos', $idPiso, $idAmbiente)) ?>';
+                      direccion = '<?php echo $this->Html->url(array('action' => 'inquilinos', $idAmbiente, $idPiso)) ?>';
                       cargarmodal(direccion);
                   },
                   error: function (jqXHR, textStatus, errorThrown)
