@@ -17,13 +17,17 @@
                 <label>Fecha Fin</label>
                 <?php echo $this->Form->date("Dato.fecha_fin", array('required', 'class' => 'form-control')); ?>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label>Tipo</label>
                 <?php echo $this->Form->select("Dato.concepto", $conceptos, array('required', 'class' => 'form-control', 'id' => 'concepto')); ?>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label>Monto</label>
                 <?php echo $this->Form->text("Dato.monto",['class' => 'form-control','type' => 'number','step' => 'any','id' => 'monto','required']);?>
+            </div>
+            <div class="col-md-2">
+                <label>Interes</label>
+                <?php echo $this->Form->text("Dato.interes",['class' => 'form-control','type' => 'number','step' => 'any','id' => 'monto','required','max' => 100,'min' => 0]);?>
             </div>
             <div class="col-md-2">
                 <label>&nbsp;</label>

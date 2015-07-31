@@ -61,7 +61,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-building sidebar-nav-icon"></i>Categorias Ambiente</a>
+                    <a href="#" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-building sidebar-nav-icon"></i>Categorias Pagos</a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'GenCategoriaspagos', 'action' => 'index')); ?>">Listado</a>

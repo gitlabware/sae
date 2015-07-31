@@ -52,33 +52,16 @@
             </div>
         </div>
         <?php if (!empty($inquilinos)): ?>
-          <div class="form-group">
-              <div class="row">
-                  <div class="col-md-2">
-                    
-                  </div>
-                  <div class="col-md-10">
-                      <div class="table-responsive">
-                          <table id="general-table" class="table table-striped table-vcenter table-hover">
-                              <thead>
-                                  <tr>
-                                      <th>C.I.</th>
-                                      <th>Inquilino</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <?php foreach ($inquilinos as $in): ?>
-                                    <tr>
-                                        <td><?php echo $in['User']['ci'] ?></td>
-                                        <td><?php echo $in['User']['nombre'] ?></td>
-                                    </tr>
-                                  <?php endforeach; ?>
-                              </tbody>
-                          </table>
-                      </div>
-                  </div>
-              </div>
-          </div>
+          <?php foreach ($inquilinos as $in): ?>
+            <div class="form-group">
+                <div id="selectpropietario">
+                    <label class="col-md-4 control-label" for="user-settings-email">Inquilino</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->text('inquilino1',array('class' => 'form-control','value' => $in['User']['nombre'],'disabled'));?>
+                    </div>
+                </div>
+            </div>
+          <?php endforeach; ?>
         <?php endif; ?>
 
         <div class="form-group">

@@ -112,6 +112,17 @@ class AmbientesController extends AppController {
   }
 
   public function registra_mantenimiento($idAmbiente = null) {
+    $mantenim = $this->Ambienteconcepto->find('first', array(
+      'recursive' => -1,
+      'conditions' => array(
+        'Ambienteconcepto.ambiente_id' => $idAmbiente,
+        'Ambienteconcepto.concepto_id' => 10
+      ),
+      'fields' => array('Ambienteconcepto.id')
+    ));
+    if (!empty($mantenim)) {
+      $this->request->data['Ambienteconcepto']['id'] = $mantenim['Ambienteconcepto']['id'];
+    }
     $catambiente = $this->request->data['Ambiente']['categoriasambiente_id'];
     $catpago = $this->request->data['Ambiente']['categoriaspago_id'];
     $a_util = $this->request->data['Ambiente']['area_util'];
@@ -438,9 +449,15 @@ class AmbientesController extends AppController {
       'fields' => array('Ambienteconcepto.concepto_id', 'Ambienteconcepto.monto'),
       'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente)
     ));
-    /* debug($ultimos_pagos);
+    $intereses = $this->Pago->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Pago.concepto_id' => 12, 'Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe'),
+      'group' => array('Pago.ambiente_id', 'Pago.concepto_id'),
+      'fields' => array('SUM(Pago.monto) as monto_total')
+    ));
+    /* debug($intereses);
       exit; */
-    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq', 'ultimos_pagos'));
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq', 'ultimos_pagos', 'intereses'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {
@@ -473,10 +490,10 @@ class AmbientesController extends AppController {
     //debug($propietarios);
   }
 
-  public function listadopago($idRecibo = null) {
+  public function listadopago($idRecibo = null, $idAmbiente = NULL) {
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     //debug($recibo);exit;
-    $this->set(compact('recibo'));
+    $this->set(compact('recibo','idAmbiente'));
   }
 
   public function registra_pagos() {
@@ -501,12 +518,15 @@ class AmbientesController extends AppController {
       $recibo = $this->Recibo->find('first', array(
         'recursive' => 0,
         'order' => 'Recibo.id DESC',
-        'fields' => array('Recibo.id'),
+        'fields' => array('Recibo.id', 'Recibo.monto'),
         'conditions' => array('Recibo.propietario_id' => $this->request->data['Ambiente']['propietario_id'], 'Recibo.estado' => 'Creado')
       ));
     }
     if (!empty($recibo)) {
       $idRecibo = $recibo['Recibo']['id'];
+      $drecibo['monto'] = $recibo['Recibo']['monto'] + $this->request->data['Recibo']['monto'];
+      $this->Recibo->id = $idRecibo;
+      $this->Recibo->save($drecibo);
     } else {
       $this->Recibo->create();
       $this->request->data['Recibo']['numero'] = $numero;
@@ -537,6 +557,13 @@ class AmbientesController extends AppController {
         $this->pagar_m_a(11, $idRecibo, $this->request->data['Alquiler']['cuotas'], $this->request->data['Alquiler']['referencia_alquileres'], $this->request->data['Alquiler']['fecha_inicio'], NULL);
       }
     }
+    if (!empty($this->request->data['Interes']['pagar'])) {
+      if (!empty($this->request->data['Interes']['retencion'])) {
+        $this->pagar_interes($idRecibo, $edificio['Edificio']['retencion']);
+      } else {
+        $this->pagar_interes($idRecibo, null);
+      }
+    }
     if (!empty($this->request->data['Ascensor']['pagar'])) {
       if (!empty($this->request->data['Ascensor']['retencion'])) {
         $this->pagar_otros(13, $idRecibo, 'Ascensor', $edificio['Edificio']['retencion']);
@@ -558,7 +585,27 @@ class AmbientesController extends AppController {
         $this->pagar_otros(15, $idRecibo, 'Otros', NULL);
       }
     }
-    $this->redirect(array('action' => 'listadopago', $idRecibo));
+    $this->redirect(array('action' => 'listadopago', $idRecibo, $this->request->data['Ambiente']['id']));
+  }
+
+  public function pagar_interes($idRecibo = null, $retencion = NULL) {
+    if ($retencion != NULL) {
+      $dinteres['retencion'] = $retencion;
+    } else {
+      $dinteres['retencion'] = NULL;
+    }
+    $por_interes = $this->request->data['Interes']['porcentaje'];
+    $intereses = $this->Pago->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Pago.concepto_id' => 12, 'Pago.ambiente_id' => $this->request->data['Ambiente']['id'], 'Pago.estado' => 'Debe'),
+      'fields' => array('Pago.id', 'Pago.monto')
+    ));
+    foreach ($intereses as $in) {
+      $dinteres['porcentaje_interes'] = $por_interes;
+      $dinteres['recibo_id'] = $idRecibo;
+      $this->Pago->id = $in['Pago']['id'];
+      $this->Pago->save($dinteres);
+    }
   }
 
   public function pagar_otros($idConcepto = null, $idRecibo = null, $tipo = null, $retencion = NULL) {
@@ -631,6 +678,8 @@ class AmbientesController extends AppController {
   }
 
   public function recibo($idRecibo = null, $terminar = null) {
+    /*debug($this->request->data);
+    exit;*/
     $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
@@ -644,6 +693,9 @@ class AmbientesController extends AppController {
       'fields' => array('Pago.id')
     ));
     if ($terminar) {
+      $this->Ambiente->id = $this->request->data['Dato']['ambiente_id'];
+      $dambiente['saldo'] = $this->request->data['Dato']['cambio'];
+      $this->Ambiente->save($dambiente);
       $this->Recibo->id = $idRecibo;
       $this->request->data['Recibo']['estado'] = 'Terminado';
       $this->Recibo->save($this->request->data['Recibo']);
@@ -686,6 +738,7 @@ class AmbientesController extends AppController {
         $this->Pago->save($this->request->data['Pago']);
       }
     }
+    $this->Recibo->delete($idRecibo);
     $this->Session->setFlash('Se cancelo correctamente!!', 'msgbueno');
     $this->redirect(array('action' => 'buscador'));
   }
@@ -824,7 +877,7 @@ class AmbientesController extends AppController {
   }
 
   public function xcobrar($idAmbiente = null) {
-    
+
     $ambiente = $this->Ambiente->find('first', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.id' => $idAmbiente),
@@ -841,6 +894,7 @@ class AmbientesController extends AppController {
       $fecha_fin_m = $this->request->data['Dato']['fecha_fin'];
       $concepto = $this->request->data['Dato']['concepto'];
       $monto = $this->request->data['Dato']['monto'];
+      $interes = $this->request->data['Dato']['interes'];
       $fecha_ini_m = NULL;
       $ultimo_pago_concepto = $this->Pago->find('first', array(
         'order' => 'Pago.id DESC',
@@ -858,7 +912,9 @@ class AmbientesController extends AppController {
       /* debug($fecha_ini);
         debug($fecha_ini_m);exit; */
       if ($fecha_ini_m <= $fecha_fin_m) {
-        foreach ($this->genera_meses($fecha_ini_m, $fecha_fin_m) as $gme) {
+        $meses = $this->genera_meses($fecha_ini_m, $fecha_fin_m);
+        $numero_c = count($meses);
+        foreach ($meses as $gme) {
           $this->Pago->create();
           $this->request->data['Pago']['estado'] = 'Debe';
           $this->request->data['Pago']['ambiente_id'] = $idAmbiente;
@@ -867,15 +923,28 @@ class AmbientesController extends AppController {
           $this->request->data['Pago']['monto'] = $monto;
           $this->request->data['Pago']['fecha'] = $gme['fecha'];
           $this->Pago->save($this->request->data['Pago']);
+          $this->gen_interes($gme['fecha'], $ambiente, ((($numero_c * $interes) / 100) * $monto));
+          $numero_c--;
         }
       }
     }
     $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
-      'conditions' => array('Pago.ambiente_id' => $idAmbiente),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente,'Pago.estado' => 'Debe'),
       'order' => 'Pago.fecha DESC', 'limit' => 20
     ));
     $this->set(compact('ambiente', 'conceptos', 'pagos', 'conceptos_mon'));
+  }
+
+  public function gen_interes($fecha = null, $ambiente = null, $monto = null) {
+    $this->Pago->create();
+    $dinteres['estado'] = 'Debe';
+    $dinteres['ambiente_id'] = $ambiente['Ambiente']['id'];
+    $dinteres['propietario_id'] = $ambiente['Ambiente']['user_id'];
+    $dinteres['concepto_id'] = 12;
+    $dinteres['monto'] = $monto;
+    $dinteres['fecha'] = $fecha;
+    $this->Pago->save($dinteres);
   }
 
   public function quita_pago($idPago = null) {

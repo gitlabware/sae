@@ -119,7 +119,7 @@ class EdificiosController extends AppController {
       if (!empty($catambiente) && !empty($catpago) && $a_comun != NULL && $a_util != NULL) {
         $this->request->data['Ambienteconcepto']['ambiente_id'] = $this->Ambiente->getLastInsertID();
         $this->request->data['Ambienteconcepto']['concepto_id'] = 10;
-        $this->request->data['Ambienteconcepto']['mantenimiento'] = $this->calcula_mantenimiento();
+        $this->request->data['Ambienteconcepto']['monto'] = $this->calcula_mantenimiento();
         $this->Ambienteconcepto->create($this->request->data['Ambienteconcepto']);
         $this->Ambienteconcepto->save();
       }
@@ -136,8 +136,10 @@ class EdificiosController extends AppController {
   }
 
   public function calcula_mantenimiento() {
+    
     $cambiente = $this->Categoriasambiente->findByid($this->request->data['Edificio']['categoriasambiente_id'], NULL, NULL, -1);
     $cpago = $this->Categoriaspago->findByid($this->request->data['Edificio']['categoriaspago_id'], NULL, NULL, -1);
+    
     $totalmt = $this->request->data['Ambiente']['area_util'] + $this->request->data['Ambiente']['area_comun'];
     $costob = $totalmt * $cambiente['Categoriasambiente']['constante'];
     $mantenimiento = $costob + $cpago['Categoriaspago']['constante'];

@@ -23,6 +23,7 @@ $Pago = new Pago();
     ));
     ?>
     <!-- Example Content -->
+    <?php echo $this->Form->create('Ambiente', array('action' => 'recibo/' . $recibo['Recibo']['id'] . '/1')); ?>
     <b>Listado y detalle de pagos </b>
     <div class="table-responsive">
         <table id="general-table" class="table table-striped table-vcenter table-hover">
@@ -43,6 +44,13 @@ $Pago = new Pago();
                       <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
                       <td><?php echo $man['Concepto']['nombre']; ?></td>
                       <td>
+                          <?php
+                          if ($man['Pago']['concepto_id'] == 12) {
+                            if ($man['Pago']['porcentaje_interes'] != null) {
+                              $man['Pago']['monto_total'] = $man['Pago']['monto_total'] * ($man['Pago']['porcentaje_interes'] / 100);
+                            }
+                          }
+                          ?>
                           <?php echo $man['Pago']['monto_total']; ?>
                       </td>
                       <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
@@ -51,7 +59,7 @@ $Pago = new Pago();
                       </td>
                       <td class="text-center">
                           <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto', $man['Pago']['id'], $recibo['Recibo']['id'])); ?>');"><i class="gi gi-pencil"></i></button>
-                          <?php echo $this->Html->link('<i class="gi gi-remove"></i>',['action' => 'quita_pago',$man['Pago']['id']],['class' => 'btn btn-xs btn-danger','confirm' => 'Esta seguro de quitar pago?','escape' => FALSE,'title' => 'Quitar pago'])?>
+                          <?php echo $this->Html->link('<i class="gi gi-remove"></i>', ['action' => 'quita_pago', $man['Pago']['id']], ['class' => 'btn btn-xs btn-danger', 'confirm' => 'Esta seguro de quitar pago?', 'escape' => FALSE, 'title' => 'Quitar pago']) ?>
                       </td>
                   </tr>
                   <?php $total = $total + $man['Pago']['monto_total']; ?>
@@ -60,6 +68,15 @@ $Pago = new Pago();
                     <td></td>
                     <td>TOTAL:</td>
                     <td><?php echo $total; ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>MONTO: </td>
+                    <td><?php echo $this->Form->text('Recibo.monto', array('class' => 'form-control', 'id' => 'dato-monto', 'value' => $recibo['Recibo']['monto'], 'type' => 'number', 'step' => 'any', 'min' => $total, 'required')); ?></td>
+                    <td>GUARDAR CAMBIO: </td>
+                    <td><?php echo $this->Form->text('Dato.cambio', array('class' => 'form-control', 'id' => 'dato-cambio', 'value' => ($recibo['Recibo']['monto'] - $total), 'type' => 'number', 'step' => 'any', 'required')); ?></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -71,11 +88,11 @@ $Pago = new Pago();
     <!--<div class="row">
         <div class="col-md-4">
             <label>Total</label>
-            <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
+    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
         </div>
         <div class="col-md-4">
             <label>Cambio</label>
-            <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
+    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
         </div>
         <div class="col-md-4">
             <label>&nbsp;</label>
@@ -96,9 +113,19 @@ $Pago = new Pago();
                   }">Cancelar Pagos</button>
         </div>
         <div class="col-md-4">
-            <button class="btn btn-block btn-success" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'recibo', $recibo['Recibo']['id'], 1)); ?>'">Terminar Pago</button>
+            <button class="btn btn-block btn-success" type="submit">Terminar Pago</button>
         </div>
     </div>
-    <?php //echo $this->Form->end(); ?>
+    <?php echo $this->Form->hidden('Dato.ambiente_id', array('value' => $idAmbiente)); ?>
+    <?php echo $this->Form->end(); ?>
 </div>
 <!-- END Example Block -->
+
+<script>
+  var total = <?php echo $total; ?>;
+  $('#dato-monto').keyup(function () {
+      var valor_monto = parseFloat($(this).val());
+      var cambio = valor_monto - total;
+      $('#dato-cambio').val(Math.round(cambio * 100) / 100);
+  });
+</script>
