@@ -480,7 +480,7 @@
   //var saldo_amb = <?php echo $datosAmbiente['Ambiente']['saldo'] ?>;
   /*var saldo_amb = 0.00;
    var retencion = 0.00;
-
+   
    
    var saldo_mant = 0.00;
    function calcula_cuotas() {
@@ -680,7 +680,7 @@
 <?php if (!empty($edificio['Edificio']['retencion_mantenimiento'])): ?>
     retencion_mantenimiento = <?php echo $edificio['Edificio']['retencion_mantenimiento'] ?> / 100;
 <?php endif; ?>
-  
+
   var retencion_alquiler = 0.00;
 <?php if (!empty($edificio['Edificio']['retencion_alquiler'])): ?>
     retencion_alquiler = <?php echo $edificio['Edificio']['retencion_alquiler'] ?> / 100;
@@ -724,7 +724,7 @@
       var cambio_a = (saldo_amb + monto_a) - monto_total_a;
       cambio_a = Math.round(cambio_a * 100) / 100;
       $('#cantidad-pe-mantenimiento').val(cantidad_cuotas);
-      $('.cambio').val(cambio_a);
+      $('#cambio-pe-mantenimiento').val(cambio_a);
       $('#lab-total-mantenimiento').html(monto_total_a);
       var retencion_final = retencion_a * cantidad_cuotas;
       retencion_final = Math.round(retencion_final * 100) / 100;
@@ -754,7 +754,7 @@
       cambio_a = Math.round(cambio_a * 100) / 100;
       monto_a = Math.round(monto_a * 100) / 100;
       $('#monto-pe-mantenimiento').val(monto_a);
-      $('.cambio').val(cambio_a);
+      $('#cambio-pe-mantenimiento').val(cambio_a);
       $('#lab-total-mantenimiento').html(monto_total_a);
       var retencion_final = retencion_a * cantidad_cuotas;
       retencion_final = Math.round(retencion_final * 100) / 100;
@@ -771,11 +771,12 @@
           saldo_amb = parseFloat($('#cambio-pe-mantenimiento').val());
           $('#id_cambio_total').html(saldo_amb);
           suma_total();
+          limpia_todo('mantenimiento');
       } else {
           $('.radios-p-mantenimiento').prop('disabled', false);
           $('#mantenimiento-retencion').prop('disabled', false);
           radios_mantenimiento();
-          limpia_todo('mantenimiento');
+          limpia_todo('todo');
       }
   });
 
@@ -827,7 +828,7 @@
       var cambio_a = (saldo_amb + monto_a) - monto_total_a;
       cambio_a = Math.round(cambio_a * 100) / 100;
       $('#cantidad-pe-alquiler').val(cantidad_cuotas);
-      $('.cambio').val(cambio_a);
+      $('#cambio-pe-alquiler').val(cambio_a);
       $('#lab-total-alquiler').html(monto_total_a);
       var retencion_final = retencion_a * cantidad_cuotas;
       retencion_final = Math.round(retencion_final * 100) / 100;
@@ -857,7 +858,7 @@
       cambio_a = Math.round(cambio_a * 100) / 100;
       monto_a = Math.round(monto_a * 100) / 100;
       $('#monto-pe-alquiler').val(monto_a);
-      $('.cambio').val(cambio_a);
+      $('#cambio-pe-alquiler').val(cambio_a);
       $('#lab-total-alquiler').html(monto_total_a);
       var retencion_final = retencion_a * cantidad_cuotas;
       retencion_final = Math.round(retencion_final * 100) / 100;
@@ -873,11 +874,12 @@
           saldo_amb = parseFloat($('#cambio-pe-alquiler').val());
           $('#id_cambio_total').html(saldo_amb);
           suma_total();
+          limpia_todo('alquiler');
       } else {
           $('.radios-p-alquiler').prop('disabled', false);
           $('#alquiler-retencion').prop('disabled', false);
           radios_alquiler();
-          limpia_todo('alquiler');
+          limpia_todo('todo');
       }
   });
 
@@ -904,7 +906,7 @@
     }
 
     function usa_saldo() {
-        
+
         var total_interes = parseFloat($('#monto-pe-interes').val());
         $('#lab-total-interes').html((Math.round(total_interes * 100) / 100));
 
@@ -923,7 +925,7 @@
         } else {
             $('#monto-total-pe-interes').val(monto_i);
         }
-        $('.cambio').val(cambio_a);
+        $('#cambio-pe-interes').val(cambio_a);
     }
 
     function calc_monto_int() {
@@ -944,17 +946,58 @@
             saldo_amb = parseFloat($('#cambio-pe-interes').val());
             $('#id_cambio_total').html(saldo_amb);
             suma_total();
+            limpia_todo('interes');
         } else {
             $('#monto-pe-interes').prop('disabled', false);
             $('#porcentaje-pe-interes').prop('disabled', false);
             $('#interes-usar-saldo').prop('disabled', false);
-            limpia_todo('interes');
+            limpia_todo('todo');
         }
     });
 
 
 <?php endif; ?>
   //----------------------------------------------------------//
+
+  //--------------- ASCENSOR ----------------------//
+  $('#monto-pe-ascensor').keyup(function () {
+      calcula_ascensor();
+  });
+  $('#ascensor-usar-saldo').click(function () {
+      calcula_ascensor();
+  });
+  function calcula_ascensor() {
+      var monto_a = parseFloat($('#monto-pe-ascensor').val());
+      $('#lab-total-ascensor').html(monto_a);
+      var cambio_a = saldo_amb;
+      if ($('#ascensor-usar-saldo').prop('checked')) {
+          if (saldo_amb <= monto_a) {
+              cambio_a = 0;
+              monto_a = monto_a - saldo_amb;
+          } else {
+              cambio_a = saldo_amb - monto_a;
+              monto_a = 0;
+          }
+          cambio_a = Math.round(cambio_a * 100) / 100;
+      }
+      monto_a = Math.round(monto_a * 100) / 100;
+      $('#monto-total-pe-ascensor').val(monto_a);
+      $('#cambio-pe-ascensor').val(cambio_a);
+  }
+  $('#ascensor-pagar').click(function () {
+      if ($(this).prop('checked')) {
+          $('#monto-pe-ascensor').prop('disabled', true);
+          $('#ascensor-usar-saldo').prop('disabled', true);
+          saldo_amb = parseFloat($('#cambio-pe-ascensor').val());
+          $('#id_cambio_total').html(saldo_amb);
+          suma_total();
+          limpia_todo('ascensor');
+      } else {
+          limpia_todo('todo');
+      }
+  });
+  //------------------------------------------------//
+
 
 
 
@@ -970,48 +1013,70 @@
       if ($('#interes-pagar').prop('checked')) {
           total_total = total_total + parseFloat($('#lab-total-interes').html());
       }
+      if ($('#ascensor-pagar').prop('checked')) {
+          total_total = total_total + parseFloat($('#lab-total-ascensor').html());
+      }
       total_total = Math.round(total_total * 100) / 100;
       $('#idtotal').html(total_total);
       //alert(total_total);
   }
 
   function limpia_todo(tipo) {
-      saldo_amb = saldo_amb_aux;
+      if (tipo == 'todo') {
+          saldo_amb = saldo_amb_aux;
+      }
 
-      //mantenimiento
-      $('#monto-pe-mantenimiento').val(0);
-      $('#cantidad-pe-mantenimiento').val(0);
-      $('#lab-total-mantenimiento').html(0);
-      $('#retencion-pe-mantenimiento').val(0);
-      $('.radios-p-mantenimiento').prop('disabled', false);
-      $('#mantenimiento-retencion').prop('disabled', false);
-      $('#mantenimiento-pagar').prop('checked', false);
-      radios_mantenimiento();
-      //fin mantenimiento
+      if (tipo != 'mantenimiento') {
+          //mantenimiento
+          $('#monto-pe-mantenimiento').val(0);
+          $('#cantidad-pe-mantenimiento').val(0);
+          $('#lab-total-mantenimiento').html(0);
+          $('#retencion-pe-mantenimiento').val(0);
+          $('.radios-p-mantenimiento').prop('disabled', false);
+          $('#mantenimiento-retencion').prop('disabled', false);
+          $('#mantenimiento-pagar').prop('checked', false);
+          radios_mantenimiento();
+          //fin mantenimiento
+      }
 
-      //alquiler
-      $('#monto-pe-alquiler').val(0);
-      $('#cantidad-pe-alquiler').val(0);
-      $('#lab-total-alquiler').html(0);
-      $('#retencion-pe-alquiler').val(0);
-      $('.radios-p-alquiler').prop('disabled', false);
-      $('#alquiler-retencion').prop('disabled', false);
-      $('#alquiler-pagar').prop('checked', false);
-      radios_alquiler();
-      //fin alquiler
+      if (tipo != 'alquiler') {
+          //alquiler
+          $('#monto-pe-alquiler').val(0);
+          $('#cantidad-pe-alquiler').val(0);
+          $('#lab-total-alquiler').html(0);
+          $('#retencion-pe-alquiler').val(0);
+          $('.radios-p-alquiler').prop('disabled', false);
+          $('#alquiler-retencion').prop('disabled', false);
+          $('#alquiler-pagar').prop('checked', false);
+          radios_alquiler();
+          //fin alquiler
+      }
 
-      //interes
+      if (tipo != 'interes') {
+          //interes
 <?php if (!empty($intereses[0][0])): ?>
 
-        $('#monto-total-pe-interes').val(monto_interes);
-        $('#monto-pe-interes').val(monto_interes);
-        $('#porcentaje-pe-interes').val(100);
-        $('#retencion-pe-interes').val(0);
-        $('#interes-retencion').prop('checked', false);
-        $('#interes-usar-saldo').prop('checked', false);
-        $('#lab-total-interes').html(monto_interes);
+            $('#monto-total-pe-interes').val(monto_interes);
+            $('#monto-pe-interes').val(monto_interes);
+            $('#porcentaje-pe-interes').val(100);
+            $('#retencion-pe-interes').val(0);
+            $('#interes-retencion').prop('checked', false);
+            $('#interes-usar-saldo').prop('checked', false);
+            $('#lab-total-interes').html(monto_interes);
 <?php endif; ?>
-      //fin interes
+          //fin interes
+      }
+
+      if (tipo != 'ascensor') {
+          //ascensor
+          $('#lab-total-ascensor').html(0);
+          $('#monto-total-pe-ascensor').val(0);
+          $('#monto-pe-ascensor').val(0);
+          $('#ascensor-usar-saldo').prop('checked', false);
+          $('#ascensor-usar-saldo').prop('disabled', false);
+          //find ascensor
+      }
+
       $('.cambio').val(saldo_amb);
       $('#idtotal').html(0.00);
       $('#id_cambio_total').html(saldo_amb);
