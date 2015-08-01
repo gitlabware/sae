@@ -457,7 +457,10 @@ class AmbientesController extends AppController {
     ));
     /* debug($intereses);
       exit; */
-    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq', 'ultimos_pagos', 'intereses'));
+    
+    $edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'),null,null,-1);
+    $edificio['Edificio']['retencion_mantenimiento'];
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq', 'ultimos_pagos', 'intereses','edificio'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {

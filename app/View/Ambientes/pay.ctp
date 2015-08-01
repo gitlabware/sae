@@ -103,7 +103,7 @@
                           </div>
                           <h2>Pago por Mantenimiento</h2> 
                           <label class="text-success">Monto mensual: <?php echo $conceptos[10] ?></label> | 
-                          <label class="text-info">Retencion: <?php echo round($conceptos[10] * ($this->Session->read('Auth.User.Edificio.retencion') / 100), 2) ?></label> | 
+                          <label class="text-info">Retencion: <?php echo round($conceptos[10] * ($edificio['Edificio']['retencion_mantenimiento'] / 100), 2) ?></label> | 
                           <label style="font-family: bold;" >TOTAL: <label id="lab-total-mantenimiento">0.00</label></label>
                       </div>
                       <!-- END Input Grid Title -->
@@ -176,7 +176,7 @@
                           </div>
                           <h2>Pago por Alquileres</h2> 
                           <label class="text-success">Monto mensual: <?php echo $conceptos[11] ?></label> | 
-                          <label class="text-info">Retencion: <?php echo round($conceptos[11] * ($this->Session->read('Auth.User.Edificio.retencion') / 100), 2) ?></label> | 
+                          <label class="text-info">Retencion: <?php echo round($conceptos[11] * ($edificio['Edificio']['retencion_alquiler'] / 100), 2) ?></label> | 
                           <label style="font-family: bold;" >TOTAL: <label id="lab-total-alquiler">0.00</label></label>
                       </div>
                       <!-- END Input Grid Title -->
@@ -246,46 +246,41 @@
                           <div class="block-options pull-right">
                               <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content" onclick="ocultaf(1)"><i class="fa fa-arrows-v"></i></a>                            
                           </div>                
-                          <h2>Pago por Intereses</h2> <label style="font-family: bold;" id="lab-total-interes">TOTAL: 0.00</label>
+                          <h2>Pago por Intereses</h2> 
+                          <label style="font-family: bold;">TOTAL:<label id="lab-total-interes">0.00</label></label>
                       </div>
                       <div id="form-1" style="display: none;">
-                          <div class="form-group">                    
+                          <div class="form-group">         
                               <div class="col-md-3">
                                   <label for="monto-pe">Monto</label>
+                                  <input type="number" step="any" class="form-control" id="monto-total-pe-interes" name="data[Interes][monto_total]" disabled="true" value="<?php echo $intereses[0][0]['monto_total'] ?>">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="monto-pe">Monto Interes</label>
                                   <input type="number" step="any" class="form-control" id="monto-pe-interes" name="data[Interes][monto]" placeholder="Introdusca el monto" value="<?php echo $intereses[0][0]['monto_total'] ?>" min="0" onkeyup="calc_porcent_int();">
                               </div>
                               <div class="col-md-3">
                                   <label for="monto-pe">%</label>
                                   <input type="number" step="any" class="form-control" id="porcentaje-pe-interes" name="data[Interes][porcentaje]" placeholder="Porcentaje" value="100" min="0" onkeyup="calc_monto_int();">
                               </div>
-                              <div class="col-md-3">
-                                  <label for="crt2">Reten.</label>
-                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-interes" name="data[Interes][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
-                              </div>
+
                               <div class="col-md-3">
                                   <label for="crt2">Saldo</label>
-                                  <input type="text" class="form-control cambio" name="data[Interes][cambio]" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
+                                  <input type="text" class="form-control cambio" name="data[Interes][cambio]" id="cambio-pe-interes" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
                               </div>
                           </div>  
                           <div class="form-group">
-                              <div class="col-md-4">
+                              <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="interes">
                                           <input type="checkbox" id="interes-pagar" name="data[Interes][pagar]" onclick="calcula_total();"> Pagar Intereses
                                       </label>
                                   </div>  
                               </div>
-                              <div class="col-md-4">
+                              <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="interes">
-                                          <input type="checkbox" id="interes-retencion" name="data[Interes][retencion]" onclick="calc_ret_int();"> RETENCION
-                                      </label>
-                                  </div>  
-                              </div>
-                              <div class="col-md-4">
-                                  <div class="checkbox">
-                                      <label for="interes">
-                                          <input type="checkbox" id="interes-usar-saldo" name="data[Interes][retencion]" > Usar saldo
+                                          <input type="checkbox" id="interes-usar-saldo" name="data[Interes][usasaldo]" onclick="usa_saldo();"> Usar saldo
                                       </label>
                                   </div>  
                               </div>
@@ -304,19 +299,23 @@
                           <div class="block-options pull-right">
                               <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content" onclick="ocultaf(2)"><i class="fa fa-arrows-v"></i></a>                            
                           </div>                
-                          <h2>Pago por Ascensor y Traslados</h2> <label class="text-info">Monto: <?php echo $conceptos[13] ?></label>
+                          <h2>Pago por Ascensor y Traslados</h2> <label style="font-family: bold;">TOTAL:<label id="lab-total-ascensor">0.00</label></label>
                       </div>
                       <div id="form-2" style="display: none;">
-                          <div class="form-group">                    
-                              <div class="col-md-3">
-                                  <label for="monto-pe">Monto</label>
-                                  <input type="number" step="any" class="form-control" id="monto-pe-ascensor" name="data[Ascensor][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
+                          <div class="form-group">                
+                              <div class="col-md-2">
+                                  <label for="monto-pe">Monto total</label>
+                                  <input type="number" step="any" class="form-control" id="monto-total-pe-ascensor" name="data[Interes][monto_total]" disabled="true" value="0">
                               </div>
                               <div class="col-md-2">
-                                  <label for="crt2">Reten.</label>
-                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-ascensor" name="data[Ascensor][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                                  <label for="monto-pe">Monto</label>
+                                  <input type="number" step="any" class="form-control" id="monto-pe-ascensor" name="data[Ascensor][monto]" placeholder="" value="0" onkeyup="calcula_total();">
                               </div>
-                              <div class="col-md-7">
+                              <div class="col-md-2">
+                                  <label for="crt2">Saldo</label>
+                                  <input type="text" class="form-control cambio" name="data[Ascensor][cambio]" id="cambio-pe-ascensor" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
+                              </div>
+                              <div class="col-md-6">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-ascensor" name="data[Ascensor][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -331,10 +330,10 @@
                               </div>
                               <div class="col-md-6">
                                   <div class="checkbox">
-                                      <label for="mantenimiento">
-                                          <input type="checkbox" id="ascensor-retencion" name="data[Ascensor][retencion]"> RETENCION
+                                      <label for="interes">
+                                          <input type="checkbox" id="ascensor-usar-saldo" name="data[Ascensor][usasaldo]" onclick=""> Usar saldo
                                       </label>
-                                  </div> 
+                                  </div>  
                               </div>
                           </div>
 
@@ -352,19 +351,23 @@
                           <div class="block-options pull-right">
                               <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content" onclick="ocultaf(3)"><i class="fa fa-arrows-v"></i></a>                            
                           </div>                
-                          <h2>Multas Inasistencias Asamblea</h2>
+                          <h2>Multas Inasistencias Asamblea</h2> <label style="font-family: bold;">TOTAL:<label id="lab-total-multas">0.00</label></label>
                       </div>
                       <div id="form-3" style="display: none;">
-                          <div class="form-group">                    
-                              <div class="col-md-3">
-                                  <label for="monto-pe">Monto</label>
-                                  <input type="number" step="any" class="form-control" id="monto-pe-multas" name="data[Multas][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
+                          <div class="form-group"> 
+                              <div class="col-md-2">
+                                  <label for="monto-pe">Monto total</label>
+                                  <input type="number" step="any" class="form-control" id="monto-total-pe-multas" name="data[Multas][monto_total]" disabled="true" value="0">
                               </div>
                               <div class="col-md-2">
-                                  <label for="crt2">Reten.</label>
-                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-multas" name="data[Multas][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                                  <label for="monto-pe">Monto</label>
+                                  <input type="number" step="any" class="form-control" id="monto-pe-multas" name="data[Multas][monto]" placeholder="" value="0" onkeyup="calcula_total();">
                               </div>
-                              <div class="col-md-7">
+                              <div class="col-md-2">
+                                  <label for="crt2">Saldo</label>
+                                  <input type="text" class="form-control cambio" name="data[Multas][cambio]" id="cambio-pe-multas" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
+                              </div>
+                              <div class="col-md-6">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-multas" name="data[Multas][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -379,10 +382,10 @@
                               </div>
                               <div class="col-md-6">
                                   <div class="checkbox">
-                                      <label for="mantenimiento">
-                                          <input type="checkbox" id="multas-retencion" name="data[Multas][retencion]"> RETENCION
+                                      <label for="interes">
+                                          <input type="checkbox" id="multas-usar-saldo" name="data[Multas][usasaldo]" onclick=""> Usar saldo
                                       </label>
-                                  </div> 
+                                  </div>  
                               </div>
                           </div>
 
@@ -400,20 +403,24 @@
                           <div class="block-options pull-right">
                               <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content" onclick="ocultaf(4)"><i class="fa fa-arrows-v"></i></a>                            
                           </div>                
-                          <h2>Otros</h2>
+                          <h2>Otros</h2> <label style="font-family: bold;">TOTAL:<label id="lab-total-otros">0.00</label></label>
                       </div>
 
                       <div id="form-4" style="display: none;">
-                          <div class="form-group">                    
-                              <div class="col-md-3">
-                                  <label for="monto-pe">Monto</label>
-                                  <input type="number" step="any" class="form-control" id="monto-pe-otros" name="data[Otros][monto]" placeholder="Introdusca el monto" onkeyup="calcula_total();">
+                          <div class="form-group">    
+                              <div class="col-md-2">
+                                  <label for="monto-pe">Monto total</label>
+                                  <input type="number" step="any" class="form-control" id="monto-total-pe-otros" name="data[Otros][monto_total]" disabled="true" value="0">
                               </div>
                               <div class="col-md-2">
-                                  <label for="crt2">Reten.</label>
-                                  <input type="text" class="form-control" disabled="true" id="retencion-pe-otros" name="data[Otros][cuotas]" placeholder="0" onkeyup="calcula_monto();" value="0">
+                                  <label for="monto-pe">Monto</label>
+                                  <input type="number" step="any" class="form-control" id="monto-pe-otros" name="data[Otros][monto]" placeholder="" value="0" onkeyup="calcula_total();">
                               </div>
-                              <div class="col-md-7">
+                              <div class="col-md-2">
+                                  <label for="crt2">Saldo</label>
+                                  <input type="text" class="form-control cambio" name="data[Otros][cambio]" id="cambio-pe-otros" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
+                              </div>
+                              <div class="col-md-6">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-otros" name="data[Otros][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -428,10 +435,10 @@
                               </div>
                               <div class="col-md-6">
                                   <div class="checkbox">
-                                      <label for="mantenimiento">
-                                          <input type="checkbox" id="otros-retencion" name="data[Otros][retencion]"> RETENCION
+                                      <label for="interes">
+                                          <input type="checkbox" id="otros-usar-saldo" name="data[Otros][usasaldo]" onclick=""> Usar saldo
                                       </label>
-                                  </div>
+                                  </div>  
                               </div>
                           </div>
 
@@ -473,9 +480,7 @@
   //var saldo_amb = <?php echo $datosAmbiente['Ambiente']['saldo'] ?>;
   /*var saldo_amb = 0.00;
    var retencion = 0.00;
-<?php if (!empty($this->Session->read('Auth.User.Edificio.retencion'))): ?>
-     retencion = <?php echo $this->Session->read('Auth.User.Edificio.retencion') ?> / 100;
-<?php endif; ?>
+
    
    var saldo_mant = 0.00;
    function calcula_cuotas() {
@@ -671,9 +676,14 @@
     saldo_amb = <?php echo $datosAmbiente['Ambiente']['saldo'] ?>;
     saldo_amb_aux = saldo_amb;
 <?php endif; ?>
-  var retencion = 0.00;
-<?php if (!empty($this->Session->read('Auth.User.Edificio.retencion'))): ?>
-    retencion = <?php echo $this->Session->read('Auth.User.Edificio.retencion') ?> / 100;
+  var retencion_mantenimiento = 0.00;
+<?php if (!empty($edificio['Edificio']['retencion_mantenimiento'])): ?>
+    retencion_mantenimiento = <?php echo $edificio['Edificio']['retencion_mantenimiento'] ?> / 100;
+<?php endif; ?>
+  
+  var retencion_alquiler = 0.00;
+<?php if (!empty($edificio['Edificio']['retencion_alquiler'])): ?>
+    retencion_alquiler = <?php echo $edificio['Edificio']['retencion_alquiler'] ?> / 100;
 <?php endif; ?>
 
   $('.radios-p-mantenimiento').click(function () {
@@ -700,7 +710,7 @@
       var retencion_a = 0.00;
       if ($('#mantenimiento-retencion').prop('checked')) {
           var referencia = parseFloat($('#idrefer_mantenimiento').val());
-          retencion_a = referencia * retencion;
+          retencion_a = referencia * retencion_mantenimiento;
           referencia = referencia + retencion_a;
       } else {
           var referencia = parseFloat($('#idrefer_mantenimiento').val());
@@ -725,7 +735,7 @@
       var retencion_a = 0.00;
       if ($('#mantenimiento-retencion').prop('checked')) {
           var referencia = parseFloat($('#idrefer_mantenimiento').val());
-          retencion_a = referencia * retencion;
+          retencion_a = referencia * retencion_mantenimiento;
           referencia = referencia + (retencion_a);
       } else {
           var referencia = parseFloat($('#idrefer_mantenimiento').val());
@@ -803,7 +813,7 @@
       var retencion_a = 0.00;
       if ($('#alquiler-retencion').prop('checked')) {
           var referencia = parseFloat($('#idrefer_alquiler').val());
-          retencion_a = referencia * retencion;
+          retencion_a = referencia * retencion_alquiler;
           referencia = referencia + retencion_a;
       } else {
           var referencia = parseFloat($('#idrefer_alquiler').val());
@@ -828,7 +838,7 @@
       var retencion_a = 0.00;
       if ($('#alquiler-retencion').prop('checked')) {
           var referencia = parseFloat($('#idrefer_alquiler').val());
-          retencion_a = referencia * retencion;
+          retencion_a = referencia * retencion_alquiler;
           referencia = referencia + (retencion_a);
       } else {
           var referencia = parseFloat($('#idrefer_alquiler').val());
@@ -885,37 +895,68 @@
 
     var monto_interes = <?php echo $intereses[0][0]['monto_total'] ?>;
     function calc_porcent_int() {
-      
+
         var monto_i = $('#monto-pe-interes').val();
         var porcent_i = ((monto_i / monto_interes) * 100);
         $('#porcentaje-pe-interes').val(Math.round(porcent_i * 100) / 100);
-        calc_ret_int();
+        usa_saldo();
         calcula_total();
+    }
+
+    function usa_saldo() {
+        
+        var total_interes = parseFloat($('#monto-pe-interes').val());
+        $('#lab-total-interes').html((Math.round(total_interes * 100) / 100));
+
+        var monto_i = total_interes;
+        var cambio_a = saldo_amb;
+        if ($('#interes-usar-saldo').prop('checked')) {
+
+            if (saldo_amb <= monto_i) {
+                monto_i = monto_i - saldo_amb;
+                cambio_a = 0;
+            } else {
+                cambio_a = saldo_amb - monto_i;
+                monto_i = 0.00;
+            }
+            $('#monto-total-pe-interes').val(monto_i);
+        } else {
+            $('#monto-total-pe-interes').val(monto_i);
+        }
+        $('.cambio').val(cambio_a);
     }
 
     function calc_monto_int() {
         var porcent_i = $('#porcentaje-pe-interes').val();
         var monto_i = (monto_interes * (porcent_i / 100));
         $('#monto-pe-interes').val(Math.round(monto_i * 100) / 100);
-        calc_ret_int();
+        usa_saldo();
         calcula_total();
     }
 
-    function calc_ret_int() {
-        if ($('#interes-retencion').prop('checked')) {
-            $('#retencion-pe-interes').val(Math.round((($('#monto-pe-interes').val()) * retencion) * 100) / 100);
+    usa_saldo();
+
+    $('#interes-pagar').click(function () {
+        if ($('#interes-pagar').prop('checked')) {
+            $('#monto-pe-interes').prop('disabled', true);
+            $('#porcentaje-pe-interes').prop('disabled', true);
+            $('#interes-usar-saldo').prop('disabled', true);
+            saldo_amb = parseFloat($('#cambio-pe-interes').val());
+            $('#id_cambio_total').html(saldo_amb);
+            suma_total();
         } else {
-            $('#retencion-pe-interes').val(0);
+            $('#monto-pe-interes').prop('disabled', false);
+            $('#porcentaje-pe-interes').prop('disabled', false);
+            $('#interes-usar-saldo').prop('disabled', false);
+            limpia_todo('interes');
         }
-        var total_interes = parseFloat($('#retencion-pe-interes').val()) + parseFloat($('#monto-pe-interes').val());
-        $('#lab-total-interes').html('TOTAL: ' + (Math.round(total_interes * 100) / 100));
-    }
-    
-    calc_ret_int();
+    });
+
+
 <?php endif; ?>
   //----------------------------------------------------------//
-  
-  
+
+
 
   function suma_total() {
 
@@ -925,6 +966,9 @@
       }
       if ($('#alquiler-pagar').prop('checked')) {
           total_total = total_total + parseFloat($('#lab-total-alquiler').html());
+      }
+      if ($('#interes-pagar').prop('checked')) {
+          total_total = total_total + parseFloat($('#lab-total-interes').html());
       }
       total_total = Math.round(total_total * 100) / 100;
       $('#idtotal').html(total_total);
@@ -939,7 +983,6 @@
       $('#cantidad-pe-mantenimiento').val(0);
       $('#lab-total-mantenimiento').html(0);
       $('#retencion-pe-mantenimiento').val(0);
-      $('.cambio').val(saldo_amb);
       $('.radios-p-mantenimiento').prop('disabled', false);
       $('#mantenimiento-retencion').prop('disabled', false);
       $('#mantenimiento-pagar').prop('checked', false);
@@ -951,16 +994,26 @@
       $('#cantidad-pe-alquiler').val(0);
       $('#lab-total-alquiler').html(0);
       $('#retencion-pe-alquiler').val(0);
-      $('.cambio').val(saldo_amb);
       $('.radios-p-alquiler').prop('disabled', false);
       $('#alquiler-retencion').prop('disabled', false);
       $('#alquiler-pagar').prop('checked', false);
       radios_alquiler();
       //fin alquiler
 
+      //interes
+<?php if (!empty($intereses[0][0])): ?>
+
+        $('#monto-total-pe-interes').val(monto_interes);
+        $('#monto-pe-interes').val(monto_interes);
+        $('#porcentaje-pe-interes').val(100);
+        $('#retencion-pe-interes').val(0);
+        $('#interes-retencion').prop('checked', false);
+        $('#interes-usar-saldo').prop('checked', false);
+        $('#lab-total-interes').html(monto_interes);
+<?php endif; ?>
+      //fin interes
+      $('.cambio').val(saldo_amb);
       $('#idtotal').html(0.00);
       $('#id_cambio_total').html(saldo_amb);
   }
-
-
 </script>

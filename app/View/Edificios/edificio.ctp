@@ -99,9 +99,15 @@
                     </div>
                     <?php endif;?>
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="user-settings-email">Retencion</label>
+                        <label class="col-md-4 control-label" for="user-settings-email">Retencion Alquiler</label>
                         <div class="col-md-8">
-                            <?php echo $this->Form->text('retencion', array('class' => 'form-control', 'placeholder' => 'Ingrese el porcentaje de retencion', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
+                            <?php echo $this->Form->text('retencion_alquiler', array('class' => 'form-control', 'placeholder' => 'Ingrese el porcentaje de retencion', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="user-settings-email">Retencion Mantenimietno</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->text('retencion_mantenimiento', array('class' => 'form-control', 'placeholder' => 'Ingrese el porcentaje de retencion', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
                         </div>
                     </div>
                 </div>

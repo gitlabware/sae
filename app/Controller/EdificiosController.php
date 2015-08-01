@@ -59,7 +59,7 @@ class EdificiosController extends AppController {
     } else {
       $this->Session->setFlash('NO se pudo registrar los datos del edificio!!!', 'msgerror');
     }
-    $this->redirect(array('action' => 'index'));
+    $this->redirect($this->referer());
   }
 
   public function registra_categorias($idEdificio = null) {
