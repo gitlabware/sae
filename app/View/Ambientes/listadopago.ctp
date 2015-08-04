@@ -73,10 +73,18 @@ $Pago = new Pago();
                     <td></td>
                 </tr>
                 <tr>
+                    <?php
+                    $saldo = 0.00;
+                    if (empty($ambiente['Ambiente']['saldo'])) {
+                      $saldo = 0.00;
+                    } else {
+                      $saldo = $ambiente['Ambiente']['saldo'];
+                    }
+                    ?>
                     <td>MONTO: </td>
-                    <td><?php echo $this->Form->text('Recibo.monto', array('class' => 'form-control', 'id' => 'dato-monto', 'value' => $recibo['Recibo']['monto'], 'type' => 'number', 'step' => 'any', 'min' => $total, 'required')); ?></td>
+                    <td><?php echo $this->Form->text('Recibo.monto', array('class' => 'form-control', 'id' => 'dato-monto', 'value' => $monto_tmp, 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
                     <td>GUARDAR CAMBIO: </td>
-                    <td><?php echo $this->Form->text('Dato.cambio', array('class' => 'form-control', 'id' => 'dato-cambio', 'value' => ($recibo['Recibo']['monto'] - $total), 'type' => 'number', 'step' => 'any', 'required')); ?></td>
+                    <td><?php echo $this->Form->text('Dato.cambio', array('class' => 'form-control', 'id' => 'dato-cambio', 'value' => ($monto_tmp + $saldo - $total), 'type' => 'number', 'step' => 'any', 'required')); ?></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -122,10 +130,14 @@ $Pago = new Pago();
 <!-- END Example Block -->
 
 <script>
+  var saldo = 0.00;
+<?php if (!empty($ambiente['Ambiente']['saldo'])): ?>
+    saldo = <?php echo $ambiente['Ambiente']['saldo']; ?>;
+<?php endif; ?>
   var total = <?php echo $total; ?>;
   $('#dato-monto').keyup(function () {
       var valor_monto = parseFloat($(this).val());
-      var cambio = valor_monto - total;
+      var cambio = valor_monto + saldo - total;
       $('#dato-cambio').val(Math.round(cambio * 100) / 100);
   });
 </script>

@@ -214,7 +214,12 @@
           <tr>
               <td><?php echo $i; ?></td>
               <td><?php echo $pa['Concepto']['nombre']; ?></td>
-              <td><?php echo $pa[0]['imp_total']; ?></td>
+              <td>
+                <?php 
+                
+                echo $pa[0]['imp_total']; 
+                ?>
+              </td>
           </tr>
           <?php $total_i = $total_i + $pa[0]['imp_total']; ?>
 <?php endforeach; ?>
@@ -230,6 +235,7 @@
             <td style="background-color: #B7B7B7;">Id</td>
             <td style="background-color: #B7B7B7;">Fecha</td>
             <td style="background-color: #B7B7B7;">Ambiente</td>
+            <td style="background-color: #B7B7B7;">Concepto</td>
             <td style="background-color: #B7B7B7;">Monto</td>
         </tr>
         <?php $total_det = 0.00; ?>
@@ -239,10 +245,12 @@
               <td><?php echo $det['Pago']['id'] ?></td>
               <td><?php echo $det['Pago']['fecha'] ?></td>
               <td><?php echo $det['Ambiente']['nombre'] ?></td>
+              <td><?php echo $det['Concepto']['nombre'] ?></td>
               <td><?php echo $det['Pago']['monto_total'] ?></td>
           </tr>
 <?php endforeach; ?>
         <tr>
+            <td style="background-color: #B7B7B7;"></td>
             <td style="background-color: #B7B7B7;"></td>
             <td style="background-color: #B7B7B7;"></td>
             <td style="background-color: #B7B7B7;">Total</td>

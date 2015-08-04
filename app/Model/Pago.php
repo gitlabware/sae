@@ -19,7 +19,7 @@ class Pago extends AppModel {
    * @var array
    */
   public $virtualFields = array(
-    'monto_total' => "CONCAT( Pago.monto+(IF((Pago.retencion != 'NULL'),((Pago.retencion/100)*Pago.monto),0)) )"
+    'monto_total' => "CONCAT( (IF((Pago.porcentaje_interes != 'NULL'),(Pago.monto*Pago.porcentaje_interes/100),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),((Pago.retencion/100)*Pago.monto),0)) )"
   );
   public $belongsTo = array(
     'Ambiente' => array(

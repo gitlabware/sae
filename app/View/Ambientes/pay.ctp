@@ -130,7 +130,7 @@
                               </div>
                               <div class="col-md-3">
                                   <label for="crt2">Fecha</label>
-                                  <?php echo $this->Form->date('Mantenimiento.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_mantenimiento)); ?>
+                                  <?php echo $this->Form->date('Mantenimiento.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_mantenimiento, 'id' => 'fecha-mantenimiento')); ?>
                               </div>
                           </div>
 
@@ -145,7 +145,7 @@
                               <div class="col-md-4">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="mantenimiento-retencion" name="data[Mantenimiento][retencion]"> RETENCION
+                                          <input type="checkbox" id="mantenimiento-retencion" name="data[Mantenimiento][retencion_mantenimiento]"> RETENCION
                                       </label>
                                   </div>
                               </div>
@@ -202,7 +202,7 @@
                               </div>
                               <div class="col-md-3">
                                   <label for="crt2">Fecha</label>
-                                  <?php echo $this->Form->date('Alquiler.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_alquiler)); ?>
+                                  <?php echo $this->Form->date('Alquiler.fecha_inicio', array('class' => 'form-control', 'value' => $fecha_alquiler, 'id' => 'fecha-alquiler')); ?>
                               </div>
                           </div>
                           <div class="form-group">
@@ -216,7 +216,7 @@
                               <div class="col-md-4">
                                   <div class="checkbox">
                                       <label for="alquiler">
-                                          <input type="checkbox" id="alquiler-retencion" name="data[Alquiler][retencion]"> RETENCION
+                                          <input type="checkbox" id="alquiler-retencion" name="data[Alquiler][retencion_alquiler]"> RETENCION
                                       </label>
                                   </div>
                               </div>
@@ -305,7 +305,7 @@
                           <div class="form-group">                
                               <div class="col-md-2">
                                   <label for="monto-pe">Monto total</label>
-                                  <input type="number" step="any" class="form-control" id="monto-total-pe-ascensor" name="data[Interes][monto_total]" disabled="true" value="0">
+                                  <input type="number" step="any" class="form-control" id="monto-total-pe-ascensor" name="data[Ascensor][monto_total]" disabled="true" value="0">
                               </div>
                               <div class="col-md-2">
                                   <label for="monto-pe">Monto</label>
@@ -376,7 +376,7 @@
                               <div class="col-md-6">
                                   <div class="checkbox">
                                       <label for="mantenimiento">
-                                          <input type="checkbox" id="multas-pagar" name="data[Multas][pagar]" onclick="calcula_total();"> Pagar Multas
+                                          <input type="checkbox" id="multas-pagar" name="data[Multas][pagar]"> Pagar Multas
                                       </label>
                                   </div> 
                               </div>
@@ -764,6 +764,7 @@
 
   $('#mantenimiento-pagar').click(function () {
       if ($(this).prop('checked')) {
+          $('#fecha-mantenimiento').prop('required', true);
           $('#monto-pe-mantenimiento').prop('disabled', true);
           $('#cantidad-pe-mantenimiento').prop('disabled', true);
           $('.radios-p-mantenimiento').prop('disabled', true);
@@ -773,6 +774,7 @@
           suma_total();
           limpia_todo('mantenimiento');
       } else {
+          $('#fecha-mantenimiento').prop('required', false);
           $('.radios-p-mantenimiento').prop('disabled', false);
           $('#mantenimiento-retencion').prop('disabled', false);
           radios_mantenimiento();
@@ -867,6 +869,7 @@
 
   $('#alquiler-pagar').click(function () {
       if ($('#alquiler-pagar').prop('checked')) {
+        $('#fecha-alquiler').prop('required', true);
           $('#monto-pe-alquiler').prop('disabled', true);
           $('#cantidad-pe-alquiler').prop('disabled', true);
           $('.radios-p-alquiler').prop('disabled', true);
@@ -876,6 +879,7 @@
           suma_total();
           limpia_todo('alquiler');
       } else {
+        $('#fecha-alquiler').prop('required', false);
           $('.radios-p-alquiler').prop('disabled', false);
           $('#alquiler-retencion').prop('disabled', false);
           radios_alquiler();
@@ -925,6 +929,7 @@
         } else {
             $('#monto-total-pe-interes').val(monto_i);
         }
+        cambio_a = Math.round(cambio_a * 100) / 100
         $('#cambio-pe-interes').val(cambio_a);
     }
 
@@ -998,35 +1003,136 @@
   });
   //------------------------------------------------//
 
+  //--------------- MULTAS ----------------------//
+  $('#monto-pe-multas').keyup(function () {
+      calcula_multas();
+  });
+  $('#multas-usar-saldo').click(function () {
+      calcula_multas();
+  });
+  function calcula_multas() {
+      var monto_a = parseFloat($('#monto-pe-multas').val());
+      $('#lab-total-multas').html(monto_a);
+      var cambio_a = saldo_amb;
+      if ($('#multas-usar-saldo').prop('checked')) {
+          if (saldo_amb <= monto_a) {
+              cambio_a = 0;
+              monto_a = monto_a - saldo_amb;
+          } else {
+              cambio_a = saldo_amb - monto_a;
+              monto_a = 0;
+          }
+          cambio_a = Math.round(cambio_a * 100) / 100;
+      }
+      monto_a = Math.round(monto_a * 100) / 100;
+      $('#monto-total-pe-multas').val(monto_a);
+      $('#cambio-pe-multas').val(cambio_a);
+  }
+  $('#multas-pagar').click(function () {
+      if ($(this).prop('checked')) {
+          $('#monto-pe-multas').prop('disabled', true);
+          $('#multas-usar-saldo').prop('disabled', true);
+          saldo_amb = parseFloat($('#cambio-pe-multas').val());
+          $('#id_cambio_total').html(saldo_amb);
+          suma_total();
+          limpia_todo('multas');
+      } else {
+          limpia_todo('todo');
+      }
+  });
+  //------------------------------------------------//
+
+  //--------------- OTROS ----------------------//
+  $('#monto-pe-otros').keyup(function () {
+      calcula_otros();
+  });
+  $('#otros-usar-saldo').click(function () {
+      calcula_otros();
+  });
+  function calcula_otros() {
+      var monto_a = parseFloat($('#monto-pe-otros').val());
+      $('#lab-total-otros').html(monto_a);
+      var cambio_a = saldo_amb;
+      if ($('#otros-usar-saldo').prop('checked')) {
+          if (saldo_amb <= monto_a) {
+              cambio_a = 0;
+              monto_a = monto_a - saldo_amb;
+          } else {
+              cambio_a = saldo_amb - monto_a;
+              monto_a = 0;
+          }
+          cambio_a = Math.round(cambio_a * 100) / 100;
+      }
+      monto_a = Math.round(monto_a * 100) / 100;
+      $('#monto-total-pe-otros').val(monto_a);
+      $('#cambio-pe-otros').val(cambio_a);
+  }
+  $('#otros-pagar').click(function () {
+      if ($(this).prop('checked')) {
+          $('#monto-pe-otros').prop('disabled', true);
+          $('#otros-usar-saldo').prop('disabled', true);
+          saldo_amb = parseFloat($('#cambio-pe-otros').val());
+          $('#id_cambio_total').html(saldo_amb);
+          suma_total();
+          limpia_todo('otros');
+      } else {
+          limpia_todo('todo');
+      }
+  });
+  //------------------------------------------------//
 
 
 
   function suma_total() {
 
       total_total = 0.00;
+      var monto_totalt = 0.00;
       if ($('#mantenimiento-pagar').prop('checked')) {
           total_total = total_total + parseFloat($('#lab-total-mantenimiento').html());
+          monto_totalt = monto_totalt + parseFloat($('#monto-pe-mantenimiento').val());
       }
       if ($('#alquiler-pagar').prop('checked')) {
           total_total = total_total + parseFloat($('#lab-total-alquiler').html());
+          monto_totalt = monto_totalt + parseFloat($('#monto-pe-alquiler').val());
       }
       if ($('#interes-pagar').prop('checked')) {
           total_total = total_total + parseFloat($('#lab-total-interes').html());
+          monto_totalt = monto_totalt + parseFloat($('#monto-total-pe-interes').val());
       }
       if ($('#ascensor-pagar').prop('checked')) {
           total_total = total_total + parseFloat($('#lab-total-ascensor').html());
+          monto_totalt = monto_totalt + parseFloat($('#monto-total-pe-ascensor').val());
       }
+      if ($('#multas-pagar').prop('checked')) {
+          total_total = total_total + parseFloat($('#lab-total-multas').html());
+          monto_totalt = monto_totalt + parseFloat($('#monto-total-pe-multas').val());
+      }
+      if ($('#otros-pagar').prop('checked')) {
+          total_total = total_total + parseFloat($('#lab-total-otros').html());
+          monto_totalt = monto_totalt + parseFloat($('#monto-total-pe-otros').val());
+      }
+      monto_totalt = Math.round(monto_totalt * 100) / 100;
       total_total = Math.round(total_total * 100) / 100;
       $('#idtotal').html(total_total);
+      $('#idmontot').html(monto_totalt);
+
+      $('#dato-monto').val(monto_totalt);
+      var cambiot = parseFloat($('#id_cambio_total').html());
+      $('#dato-cambio').val(cambiot);
       //alert(total_total);
+
   }
 
   function limpia_todo(tipo) {
       if (tipo == 'todo') {
           saldo_amb = saldo_amb_aux;
+          $('#dato-monto').val(0);
+          $('#idtotal').html(0.00);
+          $('#idmontot').html(0.00);
+          //$('#idtotal').html(0.00);
       }
 
-      if (tipo != 'mantenimiento') {
+      if (tipo != 'mantenimiento' && !$('#mantenimiento-pagar').prop('checked') || tipo == 'todo') {
           //mantenimiento
           $('#monto-pe-mantenimiento').val(0);
           $('#cantidad-pe-mantenimiento').val(0);
@@ -1039,7 +1145,7 @@
           //fin mantenimiento
       }
 
-      if (tipo != 'alquiler') {
+      if (tipo != 'alquiler' && !$('#alquiler-pagar').prop('checked') || tipo == 'todo') {
           //alquiler
           $('#monto-pe-alquiler').val(0);
           $('#cantidad-pe-alquiler').val(0);
@@ -1051,11 +1157,9 @@
           radios_alquiler();
           //fin alquiler
       }
-
-      if (tipo != 'interes') {
-          //interes
 <?php if (!empty($intereses[0][0])): ?>
-
+        if (tipo != 'interes' && !$('#interes-pagar').prop('checked') || tipo == 'todo') {
+            //interes
             $('#monto-total-pe-interes').val(monto_interes);
             $('#monto-pe-interes').val(monto_interes);
             $('#porcentaje-pe-interes').val(100);
@@ -1063,22 +1167,56 @@
             $('#interes-retencion').prop('checked', false);
             $('#interes-usar-saldo').prop('checked', false);
             $('#lab-total-interes').html(monto_interes);
+            $('#interes-pagar').prop('checked', false);
+            //fin interes
+        }
 <?php endif; ?>
-          //fin interes
-      }
 
-      if (tipo != 'ascensor') {
+      if (tipo != 'ascensor' && !$('#ascensor-pagar').prop('checked') || tipo == 'todo') {
           //ascensor
           $('#lab-total-ascensor').html(0);
           $('#monto-total-pe-ascensor').val(0);
           $('#monto-pe-ascensor').val(0);
           $('#ascensor-usar-saldo').prop('checked', false);
           $('#ascensor-usar-saldo').prop('disabled', false);
+          $('#ascensor-pagar').prop('checked', false);
           //find ascensor
       }
 
+      if (tipo != 'multas' && !$('#multas-pagar').prop('checked') || tipo == 'todo') {
+          //multas
+          $('#lab-total-multas').html(0);
+          $('#monto-total-pe-multas').val(0);
+          $('#monto-pe-multas').val(0);
+          $('#multas-usar-saldo').prop('checked', false);
+          $('#multas-usar-saldo').prop('disabled', false);
+          $('#multas-pagar').prop('checked', false);
+          //find multas
+      }
+
+
+      if (tipo != 'otros' && !$('#otros-pagar').prop('checked') || tipo == 'todo') {
+          //otros
+          $('#lab-total-otros').html(0);
+          $('#monto-total-pe-otros').val(0);
+          $('#monto-pe-otros').val(0);
+          $('#otros-usar-saldo').prop('checked', false);
+          $('#otros-usar-saldo').prop('disabled', false);
+          $('#otros-pagar').prop('checked', false);
+          //find otros
+      }
+
       $('.cambio').val(saldo_amb);
-      $('#idtotal').html(0.00);
       $('#id_cambio_total').html(saldo_amb);
+      $('#dato-cambio').val(saldo_amb);
+
   }
+  $('#crtform').submit(function (e) {
+      //alert('dddd');
+      //e.preventDefault();
+      $('#crtform input[type=text], input[type=number], input[type=checkbox]').each(function (i, val) {
+          $('#' + val.id).prop('disabled', false);
+      });
+
+  })
 </script>
