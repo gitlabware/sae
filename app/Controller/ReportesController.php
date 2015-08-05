@@ -58,7 +58,7 @@ class ReportesController extends AppController {
       , 'fields' => ['Pago.ambiente_id', 'Pago.estado', 'Pago.concepto_id', 'SUM(Pago.monto) as monto_total']
       //, 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha','Pago.estado')
     ));
-    
+
     foreach ($pagos as $key => $pa) {
       $condiciones2 = $condiciones;
       $condiciones2['Pago.ambiente_id'] = $pa['Pago']['ambiente_id'];
@@ -70,8 +70,8 @@ class ReportesController extends AppController {
         , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha', 'Pago.estado')
       ));
     }
-    /*debug($pagos);
-    exit;*/
+    /* debug($pagos);
+      exit; */
     $this->set(compact('pagos'));
   }
 
@@ -241,6 +241,50 @@ class ReportesController extends AppController {
     ));
     //debug($pagos);exit;
     $this->set(compact('pagos'));
+  }
+
+  public function indexcuentasxcobrar() {
+    
+  }
+
+  public function xgestionmora() {
+    $fecha = $this->request->data['Reporte']['fecha'];
+    $fecha_a = split('-', $fecha);
+    $ano = $fecha_a[0];
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $ambientes = $this->Ambiente->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Ambiente.edificio_id' => $idEdificio),
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
+    ));
+    $this->set(compact('ambientes', 'ano', 'fecha'));
+  }
+
+  public function get_monto_amb($idAmbiete = null, $ano = null, $fecha = null) {
+     $pago = $this->Pago->find('all',array(
+       'recursive' => -1,
+       'conditions' => array('Pago.ambiente_id' => $idAmbiete,'YEAR(Pago.fecha)' => $ano,'DATE(Pago.fecha) <=' => $fecha,'Pago.estado' => 'Debe'),
+       'group' => array('Pago.ambiente_id'),
+       'fields' => array('SUM(Pago.monto) as total_g')
+     ));
+     if(!empty($pago)){
+       return $pago[0][0]['total_g'];
+     }else{
+       return 0;
+     }
+  }
+  
+  public function manteoxcobrar(){
+    $fecha = $this->request->data['Reporte']['fecha'];
+    $fecha_a = split('-', $fecha);
+    $ano = $fecha_a[0];
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $ambientes = $this->Ambiente->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Ambiente.edificio_id' => $idEdificio),
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
+    ));
+    $this->set(compact('ambientes', 'ano', 'fecha'));
   }
 
 }

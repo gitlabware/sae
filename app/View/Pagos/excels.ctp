@@ -1,0 +1,45 @@
+<div class="block">
+    <div class="block-title">
+        <h2>Excel por cobrar</h2>
+    </div>
+    <?php echo $this->Form->create('Pago', array('class' => 'form-horizontal form-bordered', 'action' => 'registra_excel', 'enctype' => 'multipart/form-data')); ?>
+
+    <div class="form-group">
+        <div class="col-md-6">
+            <?php echo $this->Form->file('Excel.excel', array('class' => 'form-control', 'accept' => '.xlsx', 'placeholder' => 'Seleccione el archivo excel', 'required')) ?>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-primary">SUBIR EXCEL</button>
+            <a href="<?php echo $this->webroot; ?>img/formatos/excel-xcobrar.png" data-toggle="lightbox-image" title="Formato para poder cargar registros de excel" class="gallery-link btn btn-success"><i class="fa fa-eye"></i> Ver Formato excel</a>
+        </div>
+    </div>
+
+    <?php echo $this->Form->end(); ?>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-vcenter table-hover">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Excel</th>
+                    <th>Gestion</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($excels as $ex): ?>
+                  <tr>
+                      <td><?php echo $ex['Excel']['modified']; ?></td>
+                      <td><?php echo $ex['Excel']['nombre']; ?></td>
+                      <td><?php echo $ex['Excel']['gestion']; ?></td>
+                      <td>
+                        <?php echo $this->Html->link('Ver excel',array('action' => 'det_pagos',$ex['Excel']['id']),array('class' => 'btn btn-sm btn-primary'))?>
+                          <?php echo $this->Html->link('Eliminar',array('action' => 'elimina_excel',$ex['Excel']['id']),array('class' => 'btn btn-sm btn-danger','confirm' => 'Esta seguro de eliminar??'))?>
+                      </td>
+                  </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+</div>

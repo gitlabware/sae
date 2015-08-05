@@ -23,11 +23,11 @@
             </div>
             <div class="col-md-2">
                 <label>Monto</label>
-                <?php echo $this->Form->text("Dato.monto",['class' => 'form-control','type' => 'number','step' => 'any','id' => 'monto','required']);?>
+                <?php echo $this->Form->text("Dato.monto", ['class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'monto', 'required']); ?>
             </div>
             <div class="col-md-2">
                 <label>Interes</label>
-                <?php echo $this->Form->text("Dato.interes",['class' => 'form-control','type' => 'number','step' => 'any','id' => 'monto','required','max' => 100,'min' => 0]);?>
+                <?php echo $this->Form->text("Dato.interes", ['class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'monto', 'required', 'max' => 100, 'min' => 0]); ?>
             </div>
             <div class="col-md-2">
                 <label>&nbsp;</label>
@@ -66,6 +66,7 @@
         </table>
     </div>
     <!-- END Example Content -->
+
 </div>
 <!-- END Example Block -->
 

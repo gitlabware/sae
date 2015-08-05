@@ -35,7 +35,15 @@
                     <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>"><i class="gi gi-tags sidebar-nav-icon"></i>Ambientes</a>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'buscador')); ?>"><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>
+                    <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>
+                    <ul>
+                        <li>
+                          <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'buscador')); ?>">Pagar ambientes</a>
+                        </li>
+                        <li>
+                          <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Excels</a>
+                        </li>
+                    </ul>
                 </li>
                 <!--<li>
                     <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'eservicios', $this->Session->read('Auth.User.edificio_id'))); ?>');"><i class="gi gi-briefcase sidebar-nav-icon"></i>Servicios</a>
@@ -60,6 +68,9 @@
                         </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'reporte_pagos_totales')); ?>">Reporte de pagos totales</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'indexcuentasxcobrar')); ?>">Cuentas por cobrar</a>
                         </li>
                     </ul>
                 </li>
