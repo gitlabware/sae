@@ -205,118 +205,136 @@
             <td>TOTAL</td>
         </tr>
         <?php $total = 0.00; ?>
+
+        <?php $total_a[1] = 0.00; ?>
+        <?php $total_a[2] = 0.00; ?>
+        <?php $total_a[3] = 0.00; ?>
+        <?php $total_a[4] = 0.00; ?>
+        <?php $total_a[5] = 0.00; ?>
+        <?php $total_a[6] = 0.00; ?>
+        <?php $total_a[7] = 0.00; ?>
+        <?php $total_a[8] = 0.00; ?>
+        <?php $total_a[9] = 0.00; ?>
+        <?php $total_a[10] = 0.00; ?>
+        <?php $total_a[11] = 0.00; ?>
+        <?php $total_a[12] = 0.00; ?>
+
         <?php foreach ($ambientes as $am): ?>
+          <?php $subtotal = 0.00; ?>
           <tr>
               <td><?php echo $am['Ambiente']['nombre'] ?></td>
               <td><?php echo $am['User']['nombre'] ?></td>
               <td><?php echo $ano; ?></td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,1));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 1));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[1] = $total_a[1] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,2));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 2));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[2] = $total_a[2] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,3));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 3));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[3] = $total_a[3] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,4));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 4));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[4] = $total_a[4] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,5));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 5));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[5] = $total_a[5] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,6));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 6));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[6] = $total_a[6] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,7));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 7));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[7] = $total_a[7] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,8));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 8));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[8] = $total_a[8] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,9));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 9));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[9] = $total_a[9] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,10));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 10));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[10] = $total_a[10] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,11));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 11));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[11] = $total_a[11] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
               </td>
               <td>
-                <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'],$fecha,$ano,12));
-                    $subtotal = $subtotal + $monto;
-                    $total_a[$i] = $total_a[$i] + $monto;
-                    $total = $total + $monto;
-                    echo $monto;
-                    ?>
+                  <?php
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 12));
+                  $subtotal = $subtotal + $monto;
+                  $total_a[12] = $total_a[12] + $monto;
+                  $total = $total + $monto;
+                  echo $monto;
+                  ?>
+              </td>
+              <td>
+                  <?php echo $subtotal ?>
               </td>
           </tr>
         <?php endforeach; ?>
@@ -324,19 +342,19 @@
             <td></td>
             <td></td>
             <td>TOTALES</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><?php echo $total_a[1] ?></td>
+            <td><?php echo $total_a[2] ?></td>
+            <td><?php echo $total_a[3] ?></td>
+            <td><?php echo $total_a[4] ?></td>
+            <td><?php echo $total_a[5] ?></td>
+            <td><?php echo $total_a[6] ?></td>
+            <td><?php echo $total_a[7] ?></td>
+            <td><?php echo $total_a[8] ?></td>
+            <td><?php echo $total_a[9] ?></td>
+            <td><?php echo $total_a[10] ?></td>
+            <td><?php echo $total_a[11] ?></td>
+            <td><?php echo $total_a[12] ?></td>
+            <td><?php echo $total; ?></td>
         </tr>
     </table>
     <br>
