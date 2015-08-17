@@ -244,11 +244,21 @@ class ReportesController extends AppController {
   }
 
   public function indexcuentasxcobrar() {
-    
+    $this->Pago->virtualFields = array(
+      'gestion' => "YEAR(Pago.fecha)"
+    );
+    $gestiones = $this->Pago->find('list',array(
+      'group' => array('gestion'),
+      'fields' => array('gestion','gestion')
+    ));
+    $this->set(compact('gestiones'));
+    //debug($gestiones);exit;
   }
 
   public function xgestionmora() {
     $fecha = $this->request->data['Reporte']['fecha'];
+    $tipo = $this->request->data['Reporte']['tipo'];
+    //debug($tipo);exit;
     $fecha_a = split('-', $fecha);
     $ano = $fecha_a[0];
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -257,25 +267,26 @@ class ReportesController extends AppController {
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
       'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
     ));
-    $this->set(compact('ambientes', 'ano', 'fecha'));
+    $this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
   }
 
-  public function get_monto_amb($idAmbiete = null, $ano = null, $fecha = null) {
+  public function get_monto_amb($idAmbiete = null, $ano = null, $fecha = null, $tipo = NULL) {
     $pago = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => 'Debe'),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
       'group' => array('Pago.ambiente_id'),
       'fields' => array('SUM(Pago.monto) as total_g')
     ));
     if (!empty($pago)) {
       return $pago[0][0]['total_g'];
     } else {
-      return 0;
+      return '-';
     }
   }
 
   public function manteoxcobrar() {
     $fecha = $this->request->data['Reporte']['fecha'];
+    $tipo = $this->request->data['Reporte']['tipo'];
     $fecha_a = split('-', $fecha);
     $ano = $fecha_a[0];
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -284,25 +295,51 @@ class ReportesController extends AppController {
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
       'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
     ));
-    $this->set(compact('ambientes', 'ano', 'fecha'));
+    $this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
+  }
+  public function manteoxcobrarges() {
+    $tipo = $this->request->data['Reporte']['tipo'];
+    $ano = $this->request->data['Reporte']['gestion'];
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $ambientes = $this->Ambiente->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Ambiente.edificio_id' => $idEdificio),
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
+    ));
+    $this->set(compact('ambientes', 'ano', 'tipo','gestion'));
   }
 
-  public function get_monto_amb_m($idAmbiete = null, $fecha = null, $ano = null, $mes = null) {
+  public function get_monto_amb_m($idAmbiete = null, $fecha = null, $ano = null, $mes = null, $tipo = null) {
     $pago = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => 'Debe', 'Pago.concepto_id' => 10),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo, 'Pago.concepto_id' => 10),
       'group' => array('Pago.ambiente_id'),
       'fields' => array('SUM(Pago.monto) as total_g')
     ));
     if (!empty($pago)) {
       return $pago[0][0]['total_g'];
     } else {
-      return 0;
+      return '-';
+    }
+  }
+  
+  public function get_monto_amb_m_g($idAmbiete = null, $ano = null, $mes = null, $tipo = null) {
+    $pago = $this->Pago->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'Pago.estado' => $tipo, 'Pago.concepto_id' => 10),
+      'group' => array('Pago.ambiente_id'),
+      'fields' => array('SUM(Pago.monto) as total_g')
+    ));
+    if (!empty($pago)) {
+      return $pago[0][0]['total_g'];
+    } else {
+      return '-';
     }
   }
 
   public function xcobrarambiente() {
     $fecha = $this->request->data['Reporte']['fecha'];
+    $tipo = $this->request->data['Reporte']['tipo'];
     $fecha_a = split('-', $fecha);
     $ano = $fecha_a[0];
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -311,34 +348,34 @@ class ReportesController extends AppController {
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
       'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
     ));
-    $this->set(compact('ambientes', 'ano', 'fecha'));
+    $this->set(compact('ambientes', 'ano', 'fecha','tipo'));
   }
-  
-  public function gen_xcobrar_amb_a($idAmbiente = null, $fecha = null){
-    
-    $anos = $this->Pago->find('all',array(
-      'conditions' => array('Pago.ambiente_id' => $idAmbiente,'DATE(Pago.fecha) <=' => $fecha,'Pago.estado' => 'Debe'),
+
+  public function gen_xcobrar_amb_a($idAmbiente = null, $fecha = null,$tipo = null) {
+
+    $anos = $this->Pago->find('all', array(
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
       'group' => array('YEAR(Pago.fecha)'),
       'fields' => array('YEAR(Pago.fecha) as ano')
     ));
-    if(!empty($anos)){
+    if (!empty($anos)) {
       return $anos;
-    }else{
+    } else {
       return array();
     }
   }
-  
-  public function get_xcobrar_amb_s($idAmbiente = null,$fecha = null,$ano = null, $mes = null){
+
+  public function get_xcobrar_amb_s($idAmbiente = null, $fecha = null, $ano = null, $mes = null,$tipo = null) {
     $pago = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => 'Debe'),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
       'group' => array('Pago.ambiente_id'),
       'fields' => array('SUM(Pago.monto) as total_g')
     ));
     if (!empty($pago)) {
       return $pago[0][0]['total_g'];
     } else {
-      return 0;
+      return '-';
     }
   }
 
