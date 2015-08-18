@@ -33,14 +33,18 @@
                         <?php endforeach; ?>
                         <a href="javascript:void(0)" class="list-group-item">
                             <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
-                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Ultimas Deudas Alquileres</b></h4>
+                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Deuda Alquileres</b></h4>
                         </a>
-                        <?php foreach ($ultimas_deudas_alq as $ul): ?>
-                          <a href="javascript:void(0)" class="list-group-item">
-                              <span class="pull-right"><strong id="manteminientoAmbiente"><?php echo $ul['Pago']['monto']; ?></strong></span>
-                              <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo $ul['Pago']['fecha']; ?></h4>
-                          </a>
-                        <?php endforeach; ?>
+                        <a href="javascript:" class="list-group-item" onclick="return windowpop('<?php echo $this->Html->url(array('controller' => 'Pagos','action' => 'pre_aviso',$idAmbiente, 11)); ?>', 600, 433)">
+                            <span class="pull-right"><strong id="manteminientoAmbiente">
+                                    <?php
+                                    if (!empty($deuda_tot_alq[0][0]['total_alq'])) {
+                                      echo $deuda_tot_alq[0][0]['total_alq'];
+                                    }
+                                    ?>
+                                </strong></span>
+                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo 'Total Alquileres'; ?></h4>
+                        </a>
 
                         <!-- pagos -->
                         <a href="javascript:void(0)" class="list-group-item">
@@ -835,8 +839,10 @@
       var retencion_final = retencion_a * cantidad_cuotas;
       retencion_final = Math.round(retencion_final * 100) / 100;
       $('#retencion-pe-alquiler').val(retencion_final);
-
   }
+
+
+
   function alqu_cal_mont() {
       var retencion_a = 0.00;
       if ($('#alquiler-retencion').prop('checked')) {
@@ -869,7 +875,7 @@
 
   $('#alquiler-pagar').click(function () {
       if ($('#alquiler-pagar').prop('checked')) {
-        $('#fecha-alquiler').prop('required', true);
+          $('#fecha-alquiler').prop('required', true);
           $('#monto-pe-alquiler').prop('disabled', true);
           $('#cantidad-pe-alquiler').prop('disabled', true);
           $('.radios-p-alquiler').prop('disabled', true);
@@ -879,7 +885,7 @@
           suma_total();
           limpia_todo('alquiler');
       } else {
-        $('#fecha-alquiler').prop('required', false);
+          $('#fecha-alquiler').prop('required', false);
           $('.radios-p-alquiler').prop('disabled', false);
           $('#alquiler-retencion').prop('disabled', false);
           radios_alquiler();
@@ -1218,5 +1224,15 @@
           $('#' + val.id).prop('disabled', false);
       });
 
-  })
+  });
+
+  function windowpop(url, width, height) {
+      var leftPosition, topPosition;
+      //Allow for borders.
+      leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
+      //Allow for title and status bars.
+      topPosition = (window.screen.height / 2) - ((height / 2) + 50);
+      //Open the window.
+      window.open(url, "Window2", "status=no,height=" + height + ",width=" + width + ",resizable=yes,left=" + leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY=" + topPosition + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
+  }
 </script>
