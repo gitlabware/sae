@@ -106,11 +106,17 @@ class PagosController extends AppController {
       $this->request->data = "";
       $i = 0;
 
-      $primero = current($array_data);
+      $primero = $array_data[3];
       unset($array_data[1]);
       unset($array_data[2]);
-      /* debug($array_data);
-        exit; */
+      unset($array_data[3]);
+      unset($array_data[4]);
+      unset($array_data[5]);
+      /*debug($primero);
+      debug(substr($primero['A'], 8));
+      debug($array_data);
+      exit;*/
+      
       foreach ($array_data as $d) {
 
         $ambiente_a = $this->Ambiente->find('first', array(
@@ -126,7 +132,7 @@ class PagosController extends AppController {
         if (empty($ambiente_a)) {
           //debug($d['A']);exit;
           $this->Session->setFlash("No se pudo registrar, el registro " . $d['A'] . "-" . $d['B'] . " no se encontro!!", 'msgerror');
-          $this->Pago->deleteAll(array('Pago.excel_id' => $idExcel));
+          //$this->Pago->deleteAll(array('Pago.excel_id' => $idExcel));
           $this->redirect(array('action' => 'excels'));
         }
 
@@ -139,7 +145,7 @@ class PagosController extends AppController {
 
         if ($d['C'] != '') {
           $dpago['monto'] = $d['C'];
-          $dpago['fecha'] = $primero['H'] . '-01-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-01-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -156,7 +162,7 @@ class PagosController extends AppController {
         }
         if ($d['D'] != '') {
           $dpago['monto'] = $d['D'];
-          $dpago['fecha'] = $primero['H'] . '-02-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-02-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -173,7 +179,7 @@ class PagosController extends AppController {
         }
         if ($d['E'] != '') {
           $dpago['monto'] = $d['E'];
-          $dpago['fecha'] = $primero['H'] . '-03-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-03-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -190,7 +196,7 @@ class PagosController extends AppController {
         }
         if ($d['F'] != '') {
           $dpago['monto'] = $d['F'];
-          $dpago['fecha'] = $primero['H'] . '-04-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-04-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -207,7 +213,7 @@ class PagosController extends AppController {
         }
         if ($d['G'] != '') {
           $dpago['monto'] = $d['G'];
-          $dpago['fecha'] = $primero['H'] . '-05-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-05-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -224,7 +230,7 @@ class PagosController extends AppController {
         }
         if ($d['H'] != '') {
           $dpago['monto'] = $d['H'];
-          $dpago['fecha'] = $primero['H'] . '-06-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-06-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -241,7 +247,7 @@ class PagosController extends AppController {
         }
         if ($d['I'] != '') {
           $dpago['monto'] = $d['I'];
-          $dpago['fecha'] = $primero['H'] . '-07-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-07-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -258,7 +264,7 @@ class PagosController extends AppController {
         }
         if ($d['J'] != '') {
           $dpago['monto'] = $d['J'];
-          $dpago['fecha'] = $primero['H'] . '-08-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-08-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -275,7 +281,7 @@ class PagosController extends AppController {
         }
         if ($d['K'] != '') {
           $dpago['monto'] = $d['K'];
-          $dpago['fecha'] = $primero['H'] . '-09-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-09-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -292,7 +298,7 @@ class PagosController extends AppController {
         }
         if ($d['L'] != '') {
           $dpago['monto'] = $d['L'];
-          $dpago['fecha'] = $primero['H'] . '-10-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-10-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -309,7 +315,7 @@ class PagosController extends AppController {
         }
         if ($d['M'] != '') {
           $dpago['monto'] = $d['M'];
-          $dpago['fecha'] = $primero['H'] . '-11-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-11-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -326,7 +332,7 @@ class PagosController extends AppController {
         }
         if ($d['N'] != '') {
           $dpago['monto'] = $d['N'];
-          $dpago['fecha'] = $primero['H'] . '-12-01';
+          $dpago['fecha'] = substr($primero['A'], 8). '-12-01';
 
           $existe = $this->Pago->find('first', array(
             'recursive' => -1,
@@ -373,27 +379,27 @@ class PagosController extends AppController {
     $this->redirect(array('action' => 'excels'));
   }
 
-  public function pre_aviso($idAmbiente = null,$idConcepto = null) {
+  public function pre_aviso($idAmbiente = null, $idConcepto = null) {
     $this->layout = 'ajax';
-    $ambiente = $this->Ambiente->find('first',array(
+    $ambiente = $this->Ambiente->find('first', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.id' => $idAmbiente),
-      'fields' => array('Ambiente.nombre','Piso.nombre','User.nombre')
+      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'User.nombre')
     ));
     $this->Pago->virtualFields = array(
       'gestion' => "YEAR(Pago.fecha)"
     );
-    $gestiones = $this->Pago->find('all',array(
-      'conditions' => array('Pago.ambiente_id' => $idAmbiente,'Pago.concepto_id' => $idConcepto),
+    $gestiones = $this->Pago->find('all', array(
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.concepto_id' => $idConcepto),
       'group' => array('gestion'),
       'fields' => array('gestion')
     ));
-    
-    $this->set(compact('idAmbiente','idConcepto','gestiones','ambiente'));
+
+    $this->set(compact('idAmbiente', 'idConcepto', 'gestiones', 'ambiente'));
   }
-  
-  public function get_pag_ges($idAmbiente = null,$idConcepto = null,$gestion = null,$mes = null){
-    $pago = $this->Pago->find('first',array(
+
+  public function get_pag_ges($idAmbiente = null, $idConcepto = null, $gestion = null, $mes = null) {
+    $pago = $this->Pago->find('first', array(
       'recursive' => -1,
       'conditions' => array(
         'Pago.ambiente_id' => $idAmbiente,
@@ -401,12 +407,12 @@ class PagosController extends AppController {
         'MONTH(Pago.fecha)' => $mes,
         'Pago.concepto_id' => $idConcepto
       ),
-      'fields' => array('Pago.monto','Pago.estado')
+      'fields' => array('Pago.monto', 'Pago.estado')
     ));
-    if(!empty($pago)){
+    if (!empty($pago)) {
       return $pago['Pago'];
-    }else{
-      return array('monto' => '-','estado' => NULL);
+    } else {
+      return array('monto' => '-', 'estado' => NULL);
     }
   }
 

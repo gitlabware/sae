@@ -1,7 +1,7 @@
 <style type="text/css" media="print">
     @page {
-        size: landscape;
-
+        size: 16.5cm 21.59cm;
+        
     }
     *{
         margin: 0px !important;
@@ -256,15 +256,9 @@
     <table class="cabecera-doc">
         <tr>
             <td class="datos_c_a">
-                Asociacion de Copropietarios<br>
-                <?php echo 'Edificio "' . $this->Session->read('Auth.User.Edificio.nombre') . '"'; ?><br>
-                <?php
-                if (!empty($this->Session->read('Auth.User.Edificio.ciudad_pais'))) {
-                  echo $this->Session->read('Auth.User.Edificio.ciudad_pais');
-                } else {
-                  echo 'Ciudad-Pais';
-                }
-                ?>
+                <?php if (!empty($this->Session->read('Auth.User.Edificio.imagen'))): ?>
+                  <img src="<?php echo $this->webroot . 'imagenes/' . $this->Session->read('Auth.User.Edificio.imagen'); ?>" alt="Smiley face" height="45" width="180">
+                <?php endif; ?>
             </td>
             <td class="datos_c_b">
 
@@ -277,15 +271,15 @@
     <table class="CSSTableGenerator">
         <tr>
             <td><b>Copropietario</b></td>
-            <td><?php echo $ambiente['User']['nombre']?></td>
+            <td><?php echo $ambiente['User']['nombre'] ?></td>
             <td><b>Inquilino</b></td>
             <td><?php ?></td>
         </tr>
         <tr>
             <td><b>Ambiente</b></td>
-            <td><?php echo $ambiente['Ambiente']['nombre']?></td>
+            <td><?php echo $ambiente['Ambiente']['nombre'] ?></td>
             <td><b>Piso</b></td>
-            <td><?php echo $ambiente['Piso']['nombre']?></td>
+            <td><?php echo $ambiente['Piso']['nombre'] ?></td>
         </tr>
     </table>
     <table class="CSSTableGenerator">

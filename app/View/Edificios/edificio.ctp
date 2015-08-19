@@ -5,7 +5,7 @@
 <!-- END Modal Header -->
 <!-- Modal Body -->
 <div class="modal-body">
-    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered', 'id' => 'form-edificio')); ?>
+    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered', 'id' => 'form-edificio', 'enctype' => 'multipart/form-data')); ?>
 
     <div class="row">
         <div class="col-md-12">
@@ -31,9 +31,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Ciudad-Pais</label>
+                    <label class="col-md-4 control-label" for="user-settings-email">Imagen logo o firma</label>
                     <div class="col-md-8">
-                        <?php echo $this->Form->text('ciudad_pais', array('class' => 'form-control', 'placeholder' => 'Ciudad-Pais')); ?>
+                        <?php echo $this->Form->file('imagen_up', array('class' => 'form-control','accept' => 'image/*')); ?>
                     </div>
                 </div>
                 <!-- solo cuando sea nuevo edificio -->
