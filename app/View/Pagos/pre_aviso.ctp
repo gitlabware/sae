@@ -277,7 +277,7 @@
     <table class="CSSTableGenerator">
         <tr>
             <td><b>Copropietario</b></td>
-            <td><?php //echo $ambiente['User']['nombre']?></td>
+            <td><?php echo $ambiente['User']['nombre']?></td>
             <td><b>Inquilino</b></td>
             <td><?php ?></td>
         </tr>

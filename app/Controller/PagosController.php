@@ -36,7 +36,6 @@ class PagosController extends AppController {
         $this->request->data['Excelg']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
       }
     }
-
     if ($this->Excel->save($this->data['Excelg'])) {
       $idExcel = $this->Excel->getLastInsertID();
       $excelSubido = $nombreExcel;
@@ -44,9 +43,7 @@ class PagosController extends AppController {
       //debug($objLector);die;
       $objPHPExcel = $objLector->load("../webroot/files/$excelSubido");
       //debug($objPHPExcel);die;
-
       $rowIterator = $objPHPExcel->getActiveSheet()->getRowIterator();
-
       $array_data = array();
       foreach ($rowIterator as $row) {
         $cellIterator = $row->getCellIterator();
@@ -378,6 +375,11 @@ class PagosController extends AppController {
 
   public function pre_aviso($idAmbiente = null,$idConcepto = null) {
     $this->layout = 'ajax';
+    $ambiente = $this->Ambiente->find('first',array(
+      'recursive' => 0,
+      'conditions' => array('Ambiente.id' => $idAmbiente),
+      'fields' => array('Ambiente.nombre','Piso.nombre','User.nombre')
+    ));
     $this->Pago->virtualFields = array(
       'gestion' => "YEAR(Pago.fecha)"
     );
@@ -386,12 +388,7 @@ class PagosController extends AppController {
       'group' => array('gestion'),
       'fields' => array('gestion')
     ));
-    $ambiente = $this->Ambiente->find('first',array(
-      'recursive' => 0,
-      'conditions' => array('Ambiente.id' => $idAmbiente),
-      'fields' => array('Ambiente.nombre','Piso.nombre')
-    ));
-    //debug($ambiente);exit;
+    
     $this->set(compact('idAmbiente','idConcepto','gestiones','ambiente'));
   }
   
