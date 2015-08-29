@@ -9,11 +9,11 @@
             <?php echo $this->Form->file('Excel.excel', array('class' => 'form-control', 'accept' => '.xlsx', 'placeholder' => 'Seleccione el archivo excel', 'required')) ?>
         </div>
         <div class="col-md-6">
-            <button class="btn btn-primary">SUBIR EXCEL</button>
-            <a href="<?php echo $this->webroot; ?>img/formatos/excel-xcobrar.png" data-toggle="lightbox-image" title="Formato para poder cargar registros de excel" class="gallery-link btn btn-success"><i class="fa fa-eye"></i> Ver Formato excel</a>
+            <button class="btn btn-primary" type="submit">SUBIR EXCEL</button>
+            <a href="<?php echo $this->webroot; ?>img/formatos/excel-xcobrar2.png" data-toggle="lightbox-image" title="Formato para poder cargar registros de excel" class="gallery-link btn btn-success"><i class="fa fa-eye"></i> Ver Formato excel</a>
+            <a href="<?php echo $this->webroot; ?>img/formatos/formato-excel1.xlsx" title="Descargar formato" class="gallery-link btn btn-success"><i class="fa fa-download"></i> Descargar Formato</a>
         </div>
     </div>
-
     <?php echo $this->Form->end(); ?>
 
     <div class="table-responsive">

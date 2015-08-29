@@ -4,7 +4,6 @@
 
     }
     *{
-        background-color: white !important;
         margin: 0px !important;
         padding: 0px !important;
 
@@ -27,6 +26,42 @@
     }
     .fuerte td{
         font-weight: bold !important;
+    }
+
+    .datos_c_a{
+        font-size:11px !important;
+        font-weight: bold !important;
+        font-family:Arial !important;
+        color:#000000 !important;
+        width: 40% !important;
+        padding: 5px !important;
+        text-align: center !important;
+        border-top: 1px solid #000000 !important;
+        border-left: 1px solid #000000 !important;
+    }
+    .datos_c_b{
+        width: 30% !important;
+        border-top: 1px solid #000000 !important;
+    }
+    .datos_c_c{
+        border-top: 1px solid #000000 !important;
+        border-right: 1px solid #000000 !important;
+    }
+    .datos_c_c div{
+        background-color: white !important;
+        padding: 6px !important;
+        font-size: 18px !important;
+        width: 98% !important;
+        text-align: center !important;
+        color: #000000 !important;
+        font-weight: bold !important;
+        font-style: oblique !important;
+    }
+    .cabecera-doc{
+        width: 100% !important;
+    }
+    .cabecera-doc tr{
+        background-color: #cfc2c6 !important;
     }
 
     .CSSTableGenerator {
@@ -75,8 +110,6 @@
         border-bottom-left-radius:0px;
     }.CSSTableGenerator tr:hover td{
         background-color:#ffffff;
-
-
     }
     .CSSTableGenerator td{
         vertical-align:middle !important;
@@ -144,8 +177,6 @@
         border-bottom-left-radius:0px;
     }.CSSTableGenerator tr:hover td{
         background-color:#ffffff;
-
-
     }
     .CSSTableGenerator td{
         vertical-align:middle;
@@ -174,14 +205,71 @@
         font-size: 15px;
 
     }
-
+    .datos_c_a{
+        font-size:11px;
+        font-weight: bold;
+        font-family:Arial;
+        color:#000000;
+        width: 40%;
+        padding: 5px;
+        text-align: center;
+        border-top: 1px solid #000000;
+        border-left: 1px solid #000000;
+    }
+    .datos_c_b{
+        width: 30%;
+        border-top: 1px solid #000000;
+    }
+    .datos_c_c{
+        border-top: 1px solid #000000;
+        border-right: 1px solid #000000;
+    }
+    .datos_c_c div{
+        background-color: white;
+        padding: 6px;
+        font-size: 18px;
+        width: 98%;
+        text-align: center;
+        color: #000000;
+        font-weight: bold;
+        font-style: oblique;
+    }
+    .cabecera-doc{
+        width: 100%;
+    }
+    .cabecera-doc tr{
+        background-color: #cfc2c6;
+    }
 
 </style>
 <div class="block">
+    <table class="cabecera-doc">
+        <tr>
+            <td class="datos_c_a">
+                <?php if (!empty($this->Session->read('Auth.User.Edificio.imagen'))): ?>
+                  <img src="<?php echo $this->webroot . 'imagenes/' . $this->Session->read('Auth.User.Edificio.imagen'); ?>" alt="Smiley face" height="45" width="180">
+                <?php endif; ?>
+            </td>
+            <td class="datos_c_b">
+                
+            </td>
+            <td class="datos_c_c">
+                <div>REPORTE</div>
+            </td>
+        </tr>
+    </table>
     <table class="CSSTableGenerator titulo_t">
         <tr>
             <td>
-                ANEXO DE CUENTAS POR COBRAR POR GESTION EN MORA AL <?php echo $fecha; ?>
+                ESTADO DE CUENTAS 
+                <?php
+                if ($tipo == 'Debe') {
+                  echo 'POR COBRAR';
+                } else {
+                  echo 'PAGADAS';
+                }
+                ?>
+                DE GESTION EN MORA AL <?php echo $fecha; ?>
             </td>
         </tr>
     </table>
@@ -204,7 +292,7 @@
               <?php for ($i = ($ano - 15); $i <= $ano; $i++): ?>
                 <td>
                     <?php
-                    $monto = $this->requestAction(array('action' => 'get_monto_amb', $am['Ambiente']['id'], $i, $fecha));
+                    $monto = $this->requestAction(array('action' => 'get_monto_amb', $am['Ambiente']['id'], $i, $fecha, $tipo));
                     $subtotal = $subtotal + $monto;
                     $total_a[$i] = $total_a[$i] + $monto;
                     $total = $total + $monto;

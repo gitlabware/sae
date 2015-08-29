@@ -424,12 +424,13 @@ class AmbientesController extends AppController {
       'limit' => 5,
       'order' => 'Pago.id DESC'
     ));
-    $ultimas_deudas_alq = $this->Pago->find('all', array(
+    $deuda_tot_alq = $this->Pago->find('all', array(
       'recursive' => -1,
       'conditions' => array('Pago.estado' => 'Debe', 'Pago.concepto_id' => 11, 'Pago.ambiente_id' => $idAmbiente),
-      'limit' => 5,
-      'order' => 'Pago.id DESC'
+      'group' => array('Pago.ambiente_id'),
+      'fields' => array('SUM(Pago.monto) as total_alq')
     ));
+    //debug($deuda_tot_alq);exit;
     $ultimos_pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.estado' => 'Pagado', 'Pago.ambiente_id' => $idAmbiente),
@@ -460,7 +461,7 @@ class AmbientesController extends AppController {
 
     $edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'), null, null, -1);
     $edificio['Edificio']['retencion_mantenimiento'];
-    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'ultimas_deudas_alq', 'ultimos_pagos', 'intereses', 'edificio'));
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'deuda_tot_alq', 'ultimos_pagos', 'intereses', 'edificio'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {

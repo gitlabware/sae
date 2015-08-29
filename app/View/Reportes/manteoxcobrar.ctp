@@ -4,20 +4,14 @@
 
     }
     *{
-        background-color: white !important;
         margin: 0px !important;
         padding: 0px !important;
-
     }
 
     .no-imprime{
         display: none !important;
     }
 
-
-    .cabecera-r{
-
-    }
 
     .block{
         margin-left: 0.7cm !important;
@@ -27,6 +21,42 @@
     }
     .fuerte td{
         font-weight: bold !important;
+    }
+    
+    .datos_c_a{
+        font-size:11px !important;
+        font-weight: bold !important;
+        font-family:Arial !important;
+        color:#000000 !important;
+        width: 40% !important;
+        padding: 5px !important;
+        text-align: center !important;
+        border-top: 1px solid #000000 !important;
+        border-left: 1px solid #000000 !important;
+    }
+    .datos_c_b{
+        width: 30% !important;
+        border-top: 1px solid #000000 !important;
+    }
+    .datos_c_c{
+        border-top: 1px solid #000000 !important;
+        border-right: 1px solid #000000 !important;
+    }
+    .datos_c_c div{
+        background-color: white !important;
+        padding: 6px !important;
+        font-size: 18px !important;
+        width: 98% !important;
+        text-align: center !important;
+        color: #000000 !important;
+        font-weight: bold !important;
+        font-style: oblique !important;
+    }
+    .cabecera-doc{
+        width: 100% !important;
+    }
+    .cabecera-doc tr{
+        background-color: #cfc2c6 !important;
     }
 
     .CSSTableGenerator {
@@ -174,14 +204,73 @@
         font-size: 15px;
 
     }
+    
+    .datos_c_a{
+        font-size:11px;
+        font-weight: bold;
+        font-family:Arial;
+        color:#000000;
+        width: 40%;
+        padding: 5px;
+        text-align: center;
+        border-top: 1px solid #000000;
+        border-left: 1px solid #000000;
+    }
+    .datos_c_b{
+        width: 30%;
+        border-top: 1px solid #000000;
+    }
+    .datos_c_c{
+        border-top: 1px solid #000000;
+        border-right: 1px solid #000000;
+    }
+    .datos_c_c div{
+        background-color: white;
+        padding: 6px;
+        font-size: 18px;
+        width: 98%;
+        text-align: center;
+        color: #000000;
+        font-weight: bold;
+        font-style: oblique;
+    }
+    .cabecera-doc{
+        width: 100%;
+    }
+    .cabecera-doc tr{
+        background-color: #cfc2c6;
+    }
 
 
 </style>
 <div class="block">
+    <table class="cabecera-doc">
+        <tr>
+            <td class="datos_c_a">
+                <?php if (!empty($this->Session->read('Auth.User.Edificio.imagen'))): ?>
+                  <img src="<?php echo $this->webroot . 'imagenes/' . $this->Session->read('Auth.User.Edificio.imagen'); ?>" alt="Smiley face" height="45" width="180">
+                <?php endif; ?>
+            </td>
+            <td class="datos_c_b">
+
+            </td>
+            <td class="datos_c_c">
+                <div>REPORTE</div>
+            </td>
+        </tr>
+    </table>
     <table class="CSSTableGenerator titulo_t">
         <tr>
             <td>
-                CUENTAS DE MANTENIMIENTO POR COBRAR - <?php echo $ano; ?>  AL <?php echo $fecha; ?>
+                CUENTAS DE MANTENIMIENTO 
+                <?php
+                if ($tipo == 'Debe') {
+                  echo 'POR COBRAR';
+                } else {
+                  echo 'PAGADAS';
+                }
+                ?>
+                - <?php echo $ano; ?>  AL <?php echo $fecha; ?>
             </td>
         </tr>
     </table>
@@ -227,7 +316,7 @@
               <td><?php echo $ano; ?></td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 1));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 1,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[1] = $total_a[1] + $monto;
                   $total = $total + $monto;
@@ -236,7 +325,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 2));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 2,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[2] = $total_a[2] + $monto;
                   $total = $total + $monto;
@@ -245,7 +334,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 3));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 3,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[3] = $total_a[3] + $monto;
                   $total = $total + $monto;
@@ -254,7 +343,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 4));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 4,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[4] = $total_a[4] + $monto;
                   $total = $total + $monto;
@@ -263,7 +352,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 5));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 5,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[5] = $total_a[5] + $monto;
                   $total = $total + $monto;
@@ -272,7 +361,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 6));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 6,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[6] = $total_a[6] + $monto;
                   $total = $total + $monto;
@@ -281,7 +370,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 7));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 7,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[7] = $total_a[7] + $monto;
                   $total = $total + $monto;
@@ -290,7 +379,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 8));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 8,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[8] = $total_a[8] + $monto;
                   $total = $total + $monto;
@@ -299,7 +388,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 9));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 9,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[9] = $total_a[9] + $monto;
                   $total = $total + $monto;
@@ -308,7 +397,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 10));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 10,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[10] = $total_a[10] + $monto;
                   $total = $total + $monto;
@@ -317,7 +406,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 11));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 11,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[11] = $total_a[11] + $monto;
                   $total = $total + $monto;
@@ -326,7 +415,7 @@
               </td>
               <td>
                   <?php
-                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 12));
+                  $monto = $this->requestAction(array('action' => 'get_monto_amb_m', $am['Ambiente']['id'], $fecha, $ano, 12,$tipo));
                   $subtotal = $subtotal + $monto;
                   $total_a[12] = $total_a[12] + $monto;
                   $total = $total + $monto;

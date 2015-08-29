@@ -25,9 +25,9 @@ class EdificiosController extends AppController {
     if (empty($idEdificio)) {
       $catambientes = $this->GenCategoriasambiente->find('list', array('fields' => 'GenCategoriasambiente.nombre'));
       $catpagos = $this->GenCategoriaspago->find('list', array('fields' => 'GenCategoriaspago.nombre'));
-    }else{
-      $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre','conditions' => array('Categoriasambiente.edificio_id' => $idEdificio)));
-      $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre','conditions' => array('Categoriaspago.edificio_id' => $idEdificio)));
+    } else {
+      $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre', 'conditions' => array('Categoriasambiente.edificio_id' => $idEdificio)));
+      $catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre', 'conditions' => array('Categoriaspago.edificio_id' => $idEdificio)));
     }
     $pisos = $this->Piso->find('count', array('conditions' => array('Piso.edificio_id' => $idEdificio)));
     $this->set(compact('catambientes', 'catpagos', 'pisos'));
@@ -35,6 +35,24 @@ class EdificiosController extends AppController {
 
   public function guarda_edificio() {
     if (!empty($this->request->data)) {
+      if (!empty($this->request->data['Edificio']['imagen_up'])) {
+        $archivo = $this->request->data['Edificio']['imagen_up'];
+        $extension = explode('.', $archivo['name']);
+        $ext = end($extension);
+        if ($archivo['error'] === UPLOAD_ERR_OK) {
+          $nombre = String::uuid();
+          if (move_uploaded_file($archivo['tmp_name'], WWW_ROOT . 'imagenes' . DS . $nombre . '.' . $ext)) {
+            $nombre_archivo = $nombre . '.' . $ext;
+            $this->request->data['Edificio']['imagen'] = $nombre_archivo;
+          }
+        } else {
+          $this->Session->setFlash('Ocurrio un error al cargar la imagen ' . $archivo['name'],'msgerror');
+          $this->redirect($this->referer());
+        }
+      }
+
+      /*debug($this->request->data);
+      exit;*/
       $this->Edificio->create();
       $valida = $this->validar('Edificio');
       if (empty($valida)) {
@@ -136,10 +154,10 @@ class EdificiosController extends AppController {
   }
 
   public function calcula_mantenimiento() {
-    
+
     $cambiente = $this->Categoriasambiente->findByid($this->request->data['Edificio']['categoriasambiente_id'], NULL, NULL, -1);
     $cpago = $this->Categoriaspago->findByid($this->request->data['Edificio']['categoriaspago_id'], NULL, NULL, -1);
-    
+
     $totalmt = $this->request->data['Ambiente']['area_util'] + $this->request->data['Ambiente']['area_comun'];
     $costob = $totalmt * $cambiente['Categoriasambiente']['constante'];
     $mantenimiento = $costob + $cpago['Categoriaspago']['constante'];
@@ -199,7 +217,7 @@ class EdificiosController extends AppController {
           $this->Ambienteconcepto->create();
           $this->request->data['Ambienteconcepto']['ambiente_id'] = $am['Ambiente']['id'];
           $this->request->data['Ambienteconcepto']['concepto_id'] = $ed['Edificioconcepto']['concepto_id'];
-          $this->request->data['Ambienteconcepto']['monto'] = $ed['Edificioconcepto']['monto'];          
+          $this->request->data['Ambienteconcepto']['monto'] = $ed['Edificioconcepto']['monto'];
           $this->Ambienteconcepto->save($this->request->data['Ambienteconcepto']);
         }
       }
@@ -213,6 +231,5 @@ class EdificiosController extends AppController {
     $nro_usuarios = $this->User->find('count', array('conditions' => array('User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('edificio', 'nro_pisos', 'nro_ambientes', 'nro_usuarios'));
   }
-  
-  
+
 }
