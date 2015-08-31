@@ -265,7 +265,7 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre','Piso.nombre')
     ));
     $this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
   }
@@ -293,7 +293,7 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre','Piso.nombre')
     ));
     $this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
   }
@@ -304,7 +304,7 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre','Piso.nombre')
     ));
     $this->set(compact('ambientes', 'ano', 'tipo','gestion'));
   }
@@ -346,7 +346,7 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre','Piso.nombre')
     ));
     $this->set(compact('ambientes', 'ano', 'fecha','tipo'));
   }

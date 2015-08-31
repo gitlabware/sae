@@ -277,6 +277,7 @@
     <table class="CSSTableGenerator">
         <tr class="fuerte">
             <td style="width: 10%; ">Ambiente</td>
+            <td style="width: 8%; ">Piso</td>
             <td style="width: 10%;">Propietario</td>
             <td>A&ntilde;o</td>
             <td>ENE</td>
@@ -312,6 +313,7 @@
           <?php $subtotal = 0.00; ?>
           <tr>
               <td><?php echo $am['Ambiente']['nombre'] ?></td>
+              <td><?php echo $am['Piso']['nombre'] ?></td>
               <td><?php echo $am['User']['nombre'] ?></td>
               <td><?php echo $ano; ?></td>
               <td>
@@ -428,6 +430,7 @@
           </tr>
         <?php endforeach; ?>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td>TOTALES</td>

@@ -17,7 +17,7 @@ class PagosController extends AppController {
   }
 
   public function excels() {
-    $excels = $this->Excel->find('all', array('order' => 'id DESC'));
+    $excels = $this->Excel->find('all', array('order' => 'id DESC','conditions','conditions' => array('Excel.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('excels'));
   }
 

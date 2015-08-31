@@ -23,14 +23,18 @@
                     <div class="list-group remove-margin">
                         <a href="javascript:void(0)" class="list-group-item">
                             <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
-                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Ultimas Deudas Mantenimiento</b></h4>
+                            <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Deuda Mantenimientos</b></h4>
                         </a>
-                        <?php foreach ($ultimas_deudas_man as $ul): ?>
-                          <a href="javascript:void(0)" class="list-group-item">
-                              <span class="pull-right"><strong id="manteminientoAmbiente"><?php echo $ul['Pago']['monto']; ?></strong></span>
-                              <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo $ul['Pago']['fecha']; ?></h4>
-                          </a>
-                        <?php endforeach; ?>
+                        <a href="javascript:" class="list-group-item" onclick="return windowpop('<?php echo $this->Html->url(array('controller' => 'Pagos','action' => 'pre_aviso',$idAmbiente, 10)); ?>', 600, 433)">
+                            <span class="pull-right"><strong id="manteminientoAmbiente">
+                                    <?php
+                                    if (!empty($deuda_tot_man[0][0]['total_alq'])) {
+                                      echo $deuda_tot_man[0][0]['total_alq'];
+                                    }
+                                    ?>
+                                </strong></span>
+                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo 'Total Alquileres'; ?></h4>
+                        </a>
                         <a href="javascript:void(0)" class="list-group-item">
                             <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
                             <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Deuda Alquileres</b></h4>
