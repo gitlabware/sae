@@ -313,7 +313,7 @@
           <tr>
               <td><?php echo $am['Ambiente']['nombre'] ?></td>
               <td><?php echo $am['Piso']['nombre'] ?></td>
-              <td><?php echo $am['User']['nombre'] ?></td>
+              <td><?php echo $am['Representante']['nombre'] ?></td>
               <td>
                   <?php
                   $monto = $this->requestAction(array('action' => 'get_monto_amb_m_g', $am['Ambiente']['id'], $ano, 1,$tipo));

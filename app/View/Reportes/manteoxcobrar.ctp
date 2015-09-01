@@ -314,7 +314,7 @@
           <tr>
               <td><?php echo $am['Ambiente']['nombre'] ?></td>
               <td><?php echo $am['Piso']['nombre'] ?></td>
-              <td><?php echo $am['User']['nombre'] ?></td>
+              <td><?php echo $am['Representante']['nombre'] ?></td>
               <td><?php echo $ano; ?></td>
               <td>
                   <?php
