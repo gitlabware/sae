@@ -43,11 +43,24 @@
                 <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control', 'required', 'id' => 'idcatpagos')); ?>
             </div>
         </div>
+        <input type="hidden" name="data[Ambiente][representante_id]" id="idrepresen" value="<?php echo $this->request->data['Ambiente']['representante_id'] ?>">
         <div class="form-group">
             <div id="selectpropietario">
                 <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Propietario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'usuario', $idPiso)); ?>')">Propietario</a></label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->select('user_id', $usuarios, array('class' => 'form-control')); ?>
+                <div class="col-md-6">
+                    <?php echo $this->Form->select('user_id', $usuarios, array('class' => 'form-control', 'id' => 'select-prop')); ?>
+                </div>
+                <div class="col-md-2">
+                    <label for="favorite-color-r">
+                        <?php
+                        $checked = '';
+                        if ($this->request->data['Ambiente']['representante_id'] == $this->request->data['Ambiente']['user_id'] && $this->request->data['Ambiente']['user_id'] != NULL) {
+                          $checked = 'checked';
+                        }
+                        ?>
+                        <input type="radio" name="data[Ambiente][representante_id]" required value="<?php echo $this->request->data['Ambiente']['user_id'] ?>" style="color:red;" id="idrepprop" <?php echo $checked; ?>>
+                        Repre
+                    </label>
                 </div>
             </div>
         </div>
@@ -56,14 +69,30 @@
             <div class="form-group">
                 <div id="selectpropietario">
                     <label class="col-md-4 control-label" for="user-settings-email">Inquilino</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->text('inquilino1',array('class' => 'form-control','value' => $in['User']['nombre'],'disabled'));?>
+                    <div class="col-md-6">
+                        <?php echo $this->Form->text('inquilino1', array('class' => 'form-control', 'value' => $in['User']['nombre'], 'disabled')); ?>
+                    </div>
+                    <div class="col-md-2">  
+                        <label for="favorite-color-r">
+                            <?php
+                            $checked = '';
+                            if ($this->request->data['Ambiente']['representante_id'] == $in['User']['id']) {
+                              $checked = 'checked';
+                            }
+                            ?>
+                            <input type="radio" name="data[Ambiente][representante_id]" value="<?php echo $in['User']['id'] ?>" style="color:red;" id="favorite-color-r" <?php echo $checked; ?>>
+                            Repre
+                        </label>
                     </div>
                 </div>
             </div>
           <?php endforeach; ?>
         <?php endif; ?>
-
+        <script>
+          $('#select-prop').change(function () {
+            $('#idrepprop').val($('#select-prop').val());
+          });
+        </script>
         <div class="form-group">
             <label class="col-md-4 control-label" for="user-settings-email">Fecha de Ocupacion</label>
             <div class="col-md-8">

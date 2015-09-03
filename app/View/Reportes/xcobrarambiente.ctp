@@ -297,6 +297,7 @@
           <tr>
               <td>A&Ntilde;O</td>
               <td>OFICINA</td>
+              <td>PISO</td>
               <td>PROPIETARIO</td>
               <td>ENE</td>
               <td>FEB</td>
@@ -317,7 +318,8 @@
             <tr>
                 <td><?php echo $an[0]['ano']; ?></td>
                 <td><?php echo $am['Ambiente']['nombre'] ?></td>
-                <td><?php echo $am['User']['nombre'] ?></td>
+                <td><?php echo $am['Piso']['nombre'] ?></td>
+                <td><?php echo $am['Representante']['nombre'] ?></td>
                 <td>
                     <?php
                     $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 1,$tipo));
@@ -430,6 +432,7 @@
             </tr>
           <?php endforeach; ?>
           <tr>
+              <td></td>
               <td></td>
               <td></td>
               <td>TOTAL</td>

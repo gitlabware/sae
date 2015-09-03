@@ -10,6 +10,9 @@ App::uses('AppModel', 'Model');
  * @property Propietario $Propietario
  * @property Concepto $Concepto
  */
+App::import('model', 'Cuentasporcentaje');
+App::import('model', 'Cuentasmonto');
+
 class Pago extends AppModel {
   //The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -21,6 +24,30 @@ class Pago extends AppModel {
   public $virtualFields = array(
     'monto_total' => "CONCAT( (IF((Pago.porcentaje_interes != 'NULL'),(Pago.monto*Pago.porcentaje_interes/100),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),((Pago.retencion/100)*Pago.monto),0)) )"
   );
+
+  public function afterSave($created, $options = array()) {
+
+    $Cuentasporcentaje = new Cuentasporcentaje();
+
+    $cuentas = $Cuentasporcentaje->find('all', array('recursive' => 0,
+      'conditions' => array(
+        'Cuentasporcentaje.concepto_id' => $this->data['Pago']['concepto_id']
+        , 'Cuenta.edificio_id' => CakeSession::read('Auth.User.edificio_id')
+      ),
+      'fields' => array('Cuentasporcentaje.cuenta_id', 'Cuentasporcentaje.porcentaje')
+    ));
+    $Cuentasmonto = new Cuentasmonto();
+    foreach ($cuentas as $cu) {
+      $datos['monto'] = $this->data['Pago']['monto'] * $cu['Cuentasporcentaje']['porcentaje'] / 100;
+      $datos['pago_id'] = $this->id;
+      $datos['cuenta_id'] = $cu['Cuentasporcentaje']['cuenta_id'];
+      $datos['porcentaje'] = $cu['Cuentasporcentaje']['porcentaje'];
+      $Cuentasmonto->create();
+      $Cuentasmonto->save($datos);
+    }
+    return true;
+  }
+
   public $belongsTo = array(
     'Ambiente' => array(
       'className' => 'Ambiente',

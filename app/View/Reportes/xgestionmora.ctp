@@ -276,7 +276,8 @@
     <table class="CSSTableGenerator">
         <tr class="fuerte">
             <td style="width: 10%; ">Ambiente</td>
-            <td style="width: 10%;">Propietario</td>
+            <td style="width: 8%; ">Piso</td>
+            <td style="width: 10%;">Representante</td>
             <?php for ($i = ($ano - 15); $i <= $ano; $i++): ?>
               <?php $total_a[$i] = 0.00; ?>
               <td><?php echo $i; ?></td>
@@ -287,7 +288,8 @@
         <?php foreach ($ambientes as $am): ?>
           <tr>
               <td><?php echo $am['Ambiente']['nombre'] ?></td>
-              <td><?php echo $am['User']['nombre'] ?></td>
+              <td><?php echo $am['Piso']['nombre'] ?></td>
+              <td><?php echo $am['Representante']['nombre'] ?></td>
               <?php $subtotal = 0.00; ?>
               <?php for ($i = ($ano - 15); $i <= $ano; $i++): ?>
                 <td>
@@ -304,6 +306,7 @@
           </tr>
         <?php endforeach; ?>
         <tr>
+            <td></td>
             <td></td>
             <td>TOTALES</td>
             <?php for ($i = ($ano - 15); $i <= $ano; $i++): ?>

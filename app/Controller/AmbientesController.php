@@ -46,6 +46,7 @@ class AmbientesController extends AppController {
   public function ambiente($idPiso = null, $idAmbiente = null, $idUsuario = NULL, $sw = 0) {
     $this->layout = 'ajax';
     $piso = $this->Piso->findByid($idPiso);
+    $inquilinos = array();
     if (empty($idAmbiente)) {
       if (!empty($idUsuario)) {
         if ($sw) {
@@ -65,6 +66,12 @@ class AmbientesController extends AppController {
     } else {
       $this->Ambiente->id = $idAmbiente;
       $this->request->data = $this->Ambiente->read();
+      $sql = "SELECT * FROM "
+        . "(SELECT user_id,estado FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
+        . " AS Inquilino WHERE 1 GROUP BY user_id";
+      $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
+      $inquilinos = $this->Inquilino->query($sql2);
+      //debug($inquilinos);exit;
     }
     $catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre_completo',
       'conditions' => array('Categoriasambiente.edificio_id' => $piso['Edificio']['id'])
@@ -75,16 +82,14 @@ class AmbientesController extends AppController {
     $categoria_ambientes = $this->Categoriasambiente->find('all');
     $categoria_pagos = $this->Categoriaspago->find('all');
     $usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Propietario')));
-
-    $sql = "SELECT * FROM "
-      . "(SELECT user_id,estado FROM inquilinos WHERE (ambiente_id = $idAmbiente) ORDER BY id DESC)"
-      . " AS Inquilino WHERE 1 GROUP BY user_id";
-    $sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
-    $inquilinos = $this->Inquilino->query($sql2);
+    
     $select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Inquilino')));
+
     $this->set(compact('inquilinos', 'select_inquilinos', 'catambientes', 'piso', 'catpagos', 'usuarios', 'categoria_ambientes', 'categoria_pagos', 'idAmbiente', 'idPiso', 'sw'));
   }
 
+  
+  
   public function guarda_ambiente() {
     if (!empty($this->request->data)) {
       $this->Ambiente->create();
@@ -418,11 +423,11 @@ class AmbientesController extends AppController {
     } else {
       $fecha_alquiler = $datosAmbiente['Ambiente']['fecha_ocupacion'];
     }
-    $ultimas_deudas_man = $this->Pago->find('all', array(
+    $deuda_tot_man = $this->Pago->find('all', array(
       'recursive' => -1,
       'conditions' => array('Pago.estado' => 'Debe', 'Pago.concepto_id' => 10, 'Pago.ambiente_id' => $idAmbiente),
-      'limit' => 5,
-      'order' => 'Pago.id DESC'
+      'group' => array('Pago.ambiente_id'),
+      'fields' => array('SUM(Pago.monto) as total_alq')
     ));
     $deuda_tot_alq = $this->Pago->find('all', array(
       'recursive' => -1,
@@ -461,7 +466,7 @@ class AmbientesController extends AppController {
 
     $edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'), null, null, -1);
     $edificio['Edificio']['retencion_mantenimiento'];
-    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'ultimas_deudas_man', 'deuda_tot_alq', 'ultimos_pagos', 'intereses', 'edificio'));
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'deuda_tot_man', 'deuda_tot_alq', 'ultimos_pagos', 'intereses', 'edificio'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {
@@ -496,20 +501,20 @@ class AmbientesController extends AppController {
 
   public function listadopago($idRecibo = null, $idAmbiente = NULL) {
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
-    $recibo_m = $this->Pago->find('all',array(
+    $recibo_m = $this->Pago->find('all', array(
       'conditions' => array('Pago.recibo_id' => $idRecibo),
       'group' => array('Pago.ambiente_id'),
-      'fields' => array('Pago.monto_tmp','Pago.saldo_tmp')
+      'fields' => array('Pago.monto_tmp', 'Pago.saldo_tmp')
     ));
     $monto_tmp = 0.00;
     $saldo_tmp = 0.00;
-    foreach ($recibo_m as $re){
+    foreach ($recibo_m as $re) {
       $monto_tmp = $monto_tmp + $re['Pago']['monto_tmp'];
       $saldo_tmp = $saldo_tmp + $re['Pago']['saldo_tmp'];
     }
-    $ambiente = $this->Ambiente->findByid($idAmbiente,null,null,-1);
+    $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
     //debug($recibo);exit;
-    $this->set(compact('recibo', 'idAmbiente','monto_tmp','saldo_tmp','ambiente'));
+    $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente'));
   }
 
   public function registra_pagos() {
@@ -686,7 +691,7 @@ class AmbientesController extends AppController {
   }
 
   public function recibo($idRecibo = null, $terminar = null) {
-    /*debug($this->request->data);
+    /* debug($this->request->data);
       exit; */
     $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
@@ -694,7 +699,7 @@ class AmbientesController extends AppController {
       'group' => array('Pago.concepto_id'),
       'fields' => array(
         'Concepto.id',
-        'Concepto.nombre', 
+        'Concepto.nombre',
         "SUM(((IF((Pago.porcentaje_interes != 'NULL'),(Pago.monto*Pago.porcentaje_interes/100),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),((Pago.retencion/100)*Pago.monto),0)))) as imp_total")
     ));
 

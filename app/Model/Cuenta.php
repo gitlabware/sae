@@ -1,11 +1,11 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Concepto Model
+ * Cuenta Model
  *
  * @property Edificio $Edificio
  */
-class Concepto extends AppModel {
+class Cuenta extends AppModel {
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -15,5 +15,13 @@ class Concepto extends AppModel {
  *
  * @var array
  */
-
+	public $belongsTo = array(
+		'Edificio' => array(
+			'className' => 'Edificio',
+			'foreignKey' => 'edificio_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
 }

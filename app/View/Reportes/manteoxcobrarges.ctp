@@ -277,6 +277,7 @@
     <table class="CSSTableGenerator">
         <tr class="fuerte">
             <td style="width: 10%; ">Ambiente</td>
+            <td style="width: 8%; ">Piso</td>
             <td style="width: 10%;">Propietario</td>
             <td>ENE</td>
             <td>FEB</td>
@@ -311,7 +312,8 @@
           <?php $subtotal = 0.00; ?>
           <tr>
               <td><?php echo $am['Ambiente']['nombre'] ?></td>
-              <td><?php echo $am['User']['nombre'] ?></td>
+              <td><?php echo $am['Piso']['nombre'] ?></td>
+              <td><?php echo $am['Representante']['nombre'] ?></td>
               <td>
                   <?php
                   $monto = $this->requestAction(array('action' => 'get_monto_amb_m_g', $am['Ambiente']['id'], $ano, 1,$tipo));
@@ -426,6 +428,7 @@
           </tr>
         <?php endforeach; ?>
         <tr>
+            <td></td>
             <td></td>
             <td>TOTALES</td>
             <td><?php echo $total_a[1] ?></td>

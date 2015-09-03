@@ -43,6 +43,12 @@
                         <li>
                           <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Excels</a>
                         </li>
+                        <li>
+                          <a href="<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'index')); ?>">Cuentas</a>
+                        </li>
+                        <li>
+                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'cuenta')); ?>');">Nueva cuenta</a>
+                        </li>
                     </ul>
                 </li>
                 <!--<li>

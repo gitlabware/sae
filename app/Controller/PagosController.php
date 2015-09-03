@@ -17,7 +17,7 @@ class PagosController extends AppController {
   }
 
   public function excels() {
-    $excels = $this->Excel->find('all', array('order' => 'id DESC'));
+    $excels = $this->Excel->find('all', array('order' => 'id DESC','conditions','conditions' => array('Excel.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('excels'));
   }
 
@@ -414,6 +414,18 @@ class PagosController extends AppController {
     } else {
       return array('monto' => '-', 'estado' => NULL);
     }
+  }
+  
+  public function prueba(){
+    $dat['estado'] = 'Prueba';
+    $dat['ambiente_id'] = 55;
+    $dat['proipietario_id'] = 45;
+    $dat['concepto_id'] = 14;
+    $dat['monto'] = 100.00;
+    $this->Pago->create();
+    $this->Pago->save($dat);
+    debug('sss');
+    exit;
   }
 
 }
