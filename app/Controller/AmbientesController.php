@@ -63,9 +63,7 @@ class AmbientesController extends AppController {
           $this->Session->delete('fambiente');
         }
       }
-      
     } else {
-      
       $this->Ambiente->id = $idAmbiente;
       $this->request->data = $this->Ambiente->read();
       $sql = "SELECT * FROM "
@@ -90,10 +88,10 @@ class AmbientesController extends AppController {
     $this->set(compact('inquilinos', 'select_inquilinos', 'catambientes', 'piso', 'catpagos', 'usuarios', 'categoria_ambientes', 'categoria_pagos', 'idAmbiente', 'idPiso', 'sw'));
   }
 
+  
+  
   public function guarda_ambiente() {
     if (!empty($this->request->data)) {
-      /*debug($this->request->data);
-      exit;*/
       $this->Ambiente->create();
       $valida = $this->validar('Ambiente');
       if (empty($valida)) {

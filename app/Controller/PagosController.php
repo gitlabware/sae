@@ -415,5 +415,17 @@ class PagosController extends AppController {
       return array('monto' => '-', 'estado' => NULL);
     }
   }
+  
+  public function prueba(){
+    $dat['estado'] = 'Prueba';
+    $dat['ambiente_id'] = 55;
+    $dat['proipietario_id'] = 45;
+    $dat['concepto_id'] = 14;
+    $dat['monto'] = 100.00;
+    $this->Pago->create();
+    $this->Pago->save($dat);
+    debug('sss');
+    exit;
+  }
 
 }

@@ -54,11 +54,11 @@
                     <label for="favorite-color-r">
                         <?php
                         $checked = '';
-                        if ($this->request->data['Ambiente']['representante_id'] == $this->request->data['Ambiente']['user_id'] || $this->request->data['Ambiente']['representante_id'] == NULL) {
+                        if ($this->request->data['Ambiente']['representante_id'] == $this->request->data['Ambiente']['user_id'] && $this->request->data['Ambiente']['user_id'] != NULL) {
                           $checked = 'checked';
                         }
                         ?>
-                        <input type="radio" name="data[Ambiente][representante_id]" value="<?php echo $this->request->data['Ambiente']['user_id'] ?>" style="color:red;" id="idrepprop" <?php echo $checked; ?>>
+                        <input type="radio" name="data[Ambiente][representante_id]" required value="<?php echo $this->request->data['Ambiente']['user_id'] ?>" style="color:red;" id="idrepprop" <?php echo $checked; ?>>
                         Repre
                     </label>
                 </div>
@@ -90,14 +90,7 @@
         <?php endif; ?>
         <script>
           $('#select-prop').change(function () {
-              if ($('#idrepprop').prop('checked')) {
-                  $('#idrepresen').val($('#select-prop').val());
-              }
-          });
-          $('#idrepprop').click(function () {
-              if ($('#idrepprop').prop('checked')) {
-                  $('#idrepresen').val($('#select-prop').val());
-              }
+            $('#idrepprop').val($('#select-prop').val());
           });
         </script>
         <div class="form-group">
