@@ -26,9 +26,8 @@ class Pago extends AppModel {
   );
 
   public function afterSave($created, $options = array()) {
-
     $Cuentasporcentaje = new Cuentasporcentaje();
-
+    
     $cuentas = $Cuentasporcentaje->find('all', array('recursive' => 0,
       'conditions' => array(
         'Cuentasporcentaje.concepto_id' => $this->data['Pago']['concepto_id']
