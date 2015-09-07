@@ -231,5 +231,26 @@ class EdificiosController extends AppController {
     $nro_usuarios = $this->User->find('count', array('conditions' => array('User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('edificio', 'nro_pisos', 'nro_ambientes', 'nro_usuarios'));
   }
+  
+  public function piso(){
+    $this->layout = 'ajax';
+    if(!empty($this->request->data['Piso'])){
+      $idEdificio = $this->Session->read('Auth.User.edificio_id');
+      $this->Piso->create();
+      $this->request->data['Piso']['edificio_id'] = $idEdificio;
+      $this->Piso->save($this->request->data['Piso']);
+      $this->Session->setFlash("Se registrpo correctamente!!!",'msgbueno');
+      $this->redirect($this->referer());
+    }
+  }
+  
+  public function elimina_piso($idPiso = null){
+    if($this->Piso->delete($idPiso)){
+      $this->Session->setFlash("Se ha eliminado correctamente el piso!!",'msgbueno');
+    }else{
+      $this->Session->setFlash("No se ha podido eliminar el piso intentelo nuevamente!!",'msgerror');
+    }
+    $this->redirect($this->referer());
+  }
 
 }

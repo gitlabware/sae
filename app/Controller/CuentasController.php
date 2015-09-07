@@ -44,21 +44,24 @@ class CuentasController extends AppController {
       'conditions' => array('Cuentasporcentaje.concepto_id' => $idConcepto),
       'fields' => array('Cuentasporcentaje.cuenta_id', 'Cuentasporcentaje.porcentaje', 'Cuentasporcentaje.id')
     ));
-
+    /*debug($porcentajes);
+    exit;*/
     foreach ($cuentas as $key => $cu) {
       if (!empty(array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'))) {
         $key2 = array_search($cu['Cuenta']['id'], array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'));
-        if (isset($key2)) {
+        
+        if (isset($key2) && $key2 !== false) {
           $this->request->data['Cuentasporcentaje'][$key]['id'] = $porcentajes[$key2]['Cuentasporcentaje']['id'];
           $this->request->data['Cuentasporcentaje'][$key]['porcentaje'] = $porcentajes[$key2]['Cuentasporcentaje']['porcentaje'];
         }
       }
     }
-
     $this->set(compact('cuentas', 'concepto', 'porcentajes'));
   }
 
   public function guarda_porcentaje() {
+    /*debug($this->request->data);
+    exit;*/
     if (!empty($this->request->data['Cuentasporcentaje'])) {
       foreach ($this->request->data['Cuentasporcentaje'] as $cu) {
         $this->Cuentasporcentaje->create();
