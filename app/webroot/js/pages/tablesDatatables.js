@@ -25,9 +25,13 @@ var TablesDatatables = function () {
                 'bProcessing': true,
                 'sAjaxSource': urljsontablatrab,
                 'sServerMethod': 'POST',
+                "bServerSide": true,
                 "order": []
 
                         //"aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
+            }).columnFilter({
+                sPlaceHolder: "head:before",
+                aoColumns: filtro_c
             });
 
             /* Add placeholder attribute to the search input */

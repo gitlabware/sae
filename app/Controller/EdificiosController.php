@@ -4,13 +4,15 @@ App::uses('AppController', 'Controller');
 
 class EdificiosController extends AppController {
 
-  var $components = array('RequestHandler');
+  var $components = array('RequestHandler', 'DataTable');
   public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User', 'Edificioconcepto', 'Ambienteconcepto', 'Retencione', 'GenCategoriasambiente', 'GenCategoriaspago');
   public $layout = 'sae';
 
   public function beforeFilter() {
     parent::beforeFilter();
-    $this->Auth->allow();
+    if ($this->RequestHandler->responseType() == 'json') {
+      $this->RequestHandler->setContent('json', 'application/json');
+    }
   }
 
   public function index() {
@@ -46,13 +48,13 @@ class EdificiosController extends AppController {
             $this->request->data['Edificio']['imagen'] = $nombre_archivo;
           }
         } else {
-          $this->Session->setFlash('Ocurrio un error al cargar la imagen ' . $archivo['name'],'msgerror');
+          $this->Session->setFlash('Ocurrio un error al cargar la imagen ' . $archivo['name'], 'msgerror');
           $this->redirect($this->referer());
         }
       }
 
-      /*debug($this->request->data);
-      exit;*/
+      /* debug($this->request->data);
+        exit; */
       $this->Edificio->create();
       $valida = $this->validar('Edificio');
       if (empty($valida)) {
@@ -231,26 +233,48 @@ class EdificiosController extends AppController {
     $nro_usuarios = $this->User->find('count', array('conditions' => array('User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('edificio', 'nro_pisos', 'nro_ambientes', 'nro_usuarios'));
   }
-  
-  public function piso(){
+
+  public function piso() {
     $this->layout = 'ajax';
-    if(!empty($this->request->data['Piso'])){
+    if (!empty($this->request->data['Piso'])) {
       $idEdificio = $this->Session->read('Auth.User.edificio_id');
       $this->Piso->create();
       $this->request->data['Piso']['edificio_id'] = $idEdificio;
       $this->Piso->save($this->request->data['Piso']);
-      $this->Session->setFlash("Se registrpo correctamente!!!",'msgbueno');
+      $this->Session->setFlash("Se registrpo correctamente!!!", 'msgbueno');
       $this->redirect($this->referer());
     }
   }
-  
-  public function elimina_piso($idPiso = null){
-    if($this->Piso->delete($idPiso)){
-      $this->Session->setFlash("Se ha eliminado correctamente el piso!!",'msgbueno');
-    }else{
-      $this->Session->setFlash("No se ha podido eliminar el piso intentelo nuevamente!!",'msgerror');
+
+  public function elimina_piso($idPiso = null) {
+    if ($this->Piso->delete($idPiso)) {
+      $this->Session->setFlash("Se ha eliminado correctamente el piso!!", 'msgbueno');
+    } else {
+      $this->Session->setFlash("No se ha podido eliminar el piso intentelo nuevamente!!", 'msgerror');
     }
     $this->redirect($this->referer());
+  }
+
+  public function ambientes() {
+    $edificioId = $this->Session->read('Auth.User.edificio_id');
+    if ($this->RequestHandler->responseType() == 'json') {
+      $editar = '<button class="btn btn-info" type="button" title="Editar" onclick="editar(' . "',Ambiente.piso_id,'" . ',' . "',Ambiente.id,'" . ')"><i class="gi gi-edit"></i></button>';
+      $eliminar = '<button class="btn btn-danger" type="button" title="Eliminar" onclick="eliminar(' . "',Ambiente.id,'" . ')"><i class="gi gi-remove"></i></button>';
+      $acciones = '<div class="btn-group btn-group-sm"> ' . $editar . ' '.$eliminar.' </div>';
+      $this->Ambiente->virtualFields = array(
+        'acciones' => "CONCAT('$acciones')"
+      );
+      $this->paginate = array(
+        'fields' => array('Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Piso.nombre', 'Ambiente.acciones'),
+        'conditions' => array('Ambiente.edificio_id' => $edificioId),
+        'recursive' => 0,
+        'order' => 'Ambiente.nombre ASC'
+      );
+      $this->DataTable->fields = array('Piso.nombre','Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos',  'Ambiente.acciones');
+      $this->DataTable->emptyEleget_usuarios_adminments = 1;
+      $this->set('ambientes', $this->DataTable->getResponse('Edificios','Ambiente'));
+      $this->set('_serialize', 'ambientes');
+    }
   }
 
 }

@@ -1,11 +1,4 @@
-<!-- Blank Header -->
-<div class="content-header">
-    <div class="header-section">
-        <h1>
-            <i class="gi gi-brush"></i>Edificio <?php echo $edificio['Edificio']['nombre'] ?><br>
-        </h1>
-    </div>
-</div>
+
 <?php foreach ($pisos as $pi): ?>
   <div class="block">
       <!-- Interactive Title -->

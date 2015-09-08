@@ -45,6 +45,7 @@ class Pago extends AppModel {
     ));
     $Cuentasmonto = new Cuentasmonto();
     foreach ($cuentas as $cu) {
+      $Cuentasmonto->deleteAll(array('pago_id' => $idPago,'cuenta_id' => $cu['Cuentasporcentaje']['cuenta_id']));
       $datos['monto'] = $pago['Pago']['monto'] * $cu['Cuentasporcentaje']['porcentaje'] / 100;
       $datos['pago_id'] = $idPago;
       $datos['cuenta_id'] = $cu['Cuentasporcentaje']['cuenta_id'];

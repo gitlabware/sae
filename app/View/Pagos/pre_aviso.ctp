@@ -307,7 +307,7 @@
               <td><?php echo $ges['Pago']['gestion']; ?></td>
               <?php for ($i = 1; $i <= 12; $i++): ?>
                 <td>
-                    <?php $pago = $this->requestAction(array('action' => 'get_pag_ges', $idAmbiente, 11, $ges['Pago']['gestion'], $i)) ?>
+                    <?php $pago = $this->requestAction(array('action' => 'get_pag_ges', $idAmbiente, $idConcepto, $ges['Pago']['gestion'], $i)) ?>
                     <?php
                     if ($pago['estado'] == 'Debe') {
                       echo '<b>' . $pago['monto'] . '</b>';

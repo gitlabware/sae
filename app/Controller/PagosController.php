@@ -394,7 +394,6 @@ class PagosController extends AppController {
       'group' => array('gestion'),
       'fields' => array('gestion')
     ));
-
     $this->set(compact('idAmbiente', 'idConcepto', 'gestiones', 'ambiente'));
   }
 

@@ -33,7 +33,7 @@
                                     }
                                     ?>
                                 </strong></span>
-                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo 'Total Alquileres'; ?></h4>
+                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-money fa-fw"></i> <?php echo 'Total Mantenimiento'; ?></h4>
                         </a>
                         <a href="javascript:void(0)" class="list-group-item">
                             <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
@@ -1127,7 +1127,8 @@
       $('#idmontot').html(monto_totalt);
 
       $('#dato-monto').val(monto_totalt);
-      var cambiot = parseFloat($('#id_cambio_total').html());
+      var cambiot = Math.round(parseFloat($('#id_cambio_total').html()) * 100) / 100;
+      
       $('#dato-cambio').val(cambiot);
       //alert(total_total);
 
@@ -1215,7 +1216,7 @@
           $('#otros-pagar').prop('checked', false);
           //find otros
       }
-
+      saldo_amb = Math.round(parseFloat(saldo_amb) * 100) / 100;
       $('.cambio').val(saldo_amb);
       $('#id_cambio_total').html(saldo_amb);
       $('#dato-cambio').val(saldo_amb);

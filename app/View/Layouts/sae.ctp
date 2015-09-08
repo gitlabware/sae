@@ -50,6 +50,7 @@
         <script src="<?php echo $this->webroot; ?>js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
         <script>
         var urljsontablatrab = '';
+        var filtro_c = [];
         </script>
     </head>
     <!-- In the PHP version you can set the following options from inc/config file -->
@@ -368,6 +369,7 @@
         <script type="text/javascript" src="<?php echo $this->webroot; ?>js/jquery.scrollTo.js"></script>
         
         <script src="<?php echo $this->webroot; ?>js/pages/tablesDatatables.js"></script>
+        <script src="<?php echo $this->webroot; ?>js/jquery.dataTables.columnFilter.js"></script>
         <script>$(function(){ TablesDatatables.init(); });</script>
         <script>
             $('#form-edificio').validate();

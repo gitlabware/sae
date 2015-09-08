@@ -9,7 +9,8 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Fecha</th>
+                    <th>Fecha de Pago</th>
+                    <th>Corresponde a fecha</th>
                     <th>Concepto</th>
                     <th>Porcentaje</th>
                     <th>Monto</th>
@@ -21,6 +22,7 @@
                 <?php foreach ($ingresos as $in): ?>
                   <tr>
                       <td><?php echo $in['Cuentasmonto']['created']?></td>
+                      <td><?php echo $in['Pago']['fecha']?></td>
                       <td><?php echo $in['Cuentasmonto']['concepto']?></td>
                       <td><?php echo $in['Cuentasmonto']['porcentaje']?></td>
                       <td><?php echo $in['Pago']['monto']*$in['Cuentasmonto']['porcentaje']/100?></td>
