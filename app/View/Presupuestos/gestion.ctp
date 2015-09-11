@@ -1,6 +1,6 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-calendar"></i> Gestion</h2>
+    <h2 class="modal-title"><i class="fa fa-calendar"></i> Presupuesto</h2>
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
@@ -13,10 +13,10 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label">A&ntilde;o</label>
                     <div class="col-md-8">
-                        <?php echo $this->Form->hidden('Gestione.id'); ?>
+                        <?php echo $this->Form->hidden('id'); ?>
                         <?php $idEdificio =  $this->Session->read('Auth.User.edificio_id')?>
-                        <?php echo $this->Form->hidden('Gestione.edificio_id',array('value' => $idEdificio)); ?>
-                        <?php echo $this->Form->text('Gestione.ano', array('class' => 'form-control', 'placeholder' => 'Ingrese el año', 'required','type' => 'number','min' => 2014,'max' => 2050)); ?>
+                        <?php echo $this->Form->hidden('edificio_id',array('value' => $idEdificio)); ?>
+                        <?php echo $this->Form->text('gestion', array('class' => 'form-control', 'placeholder' => 'Ingrese el año', 'required','type' => 'number','min' => 1900,'max' => 2050)); ?>
                     </div>
                 </div>
             </fieldset>

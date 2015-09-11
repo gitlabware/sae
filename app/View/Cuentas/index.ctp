@@ -27,7 +27,8 @@
                       <td><?php echo $cu['Cuenta']['nombre'] ?></td>
                       <td><?php echo $cu['Cuenta']['descripcion'] ?></td>
                       <td>
-                          <a class="btn btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'cuenta', $cu['Cuenta']['id'])); ?>');"> <i class="gi gi-edit"></i> </a>  
+                          <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'cuenta', $cu['Cuenta']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
+                          <?php echo $this->Html->link('<i class="fa fa-money"></i>',array('action' => 'ingresos',$cu['Cuenta']['id']),array('class' => 'btn btn-sm btn-success','escape' => FALSE,'title' => 'Ingresos')); ?>
                       </td>
                   </tr>
                 <?php endforeach; ?>

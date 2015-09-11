@@ -26,20 +26,28 @@ class Pago extends AppModel {
   );
 
   public function afterSave($created, $options = array()) {
-
+    if (!empty($this->data['Pago']['id'])) {
+      $idPago = $this->data['Pago']['id'];
+    } else {
+      $idPago = $this->id;
+    }
+    $pago = $this->find('first', array(
+      'recursive' => -1,
+      'conditions' => array('id' => $idPago)
+    ));
     $Cuentasporcentaje = new Cuentasporcentaje();
-
     $cuentas = $Cuentasporcentaje->find('all', array('recursive' => 0,
       'conditions' => array(
-        'Cuentasporcentaje.concepto_id' => $this->data['Pago']['concepto_id']
+        'Cuentasporcentaje.concepto_id' => $pago['Pago']['concepto_id']
         , 'Cuenta.edificio_id' => CakeSession::read('Auth.User.edificio_id')
       ),
       'fields' => array('Cuentasporcentaje.cuenta_id', 'Cuentasporcentaje.porcentaje')
     ));
     $Cuentasmonto = new Cuentasmonto();
     foreach ($cuentas as $cu) {
-      $datos['monto'] = $this->data['Pago']['monto'] * $cu['Cuentasporcentaje']['porcentaje'] / 100;
-      $datos['pago_id'] = $this->id;
+      $Cuentasmonto->deleteAll(array('pago_id' => $idPago,'cuenta_id' => $cu['Cuentasporcentaje']['cuenta_id']));
+      $datos['monto'] = $pago['Pago']['monto'] * $cu['Cuentasporcentaje']['porcentaje'] / 100;
+      $datos['pago_id'] = $idPago;
       $datos['cuenta_id'] = $cu['Cuentasporcentaje']['cuenta_id'];
       $datos['porcentaje'] = $cu['Cuentasporcentaje']['porcentaje'];
       $Cuentasmonto->create();

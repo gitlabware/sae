@@ -43,7 +43,17 @@
                 <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control', 'required', 'id' => 'idcatpagos')); ?>
             </div>
         </div>
-        <input type="hidden" name="data[Ambiente][representante_id]" id="idrepresen" value="<?php echo $this->request->data['Ambiente']['representante_id'] ?>">
+        <?php 
+        $representante_id = '';
+        if(!empty($this->request->data['Ambiente']['representante_id'])){
+          $representante_id = $this->request->data['Ambiente']['representante_id'];
+        }
+        $user_id = '';
+        if(!empty($this->request->data['Ambiente']['user_id'])){
+          $user_id = $this->request->data['Ambiente']['user_id'];
+        }
+        ?>
+        <input type="hidden" name="data[Ambiente][representante_id]" id="idrepresen" value="<?php echo $representante_id ?>">
         <div class="form-group">
             <div id="selectpropietario">
                 <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Propietario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'usuario', $idPiso)); ?>')">Propietario</a></label>
@@ -54,11 +64,11 @@
                     <label for="favorite-color-r">
                         <?php
                         $checked = '';
-                        if ($this->request->data['Ambiente']['representante_id'] == $this->request->data['Ambiente']['user_id'] && $this->request->data['Ambiente']['user_id'] != NULL) {
+                        if (!empty($this->request->data['Ambiente']['representante_id']) && $this->request->data['Ambiente']['representante_id'] == $this->request->data['Ambiente']['user_id'] && $this->request->data['Ambiente']['user_id'] != NULL) {
                           $checked = 'checked';
                         }
                         ?>
-                        <input type="radio" name="data[Ambiente][representante_id]" required value="<?php echo $this->request->data['Ambiente']['user_id'] ?>" style="color:red;" id="idrepprop" <?php echo $checked; ?>>
+                        <input type="radio" name="data[Ambiente][representante_id]" required value="<?php echo $user_id ?>" style="color:red;" id="idrepprop" <?php echo $checked; ?>>
                         Repre
                     </label>
                 </div>

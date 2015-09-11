@@ -32,7 +32,15 @@
                     <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'datos')); ?>"><i class="gi gi-charts sidebar-nav-icon"></i>Panel de Control</a>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>"><i class="gi gi-tags sidebar-nav-icon"></i>Ambientes</a>
+                    <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-tags sidebar-nav-icon"></i>Ambientes</a>
+                    <ul>
+                        <li>
+                          <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>">Ambientes Piso</a>
+                        </li>
+                        <li>
+                          <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'ambientes')); ?>">Listado de ambientes</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>

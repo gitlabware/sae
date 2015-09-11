@@ -513,7 +513,7 @@ class AmbientesController extends AppController {
       $saldo_tmp = $saldo_tmp + $re['Pago']['saldo_tmp'];
     }
     $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
-    //debug($recibo);exit;
+    //debug($monto_tmp);exit;
     $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente'));
   }
 

@@ -84,7 +84,7 @@ $Pago = new Pago();
                     <td>MONTO: </td>
                     <td><?php echo $this->Form->text('Recibo.monto', array('class' => 'form-control', 'id' => 'dato-monto', 'value' => $monto_tmp, 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
                     <td>GUARDAR CAMBIO: </td>
-                    <td><?php echo $this->Form->text('Dato.cambio', array('class' => 'form-control', 'id' => 'dato-cambio', 'value' => ($monto_tmp + $saldo - $total), 'type' => 'number', 'step' => 'any', 'required')); ?></td>
+                    <td><?php echo $this->Form->text('Dato.cambio', array('class' => 'form-control', 'id' => 'dato-cambio', 'value' => ($monto_tmp + $saldo - round($total,2)), 'type' => 'number', 'step' => 'any', 'required')); ?></td>
                     <td></td>
                     <td></td>
                 </tr>
