@@ -1,11 +1,11 @@
 <?php
-App::uses('Presupuesto', 'Model');
+App::uses('Subconcepto', 'Model');
 
 /**
- * Presupuesto Test Case
+ * Subconcepto Test Case
  *
  */
-class PresupuestoTest extends CakeTestCase {
+class SubconceptoTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,7 +13,7 @@ class PresupuestoTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.presupuesto',
+		'app.subconcepto',
 		'app.edificio',
 		'app.ambiente',
 		'app.categoriasambiente',
@@ -34,7 +34,7 @@ class PresupuestoTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Presupuesto = ClassRegistry::init('Presupuesto');
+		$this->Subconcepto = ClassRegistry::init('Subconcepto');
 	}
 
 /**
@@ -43,7 +43,7 @@ class PresupuestoTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->Presupuesto);
+		unset($this->Subconcepto);
 
 		parent::tearDown();
 	}

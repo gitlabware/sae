@@ -1,12 +1,4 @@
-<!-- Blank Header -->
-<div class="content-header">
-    <div class="header-section">
-        <h1>
-            <i class="gi gi-brush"></i>Gestiones<br>
-        </h1>
-    </div>
-</div>
-<!-- END Blank Header -->
+
 <!-- Example Block -->
 <div class="block">
     <!-- Example Title -->
@@ -29,9 +21,9 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($gestiones as $ges): ?>
+                <?php foreach ($presupuestos as $pre): ?>
                     <tr>
-                        <td><?php echo $ges['Gestione']['ano']; ?></td>
+                        <td><?php echo $pre['Presupuesto']['gestion']; ?></td>
                         <td class="text-center">
                             <div class="btn-group btn-group-xs">
                                 <?php echo $this->Html->link('<i class="fa fa-table"></i>',array('action' => 'presupuestos',$ges['Gestione']['id']),array('class' => 'btn btn-info','title' => 'Presupuesto','escape' => FALSE));?>
