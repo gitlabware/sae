@@ -98,6 +98,9 @@
                         <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuario')); ?>');">Usuarios</a>
                     </ul>
                 </li>
+                <li>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos','action' => 'index'));?>"><i class="gi gi-coins sidebar-nav-icon"></i>Presupuestos</a>
+                </li>
             </ul>
             <!-- END Sidebar Navigation -->
         </div>
