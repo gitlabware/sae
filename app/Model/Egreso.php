@@ -3,14 +3,15 @@
 App::uses('AppModel', 'Model');
 
 /**
- * Ingreso Model
+ * Egreso Model
  *
  * @property Presupuesto $Presupuesto
- * @property Concepto $Concepto
- * @property Subconcepto $Subconcepto
+ * @property Gasto $Gasto
+ * @property Subgasto $Subgasto
  */
-class Ingreso extends AppModel {
+class Egreso extends AppModel {
 
+  //The Associations below have been created with all possible keys, those that are not needed can be removed
   public $validate = array(
     'presupuesto_id' => array(
       'limitDuplicateskcb' => array(
@@ -23,22 +24,20 @@ class Ingreso extends AppModel {
   public function limitDuplicateskcb($check, $limit) {
 
     //$check = array();
-    if (!empty($this->data['Ingreso']['id'])) {
-      $check['Ingreso.id !='] = $this->data['Ingreso']['id'];
+    if (!empty($this->data['Egreso']['id'])) {
+      $check['Egreso.id !='] = $this->data['Egreso']['id'];
     }
-    $check['Ingreso.subconcepto_id'] = $this->data['Ingreso']['subconcepto_id'];
-    $check['Ingreso.concepto_id'] = $this->data['Ingreso']['concepto_id'];
-    /*debug($this->data);
-    debug($check);
-    exit;*/
+    $check['Egreso.subgasto_id'] = $this->data['Egreso']['subgasto_id'];
+    $check['Egreso.gasto_id'] = $this->data['Egreso']['gasto_id'];
+    /* debug($this->data);
+      debug($check);
+      exit; */
     $existingPromoCount = $this->find('count', array(
       'conditions' => $check,
       'recursive' => -1
     ));
     return $existingPromoCount < $limit;
   }
-
-  //The Associations below have been created with all possible keys, those that are not needed can be removed
 
   /**
    * belongsTo associations
@@ -53,16 +52,16 @@ class Ingreso extends AppModel {
       'fields' => '',
       'order' => ''
     ),
-    'Concepto' => array(
-      'className' => 'Concepto',
-      'foreignKey' => 'concepto_id',
+    'Gasto' => array(
+      'className' => 'Gasto',
+      'foreignKey' => 'gasto_id',
       'conditions' => '',
       'fields' => '',
       'order' => ''
     ),
-    'Subconcepto' => array(
-      'className' => 'Subconcepto',
-      'foreignKey' => 'subconcepto_id',
+    'Subgasto' => array(
+      'className' => 'Subgasto',
+      'foreignKey' => 'subgasto_id',
       'conditions' => '',
       'fields' => '',
       'order' => ''

@@ -37,7 +37,8 @@ class EdificiosController extends AppController {
 
   public function guarda_edificio() {
     if (!empty($this->request->data)) {
-      if (!empty($this->request->data['Edificio']['imagen_up'])) {
+      //debug($this->request->data);exit;
+      if (!empty($this->request->data['Edificio']['imagen_up']['name'])) {
         $archivo = $this->request->data['Edificio']['imagen_up'];
         $extension = explode('.', $archivo['name']);
         $ext = end($extension);
@@ -83,6 +84,7 @@ class EdificiosController extends AppController {
   }
 
   public function registra_categorias($idEdificio = null) {
+    $this->request->data['Edificio']['categoriasambiente_id'] = NULL;
     if (!empty($this->request->data['Edificio']['gcategoriasambiente_id'])) {
       $categoria_ambiente = $this->GenCategoriasambiente->findByid($this->request->data['Edificio']['gcategoriasambiente_id'], null, null, -1);
       $this->request->data['Categoriasambiente']['nombre'] = $categoria_ambiente['GenCategoriasambiente']['nombre'];
@@ -92,6 +94,7 @@ class EdificiosController extends AppController {
       $datos_e['categoriasambiente_id'] = $this->Categoriasambiente->getLastInsertID();
       $this->request->data['Edificio']['categoriasambiente_id'] = $datos_e['categoriasambiente_id'];
     }
+    $this->request->data['Edificio']['categoriaspago_id'] = NULL;
     if (!empty($this->request->data['Edificio']['gcategoriasambiente_id'])) {
       $categoria_pago = $this->GenCategoriaspago->findByid($this->request->data['Edificio']['gcategoriaspago_id'], null, null, -1);
       $this->request->data['Categoriaspago']['nombre'] = $categoria_pago['GenCategoriaspago']['nombre'];

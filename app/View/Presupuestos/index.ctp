@@ -26,9 +26,8 @@
                         <td><?php echo $pre['Presupuesto']['gestion']; ?></td>
                         <td class="text-center">
                             <div class="btn-group btn-group-xs">
-                                <?php echo $this->Html->link('<i class="fa fa-table"></i>',array('action' => 'presupuestos',$ges['Gestione']['id']),array('class' => 'btn btn-info','title' => 'Presupuesto','escape' => FALSE));?>
-                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'gestion',$ges['Gestione']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$ges['Gestione']['id']),array('class' => 'btn btn-danger','title' => 'Eliminar Edificio','confirm' => 'Esta seguro de eliminar al edificio '.$ges['Gestione']['ano'].'??','escape' => FALSE))?>
+                                <a href="<?php echo $this->Html->url(array('action' => 'presupuesto',$pre['Presupuesto']['id'])); ?>" title="Editar" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$pre['Presupuesto']['id']),array('class' => 'btn btn-danger','title' => 'Eliminar Edificio','confirm' => 'Esta seguro de eliminar al edificio '.$pre['Presupuesto']['gestion'].'??','escape' => FALSE))?>
                             </div>
                         </td>
                     </tr>
