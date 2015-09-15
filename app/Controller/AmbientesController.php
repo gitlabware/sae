@@ -81,7 +81,7 @@ class AmbientesController extends AppController {
     ));
     $categoria_ambientes = $this->Categoriasambiente->find('all');
     $categoria_pagos = $this->Categoriaspago->find('all');
-    $usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Propietario')));
+    $usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Propietario'), 'order'=>'User.nombre ASC'));
     
     $select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Inquilino')));
 
