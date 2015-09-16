@@ -228,7 +228,7 @@
                 <?php foreach ($pgastos as $gas): ?>
                   <tr class="text-info text-uppercase info" style="font-weight: bold; font-size: 15px;">
                       <td><?php echo $gas['Gasto']['nombre'] ?></td>
-                      
+
                       <td><?php echo $gas[0]['pres_anterior'] ?></td>
                       <td><?php echo $gas[0]['ejec_anterior'] ?></td>
                       <td><?php echo $gas[0]['presupuesto'] ?></td>
@@ -285,9 +285,11 @@
             </tbody>
         </table>
     </div>
-</div>
 
+
+</div>
 <script>
+
   //---------------- INGRESOS --------------//
   function muestra_form_c() {
       $('#concepto-select').toggle(400);

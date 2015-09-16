@@ -73,9 +73,11 @@
                   {
                       if ($.parseJSON(data).mensaje != '')
                       {
+                        
                           mensaje($.parseJSON(data).mensaje);
                           $('div.modal-body').scrollTo(0, 800);
                       } else {
+                          
                           direccion = '<?php echo $this->Html->url(array('action' => 'ambiente', $idPiso, 0)) ?>/' + $.parseJSON(data).usuario + '/1';
                           cargarmodal(direccion);
                       }

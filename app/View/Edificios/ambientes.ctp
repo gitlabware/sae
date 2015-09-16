@@ -1,20 +1,34 @@
 <!-- Example Block -->
 <div class="row">
-
+    <style>
+        .table {
+            width: 100% !important;
+        }
+        #piso{
+            width: 12% !important;
+        }
+        #ambiente{
+            width: 15% !important;
+        }
+        #acciones{
+          width: 20% !important;
+        }
+    </style>
     <!-- Interactive Block -->
     <div class="block">
         <!-- Interactive Title -->
         <div class="block-title">
             <h2><strong>Listado de Ambientes</strong></h2>
             <div class="table-responsive">
-                <table id="tabla-json" class="table table-vcenter table-condensed table-bordered">
+                <table id="tabla-json" class="table table-vcenter table-condensed table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th>Piso</th>
-                            <th>Ambiente</th>
-                            <th>Propietario</th>
-                            <th>Inquilinos</th>
-                            <th>Accion</th>
+                            <th id="piso">Piso</th>
+                            <th id="ambiente">Ambiente</th>
+                            <th id="propietario">Propietario</th>
+                            <th id="inquilinos">Inquilinos</th>
+                            <th id="representante">Representante</th>
+                            <th id="acciones">Accion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,9 +50,14 @@
           window.location.href = '<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'eliminar')) ?>/' + idAmbiente;
       }
   }
+  
+  function ir_pagos(idAmbiente){
+    window.location = '<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'pay'));?>/'+idAmbiente;
+  }
 
 
   filtro_c = [
+      {type: "text"},
       {type: "text"},
       {type: "text"},
       {type: "text"},

@@ -52,6 +52,7 @@
         var urljsontablatrab = '';
         var filtro_c = [];
         </script>
+        
     </head>
     <!-- In the PHP version you can set the following options from inc/config file -->
     <!--
@@ -60,6 +61,7 @@
         'page-loading'      enables page preloader
     -->
     <body>
+        
         <!-- Preloader -->
         <!-- Preloader functionality (initialized in js/app.js) - pageLoading() -->
         <!-- Used only if page preloader is enabled from inc/config (PHP version) or the class 'page-loading' is added in body element (HTML version) -->
@@ -293,9 +295,13 @@
                 <!-- END Header -->
 
                 <!-- Page content -->
+                <style>
+            #tabla-json input{
+                width: 100%;
+            }
+        </style>
                 <div id="page-content">
-                    <?php echo $this->Session->flash(); ?>
-                    <br>
+                    
                     <?php echo $this->fetch('content'); ?>
                 </div>
                 <!-- END Page Content -->
@@ -413,6 +419,7 @@
 
             }
         </script>
+        <?php echo $this->Session->flash(); ?>
         
     </body>
 </html>

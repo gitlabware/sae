@@ -21,6 +21,12 @@ class User extends AppModel {
         'rule' => array('limitDuplicates', 1)
         , 'message' => 'EL nombre de usuario ya existe!!!!'
       )
+    ),
+    'nombre' => array(
+      'DuplicatesPropietario' => array(
+        'rule' => array('DuplicatesPropietario', 1)
+        , 'message' => 'EL propietario ya existe!!!!'
+      )
     )
   );
 
@@ -35,6 +41,26 @@ class User extends AppModel {
       'recursive' => -1
     ));
     return $existingPromoCount < $limit;
+  }
+
+  public function DuplicatesPropietario($check, $limit) {
+
+    if (!empty($this->data['User']['id'])) {
+      $id = $this->data['User']['id'];
+      $check['User.id !='] = $id;
+    }
+    if ($this->data['User']['role'] == 'Propietario') {
+      $check['User.ci'] = $this->data['User']['ci'];
+      $check['User.role'] = $this->data['User']['role'];
+      $check['User.edificio_id'] = $this->data['User']['edificio_id'];
+      $existingPromoCount = $this->find('count', array(
+        'conditions' => $check,
+        'recursive' => -1
+      ));
+      return $existingPromoCount < $limit;
+    }else{
+      return TRUE;
+    }
   }
 
   public $belongsTo = array(

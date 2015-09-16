@@ -262,18 +262,19 @@ class EdificiosController extends AppController {
     $edificioId = $this->Session->read('Auth.User.edificio_id');
     if ($this->RequestHandler->responseType() == 'json') {
       $editar = '<button class="btn btn-info" type="button" title="Editar" onclick="editar(' . "',Ambiente.piso_id,'" . ',' . "',Ambiente.id,'" . ')"><i class="gi gi-edit"></i></button>';
+      $pagos = '<button class="btn btn-success" type="button" title="Pagos" onclick="ir_pagos(' . "',Ambiente.id,'" . ')"><i class="fa fa-dollar"></i></button>';
       $eliminar = '<button class="btn btn-danger" type="button" title="Eliminar" onclick="eliminar(' . "',Ambiente.id,'" . ')"><i class="gi gi-remove"></i></button>';
-      $acciones = '<div class="btn-group btn-group-sm"> ' . $editar . ' '.$eliminar.' </div>';
+      $acciones = '<div class="btn-group btn-group-sm"> ' . $editar . ' '.$pagos.' '.$eliminar.' </div>';
       $this->Ambiente->virtualFields = array(
         'acciones' => "CONCAT('$acciones')"
       );
       $this->paginate = array(
-        'fields' => array('Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Piso.nombre', 'Ambiente.acciones'),
+        'fields' => array('Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Representante.nombre','Piso.nombre', 'Ambiente.acciones'),
         'conditions' => array('Ambiente.edificio_id' => $edificioId),
         'recursive' => 0,
         'order' => 'Ambiente.nombre ASC'
       );
-      $this->DataTable->fields = array('Piso.nombre','Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos',  'Ambiente.acciones');
+      $this->DataTable->fields = array('Piso.nombre','Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Representante.nombre',  'Ambiente.acciones');
       $this->DataTable->emptyEleget_usuarios_adminments = 1;
       $this->set('ambientes', $this->DataTable->getResponse('Edificios','Ambiente'));
       $this->set('_serialize', 'ambientes');

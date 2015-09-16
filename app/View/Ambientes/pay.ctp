@@ -86,16 +86,16 @@
                 <div class="block">
                     <div class="form-horizontal form-bordered">
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Inquilino: </label>
-                            <div class="col-md-9">
+                            <h3>Representante: <?php echo $datosAmbiente['Representante']['nombre']?></h3>
+                            <!--<div class="col-md-9">
                                 <select class="form-control" name="data[Pago][inquilino_id]">
                                     <option value="">Seleccione al inquilino</option>
-                                    <?php foreach ($inquilinos as $inq): ?>
-                                      <option value="<?php echo $inq['Inquilino']['id']; ?>"><?php echo $inq['User']['nombre'] ?></option>
-                                    <?php endforeach; ?>
+                                    <?php //foreach ($inquilinos as $inq): ?>
+                                      <option value="<?php //echo $inq['Inquilino']['id']; ?>"><?php //echo $inq['User']['nombre'] ?></option>
+                                    <?php //endforeach; ?>
                                 </select>
                                 <?php //echo $this->Form->select('Pago.inquilino_id', $inquilinos, array('class' => 'form-control')); ?>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

@@ -189,13 +189,15 @@
     <table class="CSSTableGenerator" style="margin-top:-1px;">
         <tr>
             <td><span class="text-success" style="font-size:12px;">Pagador: </span></td>
-            <td><?php
+            <td>
+              <?php
                 if (!empty($recibo['Recibo']['inquilino_id'])) {
                   echo $recibo['Recibo']['usuario_inquilino'] . ' (Inquilino)';
                 } else {
                   echo $recibo['Propietario']['nombre'] . ' (Propietario)';
                 }
-                ?></td>
+                ?>
+            </td>
             <td>
                 <span class="text-success">Nro: <?php echo $recibo['Recibo']['numero']; ?></span>
             </td>

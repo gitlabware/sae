@@ -1,6 +1,7 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
     <h2 class="modal-title"><i class="fa fa-table"></i> Ambiente</h2>
+    <span id="mantenimiento_span"></span>
 </div>
 <!-- END Modal Header -->
 
@@ -143,10 +144,10 @@
     catepagos[parseInt('<?php echo $cate['Categoriaspago']['id']; ?>')] = <?php echo $cate['Categoriaspago']['constante']; ?>;
 <?php endforeach; ?>
 
-  $("#idareautil").change(function () {
+  $("#idareautil").keyup(function () {
       calcula_mantenimiento();
   });
-  $("#idareacomun").change(function () {
+  $("#idareacomun").keyup(function () {
       calcula_mantenimiento();
   });
   $("#idcatambientes").change(function () {
@@ -161,7 +162,7 @@
       totalmt = (parseFloat($("#idareautil").val()) + parseFloat($("#idareacomun").val())).toFixed(2);
       costob = (totalmt * cateambientes[parseInt($("#idcatambientes").val())]).toFixed(2);
       mantenimiento = (parseFloat(costob) + parseFloat(catepagos[parseInt($("#idcatpagos").val())])).toFixed(2);
-      $("#idambiente").val(mantenimiento);
+      $("#mantenimiento_span").html('Mantenimiento('+mantenimiento+')');
   }
 </script>
 <?php if (empty($idAmbiente) && !$sw): ?>
