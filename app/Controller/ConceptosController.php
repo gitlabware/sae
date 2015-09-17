@@ -5,6 +5,7 @@ App::uses('AppController', 'Controller');
 class ConceptosController extends AppController {
 
   public $uses = array('Concepto', 'Edificioconcepto', 'Ambienteconcepto', 'User', 'Ambiente', 'Subconcepto');
+  var $components = array('RequestHandler');
   public $layout = 'sae';
 
   public function beforeFilter() {
@@ -83,16 +84,16 @@ class ConceptosController extends AppController {
   }
 
   public function ambientes() {
-    
+
     if (!empty($this->request->data)) {
-      /*debug($this->request->data);
-      exit;*/
+      /* debug($this->request->data);
+        exit; */
       foreach ($this->request->data['Dato']['ambientes'] as $dat) {
 
         if ($dat['marca'] == '1') {
           $ambientecon = $this->Ambienteconcepto->find('first', array(
             'recursive' => -1,
-            'condtions' => array(
+            'conditions' => array(
               'ambiente_id' => $dat['ambiente_id'],
               'concepto_id' => $this->request->data['Dato']['concepto_id']
             ),
@@ -103,15 +104,15 @@ class ConceptosController extends AppController {
           $datos['concepto_id'] = $this->request->data['Dato']['concepto_id'];
           $datos['subconcepto_id'] = $this->request->data['Dato']['subconcepto_id'];
           $datos['ambiente_id'] = $dat['ambiente_id'];
-          if(!empty($ambientecon)){
+          if (!empty($ambientecon)) {
             $datos['id'] = $ambientecon['Ambienteconcepto']['id'];
           }
-          debug($datos);exit;
+          //debug($datos);exit;
           $this->Ambienteconcepto->create();
           $this->Ambienteconcepto->save($datos);
         }
       }
-      $this->Session->setFlash("Se a registrado correctamente!!",'msgbueno');
+      $this->Session->setFlash("Se a registrado correctamente!!", 'msgbueno');
       $this->redirect(array('action' => 'ambientes'));
     }
     $ambientes = $this->Ambiente->find('all', array(
@@ -121,7 +122,9 @@ class ConceptosController extends AppController {
     ));
     $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre'), 'order' => array('nombre')));
     $subconceptos = $this->Subconcepto->find('list', array('fields' => array('id', 'nombre'), 'order' => array('nombre')));
-    $this->set(compact('ambientes', 'conceptos', 'subconceptos'));
+    $subconceptos_aux = $this->Subconcepto->find('list', array('fields' => array('id', 'concepto_id')));
+
+    $this->set(compact('ambientes', 'conceptos', 'subconceptos', 'subconceptos_aux'));
   }
 
   public function get_conceptos_a($idAmbiente = null) {
@@ -130,6 +133,66 @@ class ConceptosController extends AppController {
         'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente),
         'fields' => array('Concepto.nombre', 'Ambienteconcepto.monto')
     ));
+  }
+
+  function respond($message = null, $json = false) {
+    if ($message != null) {
+      if ($json == true) {
+        $this->RequestHandler->setContent('json', 'application/json');
+        $message = json_encode($message);
+      }
+      $this->set('message', $message);
+    }
+    $this->render('message');
+  }
+
+  public function subconcepto($idSubconcepto = null) {
+    $this->layout = 'ajax';
+    if (!empty($this->request->data)) {
+      $valida = $this->validar('Subconcepto');
+      if (empty($valida)) {
+        if(!empty($this->request->data['Subconcepto']['nuevo_tipo'])){
+          $this->request->data['Subconcepto']['tipo'] = $this->request->data['Subconcepto']['nuevo_tipo'];
+        }
+        $this->Subconcepto->create();
+        $this->Subconcepto->save($this->request->data['Subconcepto']);
+        $this->Session->setFlash("Se registro correctamente!!",'msgbueno');
+        $array['mensaje'] = '';
+      } else {
+        $array['mensaje'] = $valida;
+      }
+      $this->respond($array, true);
+    }
+
+    $this->Subconcepto->id = $idSubconcepto;
+    $this->request->data = $this->Subconcepto->read();
+    $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre'), 'nombre' => array('nombre')));
+    $tipos = $this->Subconcepto->find('list', array(
+      'recursive' => -1,
+      'fields' => array('tipo', 'tipo'),
+      'group' => array('tipo')
+    ));
+    $this->set(compact('conceptos', 'tipos'));
+  }
+  
+  public function subconceptos(){
+    $subconceptos = $this->Subconcepto->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Subconcepto.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
+      'fields' => array('Subconcepto.nombre','Concepto.nombre','Subconcepto.tipo','Subconcepto.id')
+    ));
+    
+    $this->set(compact('subconceptos'));
+  }
+  
+  public function eliminar_subconcepto($idSubconcepto = null){
+    if($this->Subconcepto->delete($idSubconcepto)){
+      $this->Session->setFlash("Se elimino correctamente el subconcepto!!",'msgbueno');
+    }else{
+      $this->Session->setFlash("No se pudo eliminar intente nuevamente!!",'msgerror');
+    }
+    
+    $this->redirect($this->referer());
   }
 
 }

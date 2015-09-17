@@ -18,16 +18,9 @@ class Recibo extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Inquilino' => array(
-			'className' => 'Inquilino',
-			'foreignKey' => 'inquilino_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'Propietario' => array(
-			'className' => 'User',
-			'foreignKey' => 'propietario_id',
+		'Ambiente' => array(
+			'className' => 'Ambiente',
+			'foreignKey' => 'ambiente_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

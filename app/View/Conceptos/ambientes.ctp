@@ -6,36 +6,37 @@
     </div>    
     <!-- Example Content -->
     <?php echo $this->Form->create("Ambiente"); ?>
-    <div class="table-responsive">
-        
-    <?php //echo $this->Form->hidden("Dato.ambiente",array('value' => $ambiente['Ambiente']['id']));?>
-    <div class="form-bordered">
-        <div class="form-group">
-            <div class="col-md-3">
-                <label>Concepto</label>
-                <?php echo $this->Form->select("Dato.concepto_id", $conceptos, array('required', 'class' => 'form-control','required')); ?>
-            </div>
-            <div class="col-md-3">
-                <label>Sub-Concepto</label>
-                <?php echo $this->Form->select("Dato.subconcepto_id", $subconceptos, array('required', 'class' => 'form-control')); ?>
-            </div>
-            <div class="col-md-3">
-                <label>Monto</label>
-                <?php echo $this->Form->text("Dato.monto", ['class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'monto', 'required']); ?>
-            </div>
-            <div class="col-md-3">
-                <label>&nbsp;</label>
-                <?php echo $this->Form->submit("Generar", array('class' => 'btn btn-sm btn-primary col-md-12')); ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-bordered">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label>Concepto</label>
+                        <?php echo $this->Form->select("Dato.concepto_id", $conceptos, array('required', 'class' => 'form-control', 'required', 'id' => 'concepto')); ?>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Sub-Concepto</label>
+                        <?php echo $this->Form->select("Dato.subconcepto_id", $subconceptos, array('required', 'class' => 'form-control', 'id' => 'subconcepto')); ?>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Monto</label>
+                        <?php echo $this->Form->text("Dato.monto", ['class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'monto', 'required']); ?>
+                    </div>
+                    <div class="col-md-3">
+                        <label>&nbsp;</label>
+                        <?php echo $this->Form->submit("Generar", array('class' => 'btn btn-sm btn-primary col-md-12')); ?>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    
-        <table id="general-table" class="table table-striped table-vcenter table-hover">
+    </div><br>
+    <div class="table-responsive">
+        <table id="example-datatable" class="table table-striped table-vcenter table-hover">
             <thead>
                 <tr>
                     <th>
                         <?php
-                        echo $this->Form->checkbox("todos", array('class' => 'form-control','id' => 'todos'));
+                        echo $this->Form->checkbox("todos", array('class' => 'form-control', 'id' => 'todos'));
                         ?>
                     </th>
                     <th>Ambiente</th>
@@ -50,7 +51,7 @@
                       <td>
                           <?php
                           echo $this->Form->checkbox("Dato.ambientes.$key.marca", array('class' => 'form-control marca'));
-                          echo $this->Form->hidden("Dato.ambientes.$key.ambiente_id",array('value' => $amb['Ambiente']['id']))
+                          echo $this->Form->hidden("Dato.ambientes.$key.ambiente_id", array('value' => $amb['Ambiente']['id']))
                           ?>
                       </td>
                       <td><?php echo $amb['Ambiente']['nombre'] ?></td>
@@ -82,11 +83,31 @@
 <!-- END Example Block -->
 
 <script>
-  $('#todos').click(function(){
-    if($(this).prop('checked')){
-      $('.marca').prop('checked',true);
-    }else{
-      $('.marca').prop('checked',false);
-    }
+  filtro_c = [
+      null,
+      {type: "text"},
+      {type: "text"},
+      {type: "text"}
+  ];
+  var subconceptos = [];
+<?php foreach ($subconceptos_aux as $key => $sub): ?>
+    subconceptos[<?php echo $key; ?>] = <?php echo $sub; ?>;
+<?php endforeach; ?>
+
+  $('#subconcepto').change(function () {
+      $('#concepto').val(subconceptos[$('#subconcepto').val()]);
   });
+
+  $('#concepto').change(function () {
+      $('#subconcepto').val('');
+  });
+
+  $('#todos').click(function () {
+      if ($(this).prop('checked')) {
+          $('.marca').prop('checked', true);
+      } else {
+          $('.marca').prop('checked', false);
+      }
+  });
+
 </script>

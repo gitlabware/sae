@@ -9,12 +9,8 @@ $Pago = new Pago();
         <h2>Detalle de Pagos</h2>
     </div>
     <center><h1>RECIBO # <?php echo $recibo['Recibo']['numero'] ?></h1></center>
-    <b>Propietario: </b><?php echo $recibo['Propietario']['nombre'] ?><br />
-    <?php if (!empty($recibo['Recibo']['inquilino_id'])): ?>
-      <b>Pagador: </b><?php echo $recibo['Inquilino']['User']['nombre'] ?><br />
-    <?php else: ?>
-      <b>Pagador: </b><?php echo $recibo['Propietario']['nombre'] ?><br />
-    <?php endif; ?>
+    <b>Propietario: </b><?php echo $recibo['Ambiente']['User']['nombre'] ?><br />
+     <b>Representante: </b><?php echo $recibo['Ambiente']['Representante']['nombre'] ?><br />
     <b>Fecha: </b>2015-03-17<br />
     <p>&nbsp;</p>
     <?php

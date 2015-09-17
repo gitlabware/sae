@@ -524,12 +524,12 @@ class AmbientesController extends AppController {
       $saldo_tmp = $saldo_tmp + $re['Pago']['saldo_tmp'];
     }
     $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
-    //debug($monto_tmp);exit;
+    //debug($recibo);exit;
     $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente'));
   }
 
   public function registra_pagos() {
-    /* debug($this->request->data);
+     /*debug($this->request->data);
       exit; */
     $idInquilino = $this->request->data['Pago']['inquilino_id'];
     // Genera el recibo
@@ -547,7 +547,7 @@ class AmbientesController extends AppController {
         'recursive' => 0,
         'order' => 'Recibo.id DESC',
         'fields' => array('Recibo.id', 'Recibo.monto'),
-        'conditions' => array('Recibo.propietario_id' => $this->request->data['Ambiente']['propietario_id'], 'Recibo.estado' => 'Creado'),
+        'conditions' => array('Recibo.ambiente_id' => $this->request->data['Ambiente']['id'], 'Recibo.estado' => 'Creado'),
       ));
     }
     if (!empty($recibo)) {
@@ -559,8 +559,7 @@ class AmbientesController extends AppController {
       $numero = $this->get_num_rec();
       $this->Recibo->create();
       $this->request->data['Recibo']['numero'] = $numero;
-      $this->request->data['Recibo']['inquilino_id'] = $idInquilino;
-      $this->request->data['Recibo']['propietario_id'] = $this->request->data['Ambiente']['propietario_id'];
+      $this->request->data['Recibo']['ambiente_id'] = $this->request->data['Ambiente']['id'];
       $this->request->data['Recibo']['estado'] = 'Creado';
       $this->request->data['Recibo']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
       $this->Recibo->save($this->request->data['Recibo']);
@@ -749,12 +748,12 @@ class AmbientesController extends AppController {
         $this->Pago->save($this->request->data['Pago']);
       }
     }
-    $sql2 = "SELECT user_id FROM inquilinos WHERE (inquilinos.id = Recibo.inquilino_id) LIMIT 1";
-    $sql1 = "SELECT nombre FROM users WHERE (users.id = ($sql2)) LIMIT 1";
+    $sql1 = "SELECT nombre FROM users WHERE (users.id = Ambiente.user_id) LIMIT 1";
     $this->Recibo->virtualFields = array(
-      'usuario_inquilino' => "CONCAT(($sql1))",
+      'propietario' => "CONCAT(($sql1))",
     );
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
+    //debug($recibo);exit;
     $detalles = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) >=' => date('Y')),

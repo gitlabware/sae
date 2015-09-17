@@ -35,10 +35,10 @@
                     <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-tags sidebar-nav-icon"></i>Ambientes</a>
                     <ul>
                         <li>
-                          <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>">Ambientes Piso</a>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>">Ambientes Piso</a>
                         </li>
                         <li>
-                          <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'ambientes')); ?>">Listado de ambientes</a>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'ambientes')); ?>">Listado de ambientes</a>
                         </li>
                     </ul>
                 </li>
@@ -46,13 +46,13 @@
                     <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>
                     <ul>
                         <li>
-                          <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'buscador')); ?>">Pagar ambientes</a>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'buscador')); ?>">Pagar ambientes</a>
                         </li>
                         <li>
-                          <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Excels</a>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Excels</a>
                         </li>
                         <li>
-                          <a href="<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'index')); ?>">Cuentas</a>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'index')); ?>">Cuentas</a>
                         </li>
                         <li>
                             <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'cuenta')); ?>');">Nueva cuenta</a>
@@ -93,13 +93,28 @@
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuarios')); ?>">Listado</a>
-                            
+
                         </li>
                         <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuario')); ?>');">Usuarios</a>
                     </ul>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos','action' => 'index'));?>"><i class="gi gi-coins sidebar-nav-icon"></i>Presupuestos</a>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos', 'action' => 'index')); ?>"><i class="gi gi-coins sidebar-nav-icon"></i>Presupuestos</a>
+                </li>
+                <li>
+                    <a href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-sort sidebar-nav-icon"></i>Conceptos</a>
+                    <ul>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'ambientes')); ?>">Asignacion de conceptos</a>
+
+                        </li>
+                        <li>
+                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconcepto')); ?>');">Nuevo Sub-Concepto</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconceptos')); ?>">Subconceptos</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
             <!-- END Sidebar Navigation -->

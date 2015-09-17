@@ -74,46 +74,6 @@ class Ambiente extends AppModel {
    *
    * @var array
    */
-  public $hasMany = array(
-    'Ambienteconcepto' => array(
-      'className' => 'Ambienteconcepto',
-      'foreignKey' => 'ambiente_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
-    'Inquilino' => array(
-      'className' => 'Inquilino',
-      'foreignKey' => 'ambiente_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
-    'Pago' => array(
-      'className' => 'Pago',
-      'foreignKey' => 'ambiente_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    )
-  );
+  
 
 }

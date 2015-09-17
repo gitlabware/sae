@@ -180,7 +180,7 @@
     <table class="CSSTableGenerator" style="margin-top:-1px;">
         <tr>
             <td><span class="text-success" style="font-size:12px;">Propietario: </span></td>
-            <td><?php echo $recibo['Propietario']['nombre']; ?></td>
+            <td><?php echo $recibo['Recibo']['propietario']; ?></td>
             <td>
                 <span class="text-success">FECHA: <?php echo date('d/m/Y'); ?></span>
             </td>
@@ -190,13 +190,7 @@
         <tr>
             <td><span class="text-success" style="font-size:12px;">Pagador: </span></td>
             <td>
-              <?php
-                if (!empty($recibo['Recibo']['inquilino_id'])) {
-                  echo $recibo['Recibo']['usuario_inquilino'] . ' (Inquilino)';
-                } else {
-                  echo $recibo['Propietario']['nombre'] . ' (Propietario)';
-                }
-                ?>
+              <?php echo $recibo['Ambiente']['Representante']['nombre']?>
             </td>
             <td>
                 <span class="text-success">Nro: <?php echo $recibo['Recibo']['numero']; ?></span>

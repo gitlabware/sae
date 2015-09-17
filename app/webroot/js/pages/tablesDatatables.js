@@ -18,6 +18,9 @@ var TablesDatatables = function () {
                     }],
                 "iDisplayLength": 10
                         //"aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
+            }).columnFilter({
+                sPlaceHolder: "head:before",
+                aoColumns: filtro_c
             });
 
             $('#tabla-json').dataTable({
