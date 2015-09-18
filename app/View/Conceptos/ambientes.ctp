@@ -1,4 +1,9 @@
 <!-- Example Block -->
+<style>
+    .table {
+        width: 100% !important;
+    }
+</style>
 <div class="block">
     <!-- Example Title -->
     <div class="block-title">
@@ -31,10 +36,10 @@
         </div>
     </div><br>
     <div class="table-responsive">
-        <table id="example-datatable" class="table table-striped table-vcenter table-hover">
+        <table id="example-datatable" class="table table-striped table-vcenter table-hover table-bordered">
             <thead>
                 <tr>
-                    <th>
+                    <th class="text-center">
                         <?php
                         echo $this->Form->checkbox("todos", array('class' => 'form-control', 'id' => 'todos'));
                         ?>
@@ -48,7 +53,7 @@
             <tbody>
                 <?php foreach ($ambientes as $key => $amb): ?>
                   <tr>
-                      <td>
+                      <td class="text-center">
                           <?php
                           echo $this->Form->checkbox("Dato.ambientes.$key.marca", array('class' => 'form-control marca'));
                           echo $this->Form->hidden("Dato.ambientes.$key.ambiente_id", array('value' => $amb['Ambiente']['id']))

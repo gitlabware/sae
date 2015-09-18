@@ -529,27 +529,14 @@ class AmbientesController extends AppController {
   }
 
   public function registra_pagos() {
-     /*debug($this->request->data);
+    /* debug($this->request->data);
       exit; */
-    $idInquilino = $this->request->data['Pago']['inquilino_id'];
-    // Genera el recibo
-
-    if (!empty($idInquilino)) {
-      $inquilino = $this->Inquilino->findByid($idInquilino, null, null, -1);
-      $recibo = $this->Recibo->find('first', array(
-        'recursive' => 0,
-        'order' => 'Recibo.id DESC',
-        'fields' => array('Recibo.id'),
-        'conditions' => array('Inquilino.user_id' => $inquilino['Inquilino']['user_id'], 'Recibo.estado' => 'Creado'),
-      ));
-    } else {
-      $recibo = $this->Recibo->find('first', array(
-        'recursive' => 0,
-        'order' => 'Recibo.id DESC',
-        'fields' => array('Recibo.id', 'Recibo.monto'),
-        'conditions' => array('Recibo.ambiente_id' => $this->request->data['Ambiente']['id'], 'Recibo.estado' => 'Creado'),
-      ));
-    }
+    $recibo = $this->Recibo->find('first', array(
+      'recursive' => 0,
+      'order' => 'Recibo.id DESC',
+      'fields' => array('Recibo.id', 'Recibo.monto'),
+      'conditions' => array('Recibo.ambiente_id' => $this->request->data['Ambiente']['id'], 'Recibo.estado' => 'Creado'),
+    ));
     if (!empty($recibo)) {
       $idRecibo = $recibo['Recibo']['id'];
       $drecibo['monto'] = $recibo['Recibo']['monto'] + $this->request->data['Recibo']['monto'];
@@ -599,6 +586,42 @@ class AmbientesController extends AppController {
       $this->pagar_otros(15, $idRecibo, 'Otros', NULL);
     }
     $this->redirect(array('action' => 'listadopago', $idRecibo, $this->request->data['Ambiente']['id']));
+  }
+
+  public function registra_pagos_mark() {
+
+    debug($this->request->data);
+    exit;
+
+    $recibo = $this->Recibo->find('first', array(
+      'recursive' => 0,
+      'order' => 'Recibo.id DESC',
+      'fields' => array('Recibo.id', 'Recibo.monto'),
+      'conditions' => array('Recibo.ambiente_id' => $this->request->data['Ambiente']['id'], 'Recibo.estado' => 'Creado'),
+    ));
+    if (!empty($recibo)) {
+      $idRecibo = $recibo['Recibo']['id'];
+      /*$drecibo['monto'] = $recibo['Recibo']['monto'] + $this->request->data['Recibo']['monto'];
+      $this->Recibo->id = $idRecibo;
+      $this->Recibo->save($drecibo);*/
+    } else {
+      $numero = $this->get_num_rec();
+      $this->Recibo->create();
+      $this->request->data['Recibo']['numero'] = $numero;
+      $this->request->data['Recibo']['ambiente_id'] = $this->request->data['Ambiente']['id'];
+      $this->request->data['Recibo']['estado'] = 'Creado';
+      $this->request->data['Recibo']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
+      $this->Recibo->save($this->request->data['Recibo']);
+      $idRecibo = $this->Recibo->getLastInsertID();
+      $this->set_num_rec($numero);
+    }
+    foreach ($this->request->data['Dato']['pagos'] as $dat){
+      if($dat['marca'] == '1'){
+        
+      }
+    }
+    
+    $this->request->data['Pago']['recibo_id'] = $idRecibo;
   }
 
   public function get_num_rec() {

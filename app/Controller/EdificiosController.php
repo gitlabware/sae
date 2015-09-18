@@ -263,8 +263,9 @@ class EdificiosController extends AppController {
     if ($this->RequestHandler->responseType() == 'json') {
       $editar = '<button class="btn btn-info" type="button" title="Editar" onclick="editar(' . "',Ambiente.piso_id,'" . ',' . "',Ambiente.id,'" . ')"><i class="gi gi-edit"></i></button>';
       $pagos = '<button class="btn btn-success" type="button" title="Pagos" onclick="ir_pagos(' . "',Ambiente.id,'" . ')"><i class="fa fa-dollar"></i></button>';
+      $xcobrar = '<button class="btn btn-primary" type="button" title="Cuentas por cobrar" onclick="xcobrar(' . "',Ambiente.id,'" . ')"><i class="fa fa-money"></i></button>';
       $eliminar = '<button class="btn btn-danger" type="button" title="Eliminar" onclick="eliminar(' . "',Ambiente.id,'" . ')"><i class="gi gi-remove"></i></button>';
-      $acciones = '<div class="btn-group btn-group-sm"> ' . $editar . ' '.$pagos.' '.$eliminar.' </div>';
+      $acciones = '<div class="btn-group btn-group-sm"> ' . $editar . ' '.$pagos.' '.$xcobrar.' '.$eliminar.' </div>';
       $this->Ambiente->virtualFields = array(
         'acciones' => "CONCAT('$acciones')"
       );

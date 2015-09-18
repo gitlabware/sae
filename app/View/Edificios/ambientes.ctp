@@ -54,6 +54,10 @@
   function ir_pagos(idAmbiente){
     window.location = '<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'pay'));?>/'+idAmbiente;
   }
+  
+  function xcobrar(idAmbiente){
+    window.location = '<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'xcobrar'));?>/'+idAmbiente;
+  }
 
 
   filtro_c = [
