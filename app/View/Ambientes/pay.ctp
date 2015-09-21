@@ -25,7 +25,7 @@
                             <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
                             <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Deuda Mantenimientos</b></h4>
                         </a>
-                        <a href="javascript:" class="list-group-item" onclick="return windowpop('<?php echo $this->Html->url(array('controller' => 'Pagos','action' => 'pre_aviso',$idAmbiente, 10)); ?>', 600, 433)">
+                        <a href="javascript:" class="list-group-item" onclick="return windowpop('<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'pre_aviso', $idAmbiente, 10)); ?>', 600, 433)">
                             <span class="pull-right"><strong id="manteminientoAmbiente">
                                     <?php
                                     if (!empty($deuda_tot_man[0][0]['total_alq'])) {
@@ -39,7 +39,7 @@
                             <span class="pull-right"><strong id="manteminientoAmbiente"></strong></span>
                             <h4 class="list-group-item-heading remove-margin" onclick="ocultapagos();"> <b>Deuda Alquileres</b></h4>
                         </a>
-                        <a href="javascript:" class="list-group-item" onclick="return windowpop('<?php echo $this->Html->url(array('controller' => 'Pagos','action' => 'pre_aviso',$idAmbiente, 11)); ?>', 600, 433)">
+                        <a href="javascript:" class="list-group-item" onclick="return windowpop('<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'pre_aviso', $idAmbiente, 11)); ?>', 600, 433)">
                             <span class="pull-right"><strong id="manteminientoAmbiente">
                                     <?php
                                     if (!empty($deuda_tot_alq[0][0]['total_alq'])) {
@@ -86,15 +86,16 @@
                 <div class="block">
                     <div class="form-horizontal form-bordered">
                         <div class="form-group">
-                            <h3>Representante: <?php echo $datosAmbiente['Representante']['nombre']?></h3>
+                            <h3>Representante: <?php echo $datosAmbiente['Representante']['nombre'] ?></h3>
+                            <?php echo $this->Form->hidden('Recibo.pagador',array('value' => $datosAmbiente['Representante']['nombre']))?>
                             <!--<div class="col-md-9">
                                 <select class="form-control" name="data[Pago][inquilino_id]">
                                     <option value="">Seleccione al inquilino</option>
-                                    <?php //foreach ($inquilinos as $inq): ?>
-                                      <option value="<?php //echo $inq['Inquilino']['id']; ?>"><?php //echo $inq['User']['nombre'] ?></option>
-                                    <?php //endforeach; ?>
+                            <?php //foreach ($inquilinos as $inq): ?>
+                                      <option value="<?php //echo $inq['Inquilino']['id'];  ?>"><?php //echo $inq['User']['nombre']  ?></option>
+                            <?php //endforeach; ?>
                                 </select>
-                                <?php //echo $this->Form->select('Pago.inquilino_id', $inquilinos, array('class' => 'form-control')); ?>
+                            <?php //echo $this->Form->select('Pago.inquilino_id', $inquilinos, array('class' => 'form-control')); ?>
                             </div>-->
                         </div>
                     </div>
@@ -468,6 +469,9 @@
                         </div>
                         <div class="col-md-3">
                             <h4 class="text-info">Saldo T.: <span id="id_cambio_total"><?php echo $datosAmbiente['Ambiente']['saldo'] ?></span></h4>
+                        </div>
+                        <div class="col-md-3">
+                            <?php echo $this->Form->select("Recibo.id",$recibos,array('class' => 'form-control','empty' => 'Nuevo Recibo'))?>
                         </div>
                     </div>
                 </div>
@@ -1128,7 +1132,7 @@
 
       $('#dato-monto').val(monto_totalt);
       var cambiot = Math.round(parseFloat($('#id_cambio_total').html()) * 100) / 100;
-      
+
       $('#dato-cambio').val(cambiot);
       //alert(total_total);
 

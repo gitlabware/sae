@@ -477,7 +477,11 @@ class AmbientesController extends AppController {
 
     $edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'), null, null, -1);
     $edificio['Edificio']['retencion_mantenimiento'];
-    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'deuda_tot_man', 'deuda_tot_alq', 'ultimos_pagos', 'intereses', 'edificio'));
+    $recibos = $this->Recibo->find('list', array(
+      'conditions' => array('Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
+      'fields' => array('Recibo.id', 'Recibo.numero')
+    ));
+    $this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'deuda_tot_man', 'deuda_tot_alq', 'ultimos_pagos', 'intereses', 'edificio', 'recibos'));
   }
 
   public function ajaxlistapropietario($idPropietario = null) {
@@ -513,45 +517,37 @@ class AmbientesController extends AppController {
   public function listadopago($idRecibo = null, $idAmbiente = NULL) {
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     $recibo_m = $this->Pago->find('all', array(
+      'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
       'group' => array('Pago.ambiente_id'),
-      'fields' => array('Pago.monto_tmp', 'Pago.saldo_tmp'),
+      'fields' => array('Pago.monto_tmp', 'Pago.saldo_tmp', 'Pago.ambiente_id', 'Ambiente.saldo'),
     ));
     $monto_tmp = 0.00;
     $saldo_tmp = 0.00;
-    foreach ($recibo_m as $re) {
+    //debug($recibo_m);exit;
+    foreach ($recibo_m as $key => $re) {
       $monto_tmp = $monto_tmp + $re['Pago']['monto_tmp'];
       $saldo_tmp = $saldo_tmp + $re['Pago']['saldo_tmp'];
     }
     $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
     //debug($recibo);exit;
-    $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente'));
+    $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m'));
   }
 
   public function registra_pagos() {
     /* debug($this->request->data);
       exit; */
-    $recibo = $this->Recibo->find('first', array(
-      'recursive' => 0,
-      'order' => 'Recibo.id DESC',
-      'fields' => array('Recibo.id', 'Recibo.monto'),
-      'conditions' => array('Recibo.ambiente_id' => $this->request->data['Ambiente']['id'], 'Recibo.estado' => 'Creado'),
-    ));
-    if (!empty($recibo)) {
-      $idRecibo = $recibo['Recibo']['id'];
-      $drecibo['monto'] = $recibo['Recibo']['monto'] + $this->request->data['Recibo']['monto'];
-      $this->Recibo->id = $idRecibo;
-      $this->Recibo->save($drecibo);
-    } else {
+    if (empty($this->request->data['Recibo']['id'])) {
       $numero = $this->get_num_rec();
       $this->Recibo->create();
       $this->request->data['Recibo']['numero'] = $numero;
-      $this->request->data['Recibo']['ambiente_id'] = $this->request->data['Ambiente']['id'];
       $this->request->data['Recibo']['estado'] = 'Creado';
       $this->request->data['Recibo']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
       $this->Recibo->save($this->request->data['Recibo']);
       $idRecibo = $this->Recibo->getLastInsertID();
       $this->set_num_rec($numero);
+    } else {
+      $idRecibo = $this->request->data['Recibo']['id'];
     }
     $this->request->data['Pago']['recibo_id'] = $idRecibo;
     //termina Parte de recibos
@@ -601,9 +597,9 @@ class AmbientesController extends AppController {
     ));
     if (!empty($recibo)) {
       $idRecibo = $recibo['Recibo']['id'];
-      /*$drecibo['monto'] = $recibo['Recibo']['monto'] + $this->request->data['Recibo']['monto'];
-      $this->Recibo->id = $idRecibo;
-      $this->Recibo->save($drecibo);*/
+      /* $drecibo['monto'] = $recibo['Recibo']['monto'] + $this->request->data['Recibo']['monto'];
+        $this->Recibo->id = $idRecibo;
+        $this->Recibo->save($drecibo); */
     } else {
       $numero = $this->get_num_rec();
       $this->Recibo->create();
@@ -615,12 +611,12 @@ class AmbientesController extends AppController {
       $idRecibo = $this->Recibo->getLastInsertID();
       $this->set_num_rec($numero);
     }
-    foreach ($this->request->data['Dato']['pagos'] as $dat){
-      if($dat['marca'] == '1'){
+    foreach ($this->request->data['Dato']['pagos'] as $dat) {
+      if ($dat['marca'] == '1') {
         
       }
     }
-    
+
     $this->request->data['Pago']['recibo_id'] = $idRecibo;
   }
 
@@ -759,9 +755,11 @@ class AmbientesController extends AppController {
       'fields' => array('Pago.id'),
     ));
     if ($terminar) {
-      $this->Ambiente->id = $this->request->data['Dato']['ambiente_id'];
-      $dambiente['saldo'] = $this->request->data['Dato']['cambio'];
-      $this->Ambiente->save($dambiente);
+      foreach ($this->request->data['Dato']['ambiente'] as $am) {
+        $this->Ambiente->id = $am['ambiente_id'];
+        $dambiente['saldo'] = $am['cambio'];
+        $this->Ambiente->save($dambiente);
+      }
       $this->Recibo->id = $idRecibo;
       $this->request->data['Recibo']['estado'] = 'Terminado';
       $this->Recibo->save($this->request->data['Recibo']);
@@ -771,10 +769,7 @@ class AmbientesController extends AppController {
         $this->Pago->save($this->request->data['Pago']);
       }
     }
-    $sql1 = "SELECT nombre FROM users WHERE (users.id = Ambiente.user_id) LIMIT 1";
-    $this->Recibo->virtualFields = array(
-      'propietario' => "CONCAT(($sql1))",
-    );
+    
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     //debug($recibo);exit;
     $detalles = $this->Pago->find('all', array(

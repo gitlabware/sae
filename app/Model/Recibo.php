@@ -17,13 +17,5 @@ class Recibo extends AppModel {
  *
  * @var array
  */
-	public $belongsTo = array(
-		'Ambiente' => array(
-			'className' => 'Ambiente',
-			'foreignKey' => 'ambiente_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
+	
 }

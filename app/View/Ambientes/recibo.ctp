@@ -179,18 +179,12 @@
     </table>
     <table class="CSSTableGenerator" style="margin-top:-1px;">
         <tr>
-            <td><span class="text-success" style="font-size:12px;">Propietario: </span></td>
-            <td><?php echo $recibo['Recibo']['propietario']; ?></td>
-            <td>
-                <span class="text-success">FECHA: <?php echo date('d/m/Y'); ?></span>
-            </td>
-        </tr>
-    </table>
-    <table class="CSSTableGenerator" style="margin-top:-1px;">
-        <tr>
             <td><span class="text-success" style="font-size:12px;">Pagador: </span></td>
             <td>
-              <?php echo $recibo['Ambiente']['Representante']['nombre']?>
+              <?php echo $recibo['Recibo']['pagador']?>
+            </td>
+            <td>
+                <span class="text-success">FECHA: <?php echo date('d/m/Y'); ?></span>
             </td>
             <td>
                 <span class="text-success">Nro: <?php echo $recibo['Recibo']['numero']; ?></span>

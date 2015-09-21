@@ -9,20 +9,25 @@ $Pago = new Pago();
         <h2>Detalle de Pagos</h2>
     </div>
     <center><h1>RECIBO # <?php echo $recibo['Recibo']['numero'] ?></h1></center>
-    <b>Propietario: </b><?php echo $recibo['Ambiente']['User']['nombre'] ?><br />
-     <b>Representante: </b><?php echo $recibo['Ambiente']['Representante']['nombre'] ?><br />
-    <b>Fecha: </b>2015-03-17<br />
-    <p>&nbsp;</p>
-    <?php
-    $pagos = $Pago->find('all', array(
-      'conditions' => array('Pago.recibo_id' => $recibo['Recibo']['id'])
-    ));
-    ?>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="user-settings-email">Nombre del Pagador: </label>
+                <div class="col-md-8">
+                    <?php echo $this->Form->text('Recibo.pagador', array('class' => 'form-control', 'value' => $recibo['Recibo']['pagador'], 'required', 'placeholder' => 'Ingrese el nombre del pagador')); ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <b>Fecha: </b>2015-03-17<br />
+        </div>
+    </div>
+
     <!-- Example Content -->
     <?php echo $this->Form->create('Ambiente', array('action' => 'recibo/' . $recibo['Recibo']['id'] . '/1')); ?>
     <b>Listado y detalle de pagos </b>
     <div class="table-responsive">
-        <table id="general-table" class="table table-striped table-vcenter table-hover">
+        <table id="general-table" class="table table-bordered">
             <thead>
                 <tr>
                     <th>Ambiente</th>
@@ -34,53 +39,70 @@ $Pago = new Pago();
                 </tr>
             </thead>
             <tbody> 
-                <?php $total = 0.00; ?>
-                <?php foreach ($pagos as $man): ?>
-                  <tr>                                        
-                      <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
-                      <td><?php echo $man['Concepto']['nombre']; ?></td>
-                      <td>
-                          <?php
-                          if ($man['Pago']['concepto_id'] == 12) {
-                            if ($man['Pago']['porcentaje_interes'] != null) {
-                              $man['Pago']['monto_total'] = $man['Pago']['monto_total'] * ($man['Pago']['porcentaje_interes'] / 100);
+                <?php $total = array(); ?>
+                <?php foreach ($recibo_m as $key => $rm): ?>
+                  <?php
+                  $pagos = $Pago->find('all', array(
+                    'conditions' => array('Pago.recibo_id' => $recibo['Recibo']['id'], 'Pago.ambiente_id' => $rm['Pago']['ambiente_id'])
+                  ));
+                  ?>
+                  <?php $total[$key] = 0.00; ?>
+                  <?php foreach ($pagos as $man): ?>
+                    <tr class="warning">                                        
+                        <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
+                        <td><?php echo $man['Concepto']['nombre']; ?></td>
+                        <td>
+                            <?php
+                            if ($man['Pago']['concepto_id'] == 12) {
+                              if ($man['Pago']['porcentaje_interes'] != null) {
+                                $man['Pago']['monto_total'] = $man['Pago']['monto_total'] * ($man['Pago']['porcentaje_interes'] / 100);
+                              }
                             }
-                          }
-                          ?>
-                          <?php echo $man['Pago']['monto_total']; ?>
-                      </td>
-                      <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
-                      <td class="text-center">
-                          <?php echo $man['Pago']['estado']; ?>
-                      </td>
-                      <td class="text-center">
-                          <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto', $man['Pago']['id'], $recibo['Recibo']['id'])); ?>');"><i class="gi gi-pencil"></i></button>
-                          <?php echo $this->Html->link('<i class="gi gi-remove"></i>', ['action' => 'quita_pago', $man['Pago']['id']], ['class' => 'btn btn-xs btn-danger', 'confirm' => 'Esta seguro de quitar pago?', 'escape' => FALSE, 'title' => 'Quitar pago']) ?>
-                      </td>
+                            ?>
+                            <?php echo $man['Pago']['monto_total']; ?>
+                        </td>
+                        <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
+                        <td class="text-center">
+                            <?php echo $man['Pago']['estado']; ?>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto', $man['Pago']['id'], $recibo['Recibo']['id'])); ?>');"><i class="gi gi-pencil"></i></button>
+                            <?php echo $this->Html->link('<i class="gi gi-remove"></i>', ['action' => 'quita_pago', $man['Pago']['id']], ['class' => 'btn btn-xs btn-danger', 'confirm' => 'Esta seguro de quitar pago?', 'escape' => FALSE, 'title' => 'Quitar pago']) ?>
+                        </td>
+                    </tr>
+                    <?php $total[$key] = $total[$key] + $man['Pago']['monto_total']; ?>
+                  <?php endforeach; ?>
+                  <tr class="info">
+                      <td></td>
+                      <td>TOTAL:</td>
+                      <td><?php echo $total[$key]; ?></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                   </tr>
-                  <?php $total = $total + $man['Pago']['monto_total']; ?>
+                  <tr class="success">
+                      <?php
+                      $saldo = 0.00;
+                      if (empty($rm['Ambiente']['saldo'])) {
+                        $saldo = 0.00;
+                      } else {
+                        $saldo = $rm['Ambiente']['saldo'];
+                      }
+                      ?>
+                      <td>MONTO: </td>
+                      <td><?php echo $this->Form->text("Recibo.ambiente.$key.monto", array('class' => 'form-control submonto', 'id' => 'dato-monto-' . $key, 'value' => $rm['Pago']['monto_tmp'], 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
+                      <td>GUARDAR CAMBIO: </td>
+                      <td><?php echo $this->Form->text("Dato.ambiente.$key.cambio", array('class' => 'form-control subcambio', 'id' => 'dato-cambio-' . $key, 'value' => ($rm['Pago']['monto_tmp'] + $saldo - round($total[$key], 2)), 'type' => 'number', 'step' => 'any', 'required', 'min' => 0)); ?></td>
+                      <td></td>
+                      <td></td>
+                  </tr>
+                  <?php echo $this->Form->hidden("Dato.ambiente.$key.ambiente_id", array('value' => $rm['Pago']['ambiente_id'])); ?>
                 <?php endforeach; ?>
                 <tr>
-                    <td></td>
-                    <td>TOTAL:</td>
-                    <td><?php echo $total; ?></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <?php
-                    $saldo = 0.00;
-                    if (empty($ambiente['Ambiente']['saldo'])) {
-                      $saldo = 0.00;
-                    } else {
-                      $saldo = $ambiente['Ambiente']['saldo'];
-                    }
-                    ?>
-                    <td>MONTO: </td>
-                    <td><?php echo $this->Form->text('Recibo.monto', array('class' => 'form-control', 'id' => 'dato-monto', 'value' => $monto_tmp, 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
-                    <td>GUARDAR CAMBIO: </td>
-                    <td><?php echo $this->Form->text('Dato.cambio', array('class' => 'form-control', 'id' => 'dato-cambio', 'value' => ($monto_tmp + $saldo - round($total,2)), 'type' => 'number', 'step' => 'any', 'required')); ?></td>
+                    <td>MONTO TOTAL: </td>
+                    <td><?php echo $this->Form->text("Recibo.monto", array('class' => 'form-control', 'id' => 'dato-monto', 'type' => 'number', 'step' => 'any', 'min' => 0, 'required', 'disabled')); ?></td>
+                    <td>CAMBIO TOTAL: </td>
+                    <td><?php echo $this->Form->text("Dato.cambio", array('class' => 'form-control', 'id' => 'dato-cambio', 'type' => 'number', 'step' => 'any', 'required', 'min' => 0, 'disabled')); ?></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -120,20 +142,49 @@ $Pago = new Pago();
             <button class="btn btn-block btn-success" type="submit">Terminar Pago</button>
         </div>
     </div>
-    <?php echo $this->Form->hidden('Dato.ambiente_id', array('value' => $idAmbiente)); ?>
+    
     <?php echo $this->Form->end(); ?>
 </div>
 <!-- END Example Block -->
 
 <script>
-  var saldo = 0.00;
-<?php if (!empty($ambiente['Ambiente']['saldo'])): ?>
-    saldo = <?php echo $ambiente['Ambiente']['saldo']; ?>;
-<?php endif; ?>
-  var total = <?php echo $total; ?>;
-  $('#dato-monto').keyup(function () {
-      var valor_monto = parseFloat($(this).val());
-      var cambio = valor_monto + saldo - total;
-      $('#dato-cambio').val(Math.round(cambio * 100) / 100);
+  var saldo = [];
+  var total = [];
+<?php foreach ($recibo_m as $key => $rm): ?>
+    saldo[<?php echo $key; ?>] = 0.00;
+  <?php if (!empty($rm['Ambiente']['saldo'])): ?>
+      saldo[<?php echo $key; ?>] = <?php echo $rm['Ambiente']['saldo']; ?>;
+  <?php endif; ?>
+    total[<?php echo $key ?>] = <?php echo $total[$key]; ?>;
+
+    $('#dato-monto-<?php echo $key; ?>').keyup(function () {
+        var valor_monto = parseFloat($(this).val());
+        var cambio = valor_monto + saldo[<?php echo $key; ?>] - total[<?php echo $key; ?>];
+        $('#dato-cambio-<?php echo $key; ?>').val(Math.round(cambio * 100) / 100);
+    });
+<?php endforeach; ?>
+
+  function suma_total() {
+      var total_t = 0.00;
+      var cambio_t = 0.00;
+      $('.submonto').each(function (i, val) {
+          if ($(val).val() != '') {
+              total_t = total_t + parseFloat($(val).val());
+          }
+      });
+      $('.subcambio').each(function (i, val) {
+          if ($(val).val() != '') {
+              cambio_t = cambio_t + parseFloat($(val).val());
+          }
+      });
+      $('#dato-monto').val(total_t);
+      $('#dato-cambio').val(cambio_t);
+  }
+  suma_total();
+
+  $('.submonto ,.subcambio').keyup(function () {
+      suma_total();
+
   });
+
 </script>
