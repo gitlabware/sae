@@ -692,11 +692,15 @@ class AmbientesController extends AppController {
     }
     $mantenimientos = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.estado' => 'Debe',
+      'conditions' => array(
+        'Pago.estado' => 'Debe',
         'Pago.ambiente_id' => $this->request->data['Ambiente']['id'],
-        'Pago.concepto_id' => $idConcepto),
-      'Pago.fecha >=' => $nuevafecha,
+        'Pago.concepto_id' => $idConcepto,
+        'Pago.fecha >=' => $nuevafecha
+      ),
+      'order' => array('Pago.fecha ASC')
     ));
+    //debug($mantenimientos);exit;
     foreach ($mantenimientos as $ma) {
       if ($cuotas_man > 0) {
         $this->Pago->id = $ma['Pago']['id'];
@@ -712,7 +716,17 @@ class AmbientesController extends AppController {
       }
     }
     if (!empty($mantenimientos)) {
-      $ultimo_pago = array_pop($mantenimientos);
+      //$ultimo_pago = array_pop($mantenimientos);
+      $ultimo_pago = $this->Pago->find('first', array(
+        'recursive' => -1,
+        'conditions' => array(
+          'Pago.estado' => 'Pagado',
+          'Pago.ambiente_id' => $this->request->data['Ambiente']['id'],
+          'Pago.concepto_id' => $idConcepto
+        ),
+        'order' => array('Pago.fecha DESC'),
+        'fields' => array('Pago.fecha')
+      ));
       $nuevafecha = $ultimo_pago['Pago']['fecha'];
     }
     while ($cuotas_man > 0) {
@@ -769,7 +783,7 @@ class AmbientesController extends AppController {
         $this->Pago->save($this->request->data['Pago']);
       }
     }
-    
+
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     //debug($recibo);exit;
     $detalles = $this->Pago->find('all', array(
@@ -994,7 +1008,7 @@ class AmbientesController extends AppController {
       'group' => array('Pago.ambiente_id'),
       'fields' => array('SUM(Pago.monto) as total_alq'),
     ));
-    $this->set(compact('ambiente', 'conceptos', 'pagos', 'conceptos_mon','idAmbiente','deuda_tot_man','deuda_tot_alq'));
+    $this->set(compact('ambiente', 'conceptos', 'pagos', 'conceptos_mon', 'idAmbiente', 'deuda_tot_man', 'deuda_tot_alq'));
   }
 
   public function gen_interes($fecha = null, $ambiente = null, $monto = null) {
