@@ -982,7 +982,19 @@ class AmbientesController extends AppController {
       'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe'),
       'order' => 'Pago.fecha DESC', 'limit' => 30,
     ));
-    $this->set(compact('ambiente', 'conceptos', 'pagos', 'conceptos_mon'));
+    $deuda_tot_man = $this->Pago->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Pago.estado' => 'Debe', 'Pago.concepto_id' => 10, 'Pago.ambiente_id' => $idAmbiente),
+      'group' => array('Pago.ambiente_id'),
+      'fields' => array('SUM(Pago.monto) as total_alq'),
+    ));
+    $deuda_tot_alq = $this->Pago->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Pago.estado' => 'Debe', 'Pago.concepto_id' => 11, 'Pago.ambiente_id' => $idAmbiente),
+      'group' => array('Pago.ambiente_id'),
+      'fields' => array('SUM(Pago.monto) as total_alq'),
+    ));
+    $this->set(compact('ambiente', 'conceptos', 'pagos', 'conceptos_mon','idAmbiente','deuda_tot_man','deuda_tot_alq'));
   }
 
   public function gen_interes($fecha = null, $ambiente = null, $monto = null) {
