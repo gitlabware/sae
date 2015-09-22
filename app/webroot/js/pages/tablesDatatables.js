@@ -22,6 +22,11 @@ var TablesDatatables = function () {
                 sPlaceHolder: "head:before",
                 aoColumns: filtro_c
             });
+            
+            /*$('#agruacion').dataTable({ 
+                "bLengthChange": false, 
+                "bPaginate": false
+            }).rowGrouping({bExpandableGrouping: true});*/
 
             $('#tabla-json').dataTable({
                 "iDisplayLength": 10,

@@ -270,10 +270,10 @@
     </table>
     <table class="CSSTableGenerator">
         <tr>
-            <td><b>Copropietario</b></td>
-            <td><?php echo $ambiente['User']['nombre'] ?></td>
-            <td><b>Inquilino</b></td>
-            <td><?php ?></td>
+            <td><b>Representante</b></td>
+            <td><?php echo $ambiente['Representante']['nombre'] ?></td>
+            <td><b>Concepto</b></td>
+            <td><?php echo $concepto['Concepto']['nombre'];?></td>
         </tr>
         <tr>
             <td><b>Ambiente</b></td>
@@ -310,7 +310,7 @@
                     <?php $pago = $this->requestAction(array('action' => 'get_pag_ges', $idAmbiente, $idConcepto, $ges['Pago']['gestion'], $i)) ?>
                     <?php
                     if ($pago['estado'] == 'Debe') {
-                      echo '<b>' . $pago['monto'] . '</b>';
+                      echo '<b style="color: red;">' . $pago['monto'] . '</b>';
                       $subtotal2 = $subtotal2 + $pago['monto'];
                       $total = $total + $pago['monto'];
                     } elseif ($pago['estado'] == 'Pagado') {

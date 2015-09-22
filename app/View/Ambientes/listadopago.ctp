@@ -47,9 +47,10 @@ $Pago = new Pago();
                   ));
                   ?>
                   <?php $total[$key] = 0.00; ?>
-                  <?php foreach ($pagos as $man): ?>
-                    <tr class="warning">                                        
-                        <td><a href="page_ready_user_profile.html"><?php echo $man['Ambiente']['nombre']; ?></a></td>
+                  <?php foreach ($pagos as $ik => $man): ?>
+                    <tr class="warning">    
+                        <td><?php echo $ik+1?></td>
+                        <td><a href="javascript:"><?php echo $man['Ambiente']['nombre']; ?></a></td>
                         <td><?php echo $man['Concepto']['nombre']; ?></td>
                         <td>
                             <?php
@@ -92,7 +93,7 @@ $Pago = new Pago();
                       <td>MONTO: </td>
                       <td><?php echo $this->Form->text("Recibo.ambiente.$key.monto", array('class' => 'form-control submonto', 'id' => 'dato-monto-' . $key, 'value' => $rm['Pago']['monto_tmp'], 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
                       <td>GUARDAR CAMBIO: </td>
-                      <td><?php echo $this->Form->text("Dato.ambiente.$key.cambio", array('class' => 'form-control subcambio', 'id' => 'dato-cambio-' . $key, 'value' => ($rm['Pago']['monto_tmp'] + $saldo - round($total[$key], 2)), 'type' => 'number', 'step' => 'any', 'required', 'min' => 0)); ?></td>
+                      <td><?php echo $this->Form->text("Dato.ambiente.$key.cambio", array('class' => 'form-control subcambio', 'id' => 'dato-cambio-' . $key, 'value' => ( round($rm['Pago']['monto_tmp'] + $saldo,2)- round($total[$key],2)), 'type' => 'number', 'step' => 'any', 'required', 'min' => 0)); ?></td>
                       <td></td>
                       <td></td>
                   </tr>
@@ -131,11 +132,11 @@ $Pago = new Pago();
     </div><br>-->
     <div class="row">
         <div class="col-md-4">
-            <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('action' => 'buscador')); ?>'">Ir a pagos</button>
+            <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('controller' => 'Edificios','action' => 'ambientes')); ?>'">Ambientes</button>
         </div>
         <div class="col-md-4">
             <button class="btn btn-block btn-danger" type="button" onclick="if (confirm('Esta seguro de cancelar los pagos de este recibo??')) {
-                      window.location = '<?php echo $this->Html->url(array('action' => 'cancelar_pago', $recibo['Recibo']['id'])); ?>'
+                      window.location = '<?php echo $this->Html->url(array('action' => 'cancelar_pago', $recibo['Recibo']['id'])); ?>';
                   }">Cancelar Pagos</button>
         </div>
         <div class="col-md-4">

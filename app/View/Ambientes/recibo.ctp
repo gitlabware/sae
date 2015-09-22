@@ -206,7 +206,6 @@
               <td><?php echo $pa['Concepto']['nombre']; ?></td>
               <td>
                 <?php 
-                
                 echo $pa[0]['imp_total']; 
                 ?>
               </td>
@@ -257,7 +256,7 @@
         </tr>
         <?php $total_det_a = 0.00; ?>
         <?php foreach ($detalles_a as $det): ?>
-  <?php $total_det = $total_det + $det['Pago']['monto_total']; ?>
+  <?php $total_det_a = $total_det_a + $det['Pago']['monto_total']; ?>
           <tr>
               <td><?php echo $det['Pago']['id'] ?></td>
               <td><?php echo $det['Pago']['fecha'] ?></td>
