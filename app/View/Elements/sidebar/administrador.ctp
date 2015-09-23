@@ -116,6 +116,9 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Recibos', 'action' => 'index')); ?>"><i class="gi gi-notes sidebar-nav-icon"></i>Recibos</a>
+                </li>
             </ul>
             <!-- END Sidebar Navigation -->
         </div>

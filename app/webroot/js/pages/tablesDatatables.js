@@ -32,7 +32,7 @@ var TablesDatatables = function () {
                 "iDisplayLength": 10,
                 'bProcessing': true,
                 'sAjaxSource': urljsontablatrab,
-                'sServerMethod': 'POST',
+                //'sServerMethod': 'POST',
                 "bServerSide": true,
                 "order": []
 

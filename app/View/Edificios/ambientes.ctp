@@ -45,6 +45,12 @@
   function editar(idPiso, idAmbiente) {
       cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'ambiente')); ?>/' + idPiso + '/' + idAmbiente);
   }
+  function servicios(idAmbiente, idPiso) {
+      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'aservicios')); ?>/' + idPiso + '/' + idAmbiente);
+  }
+  function inquilinos(idAmbiente, idPiso) {
+      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'inquilinos')); ?>/' + idPiso + '/' + idAmbiente);
+  }
   function eliminar(idAmbiente) {
       if (confirm('Esta seguro de eliminar el ambiente??')) {
           window.location.href = '<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'eliminar')) ?>/' + idAmbiente;
