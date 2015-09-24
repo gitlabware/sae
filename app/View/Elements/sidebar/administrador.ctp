@@ -46,9 +46,6 @@
                     <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>
                     <ul>
                         <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'buscador')); ?>">Pagar ambientes</a>
-                        </li>
-                        <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Excels</a>
                         </li>
                         <li>

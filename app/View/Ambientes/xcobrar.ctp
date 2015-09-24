@@ -47,7 +47,7 @@
         </div>
         <?php echo $this->Form->create('Ambiente', array('action' => 'registra_pagos_mark', 'id' => 'formpagos')); ?>
         <?php echo $this->Form->hidden('Ambiente.id', array('value' => $ambiente['Ambiente']['id'])) ?>
-        <?php echo $this->Form->hidden('Recibo.pagador',array('value' => $ambiente['Representante']['nombre']))?>
+        <?php echo $this->Form->hidden('Recibo.pagador', array('value' => $ambiente['Representante']['nombre'])) ?>
         <div class="block">
             <div class="block-title">
                 <div class="block-options pull-right">
@@ -165,7 +165,12 @@
                                           <th>Fecha</th>
                                           <th>Concepto</th>
                                           <th>Monto</th>
-                                          <th style="width: 10%;">Retencion</th>
+                                          <th style="width: 15%;">
+                                              <?php
+                                              echo $this->Form->text("todos_retencion", array('min' => 0, 'class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'ret_todos-' . $gp[0]['gestion'], 'placeholder' => 'Retencion', ''));
+                                              ?>
+                                          </th>
+                                          <th>M. total</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -181,16 +186,22 @@
                                                 ?>
                                             </td>
                                             <td><?php echo $pa['Pago']['fecha']; ?></td>
-                                            <td><?php echo $pa['Concepto']['nombre']; ?></td>
+                                            <td class="warning"><?php echo $pa['Concepto']['nombre']; ?></td>
                                             <td><?php echo $pa['Pago']['monto']; ?></td>
                                             <td>
                                                 <?php
+                                                $retencion_aux = 0.00;
                                                 if ($pa['Pago']['concepto_id'] == 10) {
-                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_mantenimiento'], 'min' => 0, 'class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'retencion-' . $pa['Pago']['id'],'onkeyup' => 'suma_mar('.$gp[0]['gestion'].');'));
+                                                  $retencion_aux = $edificio['Edificio']['retencion_mantenimiento'];
+                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_mantenimiento'], 'min' => 0, 'class' => 'form-control reten-'.$gp[0]['gestion'], 'type' => 'number', 'step' => 'any', 'id' => 'retencion-' . $pa['Pago']['id'], 'onkeyup' => 'suma_mar(' . $gp[0]['gestion'] . ');'));
                                                 } elseif ($pa['Pago']['concepto_id'] == 11) {
-                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_alquiler'], 'min' => 0, 'class' => 'form-control', 'type' => 'number', 'step' => 'any', 'style' => 'width: 80px;', 'id' => 'retencion-' . $pa['Pago']['id'],'onkeyup' => 'suma_mar('.$gp[0]['gestion'].');'));
+                                                  $retencion_aux = $edificio['Edificio']['retencion_alquiler'];
+                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_alquiler'], 'min' => 0, 'class' => 'form-control reten-'.$gp[0]['gestion'], 'type' => 'number', 'step' => 'any', 'style' => 'width: 80px;', 'id' => 'retencion-' . $pa['Pago']['id'], 'onkeyup' => 'suma_mar(' . $gp[0]['gestion'] . ');'));
                                                 }
                                                 ?>
+                                            </td>
+                                            <td class="success">
+                                                <?php echo ($pa['Pago']['monto'] + (($retencion_aux / 100) * $pa['Pago']['monto'])); ?>
                                             </td>
                                         </tr>
                                       <?php endforeach; ?>
@@ -213,6 +224,10 @@
                     });
 
                     $('.marca-<?php echo $gp[0]['gestion']; ?>').click(function () {
+                        suma_mar(<?php echo $gp[0]['gestion']; ?>);
+                    });
+                    $('#ret_todos-<?php echo $gp[0]['gestion']; ?>').keyup(function () {
+                        $('.reten-<?php echo $gp[0]['gestion']; ?>').val($('#ret_todos-<?php echo $gp[0]['gestion']; ?>').val());
                         suma_mar(<?php echo $gp[0]['gestion']; ?>);
                     });
                   </script>
@@ -247,9 +262,6 @@
 
   var saldo_c = $('#cambio_to').val();
 
-
-  
-
   function suma_mar(gestion) {
       var s_total = 0.00;
       var monto = 0.00;
@@ -259,7 +271,7 @@
               monto = parseFloat($(val).attr('midato'));
 
               monto = Math.round(monto * 100) / 100;
-              if ($('#' + $(val).attr('idret')).val() !== undefined) {
+              if ($('#' + $(val).attr('idret')).val() !== undefined && $('#' + $(val).attr('idret')).val() !== '') {
                   retencion = parseFloat($('#' + $(val).attr('idret')).val());
                   retencion = (Math.round(retencion * 100) / 100) / 100;
               }
@@ -284,21 +296,23 @@
           }
       });
       //alert(s_total);
-      
+
       //alert(saldo_c);
       var saldo_aux = saldo_c;
-      if(saldo_aux <= s_total){
-        s_total = s_total - saldo_aux;
-        saldo_aux = 0.00;
-      }else{
-        saldo_aux = saldo_aux - s_total;
-        s_total = 0.00;
+      if (saldo_aux <= s_total) {
+          s_total = s_total - saldo_aux;
+          saldo_aux = 0.00;
+      } else {
+          saldo_aux = saldo_aux - s_total;
+          s_total = 0.00;
       }
       saldo_aux = Math.round(saldo_aux * 100) / 100;
       s_total = Math.round(s_total * 100) / 100;
       $('#cambio_to').val(saldo_aux);
       $('#total_to').val(s_total);
   }
+
+
 
   function windowpop(url, width, height) {
       var leftPosition, topPosition;

@@ -416,13 +416,13 @@ class AmbientesController extends AppController {
       'recursive' => -1,
       'fields' => array('Pago.fecha'),
       'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.concepto_id' => 10, 'Pago.estado' => 'Pagado'),
-      'order' => 'id DESC',
+      'order' => 'fecha DESC',
     ));
     $ultimoPago_alquiler = $this->Pago->find('first', array(
       'recursive' => -1,
       'fields' => array('Pago.fecha'),
       'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.concepto_id' => 11, 'Pago.estado' => 'Pagado'),
-      'order' => 'id DESC',
+      'order' => 'fecha DESC',
     ));
     if (!empty($ultimoPago_mantenimiento)) {
       $fecha_mantenimiento = $ultimoPago_mantenimiento['Pago']['fecha'];
@@ -997,12 +997,12 @@ class AmbientesController extends AppController {
     }
     $gpagos = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe'),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe','Pago.monto !=' => 0.00),
       'group' => array('YEAR(Pago.fecha)'),
       'order' => array('Pago.fecha ASC'),
       'fields' => array('YEAR(Pago.fecha) as gestion')
     ));
-    /* debug($gpagos);
+     /*debug($gpagos);
       exit; */
     $deuda_tot_man = $this->Pago->find('all', array(
       'recursive' => -1,
@@ -1027,7 +1027,7 @@ class AmbientesController extends AppController {
   public function get_pagos_ges($idAmbiente = null, $gestion = null) {
     return $this->Pago->find('all', array(
         'recursive' => 0,
-        'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe', 'YEAR(Pago.fecha)' => $gestion),
+        'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe', 'YEAR(Pago.fecha)' => $gestion,'Pago.monto !=' => 0.00),
         'order' => array('Pago.fecha ASC')
     ));
   }

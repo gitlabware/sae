@@ -30,6 +30,7 @@ $Pago = new Pago();
         <table id="general-table" class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Ambiente</th>
                     <th>Concepto</th>
                     <th>Monto</th>
@@ -75,6 +76,7 @@ $Pago = new Pago();
                   <?php endforeach; ?>
                   <tr class="info">
                       <td></td>
+                      <td></td>
                       <td>TOTAL:</td>
                       <td><?php echo $total[$key]; ?></td>
                       <td></td>
@@ -90,6 +92,7 @@ $Pago = new Pago();
                         $saldo = $rm['Ambiente']['saldo'];
                       }
                       ?>
+                      <td></td>
                       <td>MONTO: </td>
                       <td><?php echo $this->Form->text("Recibo.ambiente.$key.monto", array('class' => 'form-control submonto', 'id' => 'dato-monto-' . $key, 'value' => $rm['Pago']['monto_tmp'], 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
                       <td>GUARDAR CAMBIO: </td>
@@ -100,6 +103,7 @@ $Pago = new Pago();
                   <?php echo $this->Form->hidden("Dato.ambiente.$key.ambiente_id", array('value' => $rm['Pago']['ambiente_id'])); ?>
                 <?php endforeach; ?>
                 <tr>
+                    <td></td>
                     <td>MONTO TOTAL: </td>
                     <td><?php echo $this->Form->text("Recibo.monto", array('class' => 'form-control', 'id' => 'dato-monto', 'type' => 'number', 'step' => 'any', 'min' => 0, 'required', 'disabled')); ?></td>
                     <td>CAMBIO TOTAL: </td>
