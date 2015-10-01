@@ -9,6 +9,7 @@
                       </th>
                       <th>Ambiente</th>
                       <th>Representante</th>
+                      <th style="width: 20%;">Codigo</th>
                   </tr>
               </thead>
               <tbody>
@@ -20,6 +21,9 @@
                         </td>
                         <td><?php echo $am['Ambiente']['nombre'] ?></td>
                         <td><?php echo $am['Representante']['nombre'] ?></td>
+                        <td>
+                            <?php echo $this->Form->text("Dato.$key.codigo", array('class' => 'form-control')); ?>
+                        </td>
                     </tr>
                   <?php endforeach; ?>
               </tbody>

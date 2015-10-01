@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class NomenclaturasController extends AppController {
 
-  public $uses = array('Nomenclatura','Concepto','Ambiente','Piso','NomenclaturasAmbiente');
+  public $uses = array('Nomenclatura', 'Concepto', 'Ambiente', 'Piso', 'NomenclaturasAmbiente');
   public $layout = 'sae';
 
   public function index() {
@@ -17,6 +17,7 @@ class NomenclaturasController extends AppController {
 
     $this->set(compact('nomenclaturas'));
   }
+
   public function ver() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
 
@@ -61,8 +62,8 @@ class NomenclaturasController extends AppController {
     }
     $this->request->data['Nomenclatura']['nomenclatura_id'] = $idNomenclatura;
     $this->request->data['Nomenclatura']['edificio_id'] = $idEdificio;
-    
-    $conceptos = $this->Concepto->find('list',array('fields' => array('id','nombre')));
+
+    $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre')));
     $this->set(compact('conceptos'));
   }
 
@@ -88,6 +89,7 @@ class NomenclaturasController extends AppController {
 
     $this->set(compact('nomenclaturas', 'idNomenclatura'));
   }
+
   public function ver_nomenclaturas($idNomenclatura = null) {
     $this->layout = 'ajax';
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -135,63 +137,77 @@ class NomenclaturasController extends AppController {
     $this->Session->setFlash("Se ha eliminado correctamente!!", 'msgbueno');
     $this->redirect($this->referer());
   }
-  
-  public function ambientes($idNomenclatura = null){
+
+  public function ambientes($idNomenclatura = null) {
     $this->layout = 'ajax';
-    $nomenclatura = $this->Nomenclatura->findByid($idNomenclatura,null,null,-1);
+    $nomenclatura = $this->Nomenclatura->findByid($idNomenclatura, null, null, -1);
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
-    $pisos = $this->Piso->find('list',array(
+    $pisos = $this->Piso->find('list', array(
       'recursive' => -1,
       'conditions' => array('edificio_id' => $idEdificio)
     ));
     $this->NomenclaturasAmbiente->virtualFields = array(
       'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)"
     );
-    $ambientes = $this->NomenclaturasAmbiente->find('all',array(
+    $ambientes = $this->NomenclaturasAmbiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('NomenclaturasAmbiente.nomenclatura_id' => $idNomenclatura),
-      'fields' => array('NomenclaturasAmbiente.id','Ambiente.nombre','NomenclaturasAmbiente.piso')
+      'fields' => array('NomenclaturasAmbiente.id', 'Ambiente.nombre', 'NomenclaturasAmbiente.piso')
     ));
     //debug($ambientes);exit;
-    $this->set(compact('idNomenclatura','pisos','nomenclatura','ambientes'));
+    $this->set(compact('idNomenclatura', 'pisos', 'nomenclatura', 'ambientes'));
   }
-  public function ajax_ambientes(){
+
+  public function ajax_ambientes() {
     $this->layout = 'ajax';
     $idPiso = $this->request->data['Piso']['id'];
     $idNomenclatura = $this->request->data['Nomenclatura']['id'];
-    $ambientes_sel = $this->NomenclaturasAmbiente->find('list',array(
+    $ambientes_sel = $this->NomenclaturasAmbiente->find('list', array(
       'recursive' => 0,
       'conditions' => array('NomenclaturasAmbiente.nomenclatura_id' => $idNomenclatura),
-      'fields' => array('NomenclaturasAmbiente.id','NomenclaturasAmbiente.ambiente_id')
+      'fields' => array('NomenclaturasAmbiente.id', 'NomenclaturasAmbiente.ambiente_id')
     ));
-    $ambientes = $this->Ambiente->find('all',array(
+    $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array(
         'Ambiente.piso_id' => $idPiso,
         'Ambiente.id != ' => $ambientes_sel
       ),
-      'fields' => array('Ambiente.nombre','Representante.nombre','Ambiente.id')
+      'fields' => array('Ambiente.nombre', 'Representante.nombre', 'Ambiente.id')
     ));
-    $this->set(compact('ambientes','idNomenclatura'));
+    $this->set(compact('ambientes', 'idNomenclatura'));
   }
-  
-  public function registra_ambientes(){
+
+  public function registra_ambientes() {
     $this->layout = 'ajax';
     $dato_m['nomenclatura_id'] = $this->request->data['Nomenclatura']['id'];
-    foreach ($this->request->data['Dato'] as $da){
-      if($da['marca'] == '1'){
+    foreach ($this->request->data['Dato'] as $da) {
+      if ($da['marca'] == '1') {
         $dato_m['ambiente_id'] = $da['ambiente_id'];
+        $dato_m['codigo'] = $da['codigo'];
         $this->NomenclaturasAmbiente->create();
         $this->NomenclaturasAmbiente->save($dato_m);
       }
     }
-    
+
     exit;
   }
-  
-  public function quita_ambiente($idNomenclatura = NULL,$id = null){
+
+  public function quita_ambiente($idNomenclatura = NULL, $id = null) {
     $this->NomenclaturasAmbiente->delete($id);
-    $this->redirect(array('action' => 'ambientes',$idNomenclatura));
+    $this->redirect(array('action' => 'ambientes', $idNomenclatura));
+  }
+
+  public function get_ambientes($idNomenclatura = null) {
+    $this->NomenclaturasAmbiente->virtualFields = array(
+      'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)"
+    );
+    $ambientes = $this->NomenclaturasAmbiente->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('NomenclaturasAmbiente.nomenclatura_id' => $idNomenclatura),
+      'fields' => array('NomenclaturasAmbiente.codigo','NomenclaturasAmbiente.id', 'Ambiente.nombre', 'NomenclaturasAmbiente.piso')
+    ));
+    return $ambientes;
   }
 
 }

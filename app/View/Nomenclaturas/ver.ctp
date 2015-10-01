@@ -21,14 +21,14 @@
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <?php foreach ($nomenclaturas as $nom): ?>
           <div class="panel panel-default">
-              <div class="panel-heading" style="background-color: #394263;" role="tab" id="headingOne-<?php echo $nom['Nomenclatura']['id']; ?>">
+              <div class="panel-heading" style="background-color: #333333;" role="tab" id="headingOne-<?php echo $nom['Nomenclatura']['id']; ?>">
                   <h4 class="panel-title ">
                       <a role="button" class="ablanco" data-toggle="collapse" data-parent="#accordion" href="#collapseOne-<?php echo $nom['Nomenclatura']['id']; ?>" aria-expanded="true" aria-controls="collapseOne">
                           <b><?php echo $nom['Nomenclatura']['codigo'] ?>- </b> <?php echo $nom['Nomenclatura']['nombre'] ?>
                       </a>
                   </h4>
               </div>
-              <div id="collapseOne-<?php echo $nom['Nomenclatura']['id']; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+              <div id="collapseOne-<?php echo $nom['Nomenclatura']['id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                   <div class="panel-body" style="width: 100%; margin-left: 10px;" id="nom-<?php echo $nom['Nomenclatura']['id']; ?>">
                       
                   </div>
@@ -41,4 +41,5 @@
     </div>
 </div>
 <!-- END Example Block -->
+
 
