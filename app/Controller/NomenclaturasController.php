@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class NomenclaturasController extends AppController {
 
-  public $uses = array('Nomenclatura', 'Concepto', 'Ambiente', 'Piso', 'NomenclaturasAmbiente');
+  public $uses = array('Nomenclatura', 'Concepto', 'Ambiente', 'Piso', 'NomenclaturasAmbiente', 'Subconcepto');
   public $layout = 'sae';
 
   public function index() {
@@ -52,6 +52,7 @@ class NomenclaturasController extends AppController {
     if (!empty($ultimo)) {
       $codigo = $ultimo['Nomenclatura']['codigo'] + 1;
     }
+    $codigo_padre = $this->get_codigo_com($idNomenclatura, "");
 
     $this->request->data = $nomenclatura = $this->Nomenclatura->find('first', array(
       'recursive' => -1,
@@ -64,11 +65,22 @@ class NomenclaturasController extends AppController {
     $this->request->data['Nomenclatura']['edificio_id'] = $idEdificio;
 
     $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre')));
-    $this->set(compact('conceptos'));
+    if (!empty($this->request->data['Nomenclatura']['concepto_id'])) {
+      $subconceptos = $this->Subconcepto->find('list', array(
+        'recursive' => -1,
+        'conditions' => array('concepto_id' => $this->request->data['Nomenclatura']['concepto_id']),
+        'fields' => array('id', 'nombre')
+      ));
+    }else{
+      $subconceptos = array();
+    }
+
+    $this->set(compact('conceptos','subconceptos','codigo_padre'));
   }
 
   public function registra() {
     if (!empty($this->request->data['Nomenclatura'])) {
+      //debug($this->request->data);exit;
       $this->Nomenclatura->create();
       $this->Nomenclatura->save($this->request->data['Nomenclatura']);
       $this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
@@ -205,9 +217,19 @@ class NomenclaturasController extends AppController {
     $ambientes = $this->NomenclaturasAmbiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('NomenclaturasAmbiente.nomenclatura_id' => $idNomenclatura),
-      'fields' => array('NomenclaturasAmbiente.codigo','NomenclaturasAmbiente.id', 'Ambiente.nombre', 'NomenclaturasAmbiente.piso')
+      'fields' => array('NomenclaturasAmbiente.codigo', 'NomenclaturasAmbiente.id', 'Ambiente.nombre', 'NomenclaturasAmbiente.piso')
     ));
     return $ambientes;
+  }
+
+  public function ajax_subconceptos($idConcepto = null) {
+    $this->layout = 'ajax';
+    $subconceptos = $this->Subconcepto->find('list', array(
+      'recursive' => -1,
+      'conditions' => array('concepto_id' => $idConcepto),
+      'fields' => array('id', 'nombre')
+    ));
+    $this->set(compact('subconceptos'));
   }
 
 }

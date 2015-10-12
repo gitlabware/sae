@@ -47,3 +47,8 @@
       </script>
     <?php endforeach; ?>
 </div>
+<?php if (!empty($nomenclaturas)): ?>
+  <script>
+    $('#collapseOne-<?php echo $idNomenclatura; ?>').addClass('in');
+  </script>
+<?php endif; ?>

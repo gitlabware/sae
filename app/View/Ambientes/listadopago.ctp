@@ -1,6 +1,8 @@
 <?php
 App::import('Model', 'Pago');
 $Pago = new Pago();
+App::import('Model', 'NomenclaturasAmbiente');
+$NomenclaturasAmbiente = new NomenclaturasAmbiente();
 ?>
 <!-- Example Block -->
 <div class="block">
@@ -9,6 +11,7 @@ $Pago = new Pago();
         <h2>Detalle de Pagos</h2>
     </div>
     <center><h1>RECIBO # <?php echo $recibo['Recibo']['numero'] ?></h1></center>
+    <?php echo $this->Form->create('Ambiente', array('action' => 'recibo/' . $recibo['Recibo']['id'] . '/1')); ?>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -18,39 +21,59 @@ $Pago = new Pago();
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <b>Fecha: </b>2015-03-17<br />
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="user-settings-email">Banco/Caja: </label>
+                <div class="col-md-8">
+                    <?php echo $this->Form->select('Recibo.banco_id', $bancos, array('class' => 'form-control', 'required', 'empty' => 'Seleccione Banco/Caja')); ?>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Example Content -->
-    <?php echo $this->Form->create('Ambiente', array('action' => 'recibo/' . $recibo['Recibo']['id'] . '/1')); ?>
+
     <b>Listado y detalle de pagos </b>
     <div class="table-responsive">
         <table id="general-table" class="table table-bordered">
             <thead>
                 <tr>
                     <th>Id</th>
+                    <th>Piso</th>
                     <th>Ambiente</th>
                     <th>Concepto</th>
                     <th>Monto</th>
                     <th>Fecha</th>
                     <th>Estado</th>
+                    <th>Categoria</th>
                     <th>Accion</th>
                 </tr>
             </thead>
             <tbody> 
                 <?php $total = array(); ?>
+                <?php
+                /* $Pago->virtualFields = array(
+                  'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)"
+                  ); */
+                ?>
+                <?php $ji = 0; ?>
                 <?php foreach ($recibo_m as $key => $rm): ?>
+
                   <?php
                   $pagos = $Pago->find('all', array(
                     'conditions' => array('Pago.recibo_id' => $recibo['Recibo']['id'], 'Pago.ambiente_id' => $rm['Pago']['ambiente_id'])
                   ));
+                  //debug($pagos);exit;
                   ?>
                   <?php $total[$key] = 0.00; ?>
                   <?php foreach ($pagos as $ik => $man): ?>
+                    <?php $ji++; ?>
                     <tr class="warning">    
-                        <td><?php echo $ik+1?></td>
+                        <td><?php echo $ik + 1 ?></td>
+                        <td><?php echo $this->requestAction(array('action' => 'get_piso', $man['Ambiente']['piso_id'])); ?></td>
                         <td><a href="javascript:"><?php echo $man['Ambiente']['nombre']; ?></a></td>
                         <td><?php echo $man['Concepto']['nombre']; ?></td>
                         <td>
@@ -63,9 +86,26 @@ $Pago = new Pago();
                             ?>
                             <?php echo $man['Pago']['monto_total']; ?>
                         </td>
+                        <?php
+                        $nomenclaturas = $NomenclaturasAmbiente->find('list', array(
+                          'recursive' => 0,
+                          'conditions' => array('NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id']),
+                          'fields' => array('Nomenclatura.id', 'Nomenclatura.nombre')
+                        ));
+                        //debug();exit;
+                        $c_seleccion = '';
+                        if (!empty($nomenclaturas)) {
+                          $c_seleccion = key($nomenclaturas);
+                        }
+                        //debug($nomenclaturas);exit;
+                        ?>
                         <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
                         <td class="text-center">
                             <?php echo $man['Pago']['estado']; ?>
+                        </td>
+                        <td>
+                            <?php echo $this->Form->select("Pagos.$ji.nomenclatura_id", $nomenclaturas, array('class' => 'form-control', 'value' => $c_seleccion)) ?>
+                            <?php echo $this->Form->hidden("Pagos.$ji.pago_id", array('value' => $man['Pago']['id'])); ?>
                         </td>
                         <td class="text-center">
                             <button class="btn btn-xs btn-primary" type="button" title="Editar Monto" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'editar_monto', $man['Pago']['id'], $recibo['Recibo']['id'])); ?>');"><i class="gi gi-pencil"></i></button>
@@ -77,8 +117,10 @@ $Pago = new Pago();
                   <tr class="info">
                       <td></td>
                       <td></td>
+                      <td></td>
                       <td>TOTAL:</td>
                       <td><?php echo $total[$key]; ?></td>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -93,16 +135,20 @@ $Pago = new Pago();
                       }
                       ?>
                       <td></td>
+                      <td></td>
+                      <td></td>
                       <td>MONTO: </td>
                       <td><?php echo $this->Form->text("Recibo.ambiente.$key.monto", array('class' => 'form-control submonto', 'id' => 'dato-monto-' . $key, 'value' => $rm['Pago']['monto_tmp'], 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
                       <td>GUARDAR CAMBIO: </td>
-                      <td><?php echo $this->Form->text("Dato.ambiente.$key.cambio", array('class' => 'form-control subcambio', 'id' => 'dato-cambio-' . $key, 'value' => ( round($rm['Pago']['monto_tmp'] + $saldo,2)- round($total[$key],2)), 'type' => 'number', 'step' => 'any', 'required', 'min' => 0)); ?></td>
+                      <td><?php echo $this->Form->text("Dato.ambiente.$key.cambio", array('class' => 'form-control subcambio', 'id' => 'dato-cambio-' . $key, 'value' => ( round($rm['Pago']['monto_tmp'] + $saldo, 2) - round($total[$key], 2)), 'type' => 'number', 'step' => 'any', 'required', 'min' => 0)); ?></td>
                       <td></td>
                       <td></td>
                   </tr>
                   <?php echo $this->Form->hidden("Dato.ambiente.$key.ambiente_id", array('value' => $rm['Pago']['ambiente_id'])); ?>
                 <?php endforeach; ?>
                 <tr>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td>MONTO TOTAL: </td>
                     <td><?php echo $this->Form->text("Recibo.monto", array('class' => 'form-control', 'id' => 'dato-monto', 'type' => 'number', 'step' => 'any', 'min' => 0, 'required', 'disabled')); ?></td>
@@ -115,15 +161,15 @@ $Pago = new Pago();
         </table>
     </div>
     <!-- END Example Content -->
-    <?php //echo $this->Form->create('Ambiente', ['action' => 'recibo/' . $recibo['Recibo']['id'] . '/1']); ?>
+    <?php //echo $this->Form->create('Ambiente', ['action' => 'recibo/' . $recibo['Recibo']['id'] . '/1']);  ?>
     <!--<div class="row">
         <div class="col-md-4">
             <label>Total</label>
-    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
+    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']);  ?>
         </div>
         <div class="col-md-4">
             <label>Cambio</label>
-    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']); ?>
+    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']);  ?>
         </div>
         <div class="col-md-4">
             <label>&nbsp;</label>
@@ -136,7 +182,7 @@ $Pago = new Pago();
     </div><br>-->
     <div class="row">
         <div class="col-md-4">
-            <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('controller' => 'Edificios','action' => 'ambientes')); ?>'">Ambientes</button>
+            <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'ambientes')); ?>'">Ambientes</button>
         </div>
         <div class="col-md-4">
             <button class="btn btn-block btn-danger" type="button" onclick="if (confirm('Esta seguro de cancelar los pagos de este recibo??')) {
@@ -147,7 +193,7 @@ $Pago = new Pago();
             <button class="btn btn-block btn-success" type="submit">Terminar Pago</button>
         </div>
     </div>
-    
+
     <?php echo $this->Form->end(); ?>
 </div>
 <!-- END Example Block -->

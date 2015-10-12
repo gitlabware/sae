@@ -19,10 +19,10 @@
                         <label>Concepto</label>
                         <?php echo $this->Form->select("Dato.concepto_id", $conceptos, array('required', 'class' => 'form-control', 'required', 'id' => 'concepto')); ?>
                     </div>
-                    <div class="col-md-3">
+                    <!--<div class="col-md-3">
                         <label>Sub-Concepto</label>
-                        <?php echo $this->Form->select("Dato.subconcepto_id", $subconceptos, array('required', 'class' => 'form-control', 'id' => 'subconcepto')); ?>
-                    </div>
+                        <?php //echo $this->Form->select("Dato.subconcepto_id", $subconceptos, array('required', 'class' => 'form-control', 'id' => 'subconcepto')); ?>
+                    </div>-->
                     <div class="col-md-3">
                         <label>Monto</label>
                         <?php echo $this->Form->text("Dato.monto", ['class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'monto', 'required']); ?>
@@ -94,18 +94,18 @@
       {type: "text"},
       {type: "text"}
   ];
-  var subconceptos = [];
-<?php foreach ($subconceptos_aux as $key => $sub): ?>
-    subconceptos[<?php echo $key; ?>] = <?php echo $sub; ?>;
-<?php endforeach; ?>
+  //var subconceptos = [];
+<?php //foreach ($subconceptos_aux as $key => $sub): ?>
+    //subconceptos[<?php //echo $key; ?>] = <?php //echo $sub; ?>;
+<?php //endforeach; ?>
 
-  $('#subconcepto').change(function () {
+  /*$('#subconcepto').change(function () {
       $('#concepto').val(subconceptos[$('#subconcepto').val()]);
   });
 
   $('#concepto').change(function () {
       $('#subconcepto').val('');
-  });
+  });*/
 
   $('#todos').click(function () {
       if ($(this).prop('checked')) {

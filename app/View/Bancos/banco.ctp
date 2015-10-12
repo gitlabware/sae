@@ -5,7 +5,7 @@
 <!-- END Modal Header -->
 <!-- Modal Body -->
 <div class="modal-body">
-    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered', 'id' => 'form-edificio', 'enctype' => 'multipart/form-data'));?>
+    <?php echo $this->Form->create('Banco', array('action' => 'registra', 'class' => 'form-horizontal form-bordered', 'id' => 'form-edificio', 'enctype' => 'multipart/form-data'));?>
 
     <div class="row">
         <div class="col-md-12">
@@ -14,7 +14,7 @@
                     <label class="col-md-4 control-label">Codigo</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->hidden('id');?>
-                        <?php echo $this->Form->text('codigo_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo de cuenta ', 'required'));?>
+                        <?php echo $this->Form->text('codigo_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo de cuenta '));?>
                     </div>
                 </div>
                 <div class="form-group">
@@ -26,13 +26,13 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="user-settings-email">Numero de cuenta</label>
                     <div class="col-md-8">
-                        <?php echo $this->Form->text('numero_cuenta', array('class' => 'form-control', 'required', 'placeholder' => 'Ingrese el numero de cuenta'));?>
+                        <?php echo $this->Form->text('numero_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el numero de cuenta'));?>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="user-settings-email">Fondo</label>
                     <div class="col-md-8">
-                        <?php echo $this->Form->select('cuenta_id',$cuentas, array('class' => 'form-control', 'required', 'empty' => 'Seleccione el fondo'));?>
+                        <?php echo $this->Form->select('cuenta_id',$cuentas, array('class' => 'form-control', 'empty' => 'Seleccione Fondo'));?>
                     </div>
                 </div>
             </fieldset>

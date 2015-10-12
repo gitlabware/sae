@@ -102,7 +102,7 @@ class ConceptosController extends AppController {
           $datos = NULL;
           $datos['monto'] = $this->request->data['Dato']['monto'];
           $datos['concepto_id'] = $this->request->data['Dato']['concepto_id'];
-          $datos['subconcepto_id'] = $this->request->data['Dato']['subconcepto_id'];
+          //$datos['subconcepto_id'] = $this->request->data['Dato']['subconcepto_id'];
           $datos['ambiente_id'] = $dat['ambiente_id'];
           if (!empty($ambientecon)) {
             $datos['id'] = $ambientecon['Ambienteconcepto']['id'];

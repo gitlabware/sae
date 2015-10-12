@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class AmbientesController extends AppController {
 
   var $components = array('RequestHandler', 'DataTable', 'Montoliteral');
-  public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo');
+  public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo','Banco');
   public $layout = 'sae';
 
   public function beforeFilter() {
@@ -531,7 +531,8 @@ class AmbientesController extends AppController {
     }
     $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
     //debug($recibo);exit;
-    $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m'));
+    $bancos = $this->Banco->find('list',array('fields' => array('id','nombre')));
+    $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m','bancos'));
   }
 
   public function registra_pagos() {
@@ -761,12 +762,13 @@ class AmbientesController extends AppController {
         "SUM(((IF((Pago.porcentaje_interes != 'NULL'),ROUND(Pago.monto*Pago.porcentaje_interes/100,2),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),ROUND((Pago.retencion/100)*Pago.monto,2),0)))) as imp_total"),
     ));
     //debug($pagos);exit;
-    $todos_pagos = $this->Pago->find('all', array(
+    /*$todos_pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
       'fields' => array('Pago.id'),
-    ));
+    ));*/
     if ($terminar) {
+      //debug($this->request->data);exit;
       foreach ($this->request->data['Dato']['ambiente'] as $am) {
         $this->Ambiente->id = $am['ambiente_id'];
         $dambiente['saldo'] = $am['cambio'];
@@ -775,11 +777,21 @@ class AmbientesController extends AppController {
       $this->Recibo->id = $idRecibo;
       $this->request->data['Recibo']['estado'] = 'Terminado';
       $this->Recibo->save($this->request->data['Recibo']);
-      foreach ($todos_pagos as $pa) {
+      $this->request->data['Pago']['banco'] = $this->Banco->find('first',array(
+        'recursive' => -1,
+        'conditions' => array('Banco.id' => $this->request->data['Recibo']['banco_id'])
+      ));
+      foreach ($this->request->data['Pagos'] as $pa) {
+        $this->Pago->id = $pa['pago_id'];
+        $this->request->data['Pago']['estado'] = 'Pagado';
+        $this->request->data['Pago']['nomenclatura_id'] = $pa['nomenclatura_id'];
+        $this->Pago->save($this->request->data['Pago']);
+      }
+      /*foreach ($todos_pagos as $pa) {
         $this->Pago->id = $pa['Pago']['id'];
         $this->request->data['Pago']['estado'] = 'Pagado';
         $this->Pago->save($this->request->data['Pago']);
-      }
+      }*/
     }
 
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
@@ -1051,6 +1063,19 @@ class AmbientesController extends AppController {
     $this->Pago->save($dpago);
     $this->Session->setFlash("Se quito correctamente el pago!!", 'msgbueno');
     $this->redirect($this->referer());
+  }
+  
+  public function get_piso($idPiso = null){
+    $piso = $this->Piso->find('first',array(
+      'recursive' => -1,
+      'conditions' => array('Piso.id' => $idPiso),
+      'fields' => 'Piso.nombre'
+    ));
+    if(!empty($piso)){
+      return $piso['Piso']['nombre'];
+    }else{
+      return "";
+    }
   }
 
 }

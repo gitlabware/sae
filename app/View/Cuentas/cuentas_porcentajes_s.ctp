@@ -1,6 +1,6 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-building"></i> Reparticion de cuentas - <?php echo $concepto['Concepto']['nombre']; ?></h2>
+    <h2 class="modal-title"><i class="fa fa-building"></i> Reparticion de cuentas - <?php echo $subconcepto['Subconcepto']['nombre']; ?></h2>
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
@@ -23,7 +23,7 @@
                       <td class="text-center"><?php echo $cu['Cuenta']['nombre'] ?></td>
                       <td style="width: 40%;">
                           <?php echo $this->Form->hidden("Cuentasporcentaje.$key.id") ?>
-                          <?php echo $this->Form->hidden("Cuentasporcentaje.$key.concepto_id", array('value' => $concepto['Concepto']['id'])) ?>
+                          <?php echo $this->Form->hidden("Cuentasporcentaje.$key.subconcepto_id", array('value' => $subconcepto['Subconcepto']['id'])) ?>
                           <?php echo $this->Form->hidden("Cuentasporcentaje.$key.cuenta_id", array('value' => $cu['Cuenta']['id'])) ?>
                           <?php echo $this->Form->text("Cuentasporcentaje.$key.porcentaje", array('class' => 'form-control', 'placeholder' => '% Porcentaje', 'required', '')); ?>
                       </td>

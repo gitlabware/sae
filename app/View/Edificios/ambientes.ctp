@@ -41,15 +41,16 @@
     </div>
 </div>
 <script>
+  var idEdificio = <?php echo $this->Session->read('Auth.User.edificio_id');?>;
   urljsontablatrab = '<?php echo $this->Html->url(array('action' => 'ambientes.json')); ?>';
   function editar(idPiso, idAmbiente) {
       cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'ambiente')); ?>/' + idPiso + '/' + idAmbiente);
   }
-  function servicios(idAmbiente, idPiso) {
-      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'aservicios')); ?>/' + idPiso + '/' + idAmbiente);
+  function servicios(idAmbiente) {
+      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'aservicios')); ?>/' + idAmbiente + '/' + idEdificio);
   }
   function inquilinos(idAmbiente, idPiso) {
-      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'inquilinos')); ?>/' + idPiso + '/' + idAmbiente);
+      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'inquilinos')); ?>/' + idAmbiente + '/' + idPiso);
   }
   function eliminar(idAmbiente) {
       if (confirm('Esta seguro de eliminar el ambiente??')) {

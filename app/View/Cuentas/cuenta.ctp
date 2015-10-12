@@ -18,6 +18,7 @@
                         <?php echo $this->Form->text('nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de la cuenta', 'required')); ?>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label class="col-md-4 control-label">Descripcion</label>
                     <div class="col-md-8">

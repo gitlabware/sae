@@ -3,7 +3,7 @@
 <div class="block">
     <!-- Example Title -->
     <div class="block-title">
-        <h2>Listado de Bancos</h2>
+        <h2>Listado de Bancos/Cajas</h2>
     </div>    
     <!-- Example Content -->
     <div class="table-responsive">

@@ -19,12 +19,14 @@ class BancosController extends AppController {
     $this->layout = 'ajax';
     $this->Banco->id = $idBanco;
     $this->request->data = $this->Banco->read();
-    $cuentas = $this->Cuenta->find('list');
+    $cuentas = $this->Cuenta->find('list',array('fields' => array('id','nombre')));
     $this->set(compact('cuentas'));
   }
 
   public function registra() {
     if (!empty($this->request->data['Banco'])) {
+      $this->request->data['Banco']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
+      //debug($this->request->data);exit;
       $this->Banco->create();
       $this->Banco->save($this->request->data['Banco']);
       $this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
