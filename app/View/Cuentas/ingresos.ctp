@@ -25,7 +25,7 @@
                       <td><?php echo $in['Pago']['fecha']?></td>
                       <td><?php echo $in['Cuentasmonto']['concepto']?></td>
                       <td><?php echo $in['Cuentasmonto']['porcentaje']?></td>
-                      <td><?php echo $in['Pago']['monto']*$in['Cuentasmonto']['porcentaje']/100?></td>
+                      <td><?php echo $in['Cuentasmonto']['monto']?></td>
                       <td><?php echo $in['Cuentasmonto']['ambiente']?></td>
                       <td><?php echo $in['Cuentasmonto']['piso']?></td>
                   </tr>

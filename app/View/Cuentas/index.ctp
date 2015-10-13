@@ -14,25 +14,32 @@
                 <h2>Listado de cuentas</h2>
             </div>
             <div class="row">
-                <table class="table table-striped">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Nombre de cuenta</th>
-                            <th>Descripcion</th>
+                            <th>Monto</th>
                             <th>Accion</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $total_c = 0.00; ?>
                         <?php foreach ($cuentas as $cu): ?>
+                          <?php $total_c+=$cu['Cuenta']['monto']; ?>
                           <tr>
                               <td><?php echo $cu['Cuenta']['nombre'] ?></td>
-                              <td><?php echo $cu['Cuenta']['descripcion'] ?></td>
+                              <td><?php echo $cu['Cuenta']['monto'] ?></td>
                               <td>
                                   <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'cuenta', $cu['Cuenta']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
                                   <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('action' => 'ingresos', $cu['Cuenta']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
                               </td>
                           </tr>
                         <?php endforeach; ?>
+                        <tr>
+                            <td>TOTAL:</td>
+                            <td><?= $total_c; ?></td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

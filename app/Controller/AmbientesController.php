@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class AmbientesController extends AppController {
 
   var $components = array('RequestHandler', 'DataTable', 'Montoliteral');
-  public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo','Banco');
+  public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo', 'Banco', 'Nomenclatura');
   public $layout = 'sae';
 
   public function beforeFilter() {
@@ -531,8 +531,8 @@ class AmbientesController extends AppController {
     }
     $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
     //debug($recibo);exit;
-    $bancos = $this->Banco->find('list',array('fields' => array('id','nombre')));
-    $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m','bancos'));
+    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre')));
+    $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m', 'bancos'));
   }
 
   public function registra_pagos() {
@@ -587,8 +587,8 @@ class AmbientesController extends AppController {
 
   public function registra_pagos_mark() {
 
-    /*debug($this->request->data);
-    exit;*/
+    /* debug($this->request->data);
+      exit; */
 
     if (empty($this->request->data['Recibo']['id'])) {
       $numero = $this->get_num_rec();
@@ -606,7 +606,7 @@ class AmbientesController extends AppController {
       foreach ($datos['pagos'] as $dat) {
         if ($dat['marca'] == '1') {
           $this->Pago->id = $dat['pago_id'];
-          if(!empty($dat['retencion'])){
+          if (!empty($dat['retencion'])) {
             $dato_p['retencion'] = $dat['retencion'];
           }
           $dato_p['recibo_id'] = $idRecibo;
@@ -726,8 +726,15 @@ class AmbientesController extends AppController {
         'order' => array('Pago.fecha DESC'),
         'fields' => array('Pago.fecha')
       ));
-      $nuevafecha = $ultimo_pago['Pago']['fecha'];
+      $fecha_u_p = $ultimo_pago['Pago']['fecha'];
     }
+    if (!empty($fecha_u_p)) {
+      $nuevafecha = $fecha_u_p;
+    } else {
+      $nuevafecha = strtotime('-1 month', strtotime(date('Y-m-01', strtotime($nuevafecha))));
+      $nuevafecha = date('Y-m-j', $nuevafecha);
+    }
+
     while ($cuotas_man > 0) {
       $nuevafecha = strtotime('+1 month', strtotime(date('Y-m-01', strtotime($nuevafecha))));
       $nuevafecha = date('Y-m-j', $nuevafecha);
@@ -761,12 +768,12 @@ class AmbientesController extends AppController {
         'Concepto.nombre',
         "SUM(((IF((Pago.porcentaje_interes != 'NULL'),ROUND(Pago.monto*Pago.porcentaje_interes/100,2),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),ROUND((Pago.retencion/100)*Pago.monto,2),0)))) as imp_total"),
     ));
-    //debug($pagos);exit;
-    /*$todos_pagos = $this->Pago->find('all', array(
+    debug($pagos);exit;
+    /* $todos_pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
       'fields' => array('Pago.id'),
-    ));*/
+      )); */
     if ($terminar) {
       //debug($this->request->data);exit;
       foreach ($this->request->data['Dato']['ambiente'] as $am) {
@@ -777,21 +784,27 @@ class AmbientesController extends AppController {
       $this->Recibo->id = $idRecibo;
       $this->request->data['Recibo']['estado'] = 'Terminado';
       $this->Recibo->save($this->request->data['Recibo']);
-      $this->request->data['Pago']['banco'] = $this->Banco->find('first',array(
+      $this->request->data['Pago']['banco'] = $this->Banco->find('first', array(
         'recursive' => -1,
         'conditions' => array('Banco.id' => $this->request->data['Recibo']['banco_id'])
       ));
+
       foreach ($this->request->data['Pagos'] as $pa) {
         $this->Pago->id = $pa['pago_id'];
         $this->request->data['Pago']['estado'] = 'Pagado';
         $this->request->data['Pago']['nomenclatura_id'] = $pa['nomenclatura_id'];
         $this->Pago->save($this->request->data['Pago']);
       }
-      /*foreach ($todos_pagos as $pa) {
+      foreach ($pagos as $pa){
+        $this->Banco->id = $this->request->data['Pago']['banco']['Banco']['id'];
+        $d_banco['monto'] = $this->request->data['Pago']['banco']['Banco']['monto'] + $pa[0]['monto'];
+        $this->Banco->save($d_banco);
+      }
+      /* foreach ($todos_pagos as $pa) {
         $this->Pago->id = $pa['Pago']['id'];
         $this->request->data['Pago']['estado'] = 'Pagado';
         $this->Pago->save($this->request->data['Pago']);
-      }*/
+        } */
     }
 
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
@@ -803,12 +816,12 @@ class AmbientesController extends AppController {
     $detalles_a = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) <' => date('Y')),
-      /*'fields' => array(
+      /* 'fields' => array(
         'Pago.id',
         'Pago.fecha',
         'Ambiente.nombre',
         'ROUND(Pago.monto_total,2) as monto_total'
-      )*/
+        ) */
     ));
     //debug($recibo);exit;
     $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a'));
@@ -833,7 +846,7 @@ class AmbientesController extends AppController {
     }
     $this->Recibo->delete($idRecibo);
     $this->Session->setFlash('Se cancelo correctamente!!', 'msgbueno');
-    $this->redirect(array('controller' => 'Edificios','action' => 'ambientes'));
+    $this->redirect(array('controller' => 'Edificios', 'action' => 'ambientes'));
   }
 
   public function generar_pagos() {
@@ -974,7 +987,7 @@ class AmbientesController extends AppController {
     $ambiente = $this->Ambiente->find('first', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.id' => $idAmbiente),
-      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'Ambiente.id', 'Ambiente.user_id', 'Ambiente.fecha_ocupacion', 'Ambiente.saldo','Representante.nombre'),
+      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'Ambiente.id', 'Ambiente.user_id', 'Ambiente.fecha_ocupacion', 'Ambiente.saldo', 'Representante.nombre'),
     ));
     $conceptos = $this->Concepto->find('list', array('fields' => 'nombre', 'conditions' => array("Concepto.id" => array(10, 11))));
     $conceptos_mon = $this->Ambienteconcepto->find('list', array(
@@ -1009,12 +1022,12 @@ class AmbientesController extends AppController {
     }
     $gpagos = $this->Pago->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe','Pago.monto !=' => 0.00),
+      'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe', 'Pago.monto !=' => 0.00),
       'group' => array('YEAR(Pago.fecha)'),
       'order' => array('Pago.fecha ASC'),
       'fields' => array('YEAR(Pago.fecha) as gestion')
     ));
-     /*debug($gpagos);
+    /* debug($gpagos);
       exit; */
     $deuda_tot_man = $this->Pago->find('all', array(
       'recursive' => -1,
@@ -1039,7 +1052,7 @@ class AmbientesController extends AppController {
   public function get_pagos_ges($idAmbiente = null, $gestion = null) {
     return $this->Pago->find('all', array(
         'recursive' => 0,
-        'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe', 'YEAR(Pago.fecha)' => $gestion,'Pago.monto !=' => 0.00),
+        'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado' => 'Debe', 'YEAR(Pago.fecha)' => $gestion, 'Pago.monto !=' => 0.00),
         'order' => array('Pago.fecha ASC')
     ));
   }
@@ -1064,16 +1077,16 @@ class AmbientesController extends AppController {
     $this->Session->setFlash("Se quito correctamente el pago!!", 'msgbueno');
     $this->redirect($this->referer());
   }
-  
-  public function get_piso($idPiso = null){
-    $piso = $this->Piso->find('first',array(
+
+  public function get_piso($idPiso = null) {
+    $piso = $this->Piso->find('first', array(
       'recursive' => -1,
       'conditions' => array('Piso.id' => $idPiso),
       'fields' => 'Piso.nombre'
     ));
-    if(!empty($piso)){
+    if (!empty($piso)) {
       return $piso['Piso']['nombre'];
-    }else{
+    } else {
       return "";
     }
   }

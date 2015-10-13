@@ -99,7 +99,7 @@ class CuentasController extends AppController {
     $ingresos = $this->Cuentasmonto->find('all', array(
       'recursive' => 0,
       'conditions' => array('Cuentasmonto.cuenta_id' => $idCuenta, 'Pago.estado' => 'Pagado'),
-      'fields' => array('Cuentasmonto.created', 'Cuentasmonto.concepto', 'Cuentasmonto.piso', 'Cuentasmonto.ambiente', 'Cuentasmonto.porcentaje', 'Pago.monto', 'Pago.fecha')
+      'fields' => array('Cuentasmonto.created', 'Cuentasmonto.concepto', 'Cuentasmonto.piso', 'Cuentasmonto.ambiente','Cuentasmonto.monto', 'Cuentasmonto.porcentaje', 'Pago.monto', 'Pago.fecha')
     ));
 
     $this->set(compact('ingresos'));
