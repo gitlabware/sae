@@ -768,7 +768,7 @@ class AmbientesController extends AppController {
         'Concepto.nombre',
         "SUM(((IF((Pago.porcentaje_interes != 'NULL'),ROUND(Pago.monto*Pago.porcentaje_interes/100,2),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),ROUND((Pago.retencion/100)*Pago.monto,2),0)))) as imp_total"),
     ));
-    debug($pagos);exit;
+    //debug($pagos);exit;
     /* $todos_pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo),
