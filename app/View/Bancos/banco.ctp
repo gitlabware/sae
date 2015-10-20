@@ -35,6 +35,12 @@
                         <?php echo $this->Form->select('cuenta_id',$cuentas, array('class' => 'form-control', 'empty' => 'Seleccione Fondo'));?>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="user-settings-email">Monto</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->text('monto', array('class' => 'form-control', 'placeholder' => 'Monto en caja/banco','step' => 'any','type' => 'number'));?>
+                    </div>
+                </div>
             </fieldset>
             
         </div>

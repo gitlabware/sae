@@ -15,6 +15,7 @@
                     <th>Nombre</th>
                     <th>Numero Cta.</th>
                     <th>Fondo</th>
+                    <th>Monto</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,7 @@
                       <td><?php echo $ba['Banco']['nombre']; ?></td>
                       <td><?php echo $ba['Banco']['numero_cuenta']; ?></td>
                       <td><?php echo $ba['Cuenta']['nombre']?></td>
+                      <td><?php echo $ba['Banco']['monto']?></td>
                       <td class="text-center">
                           <div class="btn-group btn-group-xs">
                               <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'banco', $ba['Banco']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>

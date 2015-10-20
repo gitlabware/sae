@@ -89,14 +89,40 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
                         <?php
                         $nomenclaturas = $NomenclaturasAmbiente->find('list', array(
                           'recursive' => 0,
-                          'conditions' => array('NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id']),
+                          'conditions' => array('NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'], 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']),
                           'fields' => array('Nomenclatura.id', 'Nomenclatura.nombre')
                         ));
-                        //debug();exit;
                         $c_seleccion = '';
                         if (!empty($nomenclaturas)) {
                           $c_seleccion = key($nomenclaturas);
                         }
+
+                        if (split('-', $man['Pago']['fecha'])[0] < date('Y')) {
+                          /* = $NomenclaturasAmbiente->find('first', array(
+                            'recursive' => 0,
+                            'conditions' => array(
+                            'Nomenclatura.tipo LIKE' => 'Gestiones Anteriores',
+                            'NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'],
+                            'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']
+                            ),
+                            'fields' => array('Nomenclatura.id')
+                            )); */
+                          $ant_nomen = $NomenclaturasAmbiente->find('first', array(
+                            'recursive' => 0,
+                            'conditions' => array(
+                              '(EXISTS(SELECT * FROM subconceptos WHERE subconceptos.id = Nomenclatura.subconcepto_id AND subconceptos.gestiones_anteriores = 1))',
+                              'NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'],
+                              'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']
+                            ),
+                            'fields' => array('Nomenclatura.id')
+                          ));
+                          //debug($ant_nomen);exit;
+                          if (!empty($ant_nomen)) {
+                            $c_seleccion = $ant_nomen['Nomenclatura']['id'];
+                          }
+                        }
+
+                        //debug();exit;
                         //debug($nomenclaturas);exit;
                         ?>
                         <td><a href="javascript:void(0)" class="label label-warning"><?php echo $man['Pago']['fecha']; ?></a></td>
@@ -161,15 +187,15 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
         </table>
     </div>
     <!-- END Example Content -->
-    <?php //echo $this->Form->create('Ambiente', ['action' => 'recibo/' . $recibo['Recibo']['id'] . '/1']);  ?>
+    <?php //echo $this->Form->create('Ambiente', ['action' => 'recibo/' . $recibo['Recibo']['id'] . '/1']);   ?>
     <!--<div class="row">
         <div class="col-md-4">
             <label>Total</label>
-    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']);  ?>
+    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']);   ?>
         </div>
         <div class="col-md-4">
             <label>Cambio</label>
-    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']);  ?>
+    <?php //echo $this->Form->text('Dato.total', ['class' => 'form-control', 'id' => 'idformtotal', 'type' => 'number', 'step' => 'any']);   ?>
         </div>
         <div class="col-md-4">
             <label>&nbsp;</label>

@@ -156,7 +156,8 @@ class NomenclaturasController extends AppController {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $pisos = $this->Piso->find('list', array(
       'recursive' => -1,
-      'conditions' => array('edificio_id' => $idEdificio)
+      'conditions' => array('edificio_id' => $idEdificio),
+      'fields' => array('id','nombre')
     ));
     $this->NomenclaturasAmbiente->virtualFields = array(
       'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)"

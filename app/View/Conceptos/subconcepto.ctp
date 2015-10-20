@@ -39,6 +39,12 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Gestns. Anteriores</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->checkbox('Subconcepto.gestiones_anteriores', array('class' => 'form-control')); ?>
+            </div>
+        </div>
     </fieldset>
     <div class="form-group form-actions">
         <div class="col-xs-12 text-right">
@@ -53,8 +59,8 @@
 <!-- END Modal Body -->
 <script>
 <?php if (!empty($this->request->data['Subconcepto']['id'])): ?>
-  show_text();
-  $('.text-tipo').val('<?php echo $this->request->data['Subconcepto']['tipo']?>');
+    show_text();
+    $('.text-tipo').val('<?php echo $this->request->data['Subconcepto']['tipo'] ?>');
 <?php endif; ?>
 
   function show_text() {

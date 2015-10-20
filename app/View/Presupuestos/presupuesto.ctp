@@ -4,13 +4,15 @@
     <h2 class="text-center">PLAN ANUAL OPERATIVO</h2>
     <h2 class="text-center text-success page-header">INGRESOS</h2>
     <div class="form-horizontal form-bordered">
-        <?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_ingreso', $presupuesto['Presupuesto']['id'])); ?>
+        <?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_ingreso', $presupuesto['Presupuesto']['id'], 'id' => 'form-ingresos')); ?>
         <?php echo $this->Form->hidden('Ingreso.presupuesto_id', array('value' => $presupuesto['Presupuesto']['id'])); ?>
         <div class="form-group">
-
             <div class="col-md-3">
                 <div id="concepto-select">
-                    <label>Concepto ingreso <a href="javascript:" class="label label-primary" onclick="muestra_form_c();">Nuevo</a></label>
+                    <label>Concepto ingreso 
+                        <a href="javascript:" class="label label-primary" onclick="muestra_form_c();">Nuevo</a> 
+                        <a href="javascript:" class="label label-warning" id="gene-x-ambiente" onclick="ir_pre_ambientes();">Generar</a>
+                    </label>
                     <?php echo $this->Form->select('Ingreso.subconcepto_id', $subconceptos, array('class' => 'form-control f-subconcepto', 'empty' => 'Seleccione el sub-concepto', 'required')); ?>
                 </div>
                 <div id="concepto-form" style="background-color: gainsboro; display: none;">
@@ -418,5 +420,34 @@
           $(val).prop('required', true);
       });
   }
+  function ir_pre_ambientes() {
+      subconcepto = $('.f-subconcepto').val();
+      window.location.href = '<?= $this->Html->url(array('action' => 'pre_ambientes', $presupuesto['Presupuesto']['id'])); ?>/' + subconcepto;
+  }
+  /*$('.f-subconcepto').change(function () {
+   
+   var postData = $("#form-ingresos").serializeArray();
+   var formURL = '<?= $this->Html->url(array('action' => 'get_ing_anu')); ?>';
+   $.ajax(
+   {
+   url: formURL,
+   type: "POST",
+   data: postData,
+   success: function (data, textStatus, jqXHR)
+   {
+   console.log($.parseJSON(data).sub);
+   if (data == 1) {
+   alert("si");
+   $('#gene-x-ambiente').attr('href', '<?= $this->Html->url(array('action' => 'pre_ambientes')); ?>/' + $.parseJSON(data).sub);
+   } else {
+   $('#gene-x-ambiente').attr('href', '<?= $this->Html->url(array('action' => 'pre_ambientes')); ?>/' + $.parseJSON(data).sub);
+   }
+   //$('#c-ingreso').val($.parseJSON(data).monto);
+   //data: return data from server
+   //$("#parte").html(data);
+   }
+   });
+   
+   });*/
   //-------------------- TERMINA EGRESOS -------------------//
 </script>

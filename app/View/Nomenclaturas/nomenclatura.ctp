@@ -59,10 +59,7 @@
 </div>
 <!-- END Modal Body -->
 
-
 <script>
-
-
   $('#idconcepto').change(function () {
       $('#div-subconcepto').load('<?php echo $this->Html->url(array('action' => 'ajax_subconceptos')); ?>/' + $('#idconcepto').val());
   });

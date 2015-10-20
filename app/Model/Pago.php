@@ -42,13 +42,14 @@ class Pago extends AppModel {
       //debug($this->data);exit;
       $banco = $this->data['Pago']['banco']['Banco'];
       $Cuenta = new Cuenta();
+      $Nomenclatura = new Nomenclatura();
+      $nomen_a = $Nomenclatura->find('first', array(
+        'recursive' => -1,
+        'conditions' => array('id' => $pago['Pago']['nomenclatura_id'])
+      ));
       if (empty($banco['cuenta_id']) && !empty($pago['Pago']['nomenclatura_id'])) {
         $Cuentasporcentaje = new Cuentasporcentaje();
-        $Nomenclatura = new Nomenclatura();
-        $nomen_a = $Nomenclatura->find('first', array(
-          'recursive' => -1,
-          'conditions' => array('id' => $pago['Pago']['nomenclatura_id'])
-        ));
+
         $cuentas = array();
         //debug($nomen_a);
         if (!empty($nomen_a['Nomenclatura']['subconcepto_id'])) {
@@ -59,8 +60,9 @@ class Pago extends AppModel {
             ),
             'fields' => array('Cuentasporcentaje.cuenta_id', 'Cuentasporcentaje.porcentaje')
           ));
+          $datos['subconcepto_id'] = $nomen_a['Nomenclatura']['subconcepto_id'];
           //debug($cuentas);exit;
-        }elseif(!empty($nomen_a['Nomenclatura']['concepto_id'])){
+        } elseif (!empty($nomen_a['Nomenclatura']['concepto_id'])) {
           $cuentas = $Cuentasporcentaje->find('all', array('recursive' => 0,
             'conditions' => array(
               'Cuentasporcentaje.concepto_id' => $nomen_a['Nomenclatura']['concepto_id']
@@ -68,8 +70,9 @@ class Pago extends AppModel {
             ),
             'fields' => array('Cuentasporcentaje.cuenta_id', 'Cuentasporcentaje.porcentaje')
           ));
+          $datos['concepto_id'] = $nomen_a['Nomenclatura']['concepto_id'];
         }
-        
+
         $Cuentasmonto = new Cuentasmonto();
         foreach ($cuentas as $cu) {
           $Cuentasmonto->deleteAll(array('pago_id' => $idPago, 'cuenta_id' => $cu['Cuentasporcentaje']['cuenta_id']));
@@ -93,6 +96,12 @@ class Pago extends AppModel {
           $Cuenta->save($d_cuenta);
         }
       } else {
+        if (!empty($nomen_a['Nomenclatura']['subconcepto_id'])) {
+          $datos['subconcepto_id'] = $nomen_a['Nomenclatura']['subconcepto_id'];
+          //debug($cuentas);exit;
+        } elseif (!empty($nomen_a['Nomenclatura']['concepto_id'])) {
+          $datos['concepto_id'] = $nomen_a['Nomenclatura']['concepto_id'];
+        }
         $Cuentasmonto = new Cuentasmonto();
         $Cuentasmonto->deleteAll(array('pago_id' => $idPago, 'cuenta_id' => $banco['cuenta_id']));
         $monto = $pago['Pago']['monto'];

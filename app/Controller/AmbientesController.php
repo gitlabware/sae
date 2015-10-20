@@ -774,6 +774,7 @@ class AmbientesController extends AppController {
       'conditions' => array('Pago.recibo_id' => $idRecibo),
       'fields' => array('Pago.id'),
       )); */
+    //debug($pagos);exit;
     if ($terminar) {
       //debug($this->request->data);exit;
       foreach ($this->request->data['Dato']['ambiente'] as $am) {
@@ -795,9 +796,10 @@ class AmbientesController extends AppController {
         $this->request->data['Pago']['nomenclatura_id'] = $pa['nomenclatura_id'];
         $this->Pago->save($this->request->data['Pago']);
       }
+      
       foreach ($pagos as $pa){
         $this->Banco->id = $this->request->data['Pago']['banco']['Banco']['id'];
-        $d_banco['monto'] = $this->request->data['Pago']['banco']['Banco']['monto'] + $pa[0]['monto'];
+        $d_banco['monto'] = $this->request->data['Pago']['banco']['Banco']['monto'] + $pa[0]['imp_total'];
         $this->Banco->save($d_banco);
       }
       /* foreach ($todos_pagos as $pa) {
