@@ -1,7 +1,7 @@
 
 <div class="block">
     <h3 class="text-center">EDIFICIO <?php echo strtoupper($presupuesto['Edificio']['nombre']); ?></h3>
-    <h2 class="text-center">PLAN ANUAL OPERATIVO <?= $presupuesto['Presupuesto']['gestion']?></h2>
+    <h2 class="text-center">PLAN ANUAL OPERATIVO <?= $presupuesto['Presupuesto']['gestion'] ?></h2>
     <h2 class="text-center text-success page-header">INGRESOS</h2>
     <div class="form-horizontal form-bordered">
         <?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_ingreso', $presupuesto['Presupuesto']['id'], 'id' => 'form-ingresos')); ?>
@@ -10,36 +10,12 @@
             <div class="col-md-3">
                 <div id="concepto-select">
                     <label>Concepto ingreso 
-                        <a href="javascript:" class="label label-primary" onclick="muestra_form_c();">Nuevo</a> 
+                        <a href="javascript:" class="label label-primary" onclick="cargarmodal('<?= $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconcepto')) ?>');">Nuevo</a> 
                         <a href="javascript:" class="label label-warning" id="gene-x-ambiente" onclick="ir_pre_ambientes();">Generar</a>
                     </label>
-                    <?php echo $this->Form->select('Ingreso.subconcepto_id', $subconceptos, array('class' => 'form-control f-subconcepto', 'empty' => 'Seleccione el sub-concepto', 'required')); ?>
+                    <?php echo $this->Form->select('Ingreso.subconcepto_id', $subconceptos, array('class' => 'form-control f-subconcepto', 'empty' => 'Seleccione el sub-concepto', 'required', 'id' => 'sel-subconcepto')); ?>
                 </div>
-                <div id="concepto-form" style="background-color: gainsboro; display: none;">
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Concepto <a href="javascript:" onclick="muestra_select_c();" class="label label-primary">Seleccionar</a></label>
-                            <?php echo $this->Form->select('Ingreso.concepto_id', $conceptos, array('class' => 'form-control f-n-concepto', 'empty' => 'Seleccione el sub-concepto')); ?>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <div id="c_tipo_t" style="display: none;">
-                                <label>Tipo <a href="javascript:" onclick="muestra_c_tipo_s();" class="label label-success">Seleccionar</a></label>
-                                <?php echo $this->Form->text('Ingreso.nombre_tipo', array('class' => 'form-control c-tipo-t', 'placeholder' => 'Ingrese el tipo')); ?>
-                            </div>
-                            <div id="c_tipo_s">
-                                <label>Tipo <a href="javascript:" onclick="muestra_c_tipo_t();" class="label label-success">Nuevo</a></label>
-                                <?php echo $this->Form->select('Ingreso.tipo', $tipos, array('class' => 'form-control f-n-concepto c-tipo-s', 'empty' => 'Seleccione el tipo')); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Nombre Sub-Concepto</label>
-                            <?php echo $this->Form->text('Ingreso.nombre_subconcepto', array('class' => 'form-control f-n-concepto', 'placeholder' => 'Ingrese nombre del subconcepto')); ?>
-                        </div>
-                    </div>
+                <div id="d_ajax_ges">
                 </div>
             </div>
             <div class="col-md-1">
@@ -293,46 +269,51 @@
 <script>
 
   //---------------- INGRESOS --------------//
-  function muestra_form_c() {
-      $('#concepto-select').toggle(400);
-      $('#concepto-form').toggle(400);
-      $('.f-n-concepto').each(function (i, val) {
-          $(val).prop('required', true);
-      });
-      $('.f-subconcepto').each(function (i, val) {
-          $(val).prop('required', false).val('');
-      });
-  }
-  function muestra_select_c() {
-      $('#concepto-select').toggle(400);
-      $('#concepto-form').toggle(400);
-      $('.f-n-concepto').each(function (i, val) {
-          $(val).prop('required', false).val('');
-      });
-      $('.f-subconcepto').each(function (i, val) {
-          $(val).prop('required', true);
-      });
-  }
-  function muestra_c_tipo_t() {
-      $('#c_tipo_s').toggle(400);
-      $('#c_tipo_t').toggle(400);
-      $('.c-tipo-t').each(function (i, val) {
-          $(val).prop('required', true);
-      });
-      $('.c-tipo-s').each(function (i, val) {
-          $(val).prop('required', false).val('');
-      });
-  }
-  function muestra_c_tipo_s() {
-      $('#c_tipo_t').toggle(400);
-      $('#c_tipo_s').toggle(400);
-      $('.c-tipo-t').each(function (i, val) {
-          $(val).prop('required', false).val('');
-      });
-      $('.c-tipo-s').each(function (i, val) {
-          $(val).prop('required', true);
-      });
-  }
+  /*function muestra_form_c() {
+   $('#concepto-select').toggle(400);
+   $('#concepto-form').toggle(400);
+   $('.f-n-concepto').each(function (i, val) {
+   $(val).prop('required', true);
+   });
+   $('.f-subconcepto').each(function (i, val) {
+   $(val).prop('required', false).val('');
+   });
+   }
+   function muestra_select_c() {
+   $('#concepto-select').toggle(400);
+   $('#concepto-form').toggle(400);
+   $('.f-n-concepto').each(function (i, val) {
+   $(val).prop('required', false).val('');
+   });
+   $('.f-subconcepto').each(function (i, val) {
+   $(val).prop('required', true);
+   });
+   }
+   function muestra_c_tipo_t() {
+   $('#c_tipo_s').toggle(400);
+   $('#c_tipo_t').toggle(400);
+   $('.c-tipo-t').each(function (i, val) {
+   $(val).prop('required', true);
+   });
+   $('.c-tipo-s').each(function (i, val) {
+   $(val).prop('required', false).val('');
+   });
+   }
+   function muestra_c_tipo_s() {
+   $('#c_tipo_t').toggle(400);
+   $('#c_tipo_s').toggle(400);
+   $('.c-tipo-t').each(function (i, val) {
+   $(val).prop('required', false).val('');
+   });
+   $('.c-tipo-s').each(function (i, val) {
+   $(val).prop('required', true);
+   });
+   }*/
+
+
+  $('#sel-subconcepto').change(function () {
+      $('#d_ajax_ges').load('<?= $this->Html->url(array('controller' => 'Conceptos', 'action' => 'ajax_subges')) ?>/' + $('#sel-subconcepto').val());
+  });
 
   var porcentaje = 0.00;
   var ingreso = 0.00;
@@ -421,8 +402,9 @@
       });
   }
   function ir_pre_ambientes() {
+      subges = $('#sel-subges').val();
       subconcepto = $('.f-subconcepto').val();
-      window.location.href = '<?= $this->Html->url(array('action' => 'pre_ambientes', $presupuesto['Presupuesto']['id'])); ?>/' + subconcepto;
+      window.location.href = '<?= $this->Html->url(array('action' => 'pre_ambientes', $presupuesto['Presupuesto']['id'])); ?>/' + subconcepto + '/' + subges;
   }
   /*$('.f-subconcepto').change(function () {
    

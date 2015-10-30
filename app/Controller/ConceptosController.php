@@ -208,15 +208,43 @@ class ConceptosController extends AppController {
   }
 
   public function registra_sgention() {
-    $this->SubcGestione->create();
-    $this->SubcGestione->save($this->request->data['SubcGestione']);
-    exit;
+    //debug($this->request->data['Subconcepto']);exit;
+    $valida = $this->validar('Subconcepto');
+    if (empty($valida)) {
+      if (!empty($this->request->data['Subconcepto']['nuevo_tipo'])) {
+        $this->request->data['Subconcepto']['tipo'] = $this->request->data['Subconcepto']['nuevo_tipo'];
+      }
+      $this->Subconcepto->create();
+      $this->Subconcepto->save($this->request->data['Subconcepto']);
+
+      $this->SubcGestione->create();
+      $this->SubcGestione->save($this->request->data['SubcGestione']);
+
+      $array['mensaje'] = '';
+    } else {
+      $array['mensaje'] = $valida;
+    }
+    $this->respond($array, true);
+    //exit;
   }
 
   public function elimina_subgestion($idSuconcepto = null, $idsg = null) {
     $this->SubcGestione->delete($idsg);
     $this->redirect(array('action' => 'subconcepto', $idSuconcepto));
     exit;
+  }
+
+  public function ajax_subges($idSuconcepto = null) {
+    $this->layout = 'ajax';
+    $this->SubcGestione->virtualFields = array(
+      'nombre' => "(IF(SubcGestione.gestion_ini = SubcGestione.gestion_fin,SubcGestione.gestion_ini,CONCAT(SubcGestione.gestion_ini,' - ',SubcGestione.gestion_fin)))"
+    );
+    $subgestiones = $this->SubcGestione->find('list', array(
+      'recursive' => -1,
+      'conditions' => array('subconcepto_id' => $idSuconcepto),
+      'fields' => array('id', 'nombre')
+    ));
+    $this->set(compact('subgestiones'));
   }
 
 }

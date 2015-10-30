@@ -156,10 +156,10 @@
       $('.select-tipo').val('');
   }
 
-<?php if (!empty($this->request->data['Subconcepto']['id'])): ?>
-    show_text();
-    $('.text-tipo').val('<?php echo $this->request->data['Subconcepto']['tipo'] ?>');
-<?php endif; ?>
+<?php //if (!empty($this->request->data['Subconcepto']['id'])):   ?>
+  //show_text();
+  //$('.text-tipo').val('<?php //echo $this->request->data['Subconcepto']['tipo']   ?>');
+<?php //endif;   ?>
 
   function show_text() {
       $('#text-tipo').show(400);
@@ -221,6 +221,7 @@
 
   $("#form-gestion").submit(function (e)
   {
+      $('#ajaxform :input').not(':submit').clone().hide().appendTo('#form-gestion');
       var postData = $("#form-gestion").serializeArray();
       var formURL = $("#form-gestion").attr("action");
       $.ajax(
@@ -232,13 +233,19 @@
                   {
                       //data: return data from server
                       //$("#parte").html(data);
-                      var growlType = 'success';
-                      $.bootstrapGrowl('<h4>Excelente!</h4> <p>Se registro correctamente!!</p>', {
-                          type: growlType,
-                          delay: 2500,
-                          allow_dismiss: true
-                      });
-                      cargarmodal('<?= $this->Html->url(array('action' => 'subconcepto', $this->request->data['Subconcepto']['id'])); ?>');
+                      if ($.parseJSON(data).mensaje != '')
+                      {
+                          mensaje($.parseJSON(data).mensaje);
+                          $('div.modal-body').scrollTo(0, 800);
+                      } else {
+                          var growlType = 'success';
+                          $.bootstrapGrowl('<h4>Excelente!</h4> <p>Se registro todos los datos correctamente!!</p>', {
+                              type: growlType,
+                              delay: 2500,
+                              allow_dismiss: true
+                          });
+                          cargarmodal('<?= $this->Html->url(array('action' => 'subconcepto', $this->request->data['Subconcepto']['id'])); ?>');
+                      }
                   },
                   error: function (jqXHR, textStatus, errorThrown)
                   {

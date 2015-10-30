@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class PresupuestosController extends AppController {
 
-  public $uses = array('Presupuesto', 'Concepto', 'Subconcepto', 'Ingreso', 'Gasto', 'Subgasto', 'Egreso', 'Nomenclatura', 'NomenclaturasAmbiente', 'Cuentasmonto');
+  public $uses = array('Presupuesto', 'Concepto', 'Subconcepto', 'Ingreso', 'Gasto', 'Subgasto', 'Egreso', 'Nomenclatura', 'NomenclaturasAmbiente', 'Cuentasmonto', 'SubcGestione', 'Pago');
   public $layout = 'sae';
   public $components = array('RequestHandler');
 
@@ -264,8 +264,11 @@ class PresupuestosController extends AppController {
     $this->render('/Elements/ajaxreturn');
   }
 
-  public function pre_ambientes($idPresupuesto = null, $idSubconcepto = null) {
-
+  public function pre_ambientes($idPresupuesto = null, $idSubconcepto = null, $idSubcGes = null) {
+    /* debug($idPresupuesto);
+      debug($idSubconcepto);
+      debug($idSubcGes);
+      exit; */
     $subconcepto = $this->Subconcepto->findByid($idSubconcepto, null, null, -1);
     $presupuesto = $this->Presupuesto->findByid($idPresupuesto, null, null, -1);
 
@@ -276,8 +279,14 @@ class PresupuestosController extends AppController {
         'conditions' => array('Nomenclatura.subconcepto_id' => $idSubconcepto)
       ));
       if ($subconcepto['Subconcepto']['gestiones_anteriores'] == 1) {
+        $this->SubcGestione->virtualFields = array(
+          'nombre' => "(IF(SubcGestione.gestion_ini = SubcGestione.gestion_fin,SubcGestione.gestion_ini,CONCAT(SubcGestione.gestion_ini,' - ',SubcGestione.gestion_fin)))"
+        );
+        $subcGes = $this->SubcGestione->findByid($idSubcGes, NULL, NULL, -1);
+
         //$this->Session->setFlash("No existe aun!!", 'msgerror');
         //$this->redirect($this->referer());
+        $this->set(compact('nomenclaturas', 'subconcepto', 'presupuesto', 'subcGes', 'idSubcGes', 'idSubconcepto', 'ambientes'));
       } else {
         $ingreso = $this->Ingreso->find('first', array(
           'recursive' => 0,
@@ -336,6 +345,55 @@ class PresupuestosController extends AppController {
       'fields' => array('Ambiente.nombre', 'NomenclaturasAmbiente.piso', 'NomenclaturasAmbiente.representante', 'NomenclaturasAmbiente.monto')
     ));
     return $ambientes;
+  }
+
+  public function get_deudas_subg($idNomenclatura = null, $idConcepto = null, $idSubcGes = null) {
+    $subcGes = $this->SubcGestione->findByid($idSubcGes, null, null, -1);
+    $l_ambientes = $this->NomenclaturasAmbiente->find('list', array(
+      'recursive' => -1,
+      'conditions' => array('nomenclatura_id' => $idNomenclatura),
+      'fields' => array('id', 'ambiente_id')
+    ));
+    $condiciones = array();
+
+    $condiciones['Pago.concepto_id'] = $idConcepto;
+    $condiciones['Pago.ambiente_id'] = $l_ambientes;
+    $condiciones['Pago.estado'] = 'Debe';
+    if (!empty($subcGes)) {
+      $condiciones['YEAR(Pago.fecha) >='] = $subcGes['SubcGestione']['gestion_ini'];
+      $condiciones['YEAR(Pago.fecha) <='] = $subcGes['SubcGestione']['gestion_fin'];
+    } else {
+      $condiciones['YEAR(Pago.fecha) <'] = date('Y');
+    }
+    $this->Pago->virtualFields = array(
+      'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)",
+      'representante' => "(SELECT users.nombre FROM users WHERE Ambiente.representante_id = users.id)",
+      'monto_total' => "SUM(Pago.monto)",
+      'gestion' => "(YEAR(Pago.fecha))"
+    );
+    return $this->Pago->find('all', array(
+        'recursive' => 0,
+        'conditions' => $condiciones,
+        'group' => array('Pago.ambiente_id','YEAR(Pago.fecha)'),
+        'fields' => array('Ambiente.nombre', 'Pago.piso', 'Pago.representante', 'Pago.monto_total', 'Pago.gestion', 'Pago.ambiente_id','Pago.concepto_id'),
+      'order' => array()
+    ));
+  }
+
+  public function get_pagos_amb($idAmbiente = null, $idConcepto = null, $gestion = null) {
+    $this->Pago->virtualFields = array(
+      'monto_total' => "(Pago.monto)"
+    );
+    return $this->Pago->find('all', array(
+        'recursive' => 0,
+        'conditions' => array(
+          'Pago.ambiente_id' => $idAmbiente,
+          'Pago.concepto_id' => $idConcepto,
+          'YEAR(Pago.fecha)' => $gestion,
+          'Pago.estado' => 'Debe'
+        ),
+        'fields' => array('Pago.fecha','Pago.monto_total','Concepto.nombre')
+    ));
   }
 
 }
