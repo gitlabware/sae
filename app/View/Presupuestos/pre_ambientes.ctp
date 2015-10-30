@@ -4,6 +4,8 @@
     <div class="form-horizontal form-bordered">
         <?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_ingreso', $presupuesto['Presupuesto']['id'], 'id' => 'form-ingresos')); ?>
         <?php echo $this->Form->hidden('Ingreso.presupuesto_id', array('value' => $presupuesto['Presupuesto']['id'])); ?>
+        <?php echo $this->Form->hidden('Ingreso.subconcepto_id', array('value' => $subconcepto['Subconcepto']['id'])); ?>
+        <?php echo $this->Form->hidden('Ingreso.concepto_id', array('value' => $subconcepto['Subconcepto']['concepto_id'])); ?>
         <div class="form-group">
 
             <div class="col-md-1">
@@ -89,14 +91,25 @@
       suma_todo();
   }
   calcula();
-  function suma_todo(){
-    total = 0.00;
-    $('#ambientes-a .e-total').each(function (i, elemento) {
-      total+= parseFloat($(elemento).val());
-    });
-    $('#c-ingreso').val(total);
+  function suma_todo() {
+      total = 0.00;
+      $('#ambientes-a .e-total').each(function (i, elemento) {
+          total += parseFloat($(elemento).val());
+      });
+      $('#c-ingreso').val(total);
   }
-  ('#c-porcentaje').keyup(function () {
+  $('#c-porcentaje').keyup(function () {
+      calc_presupuesto();
+  });
+  $('#c-ingreso').keyup(function () {
+      calc_presupuesto();
+  });
+  function calc_presupuesto() {
+      if ($('#c-ingreso').val() != '') {
+          ingreso = parseFloat($('#c-ingreso').val());
+      } else {
+          ingreso = 0.00;
+      }
       if ($('#c-porcentaje').val() != '') {
           porcentaje = parseFloat($('#c-porcentaje').val());
       } else {
@@ -104,14 +117,6 @@
       }
       presupuesto = Math.round(porcentaje * ingreso * 100) / 100;
       $('#c-presupuesto').val(presupuesto);
-  });
-  $('#c-ingreso').keyup(function () {
-      if ($('#c-ingreso').val() != '') {
-          ingreso = parseFloat($('#c-ingreso').val());
-      } else {
-          ingreso = 0.00;
-      }
-      presupuesto = Math.round(porcentaje * ingreso * 100) / 100;
-      $('#c-presupuesto').val(presupuesto);
-  });
+  }
+  calc_presupuesto();
 </script>

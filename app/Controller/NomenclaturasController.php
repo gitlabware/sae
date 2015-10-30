@@ -180,6 +180,10 @@ class NomenclaturasController extends AppController {
       'conditions' => array('NomenclaturasAmbiente.nomenclatura_id' => $idNomenclatura),
       'fields' => array('NomenclaturasAmbiente.id', 'NomenclaturasAmbiente.ambiente_id')
     ));
+    if(count($ambientes_sel) == 1){
+      $ambientes_sel = current($ambientes_sel);
+    }
+    //debug($ambientes_sel);exit;
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array(

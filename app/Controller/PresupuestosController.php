@@ -174,7 +174,11 @@ class PresupuestosController extends AppController {
       } else {
         $this->Session->setFlash($valida, 'msgerror');
       }
+      if (!empty($dato['presupuesto_id'])) {
+        $this->redirect(array('action' => 'presupuesto', $dato['presupuesto_id']));
+      }
     }
+
     $this->redirect($this->referer());
   }
 
@@ -267,32 +271,48 @@ class PresupuestosController extends AppController {
 
     if (!empty($subconcepto)) {
       //debug("dssd");exit;
+      $nomenclaturas = $this->Nomenclatura->find('all', array(
+        'recursive' => -1,
+        'conditions' => array('Nomenclatura.subconcepto_id' => $idSubconcepto)
+      ));
       if ($subconcepto['Subconcepto']['gestiones_anteriores'] == 1) {
-        $this->Session->setFlash("No existe aun!!", 'msgerror');
-        $this->redirect($this->referer());
+        //$this->Session->setFlash("No existe aun!!", 'msgerror');
+        //$this->redirect($this->referer());
       } else {
-        $nomenclaturas = $this->Nomenclatura->find('all', array(
-          'recursive' => -1,
-          'conditions' => array('Nomenclatura.subconcepto_id' => $idSubconcepto)
-        ));
         $ingreso = $this->Ingreso->find('first', array(
           'recursive' => 0,
           'conditions' => array('Presupuesto.gestion <' => $presupuesto['Presupuesto']['gestion'], 'Ingreso.subconcepto_id' => $idSubconcepto),
           'order' => array('Presupuesto.gestion DESC'),
-          'fields' => array('Ingreso.presupuesto', 'Presupuesto.gestion')
+          'fields' => array('Ingreso.presupuesto', 'Ingreso.ejecutado', 'Presupuesto.gestion')
         ));
         if (!empty($ingreso)) {
           $this->request->data['Ingreso']['pres_anterior'] = $ingreso['Ingreso']['presupuesto'];
-          $eje_ant = $this->Cuentasmonto->find('all', array(
+          //debug($ingreso);exit;
+          if (!empty($ingreso['Ingreso']['ejecutado'])) {
+            $this->request->data['Ingreso']['ejec_anterior'] = $ingreso['Ingreso']['ejecutado'];
+          } else {
+            $eje_ant = $this->Cuentasmonto->find('all', array(
+              'recursive' => 0,
+              'conditions' => array('Cuentasmonto.subconcepto_id' => $idSubconcepto, 'YEAR(Cuentasmonto.created)' => $ingreso['Presupuesto']['gestion']),
+              'group' => array('Cuentasmonto.subconcepto_id'),
+              'fields' => array('SUM(Cuentasmonto.monto) as monto_t')
+            ));
+            if (!empty($eje_ant[0][0]['monto_t'])) {
+              $this->request->data['Ingreso']['ejec_anterior'] = $eje_ant[0][0]['monto_t'];
+            }
+          }
+          if (!empty($this->request->data['Ingreso']['pres_anterior']) && !empty($this->request->data['Ingreso']['ejec_anterior'])) {
+            $this->request->data['Ingreso']['porcentaje'] = round($this->request->data['Ingreso']['ejec_anterior'] / $this->request->data['Ingreso']['pres_anterior'], 2);
+          }
+          /* $eje_ant = $this->Cuentasmonto->find('all', array(
             'recursive' => 0,
             //'conditions' => array('Cuentasmonto.subconcepto_id' => $idSubconcepto, 'YEAR(Cuentasmonto.created)' => $ingreso['Presupuesto']['gestion']),
             'group' => array('Cuentasmonto.subconcepto_id'),
             'fields' => array('SUM(Cuentasmonto.monto) as monto_t')
-          ));
-          if(!empty($eje_ant[0][0]['monto_t'])){
+            ));
+            if(!empty($eje_ant[0][0]['monto_t'])){
             $this->request->data['Ingreso']['ejec_anterior'] = $eje_ant[0][0]['monto_t'];
-          }
-          
+            } */
         }
 
         $this->set(compact('nomenclaturas', 'subconcepto', 'presupuesto'));

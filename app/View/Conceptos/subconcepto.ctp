@@ -42,22 +42,120 @@
         <div class="form-group">
             <label class="col-md-4 control-label">Gestns. Anteriores</label>
             <div class="col-md-8">
-                <?php echo $this->Form->checkbox('Subconcepto.gestiones_anteriores', array('class' => 'form-control')); ?>
+                <?php echo $this->Form->checkbox('Subconcepto.gestiones_anteriores', array('class' => 'form-control', 'id' => 'ch-anterior', 'onclick' => 'ver_check_ant();')); ?>
             </div>
         </div>
+        <button type="submit" class="hide"></button>
+        <?php echo $this->Form->end(); ?>
+        <div id="d-gestiones" style="display: none;">
+            <?= $this->Form->create('Concepto', array('id' => 'form-gestion', 'action' => 'registra_sgention')); ?>
+            <?= $this->Form->hidden('SubcGestione.subconcepto_id', array('value' => $this->request->data['Subconcepto']['id'])) ?>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Gestiones</label>
+                <div class="col-md-3">
+                    <?php echo $this->Form->text('SubcGestione.gestion_ini', array('class' => 'form-control', 'required', 'placeholder' => 'Gestion Inicial', 'type' => 'number', 'id' => 'id-ges-ini', 'onkeyup' => '$("#id-ges-fin").val(this.value);')); ?>
+                </div>
+                <div class="col-md-3">
+                    <?php echo $this->Form->text('SubcGestione.gestion_fin', array('class' => 'form-control', 'required', 'placeholder' => 'Gestion Final', 'type' => 'number', 'id' => 'id-ges-fin')); ?>
+                </div>
+                <div class="col-md-2">
+                    <?php if (empty($this->request->data['Subconcepto']['id'])): ?>
+                      <button class="btn btn-success" type="button" onclick="add_gestion();"><i class="fa fa-plus"></i></button>
+                    <?php else: ?>
+                      <button class="btn btn-success" type="submit"><i class="fa fa-plus"></i></button>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?= $this->Form->end(); ?>
+            <div class="row">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Gestion Ini.</th>
+                                <th>Gestion Fin</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-gestiones">
+                            <?php foreach ($generaciones as $ge): ?>
+                              <tr>
+                                  <td><?= $ge['SubcGestione']['gestion_ini'] ?></td>
+                                  <td><?= $ge['SubcGestione']['gestion_fin'] ?></td>
+                                  <td>
+                                      <a href="javascript:" class="btn btn-sm btn-danger" title="Quitar" onclick="quitar_ajax_sg(<?= $ge['SubcGestione']['id'] ?>);"><i class="fa fa-times"></i></a>
+                                  </td>
+                              </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <br>
+        </div>
+
     </fieldset>
     <div class="form-group form-actions">
         <div class="col-xs-12 text-right">
             <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="enviar_form();">Guardar</button>
         </div>
     </div>
 
-    <?php echo $this->Form->end(); ?>
 </div>
 
 <!-- END Modal Body -->
 <script>
+
+  function enviar_form() {
+      $('#ajaxform').find('[type="submit"]').trigger('click');
+  }
+  var cont_gen = 0;
+
+
+  function add_gestion() {
+      //alert($('#form-gestion').valid());
+      if ($('#form-gestion').valid()) {
+          cont_gen++;
+          var ges_ini = $('#id-ges-ini').val();
+          var ges_fin = $('#id-ges-fin').val();
+          $('#id-ges-ini').val('');
+          $('#id-ges-fin').val('');
+          var contenido_g = '<tr class="clase-g-' + cont_gen + '">'
+                  + '<td>' + ges_ini + '</td>'
+                  + '<td>' + ges_fin + '</td>'
+                  + '<td><a href="javascript:" class="btn btn-sm btn-danger" title="Quitar" onclick="quitar_gestion(' + cont_gen + ');"><i class="fa fa-times"></i></a></td>'
+                  + '</tr>';
+          var campos_f_g = '<input type="hidden" class="clase-g-' + cont_gen + '" name="data[gestiones][' + cont_gen + '][gestion_ini]" value="' + ges_ini + '">'
+                  + '<input type="hidden" class="clase-g-' + cont_gen + '" name="data[gestiones][' + cont_gen + '][gestion_fin]" value="' + ges_fin + '">';
+          $('#ajaxform').append(campos_f_g);
+          $('#body-gestiones').append(contenido_g);
+      }
+  }
+  function quitar_gestion(numero) {
+      $('.clase-g-' + numero).remove();
+  }
+
+  function ver_check_ant() {
+      if ($('#ch-anterior').prop('checked')) {
+          $('#d-gestiones').show(200);
+      } else {
+          $('#d-gestiones').hide(200);
+      }
+  }
+  ver_check_ant();
+
+  function show_text() {
+      $('#text-tipo').show(400);
+      $('#select-tipo').hide(400);
+      $('.text-tipo').prop('required', true);
+      $('.select-tipo').prop('required', false);
+      $('.select-tipo').val('');
+  }
+
 <?php if (!empty($this->request->data['Subconcepto']['id'])): ?>
     show_text();
     $('.text-tipo').val('<?php echo $this->request->data['Subconcepto']['tipo'] ?>');
@@ -120,4 +218,46 @@
       divmensaje3 = '<div class="alert alert-danger alert-dismissable">' + divmensaje2 + '</div>';
       $('#idmensaje').html(divmensaje3);
   }
+
+  $("#form-gestion").submit(function (e)
+  {
+      var postData = $("#form-gestion").serializeArray();
+      var formURL = $("#form-gestion").attr("action");
+      $.ajax(
+              {
+                  url: formURL,
+                  type: "POST",
+                  data: postData,
+                  success: function (data, textStatus, jqXHR)
+                  {
+                      //data: return data from server
+                      //$("#parte").html(data);
+                      var growlType = 'success';
+                      $.bootstrapGrowl('<h4>Excelente!</h4> <p>Se registro correctamente!!</p>', {
+                          type: growlType,
+                          delay: 2500,
+                          allow_dismiss: true
+                      });
+                      cargarmodal('<?= $this->Html->url(array('action' => 'subconcepto', $this->request->data['Subconcepto']['id'])); ?>');
+                  },
+                  error: function (jqXHR, textStatus, errorThrown)
+                  {
+                      //if fails   
+                      alert("error");
+                  }
+              });
+      e.preventDefault(); //STOP default action
+      //e.unbind(); //unbind. to stop multiple form submit.
+  });
+
+  function quitar_ajax_sg(ids) {
+      cargarmodal('<?= $this->Html->url(array('action' => 'elimina_subgestion', $this->request->data['Subconcepto']['id'])); ?>/' + ids);
+      var growlType = 'success';
+      $.bootstrapGrowl('<h4>Excelente!</h4> <p>Se elimino correctamente!!</p>', {
+          type: growlType,
+          delay: 2500,
+          allow_dismiss: true
+      });
+  }
+
 </script>

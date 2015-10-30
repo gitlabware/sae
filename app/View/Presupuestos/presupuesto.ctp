@@ -1,7 +1,7 @@
 
 <div class="block">
     <h3 class="text-center">EDIFICIO <?php echo strtoupper($presupuesto['Edificio']['nombre']); ?></h3>
-    <h2 class="text-center">PLAN ANUAL OPERATIVO</h2>
+    <h2 class="text-center">PLAN ANUAL OPERATIVO <?= $presupuesto['Presupuesto']['gestion']?></h2>
     <h2 class="text-center text-success page-header">INGRESOS</h2>
     <div class="form-horizontal form-bordered">
         <?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_ingreso', $presupuesto['Presupuesto']['id'], 'id' => 'form-ingresos')); ?>

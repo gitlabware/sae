@@ -64,9 +64,13 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <label>Presupuesto</label>
                 <?php echo $this->Form->text('Ingreso.presupuesto', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00', 'id' => 'c-presupuesto2')); ?>
+            </div>
+            <div class="col-md-6">
+                <label>Ejecutado</label>
+                <?php echo $this->Form->text('Ingreso.ejecutado', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00', 'id' => 'c-ejecutado')); ?>
             </div>
         </div>
         <div class="form-group">
