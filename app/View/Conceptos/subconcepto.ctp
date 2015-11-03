@@ -198,7 +198,7 @@
                           mensaje($.parseJSON(data).mensaje);
                           $('div.modal-body').scrollTo(0, 800);
                       } else {
-                          direccion = '<?php echo $this->Html->url(array('action' => 'subconceptos')) ?>';
+                          direccion = '<?php echo $this->Html->url($this->request->referer()) ?>';
                           window.location.href = direccion;
                       }
                   },

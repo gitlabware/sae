@@ -56,6 +56,7 @@
                     <th>Presupuesto Anterior</th>
                     <th>Ejecutado Anterior</th>
                     <th>Presupuesto</th>
+                    <th>Ejecutado</th>
                     <th></th>
                 </tr>
             </thead>
@@ -65,8 +66,10 @@
                 $tot_i['pres_anterior'] = 0.00;
                 $tot_i['ejec_anterior'] = 0.00;
                 $tot_i['presupuesto'] = 0.00;
+                $ttejecutado = 0.00;
                 ?>
-                <?php foreach ($tingresos as $tin): ?>
+                <?php foreach ($tingresos as $key => $tin): ?>
+                  <?php $tejecutado = 0.00; ?>
                   <?php
                   $tot_i['ingreso'] = $tot_i['ingreso'] + $tin[0]['ingreso'];
                   $tot_i['pres_anterior'] = $tot_i['pres_anterior'] + $tin[0]['pres_anterior'];
@@ -80,6 +83,7 @@
                       <td><?php echo $tin[0]['pres_anterior'] ?></td>
                       <td><?php echo $tin[0]['ejec_anterior'] ?></td>
                       <td><?php echo $tin[0]['presupuesto'] ?></td>
+                      <td id="ing-eje-<?= $key ?>"></td>
                       <td></td>
                   </tr>
                   <?php
@@ -91,16 +95,40 @@
                             <?php
                             if (!empty($in['Subconcepto']['nombre'])) {
                               echo $in['Subconcepto']['nombre'];
+                              if (!empty($in['SubcGestione']['gestion_ini'])) {
+                                if ($in['SubcGestione']['gestion_ini'] == $in['SubcGestione']['gestion_fin']) {
+                                  echo ' (' . $in['SubcGestione']['gestion_ini'] . ')';
+                                } else {
+                                  echo ' (' . $in['SubcGestione']['gestion_ini'] . ' - ' . $in['SubcGestione']['gestion_fin'] . ')';
+                                }
+                              }
                             } else {
                               echo $in['Concepto']['nombre'];
                             }
+                            $ejecutado = $this->requestAction(array('action' => 'get_ejecutado', $presupuesto['Presupuesto']['gestion'], $in['Ingreso']['concepto_id'], $in['Ingreso']['subconcepto_id'], $in['Ingreso']['subge_id']));
                             ?>
+                            <script>
+                              $('#ing-eje-<?= $key ?>').html(<?= $tejecutado ?>);
+                            </script>
                         </td>
                         <td><?php echo $in['Ingreso']['porcentaje'] ?></td>
                         <td><?php echo $in['Ingreso']['ingreso'] ?></td>
                         <td><?php echo $in['Ingreso']['pres_anterior'] ?></td>
                         <td><?php echo $in['Ingreso']['ejec_anterior'] ?></td>
                         <td><?php echo $in['Ingreso']['presupuesto'] ?></td>
+                        <td>
+                            <?php
+                            if (!empty($in['Ingreso']['ejecutado']) && $in['Ingreso']['ejecutado'] != 0.00) {
+                              echo '(' . $in['Ingreso']['ejecutado'] . ') ';
+                              $tejecutado += $in['Ingreso']['ejecutado'];
+                              $ttejecutado += $in['Ingreso']['ejecutado'];
+                            } else {
+                              echo "<span class='text-success'><b>$ejecutado</b></span>";
+                              $tejecutado += $ejecutado;
+                              $ttejecutado += $ejecutado;
+                            }
+                            ?>
+                        </td>
                         <td>
                             <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ingreso', $in['Ingreso']['id'])) ?>');" class="btn btn-sm btn-primary" title="Editar"><i class="gi gi-edit"></i></a> 
                             <?php echo $this->Html->link('<i class="gi gi-remove_2"></i>', array('action' => 'elimina_ingreso', $in['Ingreso']['id']), array('class' => 'btn btn-sm btn-danger', 'title' => 'Eliminar', 'confirm' => 'Esta seguro de eliminar el ingreso??', 'escape' => FALSE)) ?>
@@ -115,6 +143,7 @@
                     <td><?php echo $tot_i['pres_anterior'] ?></td>
                     <td><?php echo $tot_i['ejec_anterior'] ?></td>
                     <td><?php echo $tot_i['presupuesto'] ?></td>
+                    <td><?= $ttejecutado ?></td>
                     <td></td>
                 </tr>
             </tbody>

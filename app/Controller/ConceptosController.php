@@ -166,7 +166,6 @@ class ConceptosController extends AppController {
             $this->SubcGestione->save($dato_ge);
           }
         }
-
         $this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
         $array['mensaje'] = '';
       } else {
@@ -174,7 +173,6 @@ class ConceptosController extends AppController {
       }
       $this->respond($array, true);
     }
-
     $this->Subconcepto->id = $idSubconcepto;
     $this->request->data = $this->Subconcepto->read();
     $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre'), 'nombre' => array('nombre')));

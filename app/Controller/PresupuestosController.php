@@ -284,6 +284,46 @@ class PresupuestosController extends AppController {
         );
         $subcGes = $this->SubcGestione->findByid($idSubcGes, NULL, NULL, -1);
 
+        $ingreso = $this->Ingreso->find('first', array(
+          'recursive' => 0,
+          'conditions' => array('Presupuesto.gestion <' => $presupuesto['Presupuesto']['gestion'], 'Ingreso.subconcepto_id' => $idSubconcepto, 'Ingreso.subge_id' => $idSubcGes),
+          'order' => array('Presupuesto.gestion DESC'),
+          'fields' => array('Ingreso.presupuesto', 'Ingreso.ejecutado', 'Presupuesto.gestion')
+        ));
+        if (!empty($ingreso)) {
+          $this->request->data['Ingreso']['pres_anterior'] = $ingreso['Ingreso']['presupuesto'];
+          //debug($ingreso);exit;
+          if (!empty($ingreso['Ingreso']['ejecutado'])) {
+            //debug($ingreso);exit;
+            $this->request->data['Ingreso']['ejec_anterior'] = $ingreso['Ingreso']['ejecutado'];
+          } else {
+            $condiciones = array();
+            $condiciones['Cuentasmonto.subconcepto_id'] = $idSubconcepto;
+            $condiciones['YEAR(Cuentasmonto.created)'] = $ingreso['Presupuesto']['gestion'];
+
+            if (!empty($subcGes['SubcGestione']['gestion_ini'])) {
+              if ($subcGes['SubcGestione']['gestion_ini'] == $subcGes['SubcGestione']['gestion_fin']) {
+                $condiciones['YEAR(Pago.fecha)'] = $subcGes['SubcGestione']['gestion_ini'];
+              } else {
+                $condiciones['YEAR(Pago.fecha) >='] = $subcGes['SubcGestione']['gestion_ini'];
+                $condiciones['YEAR(Pago.fecha) <='] = $subcGes['SubcGestione']['gestion_fin'];
+              }
+            }
+
+            $eje_ant = $this->Cuentasmonto->find('all', array(
+              'recursive' => 0,
+              'conditions' => $condiciones,
+              'group' => array('Cuentasmonto.subconcepto_id'),
+              'fields' => array('SUM(Cuentasmonto.monto) as monto_t')
+            ));
+            if (!empty($eje_ant[0][0]['monto_t'])) {
+              $this->request->data['Ingreso']['ejec_anterior'] = $eje_ant[0][0]['monto_t'];
+            }
+          }
+          if (!empty($this->request->data['Ingreso']['pres_anterior']) && !empty($this->request->data['Ingreso']['ejec_anterior'])) {
+            $this->request->data['Ingreso']['porcentaje'] = round($this->request->data['Ingreso']['ejec_anterior'] / $this->request->data['Ingreso']['pres_anterior'], 2);
+          }
+        }
         //$this->Session->setFlash("No existe aun!!", 'msgerror');
         //$this->redirect($this->referer());
         $this->set(compact('nomenclaturas', 'subconcepto', 'presupuesto', 'subcGes', 'idSubcGes', 'idSubconcepto', 'ambientes'));
@@ -374,9 +414,9 @@ class PresupuestosController extends AppController {
     return $this->Pago->find('all', array(
         'recursive' => 0,
         'conditions' => $condiciones,
-        'group' => array('Pago.ambiente_id','YEAR(Pago.fecha)'),
-        'fields' => array('Ambiente.nombre', 'Pago.piso', 'Pago.representante', 'Pago.monto_total', 'Pago.gestion', 'Pago.ambiente_id','Pago.concepto_id'),
-      'order' => array()
+        'group' => array('Pago.ambiente_id', 'YEAR(Pago.fecha)'),
+        'fields' => array('Ambiente.nombre', 'Pago.piso', 'Pago.representante', 'Pago.monto_total', 'Pago.gestion', 'Pago.ambiente_id', 'Pago.concepto_id'),
+        'order' => array()
     ));
   }
 
@@ -392,8 +432,50 @@ class PresupuestosController extends AppController {
           'YEAR(Pago.fecha)' => $gestion,
           'Pago.estado' => 'Debe'
         ),
-        'fields' => array('Pago.fecha','Pago.monto_total','Concepto.nombre')
+        'fields' => array('Pago.fecha', 'Pago.monto_total', 'Concepto.nombre', 'Pago.id')
     ));
+  }
+
+  public function get_ejecutado($gestion = null,$idConcepto = null, $idSubconcepto = null, $idSubcGes = null) {
+    //debug($gestion);exit;
+    //$gestion = intval($gestion);
+    $subconcepto = $this->Subconcepto->findByid($idSubconcepto, null, null, -1);
+    $subcGes = $this->SubcGestione->findByid($idSubcGes, NULL, NULL, -1);
+    $condiciones = array();
+    //$condiciones['Cuentasmonto.concepto_id'] = $idConcepto;
+    $condiciones['YEAR(Cuentasmonto.created)'] = $gestion;
+    if (!empty($subconcepto)) {
+      //$condiciones = array();
+      $condiciones['Cuentasmonto.subconcepto_id'] = $idSubconcepto;
+      if ($subconcepto['Subconcepto']['gestiones_anteriores'] == 1) {
+        if (!empty($subcGes)) {
+          if (!empty($subcGes['SubcGestione']['gestion_ini'])) {
+            if ($subcGes['SubcGestione']['gestion_ini'] == $subcGes['SubcGestione']['gestion_fin']) {
+              $condiciones['YEAR(Pago.fecha)'] = $subcGes['SubcGestione']['gestion_ini'];
+            } else {
+              $condiciones['YEAR(Pago.fecha) >='] = $subcGes['SubcGestione']['gestion_ini'];
+              $condiciones['YEAR(Pago.fecha) <='] = $subcGes['SubcGestione']['gestion_fin'];
+            }
+          }
+        } else {
+          $condiciones['YEAR(Pago.fecha) <'] = $gestion;
+        }
+      } else {
+        
+      }
+    }
+    //debug($condiciones);
+    $ejecutado = $this->Cuentasmonto->find('all', array(
+      'recursive' => 0,
+      'conditions' => $condiciones,
+      'group' => array('Cuentasmonto.subconcepto_id'),
+      'fields' => array('SUM(Cuentasmonto.monto) as monto_t')
+    ));
+    if(!empty($ejecutado[0][0]['monto_t'])){
+      return $ejecutado[0][0]['monto_t'];
+    }else{
+      return 0.00;
+    }
   }
 
 }

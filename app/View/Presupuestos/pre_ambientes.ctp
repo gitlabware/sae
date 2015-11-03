@@ -10,6 +10,9 @@
     </h4>
     <div class="form-horizontal form-bordered">
         <?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_ingreso', $presupuesto['Presupuesto']['id'], 'id' => 'form-ingresos')); ?>
+        <?php if (!empty($subcGes)): ?>
+          <?php echo $this->Form->hidden('Ingreso.subge_id', array('value' => $subcGes['SubcGestione']['id'])); ?>
+        <?php endif; ?>
         <?php echo $this->Form->hidden('Ingreso.presupuesto_id', array('value' => $presupuesto['Presupuesto']['id'])); ?>
         <?php echo $this->Form->hidden('Ingreso.subconcepto_id', array('value' => $subconcepto['Subconcepto']['id'])); ?>
         <?php echo $this->Form->hidden('Ingreso.concepto_id', array('value' => $subconcepto['Subconcepto']['concepto_id'])); ?>
@@ -110,34 +113,43 @@
                     ?>
                     <?php foreach ($ambientes as $am): ?>
 
-                      <tr class="warning"  id="tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>">
+                      <tr class="warning"  id="tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>">
                           <td><?= $am['Ambiente']['nombre'] ?></td>
                           <td><?= $am['Pago']['piso'] ?></td>
                           <td><?= $am['Pago']['representante'] ?></td>
                           <td><?= $am['Pago']['gestion'] ?></td>
-                          <td id="mon-to-n-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>"><?= $am['Pago']['monto_total'] ?></td>
+                          <td id="mon-to-n-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>"><?= $am['Pago']['monto_total'] ?></td>
                           <td>
-                              <button class="btn btn-info btn-sm" title="Detalle de Pagos" type="button" onclick="$('#tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>').toggle(200);"><i class="gi gi-list"></i></button> 
-                              <button class="btn btn-warning btn-sm" title="Quitar del presupuesto"  onclick="$('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>').addClass('danger');$('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>').fadeOut(600, function() { $('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>').remove();$('#tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>').remove();suma_todo(); });"type="button"><i class="gi gi-remove"></i></button>
-                              <button class="btn btn-danger btn-sm" title="Eliminar Todos los pagos" type="button"><i class="gi gi-bin"></i></button>
+                              <button class="btn btn-info btn-sm" title="Detalle de Pagos" type="button" onclick="$('#tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').toggle(200);"><i class="gi gi-list"></i></button> 
+                              <button class="btn btn-warning btn-sm" title="Quitar del presupuesto"  onclick="$('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').addClass('danger');
+                                        $('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').fadeOut(600, function () {
+                                          $('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').remove();
+                                          $('#tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').remove();
+                                          suma_todo();
+                                        });"type="button"><i class="gi gi-remove"></i></button>
+
                           </td>
                       </tr>
                       <?php
                       $pagos_am = $this->requestAction(array('action' => 'get_pagos_amb', $am['Pago']['ambiente_id'], $am['Pago']['concepto_id'], $am['Pago']['gestion']));
                       ?>
-                      <tr style="display: none;" id="tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion']; ?>">
+                      <tr style="display: none;" id="tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>">
                           <td colspan="6">
                               <table class="table table-bordered"  id="ambientes-a">
                                   <?php foreach ($pagos_am as $pa): ?>
                                     <?php $i++; ?>
-                                  <tr id="tr-registro-<?= $i ?>">
+                                    <tr id="tr-registro-<?= $i ?>">
                                         <td style="width: 15%;"><?= $pa['Pago']['fecha'] ?></td>
                                         <td style="width: 40%;"><?= $pa['Concepto']['nombre'] ?></td>
-                                        <td style="width: 20%;"><?= $this->Form->text("Aux.$i.monto", array('class' => 'form-control e-total e-total-'.$no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'].'-'.$am['Pago']['gestion'], 'onkeyup' => 'suma_parcial('.$no['Nomenclatura']['id'].','.$am['Pago']['ambiente_id'].','.$am['Pago']['gestion'].');', 'value' => $pa['Pago']['monto_total'], 'numero' => $i, 'id' => 'c-monto-' . $i)); ?></td>
+                                        <td style="width: 20%;"><?= $this->Form->text("Aux.$i.monto", array('class' => 'form-control e-total e-total-' . $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion'], 'onkeyup' => 'suma_parcial(' . $no['Nomenclatura']['id'] . ',' . $am['Pago']['ambiente_id'] . ',' . $am['Pago']['gestion'] . ');', 'value' => $pa['Pago']['monto_total'], 'numero' => $i, 'id' => 'c-monto-' . $i)); ?></td>
                                         <td align="center">
-                                            <button class="btn btn-success btn-sm" title="Editar este Pago" type="button"><i class="gi gi-edit"></i></button> 
-                                            <button class="btn btn-warning btn-sm" title="Quitar del presupuesto" onclick="$('#tr-registro-<?= $i ?>').addClass('danger');$('#tr-registro-<?= $i ?>').fadeOut(600, function() { remover_registro(<?= $i ?>);suma_parcial(<?= $no['Nomenclatura']['id']?>,<?= $am['Pago']['ambiente_id'] ?>,<?= $am['Pago']['gestion'] ?>); });" type="button"><i class="gi gi-remove"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Eliminar Todos los pagos" type="button"><i class="gi gi-bin"></i></button>
+                                            <button class="btn btn-success btn-sm" title="Editar monto de este Pago" type="button" onclick="cargarmodal('<?= $this->Html->url(array('controller' => 'Pagos', 'action' => 'edit_monto', $pa['Pago']['id'])) ?>');"><i class="gi gi-edit"></i></button> 
+                                            <button class="btn btn-warning btn-sm" title="Quitar del presupuesto" onclick="$('#tr-registro-<?= $i ?>').addClass('danger');
+                                                        $('#tr-registro-<?= $i ?>').fadeOut(600, function () {
+                                                          remover_registro(<?= $i ?>);
+                                                          suma_parcial(<?= $no['Nomenclatura']['id'] ?>,<?= $am['Pago']['ambiente_id'] ?>,<?= $am['Pago']['gestion'] ?>);
+                                                        });" type="button"><i class="gi gi-remove"></i></button>
+                                                <?= $this->Html->link('<i class="gi gi-bin"></i>', array('controller' => 'Pagos', 'action' => 'eliminar', $pa['Pago']['id']), array('class' => 'btn btn-danger btn-sm', 'confirm' => 'Esta seguro de eliminar el pago??', 'escape' => FALSE)) ?>
                                         </td>
                                     </tr>
                                   <?php endforeach; ?>
@@ -175,16 +187,16 @@
       });
       $('#c-ingreso').val(total);
   }
-  function remover_registro(i){
-    //$('#tr-registro-'+i).hide(200);
-    $('#tr-registro-'+i).remove();
+  function remover_registro(i) {
+      //$('#tr-registro-'+i).hide(200);
+      $('#tr-registro-' + i).remove();
   }
-  function suma_parcial(id1,id2,gestion) {
+  function suma_parcial(id1, id2, gestion) {
       total = 0.00;
-      $('#ambientes-a .e-total-'+id1+'-'+id2+'-'+gestion).each(function (i, elemento) {
+      $('#ambientes-a .e-total-' + id1 + '-' + id2 + '-' + gestion).each(function (i, elemento) {
           total += parseFloat($(elemento).val());
       });
-      $('#mon-to-n-'+id1+'-'+id2+'-'+gestion).html(total);
+      $('#mon-to-n-' + id1 + '-' + id2 + '-' + gestion).html(total);
       //alert('#mon-to-n-'+id1+'-'+id2);
       suma_todo();
   }

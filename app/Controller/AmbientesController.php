@@ -726,7 +726,9 @@ class AmbientesController extends AppController {
         'order' => array('Pago.fecha DESC'),
         'fields' => array('Pago.fecha')
       ));
-      $fecha_u_p = $ultimo_pago['Pago']['fecha'];
+      if(!empty($ultimo_pago)){
+        $fecha_u_p = $ultimo_pago['Pago']['fecha'];
+      }
     }
     if (!empty($fecha_u_p)) {
       $nuevafecha = $fecha_u_p;

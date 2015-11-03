@@ -427,5 +427,26 @@ class PagosController extends AppController {
     debug('sss');
     exit;
   }
+  
+  public function edit_monto($idPago = NULL){
+    $this->layout = 'ajax';
+    $this->Pago->id = $idPago;
+    
+    if(!empty($this->request->data['Pago'])){
+      $this->Pago->save($this->request->data['Pago']);
+      $this->Session->setFlash("Se ha modificado correctamente el pago!!",'msgbueno');
+      $this->redirect($this->referer());
+    }
+    $this->request->data = $this->Pago->read();
+  }
+  
+  public function eliminar($idPago = null){
+    if($this->Pago->delete($idPago)){
+      $this->Session->setFlash("Se ha eliminado correctamente el pago!!",'msgbueno'); 
+    }else{
+      $this->Session->setFlash("No se ha podido eliminar el pago",'msgerror');
+    }
+    $this->redirect($this->referer());
+  }
 
 }

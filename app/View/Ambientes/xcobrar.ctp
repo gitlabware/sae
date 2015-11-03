@@ -1,11 +1,16 @@
 <div class="row">
     <div class="col-md-4">
+        <!--<div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-info btn-block" onclick="cargarmodal('<?= $this->Html->url(array('controller' => 'Pagos','action' => 'gen_pago_a',$idAmbiente))?>');">GENERAR UN PAGO</button>
+            </div>
+        </div><br>-->
         <div class="block">
             <div class="block-title">
                 <div class="block-options pull-right">
                     <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" data-toggle="block-toggle-content"><i class="fa fa-arrows-v"></i></a>
                 </div>
-                <h2>Genera Pagos</h2>
+                <h2>Genera Pagos Mensuales</h2>
             </div>
             <div class="block-content">
                 <?php echo $this->Form->create("Ambiente"); ?>
@@ -171,6 +176,7 @@
                                               ?>
                                           </th>
                                           <th>M. total</th>
+                                          <th></th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -193,15 +199,19 @@
                                                 $retencion_aux = 0.00;
                                                 if ($pa['Pago']['concepto_id'] == 10) {
                                                   $retencion_aux = $edificio['Edificio']['retencion_mantenimiento'];
-                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_mantenimiento'], 'min' => 0, 'class' => 'form-control reten-'.$gp[0]['gestion'], 'type' => 'number', 'step' => 'any', 'id' => 'retencion-' . $pa['Pago']['id'], 'onkeyup' => 'suma_mar(' . $gp[0]['gestion'] . ');'));
+                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_mantenimiento'], 'min' => 0, 'class' => 'form-control reten-' . $gp[0]['gestion'], 'type' => 'number', 'step' => 'any', 'id' => 'retencion-' . $pa['Pago']['id'], 'onkeyup' => 'suma_mar(' . $gp[0]['gestion'] . ');'));
                                                 } elseif ($pa['Pago']['concepto_id'] == 11) {
                                                   $retencion_aux = $edificio['Edificio']['retencion_alquiler'];
-                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_alquiler'], 'min' => 0, 'class' => 'form-control reten-'.$gp[0]['gestion'], 'type' => 'number', 'step' => 'any', 'style' => 'width: 80px;', 'id' => 'retencion-' . $pa['Pago']['id'], 'onkeyup' => 'suma_mar(' . $gp[0]['gestion'] . ');'));
+                                                  echo $this->Form->text("Dato.gestion.$key1.pagos.$key.retencion", array('value' => $edificio['Edificio']['retencion_alquiler'], 'min' => 0, 'class' => 'form-control reten-' . $gp[0]['gestion'], 'type' => 'number', 'step' => 'any', 'style' => 'width: 80px;', 'id' => 'retencion-' . $pa['Pago']['id'], 'onkeyup' => 'suma_mar(' . $gp[0]['gestion'] . ');'));
                                                 }
                                                 ?>
                                             </td>
                                             <td class="success">
                                                 <?php echo ($pa['Pago']['monto'] + (($retencion_aux / 100) * $pa['Pago']['monto'])); ?>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm" title="Editar monto de este Pago" type="button" onclick="cargarmodal('<?= $this->Html->url(array('controller' => 'Pagos', 'action' => 'edit_monto', $pa['Pago']['id'])) ?>');"><i class="gi gi-edit"></i></button> 
+                                                    <?= $this->Html->link('<i class="gi gi-bin"></i>', array('controller' => 'Pagos', 'action' => 'eliminar', $pa['Pago']['id']), array('class' => 'btn btn-danger btn-sm', 'confirm' => 'Esta seguro de eliminar el pago??', 'escape' => FALSE)) ?>
                                             </td>
                                         </tr>
                                       <?php endforeach; ?>
@@ -234,9 +244,6 @@
                 <?php endforeach; ?>
                 <?php echo $this->Form->end(); ?>
             </div>
-
-
-
             <!-- END Example Content -->
         </div>
     </div>

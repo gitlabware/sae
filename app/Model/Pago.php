@@ -79,6 +79,8 @@ class Pago extends AppModel {
           $monto = 0.00;
           if (!empty($pago['Pago']['retencion'])) {
             $monto = $pago['Pago']['monto'] + ($pago['Pago']['monto'] * ($pago['Pago']['retencion'] / 100));
+          }else{
+            $monto = $pago['Pago']['monto'];
           }
           $datos['monto'] = $monto * ($cu['Cuentasporcentaje']['porcentaje'] / 100);
           $datos['pago_id'] = $idPago;
