@@ -531,7 +531,7 @@ class AmbientesController extends AppController {
     }
     $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
     //debug($recibo);exit;
-    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre')));
+    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'),'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m', 'bancos'));
   }
 
@@ -777,7 +777,7 @@ class AmbientesController extends AppController {
       'fields' => array('Pago.id'),
       )); */
     //debug($pagos);exit;
-    if ($terminar) {
+    if ($terminar && !empty($this->request->data)) {
       //debug($this->request->data);exit;
       foreach ($this->request->data['Dato']['ambiente'] as $am) {
         $this->Ambiente->id = $am['ambiente_id'];
@@ -798,19 +798,22 @@ class AmbientesController extends AppController {
         $this->request->data['Pago']['nomenclatura_id'] = $pa['nomenclatura_id'];
         $this->Pago->save($this->request->data['Pago']);
       }
-      
+      //debug($pagos);
+      //debug($this->request->data['Pago']['banco']);
       foreach ($pagos as $pa){
         $this->Banco->id = $this->request->data['Pago']['banco']['Banco']['id'];
         $d_banco['monto'] = $this->request->data['Pago']['banco']['Banco']['monto'] + $pa[0]['imp_total'];
         $this->Banco->save($d_banco);
+        
       }
+      //exit;
       /* foreach ($todos_pagos as $pa) {
         $this->Pago->id = $pa['Pago']['id'];
         $this->request->data['Pago']['estado'] = 'Pagado';
         $this->Pago->save($this->request->data['Pago']);
         } */
     }
-
+    
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     //debug($recibo);exit;
     $detalles = $this->Pago->find('all', array(
@@ -828,6 +831,7 @@ class AmbientesController extends AppController {
         ) */
     ));
     //debug($recibo);exit;
+    //exit;
     $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a'));
   }
 
