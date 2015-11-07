@@ -43,10 +43,48 @@
                     </tbody>
                 </table>
             </div>
-
             <br>
         </div>
-
+        
+        <div class="block">
+            <!-- Example Title -->
+            <div class="block-title">
+                <h2>Listado de Cajas/Bancos</h2>
+            </div>
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Monto</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $total_c = 0.00; ?>
+                        <?php foreach ($bancos as $ba): ?>
+                          <?php $total_c+=$ba['Banco']['monto']; ?>
+                          <tr>
+                              <td><?php echo $ba['Banco']['nombre'] ?></td>
+                              <td><?php echo $ba['Banco']['monto'] ?></td>
+                              <td>
+                                  <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'cuenta', $ba['Banco']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
+                                  <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('action' => 'ingresos', $ba['Banco']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
+                              </td>
+                          </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td>TOTAL:</td>
+                            <td><?= $total_c; ?></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+        </div>
+    </div>
+    <div class="col-md-7">
         <div class="block">
             <!-- Example Title -->
             <div class="block-title">
@@ -74,11 +112,8 @@
                     </tbody>
                 </table>
             </div>
-
             <br>
         </div>
-    </div>
-    <div class="col-md-7">
         <div class="block">
             <!-- Example Title -->
             <div class="block-title">

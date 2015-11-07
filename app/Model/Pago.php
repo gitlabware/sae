@@ -97,7 +97,7 @@ class Pago extends AppModel {
           $d_cuenta['monto'] = $cuenta_a['Cuenta']['monto'] + $datos['monto'];
           $Cuenta->save($d_cuenta);
         }
-      } else {
+      } elseif(!empty($banco['cuenta_id'])) {
         if (!empty($nomen_a['Nomenclatura']['subconcepto_id'])) {
           $datos['subconcepto_id'] = $nomen_a['Nomenclatura']['subconcepto_id'];
           //debug($cuentas);exit;

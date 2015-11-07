@@ -319,9 +319,10 @@ class AmbientesController extends AppController {
 
   public function pago($idAmbiente = null) {
     $ambiente = $this->Ambiente->find('first', array('recursive' => -1, 'conditions' => array('Ambiente.id' => $idAmbiente)));
-    $conceptos = $this->Ambienteconcepto->find('list', array('recursive' => 0, 'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente), 'fields' => 'Concepto.nombre'));
+    //$conceptos = $this->Ambienteconcepto->find('list', array('recursive' => 0, 'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente), 'fields' => 'Concepto.nombre'));
     $inquilinos = $this->Inquilino->find('list', array('recursive' => 0, 'fields' => 'User.nombre', 'conditions' => array('Inquilino.ambiente_id' => $idAmbiente)));
     //debug($inquilinos);exit;
+    $conceptos = $this->Concepto->find('list',array('fields' => array('id','nombre'),'conditions' => array('id !=' => array(10,11))));
     $this->set(compact('inquilinos', 'ambiente', 'conceptos', 'idAmbiente'));
   }
 
@@ -333,7 +334,7 @@ class AmbientesController extends AppController {
     } else {
       $this->Session->setFlash('No se pudo registrar el pago!!', 'msgbueno');
     }
-    $this->redirect(array('action' => 'pagos', $this->request->data['Pago']['ambiente_id']));
+    $this->redirect($this->referer());
     //debug($this->request->data);exit;
   }
 
@@ -678,7 +679,7 @@ class AmbientesController extends AppController {
     $this->request->data['Pago']['monto_tmp'] = $this->request->data['Recibo']['monto'];
     $this->request->data['Pago']['saldo_tmp'] = $this->request->data['Recibo']['cambio'];
     $this->request->data['Pago']['observacion'] = $this->request->data[$tipo]['onservacion'];
-    $this->request->data['Pago']['fecha'] = date('Y-m-d');
+    $this->request->data['Pago']['fecha'] = $this->request->data[$tipo]['fecha'];
     $this->Pago->save($this->request->data['Pago']);
   }
 

@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-md-4">
-        <!--<div class="row">
+        <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-info btn-block" onclick="cargarmodal('<?= $this->Html->url(array('controller' => 'Pagos','action' => 'gen_pago_a',$idAmbiente))?>');">GENERAR UN PAGO</button>
+                <button class="btn btn-info btn-block" onclick="cargarmodal('<?= $this->Html->url(array('controller' => 'Ambientes','action' => 'pago',$idAmbiente))?>');">GENERAR UN PAGO</button>
             </div>
-        </div><br>-->
+        </div><br>
         <div class="block">
             <div class="block-title">
                 <div class="block-options pull-right">

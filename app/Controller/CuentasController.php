@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class CuentasController extends AppController {
 
   public $layout = 'sae';
-  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto');
+  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto','Banco');
 
   public function index() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -18,7 +18,10 @@ class CuentasController extends AppController {
       'recursive' => -1,
       'conditions' => array('Subconcepto.edificio_id' => $idEdificio)
     ));
-    $this->set(compact('cuentas', 'conceptos','subconceptos'));
+    $bancos = $this->Banco->find('all', array(
+      'conditions' => array('Banco.edificio_id' => $idEdificio)
+    ));
+    $this->set(compact('cuentas', 'conceptos','subconceptos','bancos'));
   }
 
   public function cuenta($idCuenta = null) {
