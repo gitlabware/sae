@@ -14,16 +14,13 @@ class CuentasegresoTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'app.cuentasegreso',
-		'app.subgasto',
-		'app.gasto',
+		'app.nomenclatura',
 		'app.edificio',
 		'app.ambiente',
 		'app.categoriasambiente',
 		'app.categoriaspago',
 		'app.piso',
 		'app.user',
-		'app.egreso',
-		'app.presupuesto',
 		'app.cuenta',
 		'app.banco'
 	);

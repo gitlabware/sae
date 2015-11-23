@@ -13,10 +13,12 @@ class CuentasegresoFixture extends CakeTestFixture {
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'monto' => array('type' => 'decimal', 'null' => true, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
-		'subgasto_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'observacion' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'detalle' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 250, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'proveedor' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 250, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'nomenclatura_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'cuenta_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'banco_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'referencia' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'fecha' => array('type' => 'date', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
@@ -35,13 +37,15 @@ class CuentasegresoFixture extends CakeTestFixture {
 		array(
 			'id' => 1,
 			'monto' => '',
-			'subgasto_id' => 1,
-			'observacion' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+			'detalle' => 'Lorem ipsum dolor sit amet',
+			'proveedor' => 'Lorem ipsum dolor sit amet',
+			'nomenclatura_id' => 1,
 			'cuenta_id' => 1,
 			'banco_id' => 1,
-			'fecha' => '2015-11-07',
-			'created' => '2015-11-07 16:39:45',
-			'modified' => '2015-11-07 16:39:45'
+			'referencia' => 'Lorem ipsum dolor sit amet',
+			'fecha' => '2015-11-23',
+			'created' => '2015-11-23 12:41:35',
+			'modified' => '2015-11-23 12:41:35'
 		),
 	);
 

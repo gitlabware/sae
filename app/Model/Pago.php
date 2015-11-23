@@ -49,7 +49,7 @@ class Pago extends AppModel {
       ));
       if (empty($banco['cuenta_id']) && !empty($pago['Pago']['nomenclatura_id'])) {
         $Cuentasporcentaje = new Cuentasporcentaje();
-
+        
         $cuentas = array();
         //debug($nomen_a);
         if (!empty($nomen_a['Nomenclatura']['subconcepto_id'])) {
@@ -86,6 +86,7 @@ class Pago extends AppModel {
           $datos['pago_id'] = $idPago;
           $datos['cuenta_id'] = $cu['Cuentasporcentaje']['cuenta_id'];
           $datos['porcentaje'] = $cu['Cuentasporcentaje']['porcentaje'];
+          $datos['banco_id'] = $banco['id'];
           $Cuentasmonto->create();
           $Cuentasmonto->save($datos);
 
@@ -114,6 +115,7 @@ class Pago extends AppModel {
         $datos['pago_id'] = $idPago;
         $datos['cuenta_id'] = $banco['cuenta_id'];
         $datos['porcentaje'] = 100;
+        $datos['banco_id'] = $banco['id'];
         $Cuentasmonto->create();
         $Cuentasmonto->save($datos);
         $cuenta_a = $Cuenta->find('first', array(

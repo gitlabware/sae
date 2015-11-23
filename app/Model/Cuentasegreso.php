@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * Cuentasegreso Model
  *
- * @property Subgasto $Subgasto
+ * @property Nomenclatura $Nomenclatura
  * @property Cuenta $Cuenta
  * @property Banco $Banco
  */
@@ -18,9 +18,9 @@ class Cuentasegreso extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Subgasto' => array(
-			'className' => 'Subgasto',
-			'foreignKey' => 'subgasto_id',
+		'Nomenclatura' => array(
+			'className' => 'Nomenclatura',
+			'foreignKey' => 'nomenclatura_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

@@ -6,7 +6,7 @@
                 <td>Ambiente</td>
                 <td>Piso</td>
                 <td>Propietario</td>
-                <td>Inquilinos</td>
+                <td>Representante</td>
                 <td>Fecha</td>
                 <td>Concepto</td>
                 <td>Estado</td>
@@ -24,7 +24,7 @@
                     <td><?php echo $pa['Ambiente']['nombre']; ?></td>
                     <td><?php echo $pa['Pago']['piso']; ?></td>
                     <td><?php echo $pa['Propietario']['nombre']; ?></td>
-                    <td><?php echo $pa['Ambiente']['lista_inquilinos']; ?></td>
+                    <td><?php echo $pa['Pago']['representante']; ?></td>
                     <td><?php echo $pa['Pago']['fecha']; ?></td>
                     <td><?php echo $pa['Concepto']['nombre']; ?></td>
                     <td><?php echo $pa['Pago']['estado']; ?></td>

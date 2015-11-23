@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class ReportesController extends AppController {
 
-  public $uses = array('Concepto', 'Pago', 'Ambiente', 'User', 'Inquilino');
+  public $uses = array('Concepto', 'Pago', 'Ambiente', 'User', 'Inquilino', 'Banco', 'Cuentasegreso');
   public $layout = 'sae';
 
   public function reporte_pagos() {
@@ -47,7 +47,8 @@ class ReportesController extends AppController {
     $sql1 = "SELECT nombre FROM pisos WHERE (pisos.id = Ambiente.piso_id)";
     //$sql2 = "SELECT nombre FROM users WHERE (users.id = (SELECT user_id FROM `inquilinos` WHERE (inquilinos.id = Pago.inquilino_id)))";
     $this->Pago->virtualFields = array(
-      'piso' => "CONCAT(($sql1))"
+      'piso' => "CONCAT(($sql1))",
+      'representante' => "SELECT users.nombre FROM users WHERE users.id = Ambiente.representante_id"
       //,'inquilino' => "CONCAT(($sql2))"
     );
 
@@ -55,7 +56,7 @@ class ReportesController extends AppController {
       'recursive' => 0,
       'conditions' => $condiciones
       , 'group' => ['Pago.ambiente_id', 'Pago.estado', 'Pago.concepto_id']
-      , 'fields' => ['Pago.ambiente_id', 'Pago.estado', 'Pago.concepto_id', 'SUM(Pago.monto) as monto_total']
+      , 'fields' => ['Pago.ambiente_id', 'Pago.estado', 'Pago.concepto_id', 'SUM(Pago.monto) as monto_total', 'Pago.representante']
       //, 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha','Pago.estado')
     ));
 
@@ -67,7 +68,7 @@ class ReportesController extends AppController {
       $pagos[$key]['Pago']['pagos'] = $this->Pago->find('all', array(
         'recursive' => 0,
         'conditions' => $condiciones2
-        , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha', 'Pago.estado')
+        , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'Pago.monto', 'Pago.fecha', 'Pago.estado', 'Pago.representante')
       ));
     }
     /* debug($pagos);
@@ -115,14 +116,15 @@ class ReportesController extends AppController {
     $sql1 = "SELECT nombre FROM pisos WHERE (pisos.id = Ambiente.piso_id)";
     //$sql2 = "SELECT nombre FROM users WHERE (users.id = (SELECT user_id FROM `inquilinos` WHERE (inquilinos.id = Pago.inquilino_id)))";
     $this->Pago->virtualFields = array(
-      'piso' => "CONCAT(($sql1))"
+      'piso' => "CONCAT(($sql1))",
+      'representante' => "SELECT users.nombre FROM users WHERE users.id = Ambiente.representante_id"
       //,'inquilino' => "CONCAT(($sql2))"
     );
 
     $pagos = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => $condiciones
-      , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'SUM(Pago.monto) as monto_total', 'Ambiente.piso_id', 'Pago.estado')
+      , 'fields' => array('Ambiente.nombre', 'Pago.piso', 'Propietario.nombre', 'Ambiente.lista_inquilinos', 'Concepto.nombre', 'SUM(Pago.monto) as monto_total', 'Ambiente.piso_id', 'Pago.estado', 'Pago.representante')
       , 'group' => array('Pago.concepto_id', 'Pago.ambiente_id', 'Pago.estado')
     ));
     //debug($pagos);exit;
@@ -247,9 +249,9 @@ class ReportesController extends AppController {
     $this->Pago->virtualFields = array(
       'gestion' => "YEAR(Pago.fecha)"
     );
-    $gestiones = $this->Pago->find('list',array(
+    $gestiones = $this->Pago->find('list', array(
       'group' => array('gestion'),
-      'fields' => array('gestion','gestion')
+      'fields' => array('gestion', 'gestion')
     ));
     $this->set(compact('gestiones'));
     //debug($gestiones);exit;
@@ -265,7 +267,7 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre','Piso.nombre','Representante.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre', 'Piso.nombre', 'Representante.nombre')
     ));
     //debug($ambientes);exit;
     $this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
@@ -278,6 +280,8 @@ class ReportesController extends AppController {
       'group' => array('Pago.ambiente_id'),
       'fields' => array('SUM(Pago.monto) as total_g')
     ));
+    /* debug($tipo);
+      debug($ano);exit; */
     if (!empty($pago)) {
       return $pago[0][0]['total_g'];
     } else {
@@ -294,10 +298,11 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre','Piso.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre', 'Piso.nombre')
     ));
     $this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
   }
+
   public function manteoxcobrarges() {
     $tipo = $this->request->data['Reporte']['tipo'];
     $ano = $this->request->data['Reporte']['gestion'];
@@ -305,9 +310,9 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre','Piso.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre', 'Piso.nombre')
     ));
-    $this->set(compact('ambientes', 'ano', 'tipo','gestion'));
+    $this->set(compact('ambientes', 'ano', 'tipo', 'gestion'));
   }
 
   public function get_monto_amb_m($idAmbiete = null, $fecha = null, $ano = null, $mes = null, $tipo = null) {
@@ -323,7 +328,7 @@ class ReportesController extends AppController {
       return '-';
     }
   }
-  
+
   public function get_monto_amb_m_g($idAmbiete = null, $ano = null, $mes = null, $tipo = null) {
     $pago = $this->Pago->find('all', array(
       'recursive' => -1,
@@ -347,12 +352,12 @@ class ReportesController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $idEdificio),
-      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre','Piso.nombre')
+      'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre', 'Piso.nombre')
     ));
-    $this->set(compact('ambientes', 'ano', 'fecha','tipo'));
+    $this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
   }
 
-  public function gen_xcobrar_amb_a($idAmbiente = null, $fecha = null,$tipo = null) {
+  public function gen_xcobrar_amb_a($idAmbiente = null, $fecha = null, $tipo = null) {
 
     $anos = $this->Pago->find('all', array(
       'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
@@ -366,7 +371,7 @@ class ReportesController extends AppController {
     }
   }
 
-  public function get_xcobrar_amb_s($idAmbiente = null, $fecha = null, $ano = null, $mes = null,$tipo = null) {
+  public function get_xcobrar_amb_s($idAmbiente = null, $fecha = null, $ano = null, $mes = null, $tipo = null) {
     $pago = $this->Pago->find('all', array(
       'recursive' => -1,
       'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
@@ -378,6 +383,30 @@ class ReportesController extends AppController {
     } else {
       return '-';
     }
+  }
+
+  public function reporte_egresos_ban() {
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+
+    if (!empty($this->request->data)) {
+      debug($this->request->data);
+      exit;
+      $egresos = $this->Cuentasegreso->find('all', array(
+        'recursive' => -1,
+        'conditions' => array(
+          'Cuentasegreso.banco_id' => $this->request->data['Reporte']['banco_id'],
+          'Cuentasegreso.fecha >=' => $this->request->data['Reporte']['fecha_ini'],
+          'Cuentasegreso.fecha <=' => $this->request->data['Reporte']['fecha_fin']
+        )
+      ));
+    }
+    $bancos = $this->Banco->find('list', array(
+      'recursive' => -1,
+      'conditions' => array('edificio_id' => $idEdificio),
+      'fields' => array('id', 'nombre')
+    ));
+
+    $this->set(compact('bancos','egresos'));
   }
 
 }

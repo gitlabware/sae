@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class CuentasController extends AppController {
 
   public $layout = 'sae';
-  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto','Banco');
+  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto','Banco','Bancosmovimiento','Cuentasegreso');
 
   public function index() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -104,8 +104,13 @@ class CuentasController extends AppController {
       'conditions' => array('Cuentasmonto.cuenta_id' => $idCuenta, 'Pago.estado' => 'Pagado'),
       'fields' => array('Cuentasmonto.created', 'Cuentasmonto.concepto', 'Cuentasmonto.piso', 'Cuentasmonto.ambiente','Cuentasmonto.monto', 'Cuentasmonto.porcentaje', 'Pago.monto', 'Pago.fecha')
     ));
-
-    $this->set(compact('ingresos'));
+    //$movimientos = $this->Bancosmovimiento->find('all',);
+    $egresos = $this->Cuentasegreso->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Cuentasegreso.cuenta_id' => $idCuenta),
+      'fields' => array('Cuentasegreso.*','Nomenclatura.nombre','Banco.nombre','Cuenta.nombre')
+    ));
+    $this->set(compact('ingresos','egresos'));
   }
   
   public function cuentas_porcentajes_s($idSubconcepto = null) {

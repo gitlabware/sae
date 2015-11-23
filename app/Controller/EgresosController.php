@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class EgresosController extends AppController {
 
-  public $uses = array('Egreso', 'Cuentasegreso', 'Subgasto', 'Banco', 'Cuenta');
+  public $uses = array('Egreso', 'Cuentasegreso', 'Banco', 'Cuenta','Nomenclatura');
   public $layout = 'sae';
 
   public function egresocuenta() {
@@ -36,11 +36,15 @@ class EgresosController extends AppController {
       'conditions' => array('Cuenta.edificio_id' => $idEdificio),
       'fields' => array('Cuenta.id', 'Cuenta.nombre')
     ));
-    $subgastos = $this->Subgasto->find('list', array(
-      'conditions' => array('Subgasto.edificio_id' => $idEdificio),
-      'fields' => array('Subgasto.id', 'Subgasto.nombre')
+    $this->Nomenclatura->virtualFields = array(
+      'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
+    );
+    $nomenclaturas = $this->Nomenclatura->find('list',array(
+      'recursive' => -1,
+      'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
+      'fields' => array('id','nombre_completo')
     ));
-    $this->set(compact('bancos', 'cuentas', 'subgastos'));
+    $this->set(compact('bancos', 'cuentas', 'subgastos','nomenclaturas'));
   }
 
 }

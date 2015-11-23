@@ -16,6 +16,7 @@
                         <?php echo $this->Form->hidden('id'); ?>
                         <?php echo $this->Form->hidden('nomenclatura_id'); ?>
                         <?php echo $this->Form->hidden('edificio_id'); ?>
+                        <?php echo $this->Form->hidden('codigo_aux',array('value' => $codigo_padre)); ?>
                         <?php echo $this->Form->text('nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo de cuenta ', 'required')); ?>
                     </div>
                 </div>

@@ -107,9 +107,7 @@
                             }
                             $ejecutado = $this->requestAction(array('action' => 'get_ejecutado', $presupuesto['Presupuesto']['gestion'], $in['Ingreso']['concepto_id'], $in['Ingreso']['subconcepto_id'], $in['Ingreso']['subge_id']));
                             ?>
-                            <script>
-                              $('#ing-eje-<?= $key ?>').html(<?= $tejecutado ?>);
-                            </script>
+
                         </td>
                         <td><?php echo $in['Ingreso']['porcentaje'] ?></td>
                         <td><?php echo $in['Ingreso']['ingreso'] ?></td>
@@ -129,23 +127,26 @@
                             }
                             ?>
                         </td>
-                        <td>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ingreso', $in['Ingreso']['id'])) ?>');" class="btn btn-sm btn-primary" title="Editar"><i class="gi gi-edit"></i></a> 
-                            <?php echo $this->Html->link('<i class="gi gi-remove_2"></i>', array('action' => 'elimina_ingreso', $in['Ingreso']['id']), array('class' => 'btn btn-sm btn-danger', 'title' => 'Eliminar', 'confirm' => 'Esta seguro de eliminar el ingreso??', 'escape' => FALSE)) ?>
-                        </td>
-                    </tr>
-                  <?php endforeach; ?>
-                <?php endforeach; ?>
-                <tr class="text-uppercase" style="font-weight: bold; font-size: 15px;">
-                    <td>TOTAL GENERAL INGRESOS</td>
-                    <td></td>
-                    <td><?php echo $tot_i['ingreso'] ?></td>
-                    <td><?php echo $tot_i['pres_anterior'] ?></td>
-                    <td><?php echo $tot_i['ejec_anterior'] ?></td>
-                    <td><?php echo $tot_i['presupuesto'] ?></td>
-                    <td><?= $ttejecutado ?></td>
-                    <td></td>
+                <script>
+                  $('#ing-eje-<?= $key ?>').html(<?= $tejecutado ?>);
+                </script>
+                <td>
+                    <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ingreso', $in['Ingreso']['id'])) ?>');" class="btn btn-sm btn-primary" title="Editar"><i class="gi gi-edit"></i></a> 
+                    <?php echo $this->Html->link('<i class="gi gi-remove_2"></i>', array('action' => 'elimina_ingreso', $in['Ingreso']['id']), array('class' => 'btn btn-sm btn-danger', 'title' => 'Eliminar', 'confirm' => 'Esta seguro de eliminar el ingreso??', 'escape' => FALSE)) ?>
+                </td>
                 </tr>
+              <?php endforeach; ?>
+            <?php endforeach; ?>
+            <tr class="text-uppercase" style="font-weight: bold; font-size: 15px;">
+                <td>TOTAL GENERAL INGRESOS</td>
+                <td></td>
+                <td><?php echo $tot_i['ingreso'] ?></td>
+                <td><?php echo $tot_i['pres_anterior'] ?></td>
+                <td><?php echo $tot_i['ejec_anterior'] ?></td>
+                <td><?php echo $tot_i['presupuesto'] ?></td>
+                <td><?= $ttejecutado ?></td>
+                <td></td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -157,44 +158,10 @@
 
             <div class="col-md-6">
                 <div id="gasto-select">
-                    <label>Gasto egreso <a href="javascript:" class="label label-primary" onclick="muestra_form_c_g();">Nuevo</a></label>
-                    <?php echo $this->Form->select('Egreso.subgasto_id', $subgastos, array('class' => 'form-control f-subgasto', 'empty' => 'Seleccione el sub-gasto', 'required')); ?>
-                </div>
-                <div id="gasto-form" style="background-color: gainsboro; display: none;">
-
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <div id="c_gasto_t_g" style="display: none;">
-                                <label>Gasto <a href="javascript:" onclick="muestra_c_gasto_s_g();" class="label label-success">Seleccionar</a> <a href="javascript:" onclick="muestra_select_c_g();" class="label label-primary">Seleccionar sub-gasto</a></label>
-                                <?php echo $this->Form->text('Egreso.nombre_gasto', array('class' => 'form-control c-gasto-t-g', 'placeholder' => 'Ingrese el gasto')); ?>
-                            </div>
-                            <div id="c_gasto_s_g">
-                                <label>Tipo <a href="javascript:" onclick="muestra_c_gasto_t_g();" class="label label-success">Nuevo</a> <a href="javascript:" onclick="muestra_select_c_g();" class="label label-primary">Seleccionar sub-gasto</a></label>
-                                <?php echo $this->Form->select('Egreso.gasto_id', $gastos, array('class' => 'form-control f-n-gasto c-gasto-s-g', 'empty' => 'Seleccione el gasto')); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <div id="c_tipo_t_g" style="display: none;">
-                                <label>Tipo <a href="javascript:" onclick="muestra_c_tipo_s_g();" class="label label-success">Seleccionar</a></label>
-                                <?php echo $this->Form->text('Egreso.nombre_tipo', array('class' => 'form-control c-tipo-t-g', 'placeholder' => 'Ingrese el tipo')); ?>
-                            </div>
-                            <div id="c_tipo_s_g">
-                                <label>Tipo <a href="javascript:" onclick="muestra_c_tipo_t_g();" class="label label-success">Nuevo</a></label>
-                                <?php echo $this->Form->select('Egreso.tipo', $gtipos, array('class' => 'form-control f-n-gasto c-tipo-s-g', 'empty' => 'Seleccione el tipo')); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Nombre Sub-Gasto</label>
-                            <?php echo $this->Form->text('Egreso.nombre_subgasto', array('class' => 'form-control f-n-gasto', 'placeholder' => 'Ingrese nombre del subgasto')); ?>
-                        </div>
-                    </div>
+                    <label>Gasto egreso</label>
+                    <?php echo $this->Form->select('Egreso.nomenclatura_id', $nomenclaturas, array('class' => 'select-chosen f-subgasto', 'empty' => 'Seleccione del Plan de Cuentas', 'required')); ?>
                 </div>
             </div>
-
             <div class="col-md-2">
                 <label>Presupuesto anterior</label>
                 <?php echo $this->Form->text('Egreso.pres_anterior', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
@@ -219,10 +186,12 @@
         <table class="table table-vcenter table-condensed table-bordered dataTable no-footer">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Detalle Egresos</th>
                     <th>Presupuesto Anterior</th>
                     <th>Ejecutado Anterior</th>
                     <th>Presupuesto</th>
+                    <th>Ejecutado</th>
                     <th></th>
                 </tr>
             </thead>
@@ -231,18 +200,20 @@
                 $tot_e['pres_anterior'] = 0.00;
                 $tot_e['ejec_anterior'] = 0.00;
                 $tot_e['presupuesto'] = 0.00;
+                $tejecutado = 0.00;
                 ?>
-                <?php foreach ($pgastos as $gas): ?>
+                <?php foreach ($egresos2 as $gas): ?>
                   <tr class="text-info text-uppercase info" style="font-weight: bold; font-size: 15px;">
-                      <td><?php echo $gas['Gasto']['nombre'] ?></td>
-
+                      <td><?php echo $gas['nomenclaturas3']['codigo_completo'] ?></td>
+                      <td><?php echo $gas['nomenclaturas3']['nombre'] ?></td>
                       <td><?php echo $gas[0]['pres_anterior'] ?></td>
                       <td><?php echo $gas[0]['ejec_anterior'] ?></td>
                       <td><?php echo $gas[0]['presupuesto'] ?></td>
+                      <td><?php echo $gas[0]['ejecutado'] ?></td>
                       <td></td>
                   </tr>
                   <?php
-                  $tegresos = $this->requestAction(array('action' => 'get_tegresos', $presupuesto['Presupuesto']['id'], $gas['Gasto']['id']));
+                  $tegresos = $this->requestAction(array('action' => 'get_tegresos', $presupuesto['Presupuesto']['id'], $gas['nomenclaturas3']['id'], $presupuesto['Presupuesto']['gestion']));
                   ?>
                   <?php foreach ($tegresos as $teg): ?>
                     <?php
@@ -251,29 +222,37 @@
                     $tot_e['presupuesto'] = $tot_e['presupuesto'] + $teg[0]['presupuesto'];
                     ?>
                     <tr class="text-warning text-uppercase warning" style="font-weight: bold; font-size: 15px;">
-                        <td><?php echo $teg['Subgasto']['tipo'] ?></td>
+                        <td><?php echo $teg['nomenclaturas2']['codigo_completo'] ?></td>
+                        <td><?php echo $teg['nomenclaturas2']['nombre'] ?></td>
                         <td><?php echo $teg[0]['pres_anterior'] ?></td>
                         <td><?php echo $teg[0]['ejec_anterior'] ?></td>
                         <td><?php echo $teg[0]['presupuesto'] ?></td>
+                        <td><?php echo $teg[0]['ejecutado'] ?></td>
                         <td></td>
                     </tr>
                     <?php
-                    $egresos = $this->requestAction(array('action' => 'get_egresos', $presupuesto['Presupuesto']['id'], $gas['Gasto']['id'], $teg['Subgasto']['tipo']));
+                    $egresos = $this->requestAction(array('action' => 'get_egresos', $presupuesto['Presupuesto']['id'], $teg['nomenclaturas2']['id'], $presupuesto['Presupuesto']['gestion']));
                     ?>
                     <?php foreach ($egresos as $eg): ?>
                       <tr>
-                          <td>
-                              <?php
-                              if (!empty($eg['Subgasto']['nombre'])) {
-                                echo $eg['Subgasto']['nombre'];
-                              } else {
-                                echo $eg['Gasto']['nombre'];
-                              }
-                              ?>
-                          </td>
+                          <td><?php echo $eg['Nomenclatura']['codigo_completo'] ?></td>
+                          <td><?php echo $eg['Nomenclatura']['nombre'] ?></td>
                           <td><?php echo $eg['Egreso']['pres_anterior'] ?></td>
                           <td><?php echo $eg['Egreso']['ejec_anterior'] ?></td>
                           <td><?php echo $eg['Egreso']['presupuesto'] ?></td>
+                          <td>
+                              <?php
+                              if (!empty($eg['Egreso']['ejecutado']) && $eg['Egreso']['ejecutado'] != 0.00) {
+                                echo '(' . $eg['Egreso']['ejecutado'] . ') ';
+                                $tejecutado += $eg['Egreso']['ejecutado'];
+                                //$ttejecutado += $eg['Egreso']['ejecutado'];
+                              } else {
+                                echo "<span class='text-success'><b>" . $eg['Egreso']['ejecutado_actual'] . "</b></span>";
+                                $tejecutado += $eg['Egreso']['ejecutado_actual'];
+                                //$ttejecutado += $eg['Egreso']['ejecutado_actual'];
+                              }
+                              ?>
+                          </td>
                           <td>
                               <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'egreso', $eg['Egreso']['id'])) ?>');" class="btn btn-sm btn-primary" title="Editar"><i class="gi gi-edit"></i></a> 
                               <?php echo $this->Html->link('<i class="gi gi-remove_2"></i>', array('action' => 'elimina_egreso', $eg['Egreso']['id']), array('class' => 'btn btn-sm btn-danger', 'title' => 'Eliminar', 'confirm' => 'Esta seguro de eliminar el Egreso??', 'escape' => FALSE)) ?>
@@ -283,11 +262,12 @@
                   <?php endforeach; ?>
                 <?php endforeach; ?>
                 <tr class="text-uppercase" style="font-weight: bold; font-size: 15px;">
+                    <td></td>
                     <td>TOTAL EGRESOS</td>
                     <td><?php echo $tot_e['pres_anterior'] ?></td>
                     <td><?php echo $tot_e['ejec_anterior'] ?></td>
                     <td><?php echo $tot_e['presupuesto'] ?></td>
-                    <td></td>
+                    <td><?php echo $tejecutado; ?></td>
                 </tr>
             </tbody>
         </table>

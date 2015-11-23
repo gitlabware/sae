@@ -1,5 +1,3 @@
-
-
 <div class="block">
     <!-- Example Title -->
     <div class="block-title">
@@ -21,13 +19,13 @@
             <tbody>
                 <?php foreach ($ingresos as $in): ?>
                   <tr>
-                      <td><?php echo $in['Cuentasmonto']['created']?></td>
-                      <td><?php echo $in['Pago']['fecha']?></td>
-                      <td><?php echo $in['Cuentasmonto']['concepto']?></td>
-                      <td><?php echo $in['Cuentasmonto']['porcentaje']?></td>
-                      <td><?php echo $in['Cuentasmonto']['monto']?></td>
-                      <td><?php echo $in['Cuentasmonto']['ambiente']?></td>
-                      <td><?php echo $in['Cuentasmonto']['piso']?></td>
+                      <td><?php echo $in['Cuentasmonto']['created'] ?></td>
+                      <td><?php echo $in['Pago']['fecha'] ?></td>
+                      <td><?php echo $in['Cuentasmonto']['concepto'] ?></td>
+                      <td><?php echo $in['Cuentasmonto']['porcentaje'] ?></td>
+                      <td><?php echo $in['Cuentasmonto']['monto'] ?></td>
+                      <td><?php echo $in['Cuentasmonto']['ambiente'] ?></td>
+                      <td><?php echo $in['Cuentasmonto']['piso'] ?></td>
                   </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -37,6 +35,36 @@
     <br>
 </div>
 
+<div class="block">
+    <!-- Example Title -->
+    <div class="block-title">
+        <h2>Listado de Movimientos</h2>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Movimiento</th>
+                    <th>Banco/Caja</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($movimientos as $mo): ?>
+                  <tr>
+                      <td><?php echo $mo['Bancosmovimiento']['fecha']; ?></td>
+                      <td><?php echo $mo['Bancosmovimiento']['movimiento']; ?></td>
+                      <td><?php echo $mo['Bancosmovimiento']['banco']; ?></td>
+                      <td><?php echo $mo['Bancosmovimiento']['monto']; ?></td>
+                  </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+</div>
 
 <div class="block">
     <!-- Example Title -->
@@ -53,7 +81,7 @@
                     <th>Tipo E.</th>
                     <th>Banco</th>
                     <th>Cuenta</th>
-                    <th>Monto</th>
+                    <th>Monto Bs</th>
                     <th>Referencia</th>
                 </tr>
             </thead>
@@ -76,6 +104,4 @@
 
     <br>
 </div>
-
-
 

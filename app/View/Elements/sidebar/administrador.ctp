@@ -64,6 +64,9 @@
                             <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos', 'action' => 'banco')); ?>');">Nuevo Banco/Caja</a>
                         </li>
                         <li>
+                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos', 'action' => 'movimiento')); ?>');">Movimiento Banco/Caja</a>
+                        </li>
+                        <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Nomenclaturas', 'action' => 'index')); ?>">Nomenclatura de Cuentas</a>
                         </li>
                     </ul>

@@ -71,17 +71,24 @@ class NomenclaturasController extends AppController {
         'conditions' => array('concepto_id' => $this->request->data['Nomenclatura']['concepto_id']),
         'fields' => array('id', 'nombre')
       ));
-    }else{
+    } else {
       $subconceptos = array();
     }
 
-    $this->set(compact('conceptos','subconceptos','codigo_padre'));
+    $this->set(compact('conceptos', 'subconceptos', 'codigo_padre'));
   }
 
   public function registra() {
     if (!empty($this->request->data['Nomenclatura'])) {
       //debug($this->request->data);exit;
       $this->Nomenclatura->create();
+      if (!empty($this->request->data['Nomenclatura']['codigo_aux'])) {
+        $this->request->data['Nomenclatura']['codigo_completo'] = $this->request->data['Nomenclatura']['codigo_aux'] . '.' . $this->request->data['Nomenclatura']['codigo'];
+      } else {
+        $this->request->data['Nomenclatura']['codigo_completo'] = $this->request->data['Nomenclatura']['codigo'];
+      }
+      /* debug($this->request->data);
+        exit; */
       $this->Nomenclatura->save($this->request->data['Nomenclatura']);
       $this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
     } else {
@@ -134,20 +141,23 @@ class NomenclaturasController extends AppController {
     return $codigo;
   }
 
-  public function eliminar($idNomenclatura = null) {
-    $nomenclatura = $this->Nomenclatura->find('first', array(
+  public function eliminar($idNomenclatura = null, $sw = TRUE) {
+    $nomenclaturas = $this->Nomenclatura->find('all', array(
       'recursive' => -1,
-      'conditions' => array('id' => $idNomenclatura),
-      'fields' => array('nomenclatura_id', 'codigo')
+      'conditions' => array('nomenclatura_id' => $idNomenclatura),
+      'fields' => array('id')
     ));
     $this->Nomenclatura->delete($idNomenclatura);
-    if (!empty($nomenclatura)) {
-      if (!empty($nomenclatura['Nomenclatura']['nomenclatura_id'])) {
-        $this->eliminar($nomenclatura['Nomenclatura']['nomenclatura_id']);
+
+    if (!empty($nomenclaturas)) {
+      foreach ($nomenclaturas as $nom){
+        $this->eliminar($nom['Nomenclatura']['id'],FALSE);
       }
     }
-    $this->Session->setFlash("Se ha eliminado correctamente!!", 'msgbueno');
-    $this->redirect($this->referer());
+    if ($sw) {
+      $this->Session->setFlash("Se ha eliminado correctamente!!", 'msgbueno');
+      $this->redirect($this->referer());
+    }
   }
 
   public function ambientes($idNomenclatura = null) {
@@ -157,7 +167,7 @@ class NomenclaturasController extends AppController {
     $pisos = $this->Piso->find('list', array(
       'recursive' => -1,
       'conditions' => array('edificio_id' => $idEdificio),
-      'fields' => array('id','nombre')
+      'fields' => array('id', 'nombre')
     ));
     $this->NomenclaturasAmbiente->virtualFields = array(
       'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)"
@@ -180,7 +190,7 @@ class NomenclaturasController extends AppController {
       'conditions' => array('NomenclaturasAmbiente.nomenclatura_id' => $idNomenclatura),
       'fields' => array('NomenclaturasAmbiente.id', 'NomenclaturasAmbiente.ambiente_id')
     ));
-    if(count($ambientes_sel) == 1){
+    if (count($ambientes_sel) == 1) {
       $ambientes_sel = current($ambientes_sel);
     }
     //debug($ambientes_sel);exit;

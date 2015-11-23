@@ -792,7 +792,7 @@ class AmbientesController extends AppController {
         'recursive' => -1,
         'conditions' => array('Banco.id' => $this->request->data['Recibo']['banco_id'])
       ));
-
+      
       foreach ($this->request->data['Pagos'] as $pa) {
         $this->Pago->id = $pa['pago_id'];
         $this->request->data['Pago']['estado'] = 'Pagado';

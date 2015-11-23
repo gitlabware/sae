@@ -12,7 +12,8 @@ class PresupuestosController extends AppController {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $presupuestos = $this->Presupuesto->find('all', array(
       'recursive' => -1,
-      'conditions' => array('edificio_id' => $idEdificio)
+      'conditions' => array('edificio_id' => $idEdificio),
+      'order' => array('Presupuesto.gestion DESC')
     ));
     $this->set(compact('idEdificio', 'presupuestos'));
   }
@@ -66,40 +67,51 @@ class PresupuestosController extends AppController {
       'group' => array('tipo')
     ));
 
-    $subgastos = $this->Subgasto->find('list', array(
-      'conditions' => array('Subgasto.edificio_id' => $idEdificio),
-      'fields' => array('Subgasto.id', 'Subgasto.nombre')
-    ));
-
-    $gtipos = $this->Subgasto->find('list', array(
-      'recursive' => -1,
-      'fields' => array('tipo', 'tipo'),
-      'group' => array('tipo')
-    ));
-    $gastos = $this->Gasto->find('list', array('fields' => array('id', 'nombre')));
-    $pgastos = $this->Egreso->find('all', array(
+    /*$pgastos = $this->Egreso->find('all', array(
       'recursive' => 0,
       'conditions' => array('Egreso.presupuesto_id' => $idPresupuesto),
       'group' => array('Egreso.gasto_id'),
       'fields' => array('Gasto.id', 'Gasto.nombre', 'SUM(Egreso.pres_anterior) as pres_anterior', 'SUM(Egreso.ejec_anterior) as ejec_anterior', 'SUM(Egreso.presupuesto) as presupuesto')
+    ));*/
+    $this->Nomenclatura->virtualFields = array(
+      'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
+    );
+    $nomenclaturas = $this->Nomenclatura->find('list',array(
+      'recursive' => -1,
+      'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
+      'fields' => array('id','nombre_completo')
     ));
-    $this->set(compact('presupuesto', 'subconceptos', 'conceptos', 'tingresos', 'tipos', 'subgastos', 'gastos', 'gtipos', 'pgastos'));
+    $gestion = $presupuesto['Presupuesto']['gestion'];
+    $sql2 = "(SELECT SUM(cuentasegresos.monto) FROM cuentasegresos LEFT JOIN nomenclaturas as nomenclaturas4 ON (nomenclaturas4.id = cuentasegresos.nomenclatura_id) WHERE YEAR(cuentasegresos.fecha) = $gestion AND nomenclaturas4.nomenclatura_id = nomenclaturas.nomenclatura_id GROUP BY nomenclaturas4.nomenclatura_id)";
+    $sql = "SELECT SUM(egresos.pres_anterior) as pres_anterior,SUM(egresos.ejec_anterior) as ejec_anterior,SUM(egresos.presupuesto) as presupuesto,$sql2 as ejecutado, nomenclaturas3.nombre, nomenclaturas3.codigo_completo, nomenclaturas3.id FROM egresos LEFT JOIN nomenclaturas ON (egresos.nomenclatura_id = nomenclaturas.id) LEFT JOIN nomenclaturas AS nomenclaturas2 ON (nomenclaturas.nomenclatura_id = nomenclaturas2.id) LEFT JOIN nomenclaturas AS nomenclaturas3 ON (nomenclaturas2.nomenclatura_id = nomenclaturas3.id)  WHERE egresos.presupuesto_id = $idPresupuesto GROUP BY nomenclaturas3.id";
+    $egresos2 = $this->Egreso->query($sql);
+    //debug($egresos2);exit;
+    $this->set(compact('presupuesto', 'subconceptos', 'conceptos', 'tingresos', 'tipos', 'gtipos', 'pgastos','nomenclaturas','egresos2'));
   }
-
-  public function get_tegresos($idPresupuesto = null, $idGasto = null) {
-    return $this->Egreso->find('all', array(
-        'recursive' => 0,
-        'conditions' => array('Egreso.presupuesto_id' => $idPresupuesto, 'Egreso.gasto_id' => $idGasto),
-        'group' => array('Subgasto.tipo'),
-        'fields' => array('Subgasto.nombre', 'Subgasto.tipo', 'SUM(Egreso.pres_anterior) as pres_anterior', 'SUM(Egreso.ejec_anterior) as ejec_anterior', 'SUM(Egreso.presupuesto) as presupuesto')
-    ));
+  
+  public function get_tegresos($idPresupuesto = null, $id = null,$gestion = null) {
+    //debug($gestion);exit;
+    $sql2 = "(SELECT SUM(cuentasegresos.monto) FROM cuentasegresos LEFT JOIN nomenclaturas as nomenclaturas4 ON (nomenclaturas4.id = cuentasegresos.nomenclatura_id) WHERE YEAR(cuentasegresos.fecha) = $gestion AND nomenclaturas4.nomenclatura_id = nomenclaturas.nomenclatura_id GROUP BY nomenclaturas4.nomenclatura_id)";
+    $sql = "SELECT SUM(egresos.pres_anterior) as pres_anterior,SUM(egresos.ejec_anterior) as ejec_anterior,SUM(egresos.presupuesto) as presupuesto, nomenclaturas2.nombre, nomenclaturas2.codigo_completo, nomenclaturas2.id, $sql2 as ejecutado FROM egresos LEFT JOIN nomenclaturas ON (egresos.nomenclatura_id = nomenclaturas.id) LEFT JOIN nomenclaturas AS nomenclaturas2 ON (nomenclaturas.nomenclatura_id = nomenclaturas2.id) LEFT JOIN nomenclaturas AS nomenclaturas3 ON (nomenclaturas2.nomenclatura_id = nomenclaturas3.id)  WHERE egresos.presupuesto_id = $idPresupuesto AND nomenclaturas3.id = $id GROUP BY nomenclaturas2.id";
+    //debug($this->Egreso->query($sql));exit;
+    return $this->Egreso->query($sql);
   }
+  
+  
 
-  public function get_egresos($idPresupuesto = null, $idGasto = null, $tipo = null) {
-    return $this->Egreso->find('all', array(
+  public function get_egresos($idPresupuesto = null, $idNomencaltura = null, $gestion  = null) {
+    $sql2 = "(SELECT SUM(cuentasegresos.monto) FROM cuentasegresos WHERE YEAR(cuentasegresos.fecha) = $gestion AND cuentasegresos.nomenclatura_id = Nomenclatura.id GROUP BY cuentasegresos.nomenclatura_id)";
+    $this->Egreso->virtualFields = array(
+      'ejecutado_actual' => "$sql2"
+    );
+    $resp =  $this->Egreso->find('all', array(
         'recursive' => 0,
-        'conditions' => array('Egreso.presupuesto_id' => $idPresupuesto, 'Subgasto.tipo' => $tipo, 'Egreso.gasto_id' => $idGasto)
+        'conditions' => array('Egreso.presupuesto_id' => $idPresupuesto, 'Nomenclatura.nomenclatura_id' => $idNomencaltura)
     ));
+    return $resp;
+    /*debug($idPresupuesto);
+    debug($idNomencaltura);
+    debug($resp);exit;*/
   }
 
   public function ingreso($idIngreso = NULL) {
@@ -125,17 +137,15 @@ class PresupuestosController extends AppController {
     $this->Egreso->id = $idEgreso;
     $this->request->data = $this->Egreso->read();
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
-    $subgastos = $this->Subgasto->find('list', array(
-      'conditions' => array('Subgasto.edificio_id' => $idEdificio),
-      'fields' => array('Subgasto.id', 'Subgasto.nombre')
-    ));
-    $gastos = $this->Gasto->find('list', array('fields' => array('id', 'nombre')));
-    $gtipos = $this->Subgasto->find('list', array(
+    $this->Nomenclatura->virtualFields = array(
+      'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
+    );
+    $nomenclaturas = $this->Nomenclatura->find('list',array(
       'recursive' => -1,
-      'fields' => array('tipo', 'tipo'),
-      'group' => array('tipo')
+      'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
+      'fields' => array('id','nombre_completo')
     ));
-    $this->set(compact('subgastos', 'gastos', 'gtipos'));
+    $this->set(compact('nomenclaturas'));
   }
 
   public function get_ingresos($idPresupuesto = null, $tipo = null) {
@@ -202,36 +212,10 @@ class PresupuestosController extends AppController {
 
   public function guarda_egreso() {
     if (!empty($this->request->data['Egreso'])) {
-      $idEdificio = $this->Session->read('Auth.User.edificio_id');
-      $dato = $this->request->data['Egreso'];
-      if (!empty($dato['nombre_gasto'])) {
-        $dgasto['nombre'] = $dato['nombre_gasto'];
-        $dgasto['edificio_id'] = $idEdificio;
-        $this->Gasto->create();
-        $this->Gasto->save($dgasto);
-        $dato['gasto_id'] = $this->Gasto->getLastInsertID();
-      }
-      if (!empty($dato['nombre_subgasto'])) {
-        $subd['nombre'] = $dato['nombre_subgasto'];
-        $subd['gasto_id'] = $dato['gasto_id'];
-        $subd['edificio_id'] = $idEdificio;
-        if (!empty($dato['nombre_tipo'])) {
-          $subd['tipo'] = $dato['nombre_tipo'];
-        } else {
-          $subd['tipo'] = $dato['tipo'];
-        }
-        $this->Subgasto->create();
-        $this->Subgasto->save($subd);
-        $dato['subgasto_id'] = $this->Subgasto->getLastInsertID();
-      } else {
-        $subgasto = $this->Subgasto->findByid($dato['subgasto_id'], null, null, -1);
-        $dato['gasto_id'] = $subgasto['Subgasto']['gasto_id'];
-      }
-      $this->request->data = $dato;
       $valida = $this->validar('Egreso');
       if (empty($valida)) {
         $this->Egreso->create();
-        $this->Egreso->save($dato);
+        $this->Egreso->save($this->request->data['Egreso']);
         $this->Session->setFlash("Se registro correctamente el ingreso!!", 'msgbueno');
       } else {
         $this->Session->setFlash($valida, 'msgerror');

@@ -68,8 +68,8 @@
                               <td><?php echo $ba['Banco']['nombre'] ?></td>
                               <td><?php echo $ba['Banco']['monto'] ?></td>
                               <td>
-                                  <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'cuenta', $ba['Banco']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
-                                  <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('action' => 'ingresos', $ba['Banco']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
+                                  <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos','action' => 'banco', $ba['Banco']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
+                                  <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('controller' => 'Bancos','action' => 'estado', $ba['Banco']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
                               </td>
                           </tr>
                         <?php endforeach; ?>
