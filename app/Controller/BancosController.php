@@ -60,6 +60,7 @@ class BancosController extends AppController {
         $d_banco['monto'] = $abanco['Banco']['monto'] + $this->request->data['Bancosmovimiento']['monto'];
         $this->Banco->save($d_banco);
         $this->Bancosmovimiento->create();
+        $this->request->data['Bancosmovimiento']['saldo'] = $abanco['Banco']['saldo'];
         $this->Bancosmovimiento->save($this->request->data['Bancosmovimiento']);
         $this->Session->setFlash("Se registro correctamente el movimiento!!", 'msgbueno');
       } else {

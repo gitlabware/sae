@@ -11,6 +11,10 @@
         <div class="block">
             <!-- Example Title -->
             <div class="block-title">
+                <div class="block-options pull-right">
+                    
+                    <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-success" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'cuenta')); ?>');" title="Nueva Cuenta"><i class="fa fa-plus"></i></a>
+                </div>
                 <h2>Listado de cuentas</h2>
             </div>
             <div class="row">
@@ -45,10 +49,14 @@
             </div>
             <br>
         </div>
-        
+
         <div class="block">
             <!-- Example Title -->
             <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-info" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos', 'action' => 'movimiento')); ?>');" title="Movimiento entre Bancos/Cajas"><i class="fa fa-exchange"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-success" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos', 'action' => 'banco')); ?>');" title="Nuevo Banco/Caja"><i class="fa fa-plus"></i></a>
+                </div>
                 <h2>Listado de Cajas/Bancos</h2>
             </div>
             <div class="row">
@@ -68,8 +76,8 @@
                               <td><?php echo $ba['Banco']['nombre'] ?></td>
                               <td><?php echo $ba['Banco']['monto'] ?></td>
                               <td>
-                                  <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos','action' => 'banco', $ba['Banco']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
-                                  <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('controller' => 'Bancos','action' => 'estado', $ba['Banco']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
+                                  <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos', 'action' => 'banco', $ba['Banco']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
+                                  <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('controller' => 'Bancos', 'action' => 'estado', $ba['Banco']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
                               </td>
                           </tr>
                         <?php endforeach; ?>

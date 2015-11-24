@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class ReportesController extends AppController {
 
-  public $uses = array('Concepto', 'Pago', 'Ambiente', 'User', 'Inquilino', 'Banco', 'Cuentasegreso');
+  public $uses = array('Concepto', 'Pago', 'Ambiente', 'User', 'Inquilino', 'Banco', 'Cuentasegreso', 'Bancosmovimiento');
   public $layout = 'sae';
 
   public function reporte_pagos() {
@@ -387,17 +387,27 @@ class ReportesController extends AppController {
 
   public function reporte_egresos_ban() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
-
+    $egresos = array();
+    $movimientos = array();
+    $cuentas = array();
     if (!empty($this->request->data)) {
-      debug($this->request->data);
-      exit;
-      $egresos = $this->Cuentasegreso->find('all', array(
-        'recursive' => -1,
+      $idBanco = $this->request->data['Reporte']['banco_id'];
+      $fecha_ini = $this->request->data['Reporte']['fecha_ini'];
+      $fecha_fin = $this->request->data['Reporte']['fecha_fin'];
+      
+      $sql1 = "SELECT CONCAT(Cuentasegreso.fecha) AS fecha, CONCAT(Cuentasegreso.referencia) AS referencia, CONCAT(Cuentasegreso.proveedor) AS proveedor,CONCAT(Cuentasegreso.detalle) AS detalle, CONCAT(nomenclaturas.nombre) AS nomenclatura, 0 AS ingreso, CONCAT(Cuentasegreso.monto) AS egreso, 0 AS saldo, CONCAT(Cuentasegreso.modified) as fecha_or FROM cuentasegresos AS Cuentasegreso LEFT JOIN nomenclaturas ON(Cuentasegreso.nomenclatura_id = nomenclaturas.id) WHERE Cuentasegreso.banco_id = $idBanco AND Cuentasegreso.fecha >= '$fecha_ini' AND Cuentasegreso.fecha <= '$fecha_fin'" ;
+      $sql2 = "SELECT CONCAT(bancosmovimientos.fecha) AS fecha, CONCAT('') AS referencia, CONCAT('') AS proveedor,CONCAT('INGESO A CAJA CHICA') AS detalle, CONCAT('') AS nomenclatura, CONCAT(bancosmovimientos.monto) AS ingreso, 0 AS egreso, CONCAT(bancosmovimientos.saldo) AS saldo , CONCAT(bancosmovimientos.modified) AS fecha_or FROM bancosmovimientos WHERE bancosmovimientos.hastabanco_id = $idBanco AND bancosmovimientos.fecha >= '$fecha_ini' AND bancosmovimientos.fecha <= '$fecha_fin'";
+      $sql3 = "SELECT * FROM (($sql1) UNION ALL ($sql2)) datos ORDER BY fecha ASC , fecha_or ASC";
+      $egresos = $this->Cuentasegreso->query($sql3);
+      $cuentas = $this->Cuentasegreso->find('all',array(
+        'recursive' => 0,
         'conditions' => array(
-          'Cuentasegreso.banco_id' => $this->request->data['Reporte']['banco_id'],
-          'Cuentasegreso.fecha >=' => $this->request->data['Reporte']['fecha_ini'],
-          'Cuentasegreso.fecha <=' => $this->request->data['Reporte']['fecha_fin']
-        )
+          'Cuentasegreso.banco_id' => $idBanco,
+          'Cuentasegreso.fecha >=' => $fecha_ini,
+          'Cuentasegreso.fecha <=' => $fecha_fin
+        ),
+        'group' => array('Cuentasegreso.nomenclatura_id'),
+        'fields' => array('Nomenclatura.codigo_completo','Nomenclatura.nombre','SUM(Cuentasegreso.monto) AS monto')
       ));
     }
     $bancos = $this->Banco->find('list', array(
@@ -405,8 +415,7 @@ class ReportesController extends AppController {
       'conditions' => array('edificio_id' => $idEdificio),
       'fields' => array('id', 'nombre')
     ));
-
-    $this->set(compact('bancos','egresos'));
+    $this->set(compact('bancos', 'egresos','movimientos','cuentas'));
   }
 
 }
