@@ -36,6 +36,7 @@
                               <td>
                                   <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'cuenta', $cu['Cuenta']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
                                   <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('action' => 'ingresos', $cu['Cuenta']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
+                                  <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'eliminar', $cu['Cuenta']['id']), array('class' => 'btn btn-sm btn-danger', 'escape' => FALSE, 'title' => 'Eliminar Cuenta','confirm' => 'Esta seguro de eliminar la cuenta '.$cu['Cuenta']['nombre'].'??')); ?>
                               </td>
                           </tr>
                         <?php endforeach; ?>
@@ -78,6 +79,7 @@
                               <td>
                                   <a class="btn btn-sm btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Bancos', 'action' => 'banco', $ba['Banco']['id'])); ?>');" title="Editar"> <i class="fa fa-edit"></i> </a> 
                                   <?php echo $this->Html->link('<i class="fa fa-money"></i>', array('controller' => 'Bancos', 'action' => 'estado', $ba['Banco']['id']), array('class' => 'btn btn-sm btn-success', 'escape' => FALSE, 'title' => 'Ingresos')); ?>
+                                  <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('controller' => 'Bancos', 'action' => 'eliminar', $ba['Banco']['id']), array('class' => 'btn btn-sm btn-danger', 'escape' => FALSE, 'title' => 'Eliminar Cuenta','confirm' => 'Esta seguro de eliminar la cuenta '.$ba['Banco']['nombre'].'??')); ?>
                               </td>
                           </tr>
                         <?php endforeach; ?>

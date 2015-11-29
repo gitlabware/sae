@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class BancosController extends AppController {
 
-  public $uses = array('Banco', 'Cuenta', 'Bancosmovimiento', 'Cuentasmonto','Cuentasegreso');
+  public $uses = array('Banco', 'Cuenta', 'Bancosmovimiento', 'Cuentasmonto', 'Cuentasegreso', 'Nomenclatura', 'Comprobante', 'Comprobantescuenta', 'Edificio');
   public $layout = 'sae';
 
   public function index() {
@@ -20,7 +20,16 @@ class BancosController extends AppController {
     $this->Banco->id = $idBanco;
     $this->request->data = $this->Banco->read();
     $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre')));
-    $this->set(compact('cuentas'));
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $this->Nomenclatura->virtualFields = array(
+      'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
+    );
+    $nomenclaturas = $this->Nomenclatura->find('list', array(
+      'recursive' => -1,
+      'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
+      'fields' => array('id', 'nombre_completo')
+    ));
+    $this->set(compact('cuentas', 'nomenclaturas'));
   }
 
   public function registra() {
@@ -50,8 +59,11 @@ class BancosController extends AppController {
     if (!empty($this->request->data)) {
       $iddbanco = $this->request->data['Bancosmovimiento']['desdebanco_id'];
       $idabanco = $this->request->data['Bancosmovimiento']['hastabanco_id'];
+      $iddcuenta = $this->request->data['Bancosmovimiento']['desdecuenta_id'];
+      $idacuenta = $this->request->data['Bancosmovimiento']['hastacuenta_id'];
       $dbanco = $this->Banco->findByid($iddbanco, null, null, -1);
-      if ($dbanco['Banco']['monto'] >= $this->request->data['Bancosmovimiento']['monto']) {
+      $dcuenta = $this->Cuenta->findByid($iddcuenta, null, null, -1);
+      if ($dbanco['Banco']['monto'] >= $this->request->data['Bancosmovimiento']['monto'] && $dcuenta['Cuenta']['monto'] >= $this->request->data['Bancosmovimiento']['monto']) {
         $abanco = $this->Banco->findByid($idabanco, null, null, -1);
         $this->Banco->id = $dbanco['Banco']['id'];
         $d_banco['monto'] = $dbanco['Banco']['monto'] - $this->request->data['Bancosmovimiento']['monto'];
@@ -60,8 +72,19 @@ class BancosController extends AppController {
         $d_banco['monto'] = $abanco['Banco']['monto'] + $this->request->data['Bancosmovimiento']['monto'];
         $this->Banco->save($d_banco);
         $this->Bancosmovimiento->create();
-        $this->request->data['Bancosmovimiento']['saldo'] = $abanco['Banco']['saldo'];
+        $this->request->data['Bancosmovimiento']['saldo'] = $abanco['Banco']['monto'];
         $this->Bancosmovimiento->save($this->request->data['Bancosmovimiento']);
+
+        $this->Cuenta->id = $dcuenta['Cuenta']['id'];
+        $d_cuenta['monto'] = $dcuenta['Cuenta']['monto'] - $this->request->data['Bancosmovimiento']['monto'];
+        $this->Cuenta->save($d_cuenta);
+
+        $acuenta = $this->Cuenta->findByid($idacuenta, null, null, -1);
+        $this->Cuenta->id = $acuenta['Cuenta']['id'];
+        $d_ceunta['monto'] = $acuenta['Cuenta']['monto'] + $this->request->data['Bancosmovimiento']['monto'];
+        $this->Cuenta->save($d_ceunta);
+        $this->genera_comprobante($dbanco, $abanco);
+
         $this->Session->setFlash("Se registro correctamente el movimiento!!", 'msgbueno');
       } else {
         $this->Session->setFlash($dbanco['Banco']['nombre'] . ' no tiene lo suficiente para el movimiento!!', 'msgerror');
@@ -70,47 +93,90 @@ class BancosController extends AppController {
       $this->redirect($this->referer());
     }
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
-    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('Banco.edificio_id' => $idEdificio)));
-    $this->set(compact('bancos'));
+    $this->Banco->virtualFields = array(
+      'nombre_completo' => "CONCAT(Banco.nombre,' (Disponibilidad: ',Banco.monto,')')"
+    );
+    $this->Cuenta->virtualFields = array(
+      'nombre_completo' => "CONCAT(Cuenta.nombre,' (Disponibilidad: ',Cuenta.monto,')')"
+    );
+    $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('Cuenta.edificio_id' => $idEdificio)));
+    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('Banco.edificio_id' => $idEdificio)));
+    $this->set(compact('bancos', 'cuentas'));
+  }
+
+  public function genera_comprobante($dbanco = null, $abanco = null) {
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $edificio = $this->Edificio->find('first', array(
+      'recursive' => -1,
+      'conditions' => array('id' => $idEdificio),
+      'fields' => array('tc_ufv')
+    ));
+    $d_comprobante['tipo'] = 'Ingreso de Banco';
+    $d_comprobante['estado'] = 'No Comprobado';
+    $d_comprobante['fecha'] = $this->request->data['Bancosmovimiento']['fecha'];
+    $d_comprobante['nombre'] = $dbanco['Banco']['nombre'];
+    $d_comprobante['nota'] = $this->request->data['Bancosmovimiento']['nota'];
+    $d_comprobante['concepto'] = "Movimiento de Caja/Banco";
+    $d_comprobante['tc_ufv'] = $edificio['Edificio']['tc_ufv'];
+    $d_comprobante['edificio_id'] = $idEdificio;
+    $this->Comprobante->create();
+    $this->Comprobante->save($d_comprobante);
+    $idConprobante = $this->Comprobante->getLastInsertID();
+
+    $d_com['cta_ctable'] = $dbanco['Banco']['nombre'];
+    $d_com['debe'] = $this->request->data['Bancosmovimiento']['monto'];
+    $d_com['haber'] = NULL;
+    $d_com['comprobante_id'] = $idConprobante;
+    $d_com['edificio_id'] = $idEdificio;
+
+    $this->Comprobantescuenta->create();
+    $this->Comprobantescuenta->save($d_com);
+
+    $d_com['cta_ctable'] = $abanco['Banco']['nombre'];
+    $d_com['debe'] = NULL;
+    $d_com['haber'] = $this->request->data['Bancosmovimiento']['monto'];
+    $d_com['comprobante_id'] = $idConprobante;
+    $d_com['edificio_id'] = $idEdificio;
+
+    $this->Comprobantescuenta->create();
+    $this->Comprobantescuenta->save($d_com);
   }
 
   public function estado($idBanco = null) {
-    $banco = $this->Banco->findByid($idBanco, null, null, -1);
-    $sql_amb1 = '(SELECT am.nombre FROM ambientes am WHERE am.id = Pago.ambiente_id)';
-    $sql_amb2 = '(SELECT am1.piso_id FROM ambientes am1 WHERE am1.id = Pago.ambiente_id)';
-    $sql_concepto = '(SELECT con.nombre FROM conceptos con WHERE con.id = Pago.concepto_id)';
-    $sql_piso = "SELECT pi1.nombre FROM pisos pi1 WHERE pi1.id = $sql_amb2";
-    $this->Cuentasmonto->virtualFields = array(
-      'ambiente' => "$sql_amb1",
-      'piso' => "$sql_piso",
-      'concepto' => "$sql_concepto"
-    );
-    $ingresos = $this->Cuentasmonto->find('all', array(
-      'recursive' => 0,
-      'conditions' => array('Cuentasmonto.banco_id' => $idBanco, 'Pago.estado' => 'Pagado'),
-      'fields' => array('Cuentasmonto.created', 'Cuentasmonto.concepto', 'Cuentasmonto.piso', 'Cuentasmonto.ambiente', 'Cuentasmonto.monto', 'Cuentasmonto.porcentaje', 'Pago.monto', 'Pago.fecha')
-    ));
-    $this->Bancosmovimiento->virtualFields = array(
-      'movimiento' => "IF(Bancosmovimiento.desdebanco_id = $idBanco,'SALIDA','INGRESO')",
-      'banco' => "IF(Bancosmovimiento.desdebanco_id = $idBanco,Hastabanco.nombre,Desdebanco.nombre)"
-    );
-    $movimientos = $this->Bancosmovimiento->find('all', array(
-      'recursive' => 0,
-      'consitions' => array(
-        'OR' => array('Bancosmovimiento.desdebanco_id' => $idBanco, 'Bancosmovimiento.hastabanco_id' => $idBanco)
-      ),
-      'fields' => array('Bancosmovimiento.*')
-    ));
-    $egresos = $this->Cuentasegreso->find('all',array(
-      'recursive' => 0,
-      'conditions' => array('Cuentasegreso.banco_id' => $idBanco),
-      'fields' => array('Cuentasegreso.*','Nomenclatura.nombre','Banco.nombre','Cuenta.nombre')
-    ));
-    
-    /*debug($movimientos);
-    exit;*/
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    if (!empty($this->request->data)) {
+      $fecha_ini = $this->request->data['Reporte']['fecha_ini'];
+      $fecha_fin = $this->request->data['Reporte']['fecha_fin'];
+    } else {
+      $fecha_ini = $this->request->data['Reporte']['fecha_ini'] = date('Y-m-d');
+      $fecha_fin = $this->request->data['Reporte']['fecha_fin'] = date('Y-m-d');
+    }
+    $a_sql_ingresos1 = "SELECT monto FROM bancosmovimientos WHERE ";
 
-    $this->set(compact('ingresos', 'banco','movimientos','egresos'));
+
+    $sql1 = "SELECT CONCAT(Cuentasegreso.fecha) AS fecha, CONCAT(Cuentasegreso.referencia) AS referencia, CONCAT(Cuentasegreso.proveedor) AS proveedor,CONCAT(Cuentasegreso.detalle) AS detalle, CONCAT(nomenclaturas.nombre) AS nomenclatura, 0 AS ingreso, CONCAT(Cuentasegreso.monto) AS egreso, 0 AS saldo, CONCAT(Cuentasegreso.modified) as fecha_or FROM cuentasegresos AS Cuentasegreso LEFT JOIN nomenclaturas ON(Cuentasegreso.nomenclatura_id = nomenclaturas.id) WHERE Cuentasegreso.banco_id = $idBanco AND Cuentasegreso.fecha >= '$fecha_ini' AND Cuentasegreso.fecha <= '$fecha_fin'";
+    $sql2 = "SELECT CONCAT(bancosmovimientos.fecha) AS fecha, CONCAT('') AS referencia, CONCAT('') AS proveedor,CONCAT('INGESO A CAJA CHICA') AS detalle, CONCAT('') AS nomenclatura, CONCAT(bancosmovimientos.monto) AS ingreso, 0 AS egreso, CONCAT(bancosmovimientos.saldo) AS saldo , CONCAT(bancosmovimientos.modified) AS fecha_or FROM bancosmovimientos WHERE bancosmovimientos.hastabanco_id = $idBanco AND bancosmovimientos.fecha >= '$fecha_ini' AND bancosmovimientos.fecha <= '$fecha_fin'";
+    $sql3 = "SELECT CONCAT(bancosmovimientos.fecha) AS fecha, CONCAT('') AS referencia, CONCAT('') AS proveedor,CONCAT('EGRESO DE CAJA CHICA') AS detalle, CONCAT('') AS nomenclatura, 0 AS ingreso, CONCAT(bancosmovimientos.monto) AS egreso, CONCAT(bancosmovimientos.saldo) AS saldo , CONCAT(bancosmovimientos.modified) AS fecha_or FROM bancosmovimientos WHERE bancosmovimientos.desdebanco_id = $idBanco AND bancosmovimientos.fecha >= '$fecha_ini' AND bancosmovimientos.fecha <= '$fecha_fin'";
+    $sql4 = "SELECT * FROM (($sql1) UNION ALL ($sql2) UNION ALL ($sql3)) datos ORDER BY fecha ASC , fecha_or ASC";
+    $egresos = $this->Cuentasegreso->query($sql4);
+
+    //debug($egresos);exit;
+    $cuentas = $this->Cuentasegreso->find('all', array(
+      'recursive' => 0,
+      'conditions' => array(
+        'Cuentasegreso.banco_id' => $idBanco,
+        'Cuentasegreso.fecha >=' => $fecha_ini,
+        'Cuentasegreso.fecha <=' => $fecha_fin
+      ),
+      'group' => array('Cuentasegreso.nomenclatura_id'),
+      'fields' => array('Nomenclatura.codigo_completo', 'Nomenclatura.nombre', 'SUM(Cuentasegreso.monto) AS monto')
+    ));
+    $banco = $this->Banco->find('first', array(
+      'recursive' => -1,
+      'conditions' => array('id' => $idBanco),
+      'fields' => array('id', 'nombre', 'monto')
+    ));
+    $this->set(compact('banco', 'egresos', 'cuentas'));
   }
 
 }

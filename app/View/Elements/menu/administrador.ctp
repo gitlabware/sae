@@ -20,5 +20,10 @@
                 <i class="gi gi-coins"></i>
             </a>
         </li>
+        <li class="dropdown">
+            <a href="<?php echo $this->Html->url(array('controller' => 'Comprobantes', 'action' => 'no_comprobados')); ?>" title="Comprobantes pendientes">
+                <i class="gi gi-justify"></i>
+            </a>
+        </li>
     </ul>
 </header>

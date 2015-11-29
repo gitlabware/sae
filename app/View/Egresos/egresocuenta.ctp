@@ -45,15 +45,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 control-label" for="user-settings-email">Monto</label>
+            <label class="col-md-4 control-label" for="user-settings-email">Importe Total</label>
             <div class="col-md-8">
                 <?php echo $this->Form->text('Cuentasegreso.monto', array('class' => 'form-control', 'required','placeholder' => 'Ingrese el monto', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 control-label" for="user-settings-email">Referencia</label>
+            <label class="col-md-4 control-label" for="user-settings-email">Doc.Respaldo</label>
             <div class="col-md-8">
-                <?php echo $this->Form->text('Cuentasegreso.referencia', array('class' => 'form-control','placeholder' => 'Referencia')); ?>
+                <?php echo $this->Form->text('Cuentasegreso.referencia', array('class' => 'form-control','placeholder' => 'Ejemplo: Pago con cheque numero: 8896')); ?>
             </div>
         </div>
     </fieldset>

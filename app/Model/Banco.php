@@ -5,6 +5,7 @@ App::uses('AppModel', 'Model');
  *
  * @property Cuenta $Cuenta
  * @property Edificio $Edificio
+ * @property Nomenclatura $Nomenclatura
  */
 class Banco extends AppModel {
 
@@ -27,6 +28,13 @@ class Banco extends AppModel {
 		'Edificio' => array(
 			'className' => 'Edificio',
 			'foreignKey' => 'edificio_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Nomenclatura' => array(
+			'className' => 'Nomenclatura',
+			'foreignKey' => 'nomenclatura_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

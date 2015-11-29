@@ -8,16 +8,17 @@
     <?php echo $this->Form->create('Banco', array('class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
     <fieldset>
         <?php echo $this->Form->hidden('Bancosmovimiento.id'); ?>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="user-settings-email">Monto</label>
-            <div class="col-md-8">
-                <?php echo $this->Form->text('Bancosmovimiento.monto', array('class' => 'form-control', 'required','placeholder' => 'Ingrese el monto', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
-            </div>
-        </div>
+        
         <div class="form-group">
             <label class="col-md-4 control-label" for="user-settings-email">De Caja/Banco</label>
             <div class="col-md-8">
                 <?php echo $this->Form->select('Bancosmovimiento.desdebanco_id', $bancos, array('class' => 'form-control', 'required','empty' => 'Seleccione la Caja/Banco')); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="user-settings-email">Desde Cuenta</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->select('Bancosmovimiento.desdecuenta_id', $cuentas, array('class' => 'form-control', 'required','empty' => 'Seleccione la Cuenta')); ?>
             </div>
         </div>
         <div class="form-group">
@@ -27,15 +28,27 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-md-4 control-label" for="user-settings-email">Hasta Cuenta</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->select('Bancosmovimiento.hastacuenta_id', $cuentas, array('class' => 'form-control', 'required','empty' => 'Seleccione la Cuenta')); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="user-settings-email">Importe</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->text('Bancosmovimiento.monto', array('class' => 'form-control', 'required','placeholder' => 'Ingrese el monto', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-md-4 control-label" for="user-settings-email">Fecha</label>
             <div class="col-md-8">
                 <?php echo $this->Form->date('Bancosmovimiento.fecha', array( 'class' => 'form-control', 'required','value' => date('Y-m-d'))); ?>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 control-label" for="user-settings-email">Concepto/Observacion</label>
+            <label class="col-md-4 control-label" for="user-settings-email">Nota(Eje: Nro. Cheque)</label>
             <div class="col-md-8">
-                <?php echo $this->Form->textarea('Bancosmovimiento.concepto', array('class' => 'form-control', 'required','placeholder' => 'Ingrese el Concepto u Observacion')); ?>
+                <?php echo $this->Form->textarea('Bancosmovimiento.nota', array('class' => 'form-control', 'required','placeholder' => 'Ejemplo: Pago con cheque numero: 5563')); ?>
             </div>
         </div>
     </fieldset>

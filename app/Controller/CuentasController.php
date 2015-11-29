@@ -138,5 +138,15 @@ class CuentasController extends AppController {
     }
     $this->set(compact('cuentas', 'subconcepto', 'porcentajes'));
   }
+  
+  public function eliminar($idCuenta = null){
+    if($this->Cuenta->delete($idCuenta)){
+      $this->Session->setFlash("Se ha eliminado correctamente la cuenta!!",'msgbueno');
+    }else{
+      $this->Session->setFlash("No se ha podido eliminar la cuenta. Intente nuevamente!!",'msgerror');
+    }
+    $this->redirect($this->referer());
+  }
+  
 
 }

@@ -24,6 +24,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-md-4 control-label" for="user-settings-email">Plan de Cuentas</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->select('nomenclatura_id',$nomenclaturas, array('class' => 'select-chosen', 'empty' => 'Seleccione el Plan de Cuenta','required'));?>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-md-4 control-label" for="user-settings-email">Numero de cuenta</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->text('numero_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el numero de cuenta'));?>
@@ -41,6 +47,7 @@
                         <?php echo $this->Form->text('monto', array('class' => 'form-control', 'placeholder' => 'Monto en caja/banco','step' => 'any','type' => 'number'));?>
                     </div>
                 </div>
+                
             </fieldset>
             
         </div>
@@ -55,3 +62,6 @@
 </div>
 <!-- END Modal Body -->
 
+<script>
+$('.select-chosen').chosen({width: "100%"});
+</script>

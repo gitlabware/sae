@@ -46,5 +46,47 @@ class EgresosController extends AppController {
     ));
     $this->set(compact('bancos', 'cuentas', 'subgastos','nomenclaturas'));
   }
+  
+  public function genera_comprobante($banco = null) {
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $edificio = $this->Edificio->find('first', array(
+      'recursive' => -1,
+      'conditions' => array('id' => $idEdificio),
+      'fields' => array('tc_ufv')
+    ));
+    $d_comprobante['tipo'] = 'Ingreso de Banco';
+    $d_comprobante['estado'] = 'No Comprobado';
+    $d_comprobante['fecha'] = $this->request->data['Bancosmovimiento']['fecha'];
+    $d_comprobante['nombre'] = $dbanco['Banco']['nombre'];
+    $d_comprobante['nota'] = $this->request->data['Bancosmovimiento']['nota'];
+    $d_comprobante['concepto'] = "Movimiento de Caja/Banco";
+    $d_comprobante['tc_ufv'] = $edificio['Edificio']['tc_ufv'];
+    $d_comprobante['edificio_id'] = $idEdificio;
+    $this->Comprobante->create();
+    $this->Comprobante->save($d_comprobante);
+    $idConprobante = $this->Comprobante->getLastInsertID();
+
+    $d_com['cta_ctable'] = $dbanco['Banco']['nombre'];
+    $d_com['debe'] = $this->request->data['Bancosmovimiento']['monto'];
+    $d_com['haber'] = NULL;
+    $d_com['comprobante_id'] = $idConprobante;
+    $d_com['edificio_id'] = $idEdificio;
+    $d_com['nomenclatura_id'] = $this->request->data['Cuentasegreso'];
+
+    $this->Comprobantescuenta->create();
+    $this->Comprobantescuenta->save($d_com);
+
+    $d_com['cta_ctable'] = $banco['Nomenclatura']['nombre'];
+    $d_com['debe'] = NULL;
+    $d_com['haber'] = $this->request->data['Cuentasegreso']['monto'];
+    $d_com['comprobante_id'] = $idConprobante;
+    $d_com['edificio_id'] = $idEdificio;
+    $d_com['auxiliar'] = NULL;
+    $d_com['codigo'] = $banco['Nomenclatura']['codigo_completo'];
+    $d_com['nomenclatura_id'] = $banco['Nomenclatura']['id'];
+
+    $this->Comprobantescuenta->create();
+    $this->Comprobantescuenta->save($d_com);
+  }
 
 }

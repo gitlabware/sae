@@ -17,6 +17,9 @@ class BancoFixture extends CakeTestFixture {
 		'numero_cuenta' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 60, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'cuenta_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'edificio_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'nomenclatura_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'tipo' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'monto' => array('type' => 'decimal', 'null' => true, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
@@ -38,8 +41,11 @@ class BancoFixture extends CakeTestFixture {
 			'numero_cuenta' => 'Lorem ipsum dolor sit amet',
 			'cuenta_id' => 1,
 			'edificio_id' => 1,
-			'created' => '2015-09-28 14:11:45',
-			'modified' => '2015-09-28 14:11:45'
+			'nomenclatura_id' => 1,
+			'tipo' => 'Lorem ipsum dolor ',
+			'monto' => '',
+			'created' => '2015-11-28 18:05:15',
+			'modified' => '2015-11-28 18:05:15'
 		),
 	);
 

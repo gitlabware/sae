@@ -14,6 +14,7 @@ App::import('model', 'Cuentasporcentaje');
 App::import('model', 'Cuentasmonto');
 App::import('model', 'Cuenta');
 App::import('model', 'Nomenclatura');
+App::import('model', 'Comprobantescuenta');
 
 class Pago extends AppModel {
   //The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -30,14 +31,20 @@ class Pago extends AppModel {
   public function afterSave($created, $options = array()) {
 
     if (!empty($this->data['Pago']['banco']['Banco'])) {
+      $idEdificio = CakeSession::read('Auth.User.edificio_id');
       if (!empty($this->data['Pago']['id'])) {
         $idPago = $this->data['Pago']['id'];
       } else {
         $idPago = $this->id;
       }
+      $this->virtualFields = array(
+        'piso' => "SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id",
+        'monto_total' => "CONCAT( (IF((Pago.porcentaje_interes != 'NULL'),ROUND(Pago.monto*Pago.porcentaje_interes/100,2),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),ROUND((Pago.retencion/100)*Pago.monto,2),0)) )"
+      );
       $pago = $this->find('first', array(
-        'recursive' => -1,
-        'conditions' => array('id' => $idPago)
+        'recursive' => 0,
+        'conditions' => array('Pago.id' => $idPago),
+        'fields' => array('Pago.*', 'Ambiente.nombre', 'Ambiente.piso_id', 'Pago.piso')
       ));
       //debug($this->data);exit;
       $banco = $this->data['Pago']['banco']['Banco'];
@@ -47,9 +54,40 @@ class Pago extends AppModel {
         'recursive' => -1,
         'conditions' => array('id' => $pago['Pago']['nomenclatura_id'])
       ));
+
+      $Comprobantescuenta = new Comprobantescuenta();
+
+      $d_com['cta_ctable'] = $nomen_a['Nomenclatura']['nombre'];
+      $d_com['haber'] = $pago['Pago']['monto_total'];
+      $d_com['debe'] = NULL;
+      $d_com['auxiliar'] = $pago['Ambiente']['nombre'] . '/' . $pago['Pago']['piso'] . ' (' . $pago['Pago']['fecha'] . ')';
+      $d_com['comprobante_id'] = $this->data['Pago']['comprobante_id'];
+      $d_com['nomenclatura_id'] = $pago['Pago']['nomenclatura_id'];
+      $d_com['codigo'] = $nomen_a['Nomenclatura']['codigo_completo'];
+      $d_com['edificio_id'] = $idEdificio;
+
+      $Comprobantescuenta->create();
+      $Comprobantescuenta->save($d_com);
+      
+      $d_com['cta_ctable'] = $banco['nombre'];
+      $d_com['haber'] = NULL;
+      $d_com['debe'] = $pago['Pago']['monto_total'];
+      $d_com['auxiliar'] = NULL;
+      $d_com['nomenclatura_id'] = $banco['nomenclatura_id'];
+      $d_com['comprobante_id'] = $this->data['Pago']['comprobante_id'];
+      if (!empty($this->data['Pago']['banco']['Nomenclatura']['codigo_completo'])) {
+        $d_com['codigo'] = $this->data['Pago']['banco']['Nomenclatura']['codigo_completo'];
+      }else{
+        $d_com['codigo'] = NULL;
+      }
+      $d_com['edificio_id'] = $idEdificio;
+      $Comprobantescuenta->create();
+      $Comprobantescuenta->save($d_com);
+
+
       if (empty($banco['cuenta_id']) && !empty($pago['Pago']['nomenclatura_id'])) {
         $Cuentasporcentaje = new Cuentasporcentaje();
-        
+
         $cuentas = array();
         //debug($nomen_a);
         if (!empty($nomen_a['Nomenclatura']['subconcepto_id'])) {
@@ -79,7 +117,7 @@ class Pago extends AppModel {
           $monto = 0.00;
           if (!empty($pago['Pago']['retencion'])) {
             $monto = $pago['Pago']['monto'] + ($pago['Pago']['monto'] * ($pago['Pago']['retencion'] / 100));
-          }else{
+          } else {
             $monto = $pago['Pago']['monto'];
           }
           $datos['monto'] = $monto * ($cu['Cuentasporcentaje']['porcentaje'] / 100);
@@ -98,7 +136,7 @@ class Pago extends AppModel {
           $d_cuenta['monto'] = $cuenta_a['Cuenta']['monto'] + $datos['monto'];
           $Cuenta->save($d_cuenta);
         }
-      } elseif(!empty($banco['cuenta_id'])) {
+      } elseif (!empty($banco['cuenta_id'])) {
         if (!empty($nomen_a['Nomenclatura']['subconcepto_id'])) {
           $datos['subconcepto_id'] = $nomen_a['Nomenclatura']['subconcepto_id'];
           //debug($cuentas);exit;

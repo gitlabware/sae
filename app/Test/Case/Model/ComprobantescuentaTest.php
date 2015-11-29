@@ -1,11 +1,11 @@
 <?php
-App::uses('Banco', 'Model');
+App::uses('Comprobantescuenta', 'Model');
 
 /**
- * Banco Test Case
+ * Comprobantescuenta Test Case
  *
  */
-class BancoTest extends CakeTestCase {
+class ComprobantescuentaTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,15 +13,15 @@ class BancoTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.banco',
-		'app.cuenta',
+		'app.comprobantescuenta',
+		'app.nomenclatura',
 		'app.edificio',
 		'app.ambiente',
 		'app.categoriasambiente',
 		'app.categoriaspago',
 		'app.piso',
 		'app.user',
-		'app.nomenclatura'
+		'app.comprobante'
 	);
 
 /**
@@ -31,7 +31,7 @@ class BancoTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Banco = ClassRegistry::init('Banco');
+		$this->Comprobantescuenta = ClassRegistry::init('Comprobantescuenta');
 	}
 
 /**
@@ -40,7 +40,7 @@ class BancoTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->Banco);
+		unset($this->Comprobantescuenta);
 
 		parent::tearDown();
 	}

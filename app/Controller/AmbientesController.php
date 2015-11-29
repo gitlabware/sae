@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class AmbientesController extends AppController {
 
   var $components = array('RequestHandler', 'DataTable', 'Montoliteral');
-  public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo', 'Banco', 'Nomenclatura');
+  public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo', 'Banco', 'Nomenclatura','Comprobante','Comprobantescuenta');
   public $layout = 'sae';
 
   public function beforeFilter() {
@@ -322,7 +322,7 @@ class AmbientesController extends AppController {
     //$conceptos = $this->Ambienteconcepto->find('list', array('recursive' => 0, 'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente), 'fields' => 'Concepto.nombre'));
     $inquilinos = $this->Inquilino->find('list', array('recursive' => 0, 'fields' => 'User.nombre', 'conditions' => array('Inquilino.ambiente_id' => $idAmbiente)));
     //debug($inquilinos);exit;
-    $conceptos = $this->Concepto->find('list',array('fields' => array('id','nombre'),'conditions' => array('id !=' => array(10,11))));
+    $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('id !=' => array(10, 11))));
     $this->set(compact('inquilinos', 'ambiente', 'conceptos', 'idAmbiente'));
   }
 
@@ -532,7 +532,7 @@ class AmbientesController extends AppController {
     }
     $ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
     //debug($recibo);exit;
-    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'),'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
+    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
     $this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m', 'bancos'));
   }
 
@@ -727,7 +727,7 @@ class AmbientesController extends AppController {
         'order' => array('Pago.fecha DESC'),
         'fields' => array('Pago.fecha')
       ));
-      if(!empty($ultimo_pago)){
+      if (!empty($ultimo_pago)) {
         $fecha_u_p = $ultimo_pago['Pago']['fecha'];
       }
     }
@@ -789,11 +789,32 @@ class AmbientesController extends AppController {
       $this->request->data['Recibo']['estado'] = 'Terminado';
       $this->Recibo->save($this->request->data['Recibo']);
       $this->request->data['Pago']['banco'] = $this->Banco->find('first', array(
-        'recursive' => -1,
-        'conditions' => array('Banco.id' => $this->request->data['Recibo']['banco_id'])
+        'recursive' => 0,
+        'conditions' => array('Banco.id' => $this->request->data['Recibo']['banco_id']),
+        'fields' => array('Banco.*','Nomenclatura.*')
       ));
       
+      $idEdificio = $this->Session->read('Auth.User.edificio_id');
+      $edificio = $this->Edificio->find('first', array(
+        'recursive' => -1,
+        'conditions' => array('id' => $idEdificio),
+        'fields' => array('tc_ufv')
+      ));
+      $d_comprobante['tipo'] = 'Ingreso';
+      $d_comprobante['estado'] = 'No Comprobado';
+      $d_comprobante['fecha'] = date('Y-m-d');
+      $d_comprobante['nombre'] = $this->request->data['Recibo']['pagador'];
+      //$d_comprobante['nota'] = $this->request->data['Recibo']['pagador'];
+      $d_comprobante['concepto'] = "Cobro de Cuotas";
+      $d_comprobante['tc_ufv'] = $edificio['Edificio']['tc_ufv'];
+      $d_comprobante['edificio_id'] = $idEdificio;
+      $this->Comprobante->create();
+      $this->Comprobante->save($d_comprobante);
+      $idComprobante = $this->Comprobante->getLastInsertID();
+      $this->request->data['Pago']['comprobante_id'] = $idComprobante;
+      
       foreach ($this->request->data['Pagos'] as $pa) {
+        //$this->genera_comprobantes($idComprobante,$pa['nomenclatura_id']);
         $this->Pago->id = $pa['pago_id'];
         $this->request->data['Pago']['estado'] = 'Pagado';
         $this->request->data['Pago']['nomenclatura_id'] = $pa['nomenclatura_id'];
@@ -801,20 +822,15 @@ class AmbientesController extends AppController {
       }
       //debug($pagos);
       //debug($this->request->data['Pago']['banco']);
-      foreach ($pagos as $pa){
+      
+      
+      foreach ($pagos as $pa) {
         $this->Banco->id = $this->request->data['Pago']['banco']['Banco']['id'];
         $d_banco['monto'] = $this->request->data['Pago']['banco']['Banco']['monto'] + $pa[0]['imp_total'];
         $this->Banco->save($d_banco);
-        
       }
-      //exit;
-      /* foreach ($todos_pagos as $pa) {
-        $this->Pago->id = $pa['Pago']['id'];
-        $this->request->data['Pago']['estado'] = 'Pagado';
-        $this->Pago->save($this->request->data['Pago']);
-        } */
     }
-    
+
     $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
     //debug($recibo);exit;
     $detalles = $this->Pago->find('all', array(
@@ -824,16 +840,14 @@ class AmbientesController extends AppController {
     $detalles_a = $this->Pago->find('all', array(
       'recursive' => 0,
       'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) <' => date('Y')),
-      /* 'fields' => array(
-        'Pago.id',
-        'Pago.fecha',
-        'Ambiente.nombre',
-        'ROUND(Pago.monto_total,2) as monto_total'
-        ) */
     ));
     //debug($recibo);exit;
     //exit;
     $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a'));
+  }
+
+  public function genera_comprobantes($idComprobante = NULL) {
+    
   }
 
   public function get_monto_literal($monto = null) {
