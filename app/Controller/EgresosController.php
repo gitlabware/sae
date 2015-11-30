@@ -54,27 +54,35 @@ class EgresosController extends AppController {
       'conditions' => array('id' => $idEdificio),
       'fields' => array('tc_ufv')
     ));
-    $d_comprobante['tipo'] = 'Ingreso de Banco';
+    $d_comprobante['tipo'] = 'Egreso';
     $d_comprobante['estado'] = 'No Comprobado';
-    $d_comprobante['fecha'] = $this->request->data['Bancosmovimiento']['fecha'];
-    $d_comprobante['nombre'] = $dbanco['Banco']['nombre'];
-    $d_comprobante['nota'] = $this->request->data['Bancosmovimiento']['nota'];
-    $d_comprobante['concepto'] = "Movimiento de Caja/Banco";
+    $d_comprobante['fecha'] = $this->request->data['Cuentasegreso']['fecha'];
+    $d_comprobante['nombre'] = $this->request->data['Cuentasegreso']['proveedor'];
+    $d_comprobante['nota'] = $this->request->data['Cuentasegreso']['referencia'];
+    $d_comprobante['concepto'] = $this->request->data['Cuentasegreso']['detalle'];
     $d_comprobante['tc_ufv'] = $edificio['Edificio']['tc_ufv'];
     $d_comprobante['edificio_id'] = $idEdificio;
     $this->Comprobante->create();
     $this->Comprobante->save($d_comprobante);
     $idConprobante = $this->Comprobante->getLastInsertID();
 
-    $d_com['cta_ctable'] = $dbanco['Banco']['nombre'];
-    $d_com['debe'] = $this->request->data['Bancosmovimiento']['monto'];
+    $d_com['cta_ctable'] = $banco['Banco']['nombre'];
+    $d_com['debe'] = $this->request->data['Cuentasegreso']['monto'];
     $d_com['haber'] = NULL;
     $d_com['comprobante_id'] = $idConprobante;
     $d_com['edificio_id'] = $idEdificio;
-    $d_com['nomenclatura_id'] = $this->request->data['Cuentasegreso'];
-
+    $d_com['nomenclatura_id'] = $banco['Banco']['nomenclatura_id'];
+    $d_com['codigo'] = $banco['Nomenclatura']['codigo_completo'];
+    $d_com['auxiliar'] = NULL;
+    
     $this->Comprobantescuenta->create();
     $this->Comprobantescuenta->save($d_com);
+    
+    $nomenclatura = $this->Nomenclatura->find('first',array(
+      'recursive' => -1,
+      'conditions' => array('Nomenclatura.id' => $this->request->data['Cuentasegreso']['nomenclatura_id']),
+      'fields' => array('Nomenclatura.')
+    ));
 
     $d_com['cta_ctable'] = $banco['Nomenclatura']['nombre'];
     $d_com['debe'] = NULL;

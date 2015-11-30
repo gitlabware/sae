@@ -9,8 +9,10 @@ class RecibosController extends AppController {
   );
   
   public function index(){
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $recibos = $this->Recibo->find('all',array(
       'recursive' => -1,
+      'conditions' => array('Recibo.edificio_id' => $idEdificio),
       'order' => array('modified DESC')
     ));
     $this->set(compact('recibos'));
