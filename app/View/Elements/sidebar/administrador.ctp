@@ -71,6 +71,9 @@
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos', 'action' => 'index')); ?>">Listado de Presupuestos</a>
                         </li>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Comprobantes', 'action' => 'index')); ?>">Listado de Comprobantes</a>
+                        </li>
                     </ul>
                 </li>
                 <!--<li>

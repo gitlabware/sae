@@ -8,15 +8,14 @@
 
                 <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-success" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Comprobantes', 'action' => 'opciones1')); ?>');" title="Opciones Marcados"><i class="fa fa-tasks"></i></a>
             </div>
-            <h2><strong>Listado de Comprobantes Pendientes (No combrobados)</strong></h2>
+            <h2><strong>Listado de Comprobantes</strong></h2>
         </div>
         <?php echo $this->Form->create('Comprobante', array('action' => 'union_comprobantes', 'id' => 'f-comprobantes')); ?>
         <div class="table-responsive">
             <table id="example-datatable" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th class="text-center"><input type="checkbox" name="marcados" id="marca-todos"></th>
-                        <th>Id</th>
+                        <th>Nro</th>
                         <th>Fecha</th>
                         <th>Tipo</th>
                         <th>Concepto</th>
@@ -37,20 +36,15 @@
                       }
                       ?>
                       <tr class="<?php echo $clase; ?> text-center">
-                          <td>
-                              <?php echo $this->Form->hidden("comprobantes.$key.id", array('value' => $com['Comprobante']['id'])) ?>
-                              <?php echo $this->Form->hidden("comprobantes.$key.tipo", array('value' => $com['Comprobante']['tipo'])) ?>
-                              <?php echo $this->Form->checkbox("comprobantes.$key.marcado") ?>
-                          </td>
-                          <td><?php echo $com['Comprobante']['id']; ?></td>
+                          <td><?php echo $com['Comprobante']['numero']; ?></td>
                           <td><?php echo $com['Comprobante']['fecha'] ?></td>
                           <td><?php echo $com['Comprobante']['tipo'] ?></td>
                           <td><?php echo $com['Comprobante']['concepto'] ?></td>
                           <td><?php echo $com['Comprobante']['nombre'] ?></td>
                           <td><?php echo $com['Comprobante']['monto_total'] ?></td>
                           <td>
-                              <?php echo $this->Html->link('<i class="fa fa-edit"></i>', array('action' => 'comprobante', $com['Comprobante']['id']), array('class' => 'btn btn-info', 'title' => 'Editar', 'escape' => FALSE)) ?>
-                              <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'eliminar', $com['Comprobante']['id']), array('class' => 'btn btn-danger', 'title' => 'Eliminar Edificio', 'confirm' => 'Esta seguro de eliminar el comprobante ' . $com['Comprobante']['id'] . '??', 'escape' => FALSE)) ?>
+                              <?php echo $this->Html->link('<i class="fa fa-eye"></i>', array('action' => 'ver', $com['Comprobante']['id']), array('class' => 'btn btn-info', 'title' => 'Ver Comprobante', 'escape' => FALSE)) ?>
+                              <?php echo $this->Html->link('<i class="fa fa-ban"></i>', array('action' => 'anular', $com['Comprobante']['id']), array('class' => 'btn btn-danger', 'title' => 'Anular Comprobante', 'confirm' => 'Esta seguro de anular el comprobante nuemero ' . $com['Comprobante']['numero'] . '??', 'escape' => FALSE)) ?>
                           </td>
                       </tr>
                     <?php endforeach; ?>

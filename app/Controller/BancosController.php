@@ -124,8 +124,8 @@ class BancosController extends AppController {
     $idConprobante = $this->Comprobante->getLastInsertID();
 
     $d_com['cta_ctable'] = $dbanco['Banco']['nombre'];
-    $d_com['debe'] = $this->request->data['Bancosmovimiento']['monto'];
-    $d_com['haber'] = NULL;
+    $d_com['haber'] = $this->request->data['Bancosmovimiento']['monto'];
+    $d_com['debe'] = NULL;
     $d_com['comprobante_id'] = $idConprobante;
     $d_com['edificio_id'] = $idEdificio;
 
@@ -133,8 +133,8 @@ class BancosController extends AppController {
     $this->Comprobantescuenta->save($d_com);
 
     $d_com['cta_ctable'] = $abanco['Banco']['nombre'];
-    $d_com['debe'] = NULL;
-    $d_com['haber'] = $this->request->data['Bancosmovimiento']['monto'];
+    $d_com['haber'] = NULL;
+    $d_com['debe'] = $this->request->data['Bancosmovimiento']['monto'];
     $d_com['comprobante_id'] = $idConprobante;
     $d_com['edificio_id'] = $idEdificio;
 
