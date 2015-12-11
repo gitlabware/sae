@@ -30,6 +30,13 @@ class Comprobantescuenta extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Ambiente' => array(
+			'className' => 'Ambiente',
+			'foreignKey' => 'ambiente_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 }

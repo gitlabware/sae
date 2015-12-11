@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <div id="gasto-select2">
                     <label>Tipo de Egreso</label>
-                    <?php echo $this->Form->select('Egreso.nomenclatura_id', $nomenclaturas, array('class' => 'select-chosen f-subgasto2', 'empty' => 'Seleccione el tipo de egreso', 'required')); ?>
+                    <?php echo $this->Form->select('Egreso.subconcepto_id', $subconceptos_e, array('class' => 'select-chosen f-subgasto2', 'empty' => 'Seleccione el tipo de egreso', 'required')); ?>
                 </div>
             </div>
         </div>

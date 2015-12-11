@@ -12,11 +12,9 @@
     <?php echo $this->Form->create('Concepto', array('id' => 'ajaxform', 'class' => 'form-horizontal form-bordered')); ?>
     <fieldset>
         <div class="form-group">
-            <label class="col-md-4 control-label">Concepto</label>
+            <label class="col-md-4 control-label">Codigo</label>
             <div class="col-md-8">
-                <?php echo $this->Form->hidden('Subconcepto.id'); ?>
-                <?php echo $this->Form->hidden('Subconcepto.edificio_id', array('value' => $this->Session->read('Auth.User.edificio_id'))); ?>
-                <?php echo $this->Form->select('Subconcepto.concepto_id', $conceptos, array('class' => 'form-control', 'empty' => 'Seleccione el concepto', 'required')); ?>
+                <?php echo $this->Form->text('Subconcepto.codigo', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo del subconcepto', 'required')); ?>
             </div>
         </div>
         <div class="form-group">
@@ -26,16 +24,24 @@
             </div>
         </div>
         <div class="form-group">
-            <div id="select-tipo">
-                <label class="col-md-4 control-label">Tipo <a href="javascript:" class="label label-info" onclick="show_text();">Texto</a></label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->select('Subconcepto.tipo', $tipos, array('class' => 'form-control select-tipo', 'empty' => 'Seleccione el Tipo', 'required')); ?>
-                </div>
+            <label class="col-md-4 control-label">Concepto</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->hidden('Subconcepto.id'); ?>
+                <?php echo $this->Form->hidden('Subconcepto.edificio_id', array('value' => $this->Session->read('Auth.User.edificio_id'))); ?>
+                <?php echo $this->Form->select('Subconcepto.concepto_id', $conceptos, array('class' => 'form-control', 'empty' => 'Seleccione el concepto')); ?>
             </div>
-            <div id="text-tipo" style="display: none;">
-                <label class="col-md-4 control-label">Tipo <a href="javascript:" class="label label-info" onclick="show_select();">Seleccion</a></label>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Es parte de</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->select('Subconcepto.subconcepto_id', $subconceptos, array('class' => 'form-control', 'empty' => 'Seleccione el subconcepto')); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <div id="select-tipo">
+                <label class="col-md-4 control-label">Tipo</label>
                 <div class="col-md-8">
-                    <?php echo $this->Form->text('Subconcepto.nuevo_tipo', array('class' => 'form-control text-tipo', 'placeholder' => 'Ingrese el tipo')); ?>
+                    <?php echo $this->Form->select('Subconcepto.tipo', array('Ingreso' => 'Ingreso','Egreso' => 'Egreso'), array('class' => 'form-control select-tipo', 'empty' => 'Seleccione el Tipo', 'required')); ?>
                 </div>
             </div>
         </div>

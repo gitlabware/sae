@@ -148,6 +148,7 @@ class ConceptosController extends AppController {
 
   public function subconcepto($idSubconcepto = null) {
     $this->layout = 'ajax';
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
     if (!empty($this->request->data)) {
       $valida = $this->validar('Subconcepto');
       if (empty($valida)) {
@@ -176,22 +177,28 @@ class ConceptosController extends AppController {
     $this->Subconcepto->id = $idSubconcepto;
     $this->request->data = $this->Subconcepto->read();
     $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre'), 'nombre' => array('nombre')));
-    $tipos = $this->Subconcepto->find('list', array(
+    $this->Subconcepto->virtualFields = array(
+      'nombre_completo' => "CONCAT(Subconcepto.codigo,' - ',Subconcepto.nombre)"
+    );
+    $subconceptos = $this->Subconcepto->find('list',array(
       'recursive' => -1,
-      'fields' => array('tipo', 'tipo'),
-      'group' => array('tipo')
+      'conditions' => array('Subconcepto.edificio_id' => $idEdificio,'Subconcepto.id !=' => $idSubconcepto),
+      'fields' => array('Subconcepto.id','Subconcepto.nombre_completo')
     ));
     $generaciones = $this->SubcGestione->findAllBysubconcepto_id($idSubconcepto, null, null, null, null, -1);
-    $this->set(compact('conceptos', 'tipos', 'generaciones'));
+    $this->set(compact('conceptos', 'generaciones','subconceptos'));
   }
 
   public function subconceptos() {
     $subconceptos = $this->Subconcepto->find('all', array(
       'recursive' => 0,
-      'conditions' => array('Subconcepto.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
-      'fields' => array('Subconcepto.nombre', 'Concepto.nombre', 'Subconcepto.tipo', 'Subconcepto.id')
+      'conditions' => array(
+        'Subconcepto.edificio_id' => $this->Session->read('Auth.User.edificio_id'),
+        "Subconcepto.subconcepto_id" => NULL
+      ),
+      'fields' => array('Subconcepto.codigo','Subconcepto.nombre', 'Concepto.nombre', 'Subconcepto.tipo', 'Subconcepto.id')
     ));
-
+    
     $this->set(compact('subconceptos'));
   }
 
@@ -243,6 +250,17 @@ class ConceptosController extends AppController {
       'fields' => array('id', 'nombre')
     ));
     $this->set(compact('subgestiones'));
+  }
+  
+  public function ajax_subconceptos($idSubconcepto = null,$sw = 0){
+    $this->layout = 'ajax';
+    $subconceptos = $this->Subconcepto->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Subconcepto.subconcepto_id' => $idSubconcepto),
+      'fields' => array('Subconcepto.*','Concepto.nombre')
+    ));
+    $this->set(compact('subconceptos','sw'));
+    
   }
 
 }

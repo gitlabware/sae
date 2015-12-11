@@ -33,22 +33,7 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">Por Concepto:  </label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->text('Comprobante.concepto', array('class' => 'form-control', 'required', 'placeholder' => 'Ingrese el nombre del pagador o beneficiario')); ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <label class="col-md-4 control-label" for="user-settings-email">T/C:  </label>
-            <div class="col-md-8">
-                <?php echo $this->Form->text('Comprobante.tc_ufv', array('class' => 'form-control', 'required', 'placeholder' => 'Tipo de Cambio')); ?>
-            </div>
-        </div>
-    </div>
+    
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
@@ -58,8 +43,11 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            
+        <div class="col-md-4">
+            <label class="col-md-4 control-label" for="user-settings-email">T/C UFV:  </label>
+            <div class="col-md-8">
+                <?php echo $this->Form->text('Comprobante.tc_ufv', array('class' => 'form-control', 'required', 'placeholder' => 'Tipo de Cambio')); ?>
+            </div>
         </div>
     </div>
 
@@ -70,9 +58,10 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
         <table id="general-table" class="table table-bordered">
             <thead>
                 <tr>
-                    <th style="width: 12%;">Codigo</th>
-                    <th style="width: 30%;">Cuenta Contable</th>
-                    <th style="width: 30%;">Auxiliar</th>
+                    <th style="width: 9%;">Cod.Ap.</th>
+                    <th style="width: 9%;">Codigo</th>
+                    <th style="width: 27%;">Cuenta Contable</th>
+                    <th style="width: 27%;">Auxiliar</th>
                     <th style="width: 10%;">Debe</th>
                     <th style="width: 10%;">Haber</th>
                     <th style="width: 8%;"></th>
@@ -88,6 +77,7 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
                   }
                   ?>
                   <tr <?php echo $clase ?>>
+                      <td><?php echo $this->Form->text("comprobantes.$key.codigo_subc", array('class' => 'form-control', 'value' => $co['Comprobantescuenta']['codigo_subc'])); ?></td>
                       <td><?php echo $this->Form->text("comprobantes.$key.codigo", array('class' => 'form-control', 'value' => $co['Comprobantescuenta']['codigo'])); ?></td>
                       <td><?php echo $this->Form->text("comprobantes.$key.cta_ctable", array('class' => 'form-control', 'value' => $co['Comprobantescuenta']['cta_ctable'])); ?></td>
                       <td><?php echo $this->Form->text("comprobantes.$key.auxiliar", array('class' => 'form-control', 'value' => $co['Comprobantescuenta']['auxiliar'])); ?></td>
@@ -107,7 +97,16 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
             </tbody>
         </table>
     </div>
-
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="user-settings-email">Glosa:  </label>
+                <div class="col-md-8">
+                    <?php echo $this->Form->text('Comprobante.concepto', array('class' => 'form-control', 'required', 'placeholder' => 'Ingrese el nombre del pagador o beneficiario')); ?>
+                </div>
+            </div>
+        </div>
+    </div><br>
     <div class="row">
         <div class="col-md-4">
             <button class="btn btn-block btn-primary" type="button" onclick="window.location = '<?php echo $this->Html->url(array('controller' => 'Comprobantes', 'action' => 'index')); ?>'">IR A COMPROBANTES</button>
@@ -122,8 +121,9 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
             <button class="btn btn-block btn-success" type="submit">Generar Comprobante</button>
         </div>
     </div>
-
+    
     <?php echo $this->Form->end(); ?>
+    <br>
 </div>
 <!-- END Example Block -->
 

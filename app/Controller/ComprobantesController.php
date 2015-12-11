@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class ComprobantesController extends AppController {
 
-  public $uses = array('Comprobante', 'Comprobantescuenta');
+  public $uses = array('Comprobante', 'Comprobantescuenta','Edificio');
   public $layout = 'sae';
 
   public function index() {
@@ -90,7 +90,8 @@ class ComprobantesController extends AppController {
       'fields' => array('Comprobantescuenta.*'),
       'order' => array('Comprobantescuenta.created ASC')
     ));
-    $this->set(compact('comprobante', 'comprobantes'));
+    $edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'),null,null,-1);
+    $this->set(compact('comprobante', 'comprobantes','edificio'));
   }
 
   public function opciones($idComprobante_c = null) {

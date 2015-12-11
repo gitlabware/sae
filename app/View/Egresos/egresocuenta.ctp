@@ -41,7 +41,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="user-settings-email">Fecha</label>
             <div class="col-md-8">
-                <?php echo $this->Form->date('Cuentasegreso.fecha', array( 'class' => 'form-control', 'required','value' => date('Y-m-d'))); ?>
+                <?php echo $this->Form->date('Cuentasegreso.fecha', array('class' => 'form-control', 'required','value' => date('Y-m-d'))); ?>
             </div>
         </div>
         <div class="form-group">

@@ -24,9 +24,9 @@ class Egreso extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Nomenclatura' => array(
-			'className' => 'Nomenclatura',
-			'foreignKey' => 'nomenclatura_id',
+		'Subconcepto' => array(
+			'className' => 'Subconcepto',
+			'foreignKey' => 'subconcepto_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

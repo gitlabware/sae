@@ -34,18 +34,13 @@
                         <?php echo $this->Form->text('codigo', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo', 'required')); ?>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Concepto</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->select('concepto_id', $conceptos, array('class' => 'form-control', 'empty' => 'Ninguno', 'id' => 'idconcepto')); ?>
-                    </div>
-                </div>
                 <div class="form-group" id="div-subconcepto">
                     <label class="col-md-4 control-label" for="user-settings-email">Sub-concepto</label>
                     <div class="col-md-8">
-                        <?php echo $this->Form->select('subconcepto_id', $subconceptos, array('class' => 'form-control', 'empty' => 'Ninguno')); ?>
+                        <?php echo $this->Form->select('subconcepto_id', $subconceptos, array('class' => 'select-chosen', 'empty' => 'Ninguno')); ?>
                     </div>
                 </div>
+                <br><br><br><br><br><br><br><br>
             </fieldset>
 
         </div>
@@ -60,8 +55,7 @@
 </div>
 <!-- END Modal Body -->
 
+
 <script>
-  $('#idconcepto').change(function () {
-      $('#div-subconcepto').load('<?php echo $this->Html->url(array('action' => 'ajax_subconceptos')); ?>/' + $('#idconcepto').val());
-  });
+  $('.select-chosen').chosen({width: "100%"});
 </script>

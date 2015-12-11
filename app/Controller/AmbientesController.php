@@ -812,6 +812,7 @@ class AmbientesController extends AppController {
       $this->Comprobante->save($d_comprobante);
       $idComprobante = $this->Comprobante->getLastInsertID();
       $this->request->data['Pago']['comprobante_id'] = $idComprobante;
+      $this->request->data['Pago']['fecha_com'] = $d_comprobante['fecha'];
       
       foreach ($this->request->data['Pagos'] as $pa) {
         //$this->genera_comprobantes($idComprobante,$pa['nomenclatura_id']);

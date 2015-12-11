@@ -27,7 +27,7 @@ class Ingreso extends AppModel {
       $check['Ingreso.id !='] = $this->data['Ingreso']['id'];
     }
     $check['Ingreso.subconcepto_id'] = $this->data['Ingreso']['subconcepto_id'];
-    $check['Ingreso.concepto_id'] = $this->data['Ingreso']['concepto_id'];
+    //$check['Ingreso.concepto_id'] = $this->data['Ingreso']['concepto_id'];
     if(isset($this->data['Ingreso']['subge_id'])){
       $check['Ingreso.subge_id'] = $this->data['Ingreso']['subge_id'];
     }

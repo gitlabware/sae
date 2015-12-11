@@ -39,9 +39,9 @@
 
         <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
         <link rel="stylesheet" href="<?php echo $this->webroot; ?>css/themes.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot; ?>css/cssprint.css" media="print">
+        
         <!-- END Stylesheets -->
-                
+
         <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
         <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>-->
@@ -49,10 +49,10 @@
         <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
         <script src="<?php echo $this->webroot; ?>js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
         <script>
-        var urljsontablatrab = '';
-        var filtro_c = [];
+          var urljsontablatrab = '';
+          var filtro_c = [];
         </script>
-        
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot; ?>css/cssprint.css" media="print">
     </head>
     <!-- In the PHP version you can set the following options from inc/config file -->
     <!--
@@ -61,7 +61,7 @@
         'page-loading'      enables page preloader
     -->
     <body>
-        
+
         <!-- Preloader -->
         <!-- Preloader functionality (initialized in js/app.js) - pageLoading() -->
         <!-- Used only if page preloader is enabled from inc/config (PHP version) or the class 'page-loading' is added in body element (HTML version) -->
@@ -114,7 +114,7 @@
                             <i class="gi gi-comments pull-right"></i> <strong>Chat</strong>UI
                         </a>
                         <!-- Chat Users -->
-                        
+
 
                         <!-- Chat Talk -->
                         <div class="chat-talk display-none">
@@ -210,41 +210,26 @@
             <?php $role = $this->Session->read('Auth.User.role'); ?>
             <?php
             if ($role == "Super Administrador") {
-                echo $this->element("sidebar/super_administrador");
+              echo $this->element("sidebar/super_administrador");
             } elseif ($role == 'Administrador') {
-                echo $this->element("sidebar/administrador");
-            }
-            elseif($role == 'Propietario' || $role == "Inquilino"){
-                echo $this->element("sidebar/usuarios");
+              echo $this->element("sidebar/administrador");
+            } elseif ($role == 'Propietario' || $role == "Inquilino") {
+              echo $this->element("sidebar/usuarios");
             }
             ?>
             <!-- Main Container -->
             <div id="main-container">
-                <!-- Header -->
-                <!-- In the PHP version you can set the following options from inc/config file -->
-                <!--
-                    Available header.navbar classes:
 
-                    'navbar-default'            for the default light header
-                    'navbar-inverse'            for an alternative dark header
-
-                    'navbar-fixed-top'          for a top fixed header (fixed sidebars with scroll will be auto initialized, functionality can be found in js/app.js - handleSidebar())
-                        'header-fixed-top'      has to be added on #page-container only if the class 'navbar-fixed-top' was added
-
-                    'navbar-fixed-bottom'       for a bottom fixed header (fixed sidebars with scroll will be auto initialized, functionality can be found in js/app.js - handleSidebar()))
-                        'header-fixed-bottom'   has to be added on #page-container only if the class 'navbar-fixed-bottom' was added
-                -->
-                <?php echo $this->element("menu/administrador");?>
+                <?php echo $this->element("menu/administrador"); ?>
                 <!-- END Header -->
 
                 <!-- Page content -->
                 <style>
-            #tabla-json input{
-                width: 100%;
-            }
-        </style>
+                    #tabla-json input{
+                        width: 100%;
+                    }
+                </style>
                 <div id="page-content">
-                    
                     <?php echo $this->fetch('content'); ?>
                 </div>
                 <!-- END Page Content -->
@@ -316,53 +301,55 @@
         <script src="<?php echo $this->webroot; ?>js/plugins.js"></script>
         <script src="<?php echo $this->webroot; ?>js/app.js"></script>
         <script type="text/javascript" src="<?php echo $this->webroot; ?>js/jquery.scrollTo.js"></script>
-        
+
         <script src="<?php echo $this->webroot; ?>js/pages/tablesDatatables.js"></script>
         <script src="<?php echo $this->webroot; ?>js/jquery.dataTables.columnFilter.js"></script>
-        <script>$(function(){ TablesDatatables.init(); });</script>
+        <script>$(function () {
+            TablesDatatables.init();
+          });</script>
         <script>
-            $('#form-edificio').validate();
+          $('#form-edificio').validate();
         </script>
         <script>
-            function cargarmodal(urll)
-            {
-                $("#div_barra_cargando").show();
-                $("#myModal").modal('show');
-                $("#divmodal").show();
-                $("#divmodal").load(urll, function (responseText, textStatus, req) {
-                    if (textStatus == "error")
-                    {
-                        $("#divmodal").hide();
-                        alert("error!!!");
-                    }
-                    else {
-                        $("#div_barra_cargando").hide(800);
-                    }
-                });
+          function cargarmodal(urll)
+          {
+              $("#div_barra_cargando").show();
+              $("#myModal").modal('show');
+              $("#divmodal").show();
+              $("#divmodal").load(urll, function (responseText, textStatus, req) {
+                  if (textStatus == "error")
+                  {
+                      $("#divmodal").hide();
+                      alert("error!!!");
+                  }
+                  else {
+                      $("#div_barra_cargando").hide(800);
+                  }
+              });
 
-            }
+          }
         </script>
 
         <script>
-            function cargarmodal2(urll)
-            {
-                $("#div_barra_cargando2").show();
-                $("#myModal2").modal('show');
-                $("#divmodal2").show();
-                $("#divmodal2").load(urll, function (responseText, textStatus, req) {
-                    if (textStatus == "error")
-                    {
-                        $("#divmodal2").hide();
-                        alert("error!!!");
-                    }
-                    else {
-                        $("#div_barra_cargando2").hide(800);
-                    }
-                });
+          function cargarmodal2(urll)
+          {
+              $("#div_barra_cargando2").show();
+              $("#myModal2").modal('show');
+              $("#divmodal2").show();
+              $("#divmodal2").load(urll, function (responseText, textStatus, req) {
+                  if (textStatus == "error")
+                  {
+                      $("#divmodal2").hide();
+                      alert("error!!!");
+                  }
+                  else {
+                      $("#div_barra_cargando2").hide(800);
+                  }
+              });
 
-            }
+          }
         </script>
-        <?php echo $this->Session->flash(); ?>
-        
+<?php echo $this->Session->flash(); ?>
+
     </body>
 </html>

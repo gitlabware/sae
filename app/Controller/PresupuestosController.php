@@ -50,86 +50,102 @@ class PresupuestosController extends AppController {
   public function presupuesto($idPresupuesto = null) {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $presupuesto = $this->Presupuesto->findByid($idPresupuesto);
+    $this->Subconcepto->virtualFields = array(
+      'nombre_completo' => "CONCAT(Subconcepto.codigo,' - ',Subconcepto.nombre)"
+    );
     $subconceptos = $this->Subconcepto->find('list', array(
-      'conditions' => array('Subconcepto.edificio_id' => $idEdificio),
-      'fields' => array('Subconcepto.id', 'Subconcepto.nombre')
+      'order' => array('Subconcepto.codigo ASC'),
+      'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso'),
+      'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
     ));
-    $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre')));
-    $tingresos = $this->Ingreso->find('all', array(
-      'recursive' => 0,
-      'conditions' => array('Ingreso.presupuesto_id' => $idPresupuesto),
-      'group' => array('Subconcepto.tipo'),
-      'fields' => array('Subconcepto.tipo', 'SUM(Ingreso.ingreso) as ingreso', 'SUM(Ingreso.pres_anterior) as pres_anterior', 'SUM(Ingreso.ejec_anterior) as ejec_anterior', 'SUM(Ingreso.presupuesto) as presupuesto')
-    ));
-    $tipos = $this->Subconcepto->find('list', array(
-      'recursive' => -1,
-      'fields' => array('tipo', 'tipo'),
-      'group' => array('tipo')
+    $subconceptos_e = $this->Subconcepto->find('list', array(
+      'order' => array('Subconcepto.codigo ASC'),
+      'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso'),
+      'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
     ));
 
-    /*$pgastos = $this->Egreso->find('all', array(
-      'recursive' => 0,
-      'conditions' => array('Egreso.presupuesto_id' => $idPresupuesto),
-      'group' => array('Egreso.gasto_id'),
-      'fields' => array('Gasto.id', 'Gasto.nombre', 'SUM(Egreso.pres_anterior) as pres_anterior', 'SUM(Egreso.ejec_anterior) as ejec_anterior', 'SUM(Egreso.presupuesto) as presupuesto')
-    ));*/
+    $gestion = $presupuesto['Presupuesto']['gestion'];
+    $sql_aux1 = "LEFT JOIN subconceptos asub1 ON asub1.id = comprobantescuentas.subconcepto_id LEFT JOIN subconceptos asub2 ON asub2.id = asub1.subconcepto_id LEFT JOIN subconceptos asub3 ON asub3.id = asub2.subconcepto_id";
+    $sql_aux2 = "(IF(ISNULL(asub3.id),(IF(ISNULL(asub2.id),asub1.id,asub2.id)),asub3.id))";
+    $sql_aux3 = "(IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id))";
+    //$sql_7 = "(SELECT SUM(comprobantescuentas.haber) FROM comprobantescuentas $sql_aux1 LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND  YEAR(comprobantes.fecha) = $gestion AND $sql_aux2 = $sql_aux3 GROUP BY $sql_aux2)";
+    $sql_5 = "(SELECT SUM(comprobantescuentas.haber) FROM comprobantescuentas $sql_aux1 LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND  YEAR(comprobantescuentas.fecha) = $gestion AND  YEAR(comprobantes.fecha) = $gestion AND comprobantescuentas.subconcepto_id = ingresos.subconcepto_id GROUP BY comprobantescuentas.subconcepto_id)";
+    $sql_4 = "(SELECT SUM(comprobantescuentas.haber) FROM comprobantescuentas $sql_aux1 LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND  YEAR(comprobantescuentas.fecha) >= SubcGestione.gestion_ini AND YEAR(comprobantescuentas.fecha) <= SubcGestione.gestion_fin AND YEAR(comprobantes.fecha) = $gestion AND comprobantescuentas.subconcepto_id = ingresos.subconcepto_id GROUP BY comprobantescuentas.subconcepto_id)";
+    $sql_3 = "(IF(  ISNULL(SubcGestione.gestion_ini) ,  (IF(ISNULL($sql_5),0,$sql_5)) , (IF(ISNULL($sql_4),0,$sql_4))    ))";
+    //$sql_3 = "(IF(ISNULL(SubcGestione.gestion_ini),$sql_5,$sql_4))";
+    //$sql_3a = "(IF(  (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) = ingresos.subconcepto_id,   $sql_3   ,  (IF(ISNULL($sql_7),0,$sql_7)) ))";
+    $sql_6 = "(IF(ISNULL(SUM(ingresos.ejecutado)),$sql_3,SUM(ingresos.ejecutado)))";
+    $sql_8 = "(IF(  (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) = ingresos.subconcepto_id,$sql_6, 0  )) as ejecutado_actual";
+    $sql_1 = "SELECT sub1.nombre as nombre1, sub2.nombre as nombre2, sub3.nombre as nombre3, (IF(ISNULL(sub3.nombre),(IF(ISNULL(sub2.nombre),sub1.nombre,sub2.nombre)),sub3.nombre)) as nombre, (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.codigo,sub2.codigo)),sub3.codigo)) as codigo , (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) as idsub,(IF((IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id))=ingresos.subconcepto_id,ingresos.porcentaje,'')) as porcentaje, SUM(ingresos.ingreso) as ingreso, SUM(ingresos.pres_anterior) as pres_anterior, SUM(ingresos.ejec_anterior) as ejec_anterior,SUM(ingresos.presupuesto) as presupuesto, $sql_8, ingresos.subconcepto_id, ingresos.subge_id, ingresos.id,SubcGestione.* FROM ingresos LEFT JOIN subc_gestiones as SubcGestione ON SubcGestione.id = ingresos.subge_id LEFT JOIN subconceptos sub1 ON sub1.id = ingresos.subconcepto_id LEFT JOIN subconceptos sub2 ON sub2.id = sub1.subconcepto_id LEFT JOIN subconceptos sub3 ON sub3.id = sub2.subconcepto_id WHERE ingresos.presupuesto_id = $idPresupuesto GROUP BY idsub";
+    //$sql_1 = "SELECT (SELECT sub1.id as id FROM subconceptos AS sub1, subconceptos AS sub2 WHERE ) WHERE ingresos.presupuesto_id = $idPresupuesto";
+    $tingresos = $this->Ingreso->query($sql_1);
+    //debug($tingresos);exit;
+
     $this->Nomenclatura->virtualFields = array(
       'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
     );
-    $nomenclaturas = $this->Nomenclatura->find('list',array(
-      'recursive' => -1,
-      'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
-      'fields' => array('id','nombre_completo')
-    ));
-    $gestion = $presupuesto['Presupuesto']['gestion'];
-    $sql2 = "(SELECT SUM(cuentasegresos.monto) FROM cuentasegresos LEFT JOIN nomenclaturas as nomenclaturas4 ON (nomenclaturas4.id = cuentasegresos.nomenclatura_id) WHERE YEAR(cuentasegresos.fecha) = $gestion AND nomenclaturas4.nomenclatura_id = nomenclaturas.nomenclatura_id GROUP BY nomenclaturas4.nomenclatura_id)";
-    $sql = "SELECT SUM(egresos.pres_anterior) as pres_anterior,SUM(egresos.ejec_anterior) as ejec_anterior,SUM(egresos.presupuesto) as presupuesto,$sql2 as ejecutado, nomenclaturas3.nombre, nomenclaturas3.codigo_completo, nomenclaturas3.id FROM egresos LEFT JOIN nomenclaturas ON (egresos.nomenclatura_id = nomenclaturas.id) LEFT JOIN nomenclaturas AS nomenclaturas2 ON (nomenclaturas.nomenclatura_id = nomenclaturas2.id) LEFT JOIN nomenclaturas AS nomenclaturas3 ON (nomenclaturas2.nomenclatura_id = nomenclaturas3.id)  WHERE egresos.presupuesto_id = $idPresupuesto GROUP BY nomenclaturas3.id";
-    $egresos2 = $this->Egreso->query($sql);
-    //debug($egresos2);exit;
-    $this->set(compact('presupuesto', 'subconceptos', 'conceptos', 'tingresos', 'tipos', 'gtipos', 'pgastos','nomenclaturas','egresos2'));
-  }
-  
-  public function get_tegresos($idPresupuesto = null, $id = null,$gestion = null) {
-    //debug($gestion);exit;
-    $sql2 = "(SELECT SUM(cuentasegresos.monto) FROM cuentasegresos LEFT JOIN nomenclaturas as nomenclaturas4 ON (nomenclaturas4.id = cuentasegresos.nomenclatura_id) WHERE YEAR(cuentasegresos.fecha) = $gestion AND nomenclaturas4.nomenclatura_id = nomenclaturas.nomenclatura_id GROUP BY nomenclaturas4.nomenclatura_id)";
-    $sql = "SELECT SUM(egresos.pres_anterior) as pres_anterior,SUM(egresos.ejec_anterior) as ejec_anterior,SUM(egresos.presupuesto) as presupuesto, nomenclaturas2.nombre, nomenclaturas2.codigo_completo, nomenclaturas2.id, $sql2 as ejecutado FROM egresos LEFT JOIN nomenclaturas ON (egresos.nomenclatura_id = nomenclaturas.id) LEFT JOIN nomenclaturas AS nomenclaturas2 ON (nomenclaturas.nomenclatura_id = nomenclaturas2.id) LEFT JOIN nomenclaturas AS nomenclaturas3 ON (nomenclaturas2.nomenclatura_id = nomenclaturas3.id)  WHERE egresos.presupuesto_id = $idPresupuesto AND nomenclaturas3.id = $id GROUP BY nomenclaturas2.id";
-    //debug($this->Egreso->query($sql));exit;
-    return $this->Egreso->query($sql);
-  }
-  
-  
 
-  public function get_egresos($idPresupuesto = null, $idNomencaltura = null, $gestion  = null) {
-    $sql2 = "(SELECT SUM(cuentasegresos.monto) FROM cuentasegresos WHERE YEAR(cuentasegresos.fecha) = $gestion AND cuentasegresos.nomenclatura_id = Nomenclatura.id GROUP BY cuentasegresos.nomenclatura_id)";
-    $this->Egreso->virtualFields = array(
-      'ejecutado_actual' => "$sql2"
-    );
-    $resp =  $this->Egreso->find('all', array(
-        'recursive' => 0,
-        'conditions' => array('Egreso.presupuesto_id' => $idPresupuesto, 'Nomenclatura.nomenclatura_id' => $idNomencaltura)
+    $sql5 = "(SELECT SUM(comprobantescuentas.debe) FROM comprobantescuentas $sql_aux1 LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND YEAR(comprobantescuentas.fecha) = $gestion AND comprobantescuentas.subconcepto_id = (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) GROUP BY comprobantescuentas.subconcepto_id)";
+
+    $sql6 = "(IF(ISNULL(SUM(egresos.ejecutado)) AND (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) = egresos.subconcepto_id  ,$sql5,SUM(egresos.ejecutado)))";
+    $sql8 = "(IF((IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) = egresos.subconcepto_id,$sql6,0)) as ejecutado_actual";
+    $sql1 = "SELECT sub1.nombre as nombre1, sub2.nombre as nombre2, sub3.nombre as nombre3, (IF(ISNULL(sub3.nombre),(IF(ISNULL(sub2.nombre),sub1.nombre,sub2.nombre)),sub3.nombre)) as nombre, (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) as idsub, (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.codigo,sub2.codigo)),sub3.codigo)) as codigo, SUM(egresos.pres_anterior) as pres_anterior, SUM(egresos.ejec_anterior) as ejec_anterior, SUM(egresos.presupuesto) as presupuesto, egresos.subconcepto_id, egresos.id,$sql8, sub1.id FROM egresos LEFT JOIN subconceptos sub1 ON sub1.id = egresos.subconcepto_id LEFT JOIN subconceptos sub2 ON sub2.id = sub1.subconcepto_id LEFT JOIN subconceptos sub3 ON sub3.id = sub2.subconcepto_id WHERE egresos.presupuesto_id = $idPresupuesto GROUP BY idsub";
+    $tegresos = $this->Egreso->query($sql1);
+    //debug($tegresos);exit;
+    $this->set(compact('presupuesto', 'subconceptos', 'subconceptos_e', 'tingresos', 'pgastos', 'tegresos'));
+  }
+
+  public function get_egresos($idPresupuesto = null, $idSubconcepto = null, $sw = false) {
+
+
+    $this->layout = 'ajax';
+    //debug($idPresupuesto);exit;
+    $presupuesto = $this->Presupuesto->findByid($idPresupuesto, null, null, -1);
+    $gestion = $presupuesto['Presupuesto']['gestion'];
+    //$sql_aux1 = "LEFT JOIN subconceptos asub1 ON asub1.id = comprobantescuentas.subconcepto_id LEFT JOIN subconceptos asub2 ON asub2.id = asub1.subconcepto_id";
+    //$sql_aux3 = "(IF(sub1.subconcepto_id = $idSubconcepto,sub1.id,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.id,sub1.id))))";
+    //$sql_aux2 = "(IF(asub1.id = $sql_aux3,asub1.id,  IF(asub2.id = $sql_aux3,asub2.id,asub1.id)  ))";
+    $sql_aux4 = "(IF(sub1.subconcepto_id = $idSubconcepto,sub1.id,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.id,sub1.id))))";
+    $sql5 = "(SELECT SUM(comprobantescuentas.debe) FROM comprobantescuentas LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND YEAR(comprobantescuentas.fecha) = $gestion AND comprobantescuentas.subconcepto_id = $sql_aux4 GROUP BY comprobantescuentas.subconcepto_id)";
+    $sql_6 = "(IF(ISNULL(egresos.ejecutado),IF(ISNULL($sql5),'-',$sql5),egresos.ejecutado))";
+    $sql_8 = "(IF($sql_aux4 = egresos.subconcepto_id,$sql_6,'-')) as ejecutado_actual";
+    //$sql_1 = "SELECT sub1.nombre as nombre1, sub2.nombre as nombre2, (IF(ISNULL(sub2.nombre),sub1.nombre,sub2.nombre)) as nombre, (IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id)) as idsub,(IF((IF(ISNULL(sub3.id),(IF(ISNULL(sub2.id),sub1.id,sub2.id)),sub3.id))=ingresos.subconcepto_id,ingresos.porcentaje,0)) as porcentaje, SUM(ingresos.ingreso) as ingreso, SUM(ingresos.pres_anterior) as pres_anterior, SUM(ingresos.ejec_anterior) as ejec_anterior,SUM(ingresos.presupuesto) as presupuesto, $sql_6, ingresos.subconcepto_id FROM ingresos LEFT JOIN subc_gestiones as SubcGestione ON SubcGestione.id = ingresos.subge_id LEFT JOIN subconceptos sub1 ON sub1.id = ingresos.subconcepto_id LEFT JOIN subconceptos sub2 ON sub2.id = sub1.subconcepto_id LEFT JOIN subconceptos sub3 ON sub3.id = sub2.subconcepto_id WHERE ingresos.presupuesto_id = $idPresupuesto AND sub1.subconcepto_id = $idSubconcepto GROUP BY idsub";
+    $sql_1 = "SELECT sub1.nombre as nombre1, sub2.nombre as nombre2, (IF(sub1.subconcepto_id = $idSubconcepto,sub1.codigo,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.codigo,sub1.codigo)))) as codigo, (IF(sub1.subconcepto_id = $idSubconcepto,sub1.nombre,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.nombre,sub1.nombre)))) as nombre, (IF(sub1.subconcepto_id = $idSubconcepto,sub1.id,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.id,sub1.id)))) as idsub, SUM(egresos.pres_anterior) as pres_anterior, SUM(egresos.ejec_anterior) as ejec_anterior,SUM(egresos.presupuesto) as presupuesto, egresos.subconcepto_id, egresos.id,$sql_8 FROM egresos LEFT JOIN subconceptos sub1 ON sub1.id = egresos.subconcepto_id LEFT JOIN subconceptos sub2 ON sub2.id = sub1.subconcepto_id WHERE egresos.presupuesto_id = $idPresupuesto AND (IF(sub1.subconcepto_id = $idSubconcepto,TRUE,(IF(sub2.subconcepto_id = $idSubconcepto,TRUE,FALSE)))) GROUP BY idsub";
+    $egresos = $this->Egreso->query($sql_1);
+
+    /* if($sw){
+      debug($egresos);exit;
+      } */
+    //debug($egresos);
+    $subconcepto = $this->Subconcepto->find('first', array(
+      'recursive' => -1,
+      'conditions' => array('Subconcepto.id' => $idSubconcepto),
+      'fields' => array('Subconcepto.subconcepto_id')
     ));
-    return $resp;
-    /*debug($idPresupuesto);
-    debug($idNomencaltura);
-    debug($resp);exit;*/
+
+    $this->set(compact('egresos', 'presupuesto', 'sw', 'idSubconcepto', 'subconcepto'));
   }
 
   public function ingreso($idIngreso = NULL) {
     $this->layout = 'ajax';
+
     $this->Ingreso->id = $idIngreso;
     $this->request->data = $this->Ingreso->read();
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $this->Subconcepto->virtualFields = array(
+      'nombre_completo' => "CONCAT(Subconcepto.codigo,' - ',Subconcepto.nombre)"
+    );
     $subconceptos = $this->Subconcepto->find('list', array(
-      'conditions' => array('Subconcepto.edificio_id' => $idEdificio),
-      'fields' => array('Subconcepto.id', 'Subconcepto.nombre')
+      'order' => array('Subconcepto.codigo ASC'),
+      'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso'),
+      'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
     ));
-    $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre')));
     $tipos = $this->Subconcepto->find('list', array(
       'recursive' => -1,
       'fields' => array('tipo', 'tipo'),
       'group' => array('tipo')
     ));
-    $this->set(compact('subconceptos', 'conceptos', 'tipos'));
+    $this->set(compact('subconceptos', 'tipos'));
   }
 
   public function egreso($idEgreso = null) {
@@ -137,44 +153,52 @@ class PresupuestosController extends AppController {
     $this->Egreso->id = $idEgreso;
     $this->request->data = $this->Egreso->read();
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
-    $this->Nomenclatura->virtualFields = array(
-      'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
+    $this->Subconcepto->virtualFields = array(
+      'nombre_completo' => "CONCAT(Subconcepto.codigo,' - ',Subconcepto.nombre)"
     );
-    $nomenclaturas = $this->Nomenclatura->find('list',array(
-      'recursive' => -1,
-      'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
-      'fields' => array('id','nombre_completo')
+    $subconceptos_e = $this->Subconcepto->find('list', array(
+      'order' => array('Subconcepto.codigo ASC'),
+      'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso'),
+      'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
     ));
-    $this->set(compact('nomenclaturas'));
+    $this->set(compact('nomenclaturas', 'subconceptos_e'));
   }
 
-  public function get_ingresos($idPresupuesto = null, $tipo = null) {
-    return $this->Ingreso->find('all', array(
-        'recursive' => 0,
-        'conditions' => array('Ingreso.presupuesto_id' => $idPresupuesto, 'Subconcepto.tipo' => $tipo)
+  public function get_ingresos($idPresupuesto = null, $idSubconcepto = null, $sw = false) {
+    $this->layout = 'ajax';
+    //debug("eynar");exit;
+    $presupuesto = $this->Presupuesto->findByid($idPresupuesto, null, null, -1);
+    $gestion = $presupuesto['Presupuesto']['gestion'];
+    $sql_aux1 = "LEFT JOIN subconceptos asub1 ON asub1.id = comprobantescuentas.subconcepto_id LEFT JOIN subconceptos asub2 ON asub2.id = asub1.subconcepto_id";
+    //$sql_aux2 = "(IF(ISNULL(asub2.id),asub1.id,asub2.id))";
+    //$sql_aux3 = "(IF(ISNULL(sub2.id),sub1.id,sub2.id))";
+
+    //$sql_aux2 = "(IF(asub1.id = $sql_aux3,asub1.id,  IF(asub2.id = $sql_aux3,asub2.id,asub1.id)  ))";
+    //$sql_aux4 = "(IF(sub1.subconcepto_id = $idSubconcepto,sub1.id,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.id,sub1.id))))";
+    //$sql_7 = "(SELECT SUM(comprobantescuentas.haber) FROM comprobantescuentas $sql_aux1 LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND  YEAR(comprobantes.fecha) = $gestion AND $sql_aux4 GROUP BY $sql_aux2)";
+    $sql_5 = "(SELECT SUM(comprobantescuentas.haber) FROM comprobantescuentas $sql_aux1 LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND  YEAR(comprobantescuentas.fecha) = $gestion AND  YEAR(comprobantes.fecha) = $gestion AND comprobantescuentas.subconcepto_id = ingresos.subconcepto_id GROUP BY comprobantescuentas.subconcepto_id)";
+    $sql_4 = "(SELECT SUM(comprobantescuentas.haber) FROM comprobantescuentas $sql_aux1 LEFT JOIN comprobantes ON comprobantes.id = comprobantescuentas.comprobante_id WHERE comprobantes.estado LIKE 'Comprobado' AND  YEAR(comprobantescuentas.fecha) >= SubcGestione.gestion_ini AND YEAR(comprobantescuentas.fecha) <= SubcGestione.gestion_fin AND YEAR(comprobantes.fecha) = $gestion AND comprobantescuentas.subconcepto_id = ingresos.subconcepto_id GROUP BY comprobantescuentas.subconcepto_id)";
+    $sql_3 = "(IF(  ISNULL(SubcGestione.gestion_ini) ,  (IF(ISNULL($sql_5),0,$sql_5)) , (IF(ISNULL($sql_4),0,$sql_4))    ))";
+    //$sql_3 = "(IF(ISNULL(SubcGestione.gestion_ini),$sql_5,$sql_4))";
+    //$sql_3a = "(IF(  (IF(sub1.subconcepto_id = $idSubconcepto,sub1.id,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.id,sub1.id)))) = ingresos.subconcepto_id,   $sql_3   ,  (IF(ISNULL($sql_7),0,$sql_7)) ))";
+    $sql_6 = "(IF(ISNULL(ingresos.ejecutado),$sql_3,SUM(ingresos.ejecutado)))";
+    $sql_8 = "(IF(  (IF(sub1.subconcepto_id = $idSubconcepto,sub1.id,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.id,sub1.id)))) = ingresos.subconcepto_id,  $sql_6, '-')) as ejecutado_actual";
+    $sql_1 = "SELECT sub1.nombre as nombre1, sub2.nombre as nombre2, (IF(sub1.subconcepto_id = $idSubconcepto,sub1.nombre,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.nombre,sub1.nombre)))) as nombre, (IF(sub1.subconcepto_id = $idSubconcepto,sub1.codigo,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.codigo,sub1.codigo)))) as codigo, (IF(sub1.subconcepto_id = $idSubconcepto,sub1.id,(IF(sub2.subconcepto_id = $idSubconcepto,sub2.id,sub1.id)))) as idsub, SUM(ingresos.ingreso) as ingreso, SUM(ingresos.pres_anterior) as pres_anterior, SUM(ingresos.ejec_anterior) as ejec_anterior,SUM(ingresos.presupuesto) as presupuesto, ingresos.subconcepto_id,(IF($idSubconcepto = sub1.subconcepto_id,ingresos.porcentaje,'')) as porcentaje,$sql_8,ingresos.subge_id,SubcGestione.*, ingresos.id,sub1.id FROM ingresos LEFT JOIN subconceptos sub1 ON sub1.id = ingresos.subconcepto_id LEFT JOIN subconceptos sub2 ON sub2.id = sub1.subconcepto_id LEFT JOIN subc_gestiones as SubcGestione ON SubcGestione.id = ingresos.subge_id WHERE ingresos.presupuesto_id = $idPresupuesto AND (IF(sub1.subconcepto_id = $idSubconcepto,TRUE,(IF(sub2.subconcepto_id = $idSubconcepto,TRUE,FALSE)))) GROUP BY idsub,subge_id";
+    $ingresos = $this->Ingreso->query($sql_1);
+    //debug($ingresos);exit;
+    $subconcepto = $this->Subconcepto->find('first', array(
+      'recursive' => -1,
+      'conditions' => array('Subconcepto.id' => $idSubconcepto),
+      'fields' => array('Subconcepto.subconcepto_id')
     ));
+    $this->set(compact('ingresos', 'presupuesto', 'sw','subconcepto','idSubconcepto'));
   }
 
   public function guarda_ingreso() {
     if (!empty($this->request->data['Ingreso'])) {
       $idEdificio = $this->Session->read('Auth.User.edificio_id');
       $dato = $this->request->data['Ingreso'];
-      if (!empty($dato['nombre_subconcepto'])) {
-        $subd['nombre'] = $dato['nombre_subconcepto'];
-        $subd['concepto_id'] = $dato['concepto_id'];
-        $subd['edificio_id'] = $idEdificio;
-        if (!empty($dato['nombre_tipo'])) {
-          $subd['tipo'] = $dato['nombre_tipo'];
-        } else {
-          $subd['tipo'] = $dato['tipo'];
-        }
-        $this->Subconcepto->create();
-        $this->Subconcepto->save($subd);
-        $dato['subconcepto_id'] = $this->Subconcepto->getLastInsertID();
-      } else {
-        $subconcepto = $this->Subconcepto->findByid($dato['subconcepto_id'], null, null, -1);
-        $dato['concepto_id'] = $subconcepto['Subconcepto']['concepto_id'];
-      }
+
       $this->request->data = $dato;
       $valida = $this->validar('Ingreso');
       if (empty($valida)) {
@@ -420,7 +444,7 @@ class PresupuestosController extends AppController {
     ));
   }
 
-  public function get_ejecutado($gestion = null,$idConcepto = null, $idSubconcepto = null, $idSubcGes = null) {
+  public function get_ejecutado($gestion = null, $idConcepto = null, $idSubconcepto = null, $idSubcGes = null) {
     //debug($gestion);exit;
     //$gestion = intval($gestion);
     $subconcepto = $this->Subconcepto->findByid($idSubconcepto, null, null, -1);
@@ -455,9 +479,9 @@ class PresupuestosController extends AppController {
       'group' => array('Cuentasmonto.subconcepto_id'),
       'fields' => array('SUM(Cuentasmonto.monto) as monto_t')
     ));
-    if(!empty($ejecutado[0][0]['monto_t'])){
+    if (!empty($ejecutado[0][0]['monto_t'])) {
       return $ejecutado[0][0]['monto_t'];
-    }else{
+    } else {
       return 0.00;
     }
   }

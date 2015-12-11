@@ -17,16 +17,17 @@ class Nomenclatura extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Nomenclatura' => array(
-			'className' => 'Nomenclatura',
-			'foreignKey' => 'nomenclatura_id',
+		
+		'Edificio' => array(
+			'className' => 'Edificio',
+			'foreignKey' => 'edificio_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
-		'Edificio' => array(
-			'className' => 'Edificio',
-			'foreignKey' => 'edificio_id',
+		'Subconcepto' => array(
+			'className' => 'Subconcepto',
+			'foreignKey' => 'subconcepto_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

@@ -51,8 +51,9 @@ class Pago extends AppModel {
       $Cuenta = new Cuenta();
       $Nomenclatura = new Nomenclatura();
       $nomen_a = $Nomenclatura->find('first', array(
-        'recursive' => -1,
-        'conditions' => array('id' => $pago['Pago']['nomenclatura_id'])
+        'recursive' => 0,
+        'conditions' => array('Nomenclatura.id' => $pago['Pago']['nomenclatura_id']),
+        'fields' => array('Nomenclatura.*','Subconcepto.*')
       ));
 
       $Comprobantescuenta = new Comprobantescuenta();
@@ -65,19 +66,27 @@ class Pago extends AppModel {
       $d_com['nomenclatura_id'] = $pago['Pago']['nomenclatura_id'];
       $d_com['codigo'] = $nomen_a['Nomenclatura']['codigo_completo'];
       $d_com['edificio_id'] = $idEdificio;
+      $d_com['ambiente_id'] = $pago['Pago']['ambiente_id'];
+
+      $d_com['subconcepto_id'] = $nomen_a['Subconcepto']['id'];
+      $d_com['codigo_subc'] = $nomen_a['Subconcepto']['codigo'];
+      $d_com['fecha'] = $pago['Pago']['fecha'];
 
       $Comprobantescuenta->create();
       $Comprobantescuenta->save($d_com);
-      
+
       $d_com['cta_ctable'] = $banco['nombre'];
       $d_com['haber'] = NULL;
       $d_com['debe'] = $pago['Pago']['monto_total'];
       $d_com['auxiliar'] = NULL;
       $d_com['nomenclatura_id'] = $banco['nomenclatura_id'];
       $d_com['comprobante_id'] = $this->data['Pago']['comprobante_id'];
+      $d_com['fecha'] = $pago['Pago']['fecha'];
+      
+      
       if (!empty($this->data['Pago']['banco']['Nomenclatura']['codigo_completo'])) {
         $d_com['codigo'] = $this->data['Pago']['banco']['Nomenclatura']['codigo_completo'];
-      }else{
+      } else {
         $d_com['codigo'] = NULL;
       }
       $d_com['edificio_id'] = $idEdificio;

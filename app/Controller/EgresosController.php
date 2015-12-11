@@ -86,9 +86,9 @@ class EgresosController extends AppController {
     $this->Comprobantescuenta->save($d_com);
 
     $nomenclatura = $this->Nomenclatura->find('first', array(
-      'recursive' => -1,
+      'recursive' => 0,
       'conditions' => array('Nomenclatura.id' => $this->request->data['Cuentasegreso']['nomenclatura_id']),
-      'fields' => array('Nomenclatura.nombre','Nomenclatura.codigo_completo','Nomenclatura.id')
+      'fields' => array('Nomenclatura.nombre','Nomenclatura.codigo_completo','Nomenclatura.id','Subconcepto.codigo','Subconcepto.id')
     ));
 
     $d_com['cta_ctable'] = $nomenclatura['Nomenclatura']['nombre'];
@@ -99,7 +99,10 @@ class EgresosController extends AppController {
     $d_com['auxiliar'] = $this->request->data['Cuentasegreso']['detalle'] . ' (' . $d_comprobante['fecha'] . ')';
     $d_com['codigo'] = $nomenclatura['Nomenclatura']['codigo_completo'];
     $d_com['nomenclatura_id'] = $nomenclatura['Nomenclatura']['id'];
-
+    $d_com['subconcepto_id'] = $nomenclatura['Subconcepto']['id'];
+    $d_com['codigo_subc'] = $nomenclatura['Subconcepto']['codigo'];
+    $d_com['fecha'] = $this->request->data['Cuentasegreso']['fecha'];
+    
     $this->Comprobantescuenta->create();
     $this->Comprobantescuenta->save($d_com);
   }

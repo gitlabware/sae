@@ -64,16 +64,15 @@ class NomenclaturasController extends AppController {
     $this->request->data['Nomenclatura']['nomenclatura_id'] = $idNomenclatura;
     $this->request->data['Nomenclatura']['edificio_id'] = $idEdificio;
 
-    $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre')));
-    if (!empty($this->request->data['Nomenclatura']['concepto_id'])) {
-      $subconceptos = $this->Subconcepto->find('list', array(
-        'recursive' => -1,
-        'conditions' => array('concepto_id' => $this->request->data['Nomenclatura']['concepto_id']),
-        'fields' => array('id', 'nombre')
-      ));
-    } else {
-      $subconceptos = array();
-    }
+
+    $this->Subconcepto->virtualFields = array(
+      'nombre_completo' => "CONCAT(codigo,' - ',nombre)"
+      );
+    $subconceptos = $this->Subconcepto->find('list', array(
+      'recursive' => -1,
+      'conditions' => array('edificio_id' => $idEdificio),
+      'fields' => array('id', 'nombre_completo')
+    ));
 
     $this->set(compact('conceptos', 'subconceptos', 'codigo_padre'));
   }
@@ -89,6 +88,11 @@ class NomenclaturasController extends AppController {
       }
       /* debug($this->request->data);
         exit; */
+      if (!empty($this->request->data['Nomenclatura']['subconcepto_id'])) {
+        $subconcepto = $this->Subconcepto->findByid($this->request->data['Nomenclatura']['subconcepto_id'], null, null, -1);
+        $this->request->data['Nomenclatura']['concepto_id'] = $subconcepto['Subconcepto']['concepto_id'];
+      }
+
       $this->Nomenclatura->save($this->request->data['Nomenclatura']);
       $this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
     } else {
@@ -150,8 +154,8 @@ class NomenclaturasController extends AppController {
     $this->Nomenclatura->delete($idNomenclatura);
 
     if (!empty($nomenclaturas)) {
-      foreach ($nomenclaturas as $nom){
-        $this->eliminar($nom['Nomenclatura']['id'],FALSE);
+      foreach ($nomenclaturas as $nom) {
+        $this->eliminar($nom['Nomenclatura']['id'], FALSE);
       }
     }
     if ($sw) {

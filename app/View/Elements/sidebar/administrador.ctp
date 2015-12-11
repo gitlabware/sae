@@ -103,6 +103,12 @@
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'reporte_egresos_ban')); ?>">Reporte de Egresos</a>
                         </li>
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'reporte_auxiliares')); ?>">Reporte de Auxiliares</a>
+                        </li> 
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'comprobantes_pago_meses')); ?>">Reporte de Auxiliares por meses</a>
+                        </li>
                     </ul>
                 </li>
                 <li>

@@ -137,7 +137,7 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
                             <?php echo $man['Pago']['estado']; ?>
                         </td>
                         <td>
-                            <?php echo $this->Form->select("Pagos.$ji.nomenclatura_id", $nomenclaturas, array('class' => 'form-control', 'value' => $c_seleccion)) ?>
+                            <?php echo $this->Form->select("Pagos.$ji.nomenclatura_id", $nomenclaturas, array('class' => 'form-control', 'value' => $c_seleccion,'required')) ?>
                             <?php echo $this->Form->hidden("Pagos.$ji.pago_id", array('value' => $man['Pago']['id'])); ?>
                         </td>
                         <td class="text-center">
