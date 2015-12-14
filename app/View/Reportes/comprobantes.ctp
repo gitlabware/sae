@@ -58,16 +58,24 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                      <?php 
+                                      $total_debe = 0.00;
+                                      $total_haber = 0.00;
+                                      ?>
                                       <?php foreach ($comprobantes as $comp): ?>
+                                      <?php 
+                                      $total_debe = $total_debe + $comp['Comprobantescuenta']['debe'];
+                                      $total_haber = $total_haber + $comp['Comprobantescuenta']['haber'];
+                                      ?>
                                         <tr>
                                             <td><?php echo $comp['Comprobante']['fecha'] ?></td>
                                             <td><?php echo $comp['Comprobante']['numero'] ?></td>
-                                            <td><?php echo $comp['Comprobante']['codigo'] ?></td>
-                                            <td><?php echo $comp['Comprobante']['codigo_subc'] ?></td>
-                                            <td><?php echo $comp['Comprobante']['cta_ctable'] ?></td>
-                                            <td><?php echo $comp['Comprobante']['auxiliar'] ?></td>
-                                            <td><?php echo $comp['Comprobante']['debe'] ?></td>
-                                            <td><?php echo $comp['Comprobante']['haber'] ?></td>
+                                            <td><?php echo $comp['Comprobantescuenta']['codigo_subc'] ?></td>
+                                            <td><?php echo $comp['Comprobantescuenta']['codigo'] ?></td>
+                                            <td><?php echo $comp['Comprobantescuenta']['cta_ctable'] ?></td>
+                                            <td><?php echo $comp['Comprobantescuenta']['auxiliar'] ?></td>
+                                            <td><?php echo $comp['Comprobantescuenta']['debe'] ?></td>
+                                            <td><?php echo $comp['Comprobantescuenta']['haber'] ?></td>
                                         </tr>
                                       <?php endforeach; ?>
                                       <tr>

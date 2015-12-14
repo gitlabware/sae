@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class ReportesController extends AppController {
 
-  public $uses = array('Concepto', 'Pago', 'Ambiente', 'User', 'Inquilino', 'Banco', 'Cuentasegreso', 'Bancosmovimiento', 'Comprobantescuenta', 'Comprobante','Nomenclatura');
+  public $uses = array('Concepto', 'Pago', 'Ambiente', 'User', 'Inquilino', 'Banco', 'Cuentasegreso', 'Bancosmovimiento', 'Comprobantescuenta', 'Comprobante', 'Nomenclatura');
   public $layout = 'sae';
 
   public function reporte_pagos() {
@@ -571,43 +571,46 @@ class ReportesController extends AppController {
     //debug($gestiones);exit;
     $this->set(compact('gestiones', 'gestion', 'pagos', 'gestion_ini', 'gestion_fin'));
   }
-  
-  
+
   public function comprobantes() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $this->Nomenclatura->virtualFields = array(
       'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
     );
-    $nomenclaturas = $this->Nomenclatura->find('list',array(
+    $nomenclaturas = $this->Nomenclatura->find('list', array(
       'recursive' => -1,
       'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
-      'fields' => array('Nomenclatura.id','Nomenclatura.nombre_completo')
+      'fields' => array('Nomenclatura.id', 'Nomenclatura.nombre_completo')
     ));
-    if(!empty($this->request->data)){
+    if (!empty($this->request->data)) {
       $fecha_ini = $this->request->data['Reporte']['fecha_ini'];
       $fecha_fin = $this->request->data['Reporte']['fecha_fin'];
       $tipo = $this->request->data['Reporte']['tipo'];
       $idNomenclatura = $this->request->data['Reporte']['nomenclatura_id'];
-      
+
       $condiciones = array();
       $condiciones['Comprobante.fecha >='] = $fecha_ini;
       $condiciones['Comprobante.fecha <='] = $fecha_fin;
-      if(!empty($tipo)){
+      if (!empty($tipo)) {
         $condiciones['Comprobante.tipo'] = $tipo;
       }
-      if(!empty($idNomenclatura)){
+      if (!empty($idNomenclatura)) {
         $condiciones['Comprobantescuenta.nomenclatura_id'] = $idNomenclatura;
-        $nomenclatura;
+        $nomenclatura = $this->Nomenclatura->find('first',array(
+          'recursive' => -1,
+          'conditions' => array('Nomenclatura.id' => $idNomenclatura),
+          'fields' => array('Nomenclatura.nombre','Nomenclatura.codigo_completo')
+        ));
       }
-      
-      $comproantes = $this->Comprobantescuenta->find('all',array(
+
+      $comprobantes = $this->Comprobantescuenta->find('all', array(
         'recursive' => 0,
         'conditions' => $condiciones,
-        'fields' => array('Comprobante.*','Comprobantescuenta.*')
+        'fields' => array('Comprobante.*', 'Comprobantescuenta.*')
       ));
     }
     //debug($nomenclaturas);exit;
-    $this->set(compact('nomenclaturas','comprobantes'));
+    $this->set(compact('nomenclaturas', 'comprobantes','nomenclatura'));
   }
 
 }
