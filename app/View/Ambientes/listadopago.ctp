@@ -33,6 +33,16 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="user-settings-email">Doc. Respaldo: </label>
+                <div class="col-md-8">
+                    <?php echo $this->Form->text('Recibo.doc_respaldo', array('class' => 'form-control', 'placeholder' => 'Documento de Respaldo')); ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Example Content -->
 
@@ -171,9 +181,9 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
                       <td></td>
                       <td></td>
                       <td>MONTO: </td>
-                      <td><?php echo $this->Form->text("Recibo.ambiente.$key.monto", array('class' => 'form-control submonto', 'id' => 'dato-monto-' . $key, 'value' => $rm['Pago']['monto_tmp'], 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
+                      <td><?php echo $this->Form->text("Recibo.ambiente.$key.monto", array('class' => 'form-control submonto', 'id' => 'dato-monto-' . $key, 'value' => round($rm['Pago']['monto_tmp'],2), 'type' => 'number', 'step' => 'any', 'min' => 0, 'required')); ?></td>
                       <td>GUARDAR CAMBIO: </td>
-                      <td><?php echo $this->Form->text("Dato.ambiente.$key.cambio", array('class' => 'form-control subcambio', 'id' => 'dato-cambio-' . $key, 'value' => ( round($rm['Pago']['monto_tmp'] + $saldo, 2) - round($total[$key], 2)), 'type' => 'number', 'step' => 'any', 'required', 'min' => 0)); ?></td>
+                      <td><?php echo $this->Form->text("Dato.ambiente.$key.cambio", array('class' => 'form-control subcambio', 'id' => 'dato-cambio-' . $key, 'value' => round( round($rm['Pago']['monto_tmp'] + $saldo, 2) - round($total[$key], 2),2), 'type' => 'number', 'step' => 'any', 'required', 'min' => 0)); ?></td>
                       <td></td>
                       <td></td>
                   </tr>

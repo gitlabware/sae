@@ -108,6 +108,9 @@
                         </li> 
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'comprobantes_pago_meses')); ?>">Reporte de Auxiliares por meses</a>
+                        </li> 
+                        <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'comprobantes_pago_gestiones')); ?>">Reporte de Auxiliares por gestiones</a>
                         </li>
                     </ul>
                 </li>

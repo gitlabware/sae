@@ -1531,10 +1531,10 @@ a[data-toggle="lightbox-image"]:hover img {
 }
 
 .chart-pie-label {
-     font-size: 12px;
-     text-align: center;
-     padding: 8px 12px;
-     color: #ffffff;
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 12px;
+    color: #ffffff;
 }
 
 .mini-chart-tooltip {
@@ -3797,6 +3797,8 @@ p, .table, .alert, .carousel {
     .sidebar-alt-visible-lg.footer-fixed #main-container #page-content + footer {
         right: 200px;
     }
+    
+    
 }
 
 /* Large devices, Desktops (>1199px) */
@@ -3834,4 +3836,5 @@ only screen and (min-device-pixel-ratio: 1.5) {
 (#m11prs) PRINT
 =================================================================
 */
+
 
