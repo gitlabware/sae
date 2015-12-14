@@ -155,7 +155,7 @@ class ConceptosController extends AppController {
         if (!empty($this->request->data['Subconcepto']['nuevo_tipo'])) {
           $this->request->data['Subconcepto']['tipo'] = $this->request->data['Subconcepto']['nuevo_tipo'];
         }
-
+        
         $this->Subconcepto->create();
         $this->Subconcepto->save($this->request->data['Subconcepto']);
         if (!empty($this->request->data['gestiones'])) {
