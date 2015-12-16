@@ -805,7 +805,7 @@ class AmbientesController extends AppController {
       $d_comprobante['fecha'] = date('Y-m-d');
       $d_comprobante['nombre'] = $this->request->data['Recibo']['pagador'];
       $d_comprobante['nota'] = $this->request->data['Recibo']['doc_respaldo'];
-      $d_comprobante['concepto'] = "Cobro de Cuotas";
+      $d_comprobante['concepto'] = "";
       $d_comprobante['tc_ufv'] = $edificio['Edificio']['tc_ufv'];
       $d_comprobante['edificio_id'] = $idEdificio;
       $this->Comprobante->create();

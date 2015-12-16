@@ -98,7 +98,7 @@
     <table class="table table-bordered" style="margin-top: -10px;">
         <tr>
             <td style="font-size: 16px; font-weight: bold;">Glosa: </td>
-            <td><?php echo $comprobante['Comprobante']['concepto'] ?></td>
+            <td><?php echo nl2br($comprobante['Comprobante']['concepto']) ?></td>
         </tr>
     </table>
 

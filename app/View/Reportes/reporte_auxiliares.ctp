@@ -1,3 +1,19 @@
+
+<script>
+  function cargardetalles(idAmbiente, idComprobante) {
+      if ($('#comp-' + idAmbiente + '-' + idComprobante).attr('data-sw') == 'FALSE') {
+          //alert($('#comp-' + idAmbiente + '-' + idComprobante).attr('data-sw'));
+          $.get('<?php echo $this->Html->url(array('action' => 'get_detalles_comp', $fecha_ini, $fecha_fin)); ?>/' + idAmbiente + '/' + idComprobante, function (data) { // Loads content into the 'data' variable.
+              $('#comp-' + idAmbiente + '-' + idComprobante).after(data); // Injects 'data' after the #mydiv element.
+          });
+          $('#comp-' + idAmbiente + '-' + idComprobante).attr('data-sw', 'TRUE');
+      } else {
+
+      }
+
+
+  }
+</script>
 <div class="row">
     <div class="col-md-12">
         <!-- Basic Form Elements Block -->
@@ -13,12 +29,12 @@
                         <label class="control-label">Propietario</label>
                         <div id="divselectpropietario">
                             <button type="button" class="btn btn-info col-md-12" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'comboselect_prop1', 'Reporte.propietario_id', 'divselectpropietario')); ?>');">
-                                
-                                <?php 
-                                if(!empty($this->request->data['Reporte']['propietario_id'])){
+
+                                <?php
+                                if (!empty($this->request->data['Reporte']['propietario_id'])) {
                                   echo $propietario['User']['nombre'];
-                                  $this->Form->hidden('Reporte.propietario_id',array('value' => $this->request->data['Reporte']['propietario_id']));
-                                }else{
+                                  $this->Form->hidden('Reporte.propietario_id', array('value' => $this->request->data['Reporte']['propietario_id']));
+                                } else {
                                   echo 'SELECCIONE EL PROPIETARIO';
                                 }
                                 ?>
@@ -29,12 +45,12 @@
                         <label class="control-label">Inquilino</label>
                         <div id="divselectinquilino">
                             <button type="button" class="btn btn-info col-md-12" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'comboselect_inq1', 'Reporte.inquilino_id', 'divselectinquilino')); ?>');">
-                                
-                                <?php 
-                                if(!empty($this->request->data['Reporte']['inquilino_id'])){
+
+                                <?php
+                                if (!empty($this->request->data['Reporte']['inquilino_id'])) {
                                   echo $inquilino['User']['nombre'];
-                                  $this->Form->hidden('Reporte.inquilino_id',array('value' => $this->request->data['Reporte']['inquilino_id']));
-                                }else{
+                                  $this->Form->hidden('Reporte.inquilino_id', array('value' => $this->request->data['Reporte']['inquilino_id']));
+                                } else {
                                   echo 'SELECCIONE EL INQUILINO';
                                 }
                                 ?>
@@ -45,11 +61,11 @@
                         <label class="control-label">Ambiente</label>
                         <div id="divselectambiente">
                             <button type="button" class="btn btn-info col-md-12" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'comboselect_amb1', 'Reporte.ambiente_id', 'divselectambiente')); ?>');">
-                                <?php 
-                                if(!empty($this->request->data['Reporte']['ambiente_id'])){
+                                <?php
+                                if (!empty($this->request->data['Reporte']['ambiente_id'])) {
                                   echo $ambiente['Ambiente']['nombre'];
-                                  $this->Form->hidden('Reporte.ambiente_id',array('value' => $this->request->data['Reporte']['ambiente_id']));
-                                }else{
+                                  $this->Form->hidden('Reporte.ambiente_id', array('value' => $this->request->data['Reporte']['ambiente_id']));
+                                } else {
                                   echo 'SELECCIONE EL AMBIENTE';
                                 }
                                 ?>
@@ -79,26 +95,26 @@
                 <div class="form-group">
                     <div class="col-md-12" id="divtablapagos">
                         <?php if (!empty($pagos)): ?>
-                        <h2 class="text-center text-success">REPORTE DE AUXILIARES DEL EDIFICIO <?php echo strtoupper($this->Session->read('Auth.User.Edificio.nombre')); ?></h2>
-                        <h3 class="text-center"> <?php echo 'DESDE FECHA: '.$this->request->data['Reporte']['fecha_ini'].' HASTA FECHA: '.$this->request->data['Reporte']['fecha_fin']?></h3>
-                        <h4 class="text-center">
-                          <?php 
-                          if(!empty($propietario)){
-                            echo '&nbsp;&nbsp;PROPIETARIO: '.$propietario['User']['nombre'];
-                          }
-                          if(!empty($inquilino)){
-                            echo '&nbsp;&nbsp;INQUILINO: '.$inquilino['User']['nombre'];
-                          }
-                          if(!empty($ambiente)){
-                            echo '&nbsp;&nbsp;AMBIENTE: '.$ambiente['Ambiente']['nombre'].'/'.$ambiente['Piso']['nombre'];
-                          }
-                          if(!empty($this->request->data['Reporte']['auxiliar'])){
-                            echo '&nbsp;&nbsp;AUXILIAR: '.$this->request->data['Reporte']['auxiliar'];
-                          }
-                          ?>
-                        </h4>  
-                        <div class="table-responsive">
-                              <table class="table table-striped table-bordered">
+                          <h2 class="text-center text-success">REPORTE DE AUXILIARES DEL EDIFICIO <?php echo strtoupper($this->Session->read('Auth.User.Edificio.nombre')); ?></h2>
+                          <h3 class="text-center"> <?php echo 'DESDE FECHA: ' . $this->request->data['Reporte']['fecha_ini'] . ' HASTA FECHA: ' . $this->request->data['Reporte']['fecha_fin'] ?></h3>
+                          <h4 class="text-center">
+                              <?php
+                              if (!empty($propietario)) {
+                                echo '&nbsp;&nbsp;PROPIETARIO: ' . $propietario['User']['nombre'];
+                              }
+                              if (!empty($inquilino)) {
+                                echo '&nbsp;&nbsp;INQUILINO: ' . $inquilino['User']['nombre'];
+                              }
+                              if (!empty($ambiente)) {
+                                echo '&nbsp;&nbsp;AMBIENTE: ' . $ambiente['Ambiente']['nombre'] . '/' . $ambiente['Piso']['nombre'];
+                              }
+                              if (!empty($this->request->data['Reporte']['auxiliar'])) {
+                                echo '&nbsp;&nbsp;AUXILIAR: ' . $this->request->data['Reporte']['auxiliar'];
+                              }
+                              ?>
+                          </h4>  
+                          <div class="table-responsive">
+                              <table class="table table-bordered">
                                   <thead>
                                       <tr>
                                           <th>Fecha</th>
@@ -122,9 +138,10 @@
                                       <?php $total = 0.00; ?>
 
                                       <?php foreach ($pagos as $pag): ?>
-                                        <tr>
+
+                                        <tr class="warning text-success" data-sw="FALSE" id="comp-<?php echo $pag['Comprobantescuenta']['ambiente_id'] . '-' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>" onclick="cargardetalles(<?php echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);">
                                             <td><?php echo $pag['Comprobante']['fecha'] ?></td>
-                                            <td><?php echo $pag['Comprobante']['numero'] ?></td>
+                                            <td><?php //echo $pag['Comprobante']['numero']  ?></td>
                                             <td><?php echo $pag['Comprobantescuenta']['codigo_subc'] ?></td>
                                             <td><?php echo $pag['Comprobantescuenta']['codigo'] ?></td>
                                             <td><?php echo $pag['Comprobantescuenta']['cta_ctable'] ?></td>
@@ -132,31 +149,34 @@
                                               <td><?php echo $pag['Ambiente']['nombre'] ?></td>
                                               <td><?php echo $pag['Comprobantescuenta']['piso'] ?></td>
                                             <?php endif; ?>
-                                            <td><?php echo $pag['Comprobantescuenta']['auxiliar'] ?></td>
+                                            <td><?php //echo $pag['Comprobantescuenta']['auxiliar']  ?></td>
                                             <?php if (empty($propietario)): ?>
                                               <td><?php echo $pag['Comprobantescuenta']['propietario'] ?></td>
                                             <?php endif; ?>
                                             <td><?php echo $pag['Ambiente']['lista_inquilinos'] ?></td>
-                                            <td><?php echo $pag['Comprobantescuenta']['haber'] ?></td>
+                                            <td><?php echo $pag[0]['importe_total'] ?></td>
                                         </tr>
-                                      <?php endforeach; ?>
-                                      <tr>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <?php if (empty($ambiente)): ?>
-                                            <td></td>
-                                            <td></td>
-                                          <?php endif; ?>
-                                          <td></td>
-                                          <?php if (empty($propietario)): ?>
-                                            <td></td>
-                                          <?php endif; ?>
-                                          <td>TOTAL</td>
-                                          <td><?php echo $total; ?></td>
-                                      </tr>
+                                    <script>
+                                      cargardetalles(<?php echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);
+                                    </script>
+                                  <?php endforeach; ?>
+                                  <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <?php if (empty($ambiente)): ?>
+                                        <td></td>
+                                        <td></td>
+                                      <?php endif; ?>
+                                      <td></td>
+                                      <?php if (empty($propietario)): ?>
+                                        <td></td>
+                                      <?php endif; ?>
+                                      <td>TOTAL</td>
+                                      <td><?php echo $total; ?></td>
+                                  </tr>
                                   </tbody>
                               </table>
                           </div>
@@ -167,3 +187,6 @@
         </div>
     </div>
 </div>
+
+
+

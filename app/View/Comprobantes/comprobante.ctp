@@ -2,9 +2,9 @@
 $pagador = "";
 if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
   $pagador = "Recibido de: ";
-}elseif ($this->request->data['Comprobante']['tipo'] == 'Egreso') {
+} elseif ($this->request->data['Comprobante']['tipo'] == 'Egreso') {
   $pagador = "Beneficiario: ";
-}elseif($this->request->data['Comprobante']['tipo'] == 'Ingreso de Banco'){
+} elseif ($this->request->data['Comprobante']['tipo'] == 'Ingreso de Banco') {
   $pagador = "Recibido de: ";
 }
 ?>
@@ -33,7 +33,7 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
@@ -102,7 +102,7 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
             <div class="form-group">
                 <label class="col-md-4 control-label" for="user-settings-email">Glosa:  </label>
                 <div class="col-md-8">
-                    <?php echo $this->Form->text('Comprobante.concepto', array('class' => 'form-control', 'required', 'placeholder' => 'Ingrese el nombre del pagador o beneficiario')); ?>
+                    <?php echo $this->Form->textarea('Comprobante.concepto', array('class' => 'form-control', 'required', 'placeholder' => 'Ingrese el nombre del pagador o beneficiario', 'id' => 'tglosa')); ?>
                 </div>
             </div>
         </div>
@@ -121,38 +121,44 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
             <button class="btn btn-block btn-success" type="submit">Generar Comprobante</button>
         </div>
     </div>
-    
+
     <?php echo $this->Form->end(); ?>
     <br>
 </div>
 <!-- END Example Block -->
 
 <script>
+  
   $('.debe').keyup(function () {
       sum_debe();
   });
   function sum_debe() {
       var debe = 0.00;
       $('.debe').each(function (e, valor) {
-        if($(valor).val() != ''){
-          debe += parseFloat($(valor).val());
-        }
+          if ($(valor).val() != '') {
+              debe += parseFloat($(valor).val());
+          }
       });
       $('#total-debe').html(Math.round(debe * 100) / 100);
   }
   sum_debe();
-  
+
   $('.haber').keyup(function () {
       sum_haber();
   });
   function sum_haber() {
       var haber = 0.00;
       $('.haber').each(function (e, valor) {
-        if($(valor).val() != ''){
-          haber += parseFloat($(valor).val());
-        }
+          if ($(valor).val() != '') {
+              haber += parseFloat($(valor).val());
+          }
       });
       $('#total-haber').html(Math.round(haber * 100) / 100);
   }
   sum_haber();
+
+  /*$('#tglosa').keyup(function () {
+   console.log($('#tglosa').val());
+   });*/
+
 </script>

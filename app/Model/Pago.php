@@ -16,6 +16,8 @@ App::import('model', 'Cuenta');
 App::import('model', 'Nomenclatura');
 App::import('model', 'Comprobantescuenta');
 
+App::import('model', 'Comprobante');
+
 class Pago extends AppModel {
   //The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -55,7 +57,23 @@ class Pago extends AppModel {
         'conditions' => array('Nomenclatura.id' => $pago['Pago']['nomenclatura_id']),
         'fields' => array('Nomenclatura.*','Subconcepto.*')
       ));
-
+      
+      $Comprobante = new Comprobante();
+      
+      $mi_comprobante = $Comprobante->find('first',array(
+        'recursive' => -1,
+        'conditions' => array('Comprobante.id' => $this->data['Pago']['comprobante_id']),
+        'fields' => array('Comprobante.concepto')
+      ));
+      if(!empty($mi_comprobante['Comprobante']['concepto'])){
+        $d_compro['concepto'] = $mi_comprobante['Comprobante']['concepto'].'<br> Ingreso de '.$nomen_a['Nomenclatura']['nombre'].' de '.$pago['Ambiente']['nombre'] . '/' . $pago['Pago']['piso'] . ' (' . $pago['Pago']['fecha'] . ')';
+      }else{
+        $d_compro['concepto'] = ' Ingreso de '.$nomen_a['Nomenclatura']['nombre'].' de '.$pago['Ambiente']['nombre'] . '/' . $pago['Pago']['piso'] . ' (' . $pago['Pago']['fecha'] . ')';
+      }
+      
+      $Comprobante->id = $this->data['Pago']['comprobante_id'];
+      $Comprobante->save($d_compro);
+      
       $Comprobantescuenta = new Comprobantescuenta();
 
       $d_com['cta_ctable'] = $nomen_a['Nomenclatura']['nombre'];
@@ -90,6 +108,7 @@ class Pago extends AppModel {
         $d_com['codigo'] = NULL;
       }
       $d_com['edificio_id'] = $idEdificio;
+      
       $Comprobantescuenta->create();
       $Comprobantescuenta->save($d_com);
 
