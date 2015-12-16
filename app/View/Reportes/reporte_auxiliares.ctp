@@ -157,7 +157,7 @@
                                             <td><?php echo $pag[0]['importe_total'] ?></td>
                                         </tr>
                                     <script>
-                                      cargardetalles(<?php echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);
+                                      //cargardetalles(<?php //echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);
                                     </script>
                                   <?php endforeach; ?>
                                   <tr>
