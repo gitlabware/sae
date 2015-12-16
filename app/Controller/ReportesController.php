@@ -464,10 +464,11 @@ class ReportesController extends AppController {
       $pagos = $this->Comprobantescuenta->find('all', array(
         'recursive' => 0,
         'conditions' => $condiciones,
-        'fields' => array('Comprobantescuenta.*', 'Comprobante.fecha', 'Comprobante.numero', 'Ambiente.lista_inquilinos', 'Ambiente.nombre')
+        'fields' => array('Comprobantescuenta.*','SUM(Comprobantescuenta.haber) AS importe_total', 'Comprobante.fecha', 'Comprobante.numero', 'Ambiente.lista_inquilinos', 'Ambiente.nombre'),
+        'group' => array('Comprobantescuenta.ambiente_id', 'Comprobantescuenta.nomenclatura_id')
       ));
-
-      $this->set(compact('pagos', 'propietario', 'inquilino', 'ambiente'));
+      //debug($pagos);exit;
+      $this->set(compact('pagos', 'propietario', 'inquilino', 'ambiente','fecha_ini','fecha_fin'));
     }
   }
 
@@ -596,10 +597,10 @@ class ReportesController extends AppController {
       }
       if (!empty($idNomenclatura)) {
         $condiciones['Comprobantescuenta.nomenclatura_id'] = $idNomenclatura;
-        $nomenclatura = $this->Nomenclatura->find('first',array(
+        $nomenclatura = $this->Nomenclatura->find('first', array(
           'recursive' => -1,
           'conditions' => array('Nomenclatura.id' => $idNomenclatura),
-          'fields' => array('Nomenclatura.nombre','Nomenclatura.codigo_completo')
+          'fields' => array('Nomenclatura.nombre', 'Nomenclatura.codigo_completo')
         ));
       }
 
@@ -610,7 +611,32 @@ class ReportesController extends AppController {
       ));
     }
     //debug($nomenclaturas);exit;
-    $this->set(compact('nomenclaturas', 'comprobantes','nomenclatura'));
+    $this->set(compact('nomenclaturas', 'comprobantes', 'nomenclatura','fecha_ini','fecha_fin'));
+  }
+
+  public function get_detalles_comp($fecha_ini = null, $fecha_fin = null, $idAmbiente = null, $idNomenclatura = null) {
+    $this->layout = 'ajax';
+    $condiciones = array();
+    $condiciones['Comprobante.fecha >='] = $fecha_ini;
+    $condiciones['Comprobante.fecha <='] = $fecha_fin;
+    $condiciones['Comprobantescuenta.ambiente_id'] = $idAmbiente;
+    $condiciones['Comprobantescuenta.nomenclatura_id'] = $idNomenclatura;
+    $condiciones['Comprobante.estado LIKE'] = 'Comprobado';
+    $condiciones['Comprobante.tipo LIKE'] = 'Ingreso';
+    $condiciones['Comprobantescuenta.haber !='] = NULL;
+
+    $this->Comprobantescuenta->virtualFields = array(
+      'propietario' => "(SELECT users.nombre FROM users WHERE users.id = Ambiente.user_id)",
+      'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)"
+    );
+    $pagos = $this->Comprobantescuenta->find('all', array(
+      'recursive' => 0,
+      'conditions' => $condiciones,
+      'fields' => array('Comprobantescuenta.*', 'Comprobante.fecha', 'Comprobante.numero', 'Ambiente.lista_inquilinos', 'Ambiente.nombre')
+    ));
+    /*debug($condiciones);
+    debug($pagos);exit;*/
+    $this->set(compact('pagos'));
   }
 
 }

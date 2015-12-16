@@ -45,7 +45,7 @@
                           <td><?php echo $com['Comprobante']['id']; ?></td>
                           <td><?php echo $com['Comprobante']['fecha'] ?></td>
                           <td><?php echo $com['Comprobante']['tipo'] ?></td>
-                          <td><?php echo $com['Comprobante']['concepto'] ?></td>
+                          <td><?php echo substr($com['Comprobante']['concepto'], 0, 30) ?></td>
                           <td><?php echo $com['Comprobante']['nombre'] ?></td>
                           <td><?php echo $com['Comprobante']['monto_total'] ?></td>
                           <td>
