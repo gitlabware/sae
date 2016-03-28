@@ -19,6 +19,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-md-4 control-label">Monto</label>
+                    <div class="col-md-8">
+                        <?php echo $this->Form->text('monto', array('class' => 'form-control', 'placeholder' => 'Ingrese el monto', 'required','type' => 'number','step' => 'any')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-md-4 control-label">Descripcion</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->text('descripcion', array('class' => 'form-control', 'placeholder' => 'Ingrese una descripcion')); ?>

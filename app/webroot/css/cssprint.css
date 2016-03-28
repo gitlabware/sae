@@ -1,15 +1,12 @@
 
 @media print {
 
-
-    #sidebar, #sidebar-alt, .content-header, .breadcrumb-top, .block-title .block-options, #page-content + footer, #to-top, .ocultar-imp {
-        display:none !important;
-    }
+    
     body, #page-container, #page-content, #main-container {
         float: none !important;
         width: auto !important;
-        margin:  0 !important;
-        padding: 0 !important;
+        margin:  0px !important;
+        padding: 0px !important;
         background: white;
     }
     * {
@@ -18,11 +15,11 @@
         
     }
     .sidebar-partial #sidebar:hover + #main-container, .sidebar-visible-lg #main-container {
-        margin-left: 0px !important;
+       /* margin-left: 0px !important;*/
     }
     block, .block.full {border: none !important; padding: 0 !important;}
     .navbar {
-        display: none
+        display: none !important;
     }
     #login-alt-container {
         display: block;
@@ -51,7 +48,7 @@
 
     .sidebar-visible-xs #main-container,
     .sidebar-alt-visible-xs #main-container {
-        margin-left: 0;
+       /* margin-left: 0 !important;*/
         margin-right: 0;
     }
 
@@ -105,12 +102,12 @@
 
     /* Main Sidebar */
     .sidebar-partial #main-container {
-        margin-left: 0px;
+        /*margin-left: 0px !important;*/
     }
 
     .sidebar-partial #sidebar:hover + #main-container,
     .sidebar-visible-lg #main-container {
-        margin-left: 0px;
+        /*margin-left: 0px !important;*/
     }
 
     .sidebar-partial.footer-fixed #main-container #page-content + footer,
@@ -152,4 +149,26 @@
     .sidebar-alt-visible-lg.footer-fixed #main-container #page-content + footer {
         right: 0px;
     }
+    #sidebar, #sidebar-alt, .content-header, .breadcrumb-top, .block-title .block-options, #page-content + footer, #to-top, .ocultar-imp {
+        display:none !important;
+    }
+    #main-container{
+        margin-left: 0px !important;
+    }
+    .sidebar-content{
+        width: 0px !important;
+    }
+    #sidebar{
+        width: 0px !important;
+    }
+    .sidebar-partial{
+        width: 0px !important;
+    }
+    .sidebar-visible-lg{
+        width: 0px !important;
+    }
+    
+    
+    
+    
 }

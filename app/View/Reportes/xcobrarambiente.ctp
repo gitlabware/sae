@@ -1,6 +1,6 @@
 <style type="text/css" media="print">
     @page {
-        
+
     }
     *{
         margin: 0px !important;
@@ -291,166 +291,168 @@
       $total_a[12] = 0.00;
       ?>
       <?php
-      $anos = $this->requestAction(array('action' => 'gen_xcobrar_amb_a', $am['Ambiente']['id'], $fecha,$tipo));
+      $anos = $this->requestAction(array('action' => 'gen_xcobrar_amb_a', $am['Ambiente']['id'], $fecha, $tipo));
       ?>
-      <table class="CSSTableGenerator">
-          <tr>
-              <td>A&Ntilde;O</td>
-              <td>OFICINA</td>
-              <td>PISO</td>
-              <td>PROPIETARIO</td>
-              <td>ENE</td>
-              <td>FEB</td>
-              <td>MAR</td>
-              <td>ABR</td>
-              <td>MAY</td>
-              <td>JUN</td>
-              <td>JUL</td>
-              <td>AGO</td>
-              <td>SEP</td>
-              <td>OCT</td>
-              <td>NOV</td>
-              <td>DIC</td>
-              <td>TOTAL</td>
-          </tr>
-          <?php foreach ($anos as $an): ?>
-            <?php $subtotal = 0.00; ?>
+      <?php if (!empty($anos)): ?>
+        <table class="CSSTableGenerator">
             <tr>
-                <td><?php echo $an[0]['ano']; ?></td>
-                <td><?php echo $am['Ambiente']['nombre'] ?></td>
-                <td><?php echo $am['Piso']['nombre'] ?></td>
-                <td><?php echo $am['Representante']['nombre'] ?></td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 1,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[1] = $total_a[1] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 2,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[2] = $total_a[2] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 3,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[3] = $total_a[3] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 4,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[4] = $total_a[4] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 5,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[5] = $total_a[5] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 6,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[6] = $total_a[6] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 7,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[7] = $total_a[7] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 8,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[8] = $total_a[8] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 9,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[9] = $total_a[9] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 10,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[10] = $total_a[10] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 11,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[11] = $total_a[11] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 12,$tipo));
-                    echo $monto;
-                    $subtotal = $subtotal + $monto;
-                    $total_a[12] = $total_a[12] + $monto;
-                    $total = $total + $monto;
-                    ?>
-                </td>
-                <td><?php echo $subtotal; ?></td>
+                <td>A&Ntilde;O</td>
+                <td>OFICINA</td>
+                <td>PISO</td>
+                <td>PROPIETARIO</td>
+                <td>ENE</td>
+                <td>FEB</td>
+                <td>MAR</td>
+                <td>ABR</td>
+                <td>MAY</td>
+                <td>JUN</td>
+                <td>JUL</td>
+                <td>AGO</td>
+                <td>SEP</td>
+                <td>OCT</td>
+                <td>NOV</td>
+                <td>DIC</td>
+                <td>TOTAL</td>
             </tr>
-          <?php endforeach; ?>
-          <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>TOTAL</td>
-              <td><?php echo $total_a[1] ?></td>
-              <td><?php echo $total_a[2] ?></td>
-              <td><?php echo $total_a[3] ?></td>
-              <td><?php echo $total_a[4] ?></td>
-              <td><?php echo $total_a[5] ?></td>
-              <td><?php echo $total_a[6] ?></td>
-              <td><?php echo $total_a[7] ?></td>
-              <td><?php echo $total_a[8] ?></td>
-              <td><?php echo $total_a[9] ?></td>
-              <td><?php echo $total_a[10] ?></td>
-              <td><?php echo $total_a[11] ?></td>
-              <td><?php echo $total_a[12] ?></td>
-              <td><?php echo $total ?></td>
-          </tr>
-      </table><br>
+            <?php foreach ($anos as $an): ?>
+              <?php $subtotal = 0.00; ?>
+              <tr>
+                  <td><?php echo $an[0]['ano']; ?></td>
+                  <td><?php echo $am['Ambiente']['nombre'] ?></td>
+                  <td><?php echo $am['Piso']['nombre'] ?></td>
+                  <td><?php echo $am['Representante']['nombre'] ?></td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 1, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[1] = $total_a[1] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 2, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[2] = $total_a[2] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 3, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[3] = $total_a[3] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 4, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[4] = $total_a[4] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 5, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[5] = $total_a[5] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 6, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[6] = $total_a[6] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 7, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[7] = $total_a[7] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 8, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[8] = $total_a[8] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 9, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[9] = $total_a[9] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 10, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[10] = $total_a[10] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 11, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[11] = $total_a[11] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td>
+                      <?php
+                      $monto = $this->requestAction(array('action' => 'get_xcobrar_amb_s', $am['Ambiente']['id'], $fecha, $an[0]['ano'], 12, $tipo));
+                      echo $monto;
+                      $subtotal = $subtotal + $monto;
+                      $total_a[12] = $total_a[12] + $monto;
+                      $total = $total + $monto;
+                      ?>
+                  </td>
+                  <td><?php echo $subtotal; ?></td>
+              </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>TOTAL</td>
+                <td><?php echo $total_a[1] ?></td>
+                <td><?php echo $total_a[2] ?></td>
+                <td><?php echo $total_a[3] ?></td>
+                <td><?php echo $total_a[4] ?></td>
+                <td><?php echo $total_a[5] ?></td>
+                <td><?php echo $total_a[6] ?></td>
+                <td><?php echo $total_a[7] ?></td>
+                <td><?php echo $total_a[8] ?></td>
+                <td><?php echo $total_a[9] ?></td>
+                <td><?php echo $total_a[10] ?></td>
+                <td><?php echo $total_a[11] ?></td>
+                <td><?php echo $total_a[12] ?></td>
+                <td><?php echo $total ?></td>
+            </tr>
+        </table><br>
+      <?php endif; ?>
     <?php endforeach; ?>
 
     <br>

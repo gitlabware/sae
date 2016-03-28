@@ -12,34 +12,8 @@
 
             <div class="col-md-12">
                 <div id="concepto-select2">
-                    <label>Concepto ingreso <a href="javascript:" class="label label-primary" onclick="muestra_form_c2();">Nuevo</a></label>
-                    <?php echo $this->Form->select('Ingreso.subconcepto_id', $subconceptos, array('class' => 'form-control f-subconcepto2', 'empty' => 'Seleccione el sub-concepto', 'required')); ?>
-                </div>
-                <div id="concepto-form2" style="background-color: gainsboro; display: none;">
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Concepto <a href="javascript:" onclick="muestra_select_c2();" class="label label-primary">Seleccionar</a></label>
-                            <?php echo $this->Form->select('Ingreso.concepto_id', $conceptos, array('class' => 'form-control f-n-concepto2', 'empty' => 'Seleccione el sub-concepto')); ?>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <div id="c_tipo_t2" style="display: none;">
-                                <label>Tipo <a href="javascript:" onclick="muestra_c_tipo_s2();" class="label label-success">Seleccionar</a></label>
-                                <?php echo $this->Form->text('Ingreso.nombre_tipo', array('class' => 'form-control c-tipo-t2', 'placeholder' => 'Ingrese el tipo')); ?>
-                            </div>
-                            <div id="c_tipo_s2">
-                                <label>Tipo <a href="javascript:" onclick="muestra_c_tipo_t2();" class="label label-success">Nuevo</a></label>
-                                <?php echo $this->Form->select('Ingreso.tipo', $tipos, array('class' => 'form-control f-n-concepto2 c-tipo-s2', 'empty' => 'Seleccione el tipo')); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Nombre Sub-Concepto</label>
-                            <?php echo $this->Form->text('Ingreso.nombre_subconcepto', array('class' => 'form-control f-n-concepto2', 'placeholder' => 'Ingrese nombre del subconcepto')); ?>
-                        </div>
-                    </div>
+                    <label>Concepto ingreso</label>
+                    <?php echo $this->Form->select('Ingreso.subconcepto_id', $subconceptos, array('class' => 'select-chosen f-subconcepto2', 'empty' => 'Seleccione el sub-concepto', 'required')); ?>
                 </div>
             </div>
         </div>
@@ -64,9 +38,13 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <label>Presupuesto</label>
                 <?php echo $this->Form->text('Ingreso.presupuesto', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00', 'id' => 'c-presupuesto2')); ?>
+            </div>
+            <div class="col-md-6">
+                <label>Ejecutado</label>
+                <?php echo $this->Form->text('Ingreso.ejecutado', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00', 'id' => 'c-ejecutado')); ?>
             </div>
         </div>
         <div class="form-group">
@@ -78,6 +56,9 @@
 
     <?php echo $this->Form->end(); ?>
 </div>
+<script>
+  $('.select-chosen').chosen({width: "100%"});
+</script>
 <!-- END Modal Body -->
 <script>
   function muestra_form_c2() {

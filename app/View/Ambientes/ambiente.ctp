@@ -44,13 +44,13 @@
                 <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control', 'required', 'id' => 'idcatpagos')); ?>
             </div>
         </div>
-        <?php 
+        <?php
         $representante_id = '';
-        if(!empty($this->request->data['Ambiente']['representante_id'])){
+        if (!empty($this->request->data['Ambiente']['representante_id'])) {
           $representante_id = $this->request->data['Ambiente']['representante_id'];
         }
         $user_id = '';
-        if(!empty($this->request->data['Ambiente']['user_id'])){
+        if (!empty($this->request->data['Ambiente']['user_id'])) {
           $user_id = $this->request->data['Ambiente']['user_id'];
         }
         ?>
@@ -101,13 +101,19 @@
         <?php endif; ?>
         <script>
           $('#select-prop').change(function () {
-            $('#idrepprop').val($('#select-prop').val());
+              $('#idrepprop').val($('#select-prop').val());
           });
         </script>
         <div class="form-group">
             <label class="col-md-4 control-label" for="user-settings-email">Fecha de Ocupacion</label>
             <div class="col-md-8">
                 <?php echo $this->Form->date('fecha_ocupacion', array('class' => 'form-control', 'placeholder' => 'ejemplo: 2014-12-01')); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Estado</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->select('estado', array('Activo' => 'Activo','Inactivo' => 'Inactivo'), array('class' => 'form-control', 'required', 'empty' => 'Seleccione el estado')); ?>
             </div>
         </div>
         <div class="form-group">
@@ -119,13 +125,12 @@
     </fieldset>
     <div class="form-group form-actions">
         <div class="col-xs-12 text-right">
-
             <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cerrar</button>
             <?php if (!empty($idAmbiente)): ?>
               <button type="button" class="btn btn-sm btn-info" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'aservicios', $idAmbiente, $piso['Edificio']['id'])) ?>');">Servicios</button>
               <button type="button" class="btn btn-sm btn-warning" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'inquilinos', $idAmbiente, $idPiso)) ?>');">Inquilinos</button>
-              <button type="button" class="btn btn-sm btn-success" onclick="window.location = ('<?php echo $this->Html->url(array('action' => 'pagos', $idAmbiente)) ?>');">Pagos</button>
-              <?php echo $this->Html->link("Por cobrar", array('action' => 'xcobrar', $idAmbiente), array('class' => 'btn btn-sm btn-warning')) ?>
+              <!--<button type="button" class="btn btn-sm btn-success" onclick="window.location = ('<?php //echo $this->Html->url(array('action' => 'pagos', $idAmbiente))  ?>');">Pagos</button>-->
+              <?php echo $this->Html->link("Por cobrar", array('action' => 'xcobrar', $idAmbiente), array('class' => 'btn btn-sm btn-success')) ?>
             <?php endif; ?>
             <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
         </div>
@@ -162,7 +167,7 @@
       totalmt = (parseFloat($("#idareautil").val()) + parseFloat($("#idareacomun").val())).toFixed(2);
       costob = (totalmt * cateambientes[parseInt($("#idcatambientes").val())]).toFixed(2);
       mantenimiento = (parseFloat(costob) + parseFloat(catepagos[parseInt($("#idcatpagos").val())])).toFixed(2);
-      $("#mantenimiento_span").html('Mantenimiento('+mantenimiento+')');
+      $("#mantenimiento_span").html('Mantenimiento(' + mantenimiento + ')');
   }
 </script>
 <?php if (empty($idAmbiente) && !$sw): ?>

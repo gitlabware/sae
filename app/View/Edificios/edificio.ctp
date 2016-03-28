@@ -121,6 +121,12 @@
                             <?php echo $this->Form->text('num_recibo', array('class' => 'form-control', 'placeholder' => 'Numero de recibo actual', 'type' => 'number', 'min' => 0));?>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">T/C UFV</label>
+                        <div class="col-md-8">
+                            <?php echo $this->Form->text('tc_ufv', array('class' => 'form-control', 'placeholder' => 'T/C UFV', 'type' => 'number','step' => 'any', 'min' => 0));?>
+                        </div>
+                    </div>
                 </div>
             </fieldset>
         </div>
@@ -134,4 +140,8 @@
     <?php echo $this->Form->end();?>
 </div>
 <!-- END Modal Body -->
+
+
+
+
 

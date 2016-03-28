@@ -42,6 +42,4 @@
 </div>
 <!-- END Modal Body -->
 
-<script>
-  $('#')
-</script>
+

@@ -206,7 +206,6 @@
               <td><?php echo $pa['Concepto']['nombre']; ?></td>
               <td>
                 <?php 
-                
                 echo $pa[0]['imp_total']; 
                 ?>
               </td>
@@ -222,17 +221,17 @@
     DETALLE DE LAS CUOTAS
     <table class="CSSTableGenerator">
         <tr>
-            <td style="background-color: #B7B7B7;">Id</td>
+            <td style="background-color: #B7B7B7;">Nro</td>
             <td style="background-color: #B7B7B7;">Fecha</td>
             <td style="background-color: #B7B7B7;">Ambiente</td>
             <td style="background-color: #B7B7B7;">Concepto</td>
             <td style="background-color: #B7B7B7;">Monto</td>
         </tr>
         <?php $total_det = 0.00; ?>
-        <?php foreach ($detalles as $det): ?>
+        <?php foreach ($detalles as $key => $det): ?>
   <?php $total_det = $total_det + $det['Pago']['monto_total']; ?>
           <tr>
-              <td><?php echo $det['Pago']['id'] ?></td>
+              <td><?php echo $key+1 ?></td>
               <td><?php echo $det['Pago']['fecha'] ?></td>
               <td><?php echo $det['Ambiente']['nombre'] ?></td>
               <td><?php echo $det['Concepto']['nombre'] ?></td>
@@ -250,16 +249,16 @@
     GESTIONES ANTERIORES DE DETALLE DE LAS CUOTAS
     <table class="CSSTableGenerator">
         <tr>
-            <td style="background-color: #B7B7B7;">Id</td>
+            <td style="background-color: #B7B7B7;">Nro</td>
             <td style="background-color: #B7B7B7;">Fecha</td>
             <td style="background-color: #B7B7B7;">Ambiente</td>
             <td style="background-color: #B7B7B7;">Monto</td>
         </tr>
         <?php $total_det_a = 0.00; ?>
-        <?php foreach ($detalles_a as $det): ?>
-  <?php $total_det = $total_det + $det['Pago']['monto_total']; ?>
+        <?php foreach ($detalles_a as $key => $det): ?>
+  <?php $total_det_a = $total_det_a + $det['Pago']['monto_total']; ?>
           <tr>
-              <td><?php echo $det['Pago']['id'] ?></td>
+              <td><?php echo $key+1; ?></td>
               <td><?php echo $det['Pago']['fecha'] ?></td>
               <td><?php echo $det['Ambiente']['nombre'] ?></td>
               <td><?php echo $det['Pago']['monto_total'] ?></td>

@@ -25,7 +25,7 @@
                       <td><?php echo $in['Pago']['fecha']?></td>
                       <td><?php echo $in['Cuentasmonto']['concepto']?></td>
                       <td><?php echo $in['Cuentasmonto']['porcentaje']?></td>
-                      <td><?php echo $in['Pago']['monto']*$in['Cuentasmonto']['porcentaje']/100?></td>
+                      <td><?php echo $in['Cuentasmonto']['monto']?></td>
                       <td><?php echo $in['Cuentasmonto']['ambiente']?></td>
                       <td><?php echo $in['Cuentasmonto']['piso']?></td>
                   </tr>
@@ -36,4 +36,46 @@
 
     <br>
 </div>
+
+
+<div class="block">
+    <!-- Example Title -->
+    <div class="block-title">
+        <h2>Listado de Egresos</h2>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Detalle</th>
+                    <th>Proveedor</th>
+                    <th>Tipo E.</th>
+                    <th>Banco</th>
+                    <th>Cuenta</th>
+                    <th>Monto</th>
+                    <th>Referencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($egresos as $eg): ?>
+                  <tr>
+                      <td><?php echo $eg['Cuentasegreso']['fecha'] ?></td>
+                      <td><?php echo $eg['Cuentasegreso']['detalle'] ?></td>
+                      <td><?php echo $eg['Cuentasegreso']['proveedor'] ?></td>
+                      <td><?php echo $eg['Nomenclatura']['nombre'] ?></td>
+                      <td><?php echo $eg['Banco']['nombre'] ?></td>
+                      <td><?php echo $eg['Cuenta']['nombre'] ?></td>
+                      <td><?php echo $eg['Cuentasegreso']['monto'] ?></td>
+                      <td><?php echo $eg['Cuentasegreso']['referencia'] ?></td>
+                  </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+</div>
+
+
 

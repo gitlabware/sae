@@ -11,6 +11,7 @@
                         <tr>
                             <th>Id</th>
                             <th>Nombre</th>
+                            <th>C.I.</th>
                             <th>Tipo</th>
                             <th>Email</th>
                             <th>Accion</th>
@@ -31,5 +32,10 @@
   urljsontablatrab = '<?php echo $this->Html->url(array('action' => 'usuarios.json')); ?>';
   function editar(idUsuario){
     cargarmodal('<?php echo $this->Html->url(array('action' => 'usuario'))?>/'+idUsuario);
+  }
+  function eliminar(idUsuario){
+    if(confirm('Esta seguro de eliminar??')){
+      window.location.href = '<?php echo $this->Html->url(array('action' => 'elimina_usuario'))?>/'+idUsuario;
+    }
   }
 </script>

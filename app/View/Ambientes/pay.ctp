@@ -299,7 +299,7 @@
                   <!-- END Input Grid Block -->
               </div> 
             <?php endif; ?>
-            <?php if (!empty($conceptos[13])): ?>
+            <?php //if (!empty($conceptos[13])): ?>
               <div class="col-md-12">
                   <!-- Input Grid Block -->
                   <div class="block">
@@ -324,7 +324,11 @@
                                   <label for="crt2">Saldo</label>
                                   <input type="text" class="form-control cambio" name="data[Ascensor][cambio]" id="cambio-pe-ascensor" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-md-3">
+                                  <label for="crt2">Fecha</label>
+                                  <?php echo $this->Form->date('Ascensor.fecha', array('class' => 'form-control','value' => date('Y-m-d'))); ?>
+                              </div>
+                              <div class="col-md-3">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-ascensor" name="data[Ascensor][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -350,8 +354,8 @@
                   </div>
                   <!-- END Input Grid Block -->
               </div>
-            <?php endif; ?>
-            <?php if (!empty($conceptos[14])): ?>
+            <?php //endif; ?>
+            <?php //if (!empty($conceptos[14])): ?>
               <div class="col-md-12">
                   <!-- Input Grid Block -->
                   <div class="block">
@@ -376,7 +380,11 @@
                                   <label for="crt2">Saldo</label>
                                   <input type="text" class="form-control cambio" name="data[Multas][cambio]" id="cambio-pe-multas" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-md-3">
+                                  <label for="crt2">Fecha</label>
+                                  <?php echo $this->Form->date('Multas.fecha', array('class' => 'form-control','value' => date('Y-m-d'))); ?>
+                              </div>
+                              <div class="col-md-3">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-multas" name="data[Multas][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -402,8 +410,8 @@
                   </div>
                   <!-- END Input Grid Block -->
               </div>
-            <?php endif; ?>
-            <?php if (!empty($conceptos[15])): ?>
+            <?php //endif; ?>
+            <?php //if (!empty($conceptos[15])): ?>
               <div class="col-md-12">
                   <!-- Input Grid Block -->
                   <div class="block">
@@ -429,7 +437,11 @@
                                   <label for="crt2">Saldo</label>
                                   <input type="text" class="form-control cambio" name="data[Otros][cambio]" id="cambio-pe-otros" placeholder="0"  disabled="true" value="<?php echo $datosAmbiente['Ambiente']['saldo'] ?>">
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-md-3">
+                                  <label for="crt2">Fecha</label>
+                                  <?php echo $this->Form->date('Otros.fecha', array('class' => 'form-control','value' => date('Y-m-d'))); ?>
+                              </div>
+                              <div class="col-md-3">
                                   <label for="crt2">Observacion</label>
                                   <input type="text" class="form-control" id="observacion-pe-otros" name="data[Otros][onservacion]" placeholder="Ingrese una observacion">
                               </div>
@@ -455,7 +467,7 @@
                   </div>
                   <!-- END Input Grid Block -->
               </div> 
-            <?php endif; ?>
+            <?php //endif; ?>
             <div class="col-md-12">
                 <!-- Input Grid Block -->
                 <div class="block">

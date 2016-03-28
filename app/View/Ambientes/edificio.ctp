@@ -5,8 +5,8 @@
       <div class="block-title">
           <!-- Interactive block controls (initialized in js/app.js -> interactiveBlocks()) -->
           <div class="block-options pull-right">
-              <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" onclick="$('#<?php echo 'idcont-'.$pi['Piso']['id']?>').toggle(400);"><i class="fa fa-arrows-v"></i></a>
-              <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('controller' => 'Edificios','action' => 'elimina_piso',$pi['Piso']['id']),array('class' => 'btn btn-alt btn-sm btn-primary','confirm' => 'Esta seguro de eliminar el piso??','escape' => FALSE));?>
+              <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" onclick="$('#<?php echo 'idcont-' . $pi['Piso']['id'] ?>').toggle(400);"><i class="fa fa-arrows-v"></i></a>
+              <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('controller' => 'Edificios', 'action' => 'elimina_piso', $pi['Piso']['id']), array('class' => 'btn btn-alt btn-sm btn-primary', 'confirm' => 'Esta seguro de eliminar el piso??', 'escape' => FALSE)); ?>
           </div>
           <h2>
               <div id="div-nombre-edi-<?php echo $pi['Piso']['id']; ?>">
@@ -30,7 +30,7 @@
 
       <!-- Interactive Content -->
       <!-- The content you will put inside div.block-content, will be toggled -->
-      <div class="block-content" id="<?php echo 'idcont-'.$pi['Piso']['id']?>" style="display: none;">
+      <div class="block-content" id="<?php echo 'idcont-' . $pi['Piso']['id'] ?>" style="display: none;">
           <div class="row">
               <table class="table table-striped" style="font-size: 15px; font-weight: bold;">
                   <thead>
@@ -114,5 +114,8 @@
                           }
                       });
           }
+
+
+          
 </script>
 

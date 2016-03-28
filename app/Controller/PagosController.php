@@ -9,7 +9,7 @@ class PagosController extends AppController {
 
   public $layout = 'sae';
   public $uses = array(
-    'Pago', 'Excel', 'Ambiente'
+    'Pago', 'Excel', 'Ambiente','Concepto'
   );
 
   public function index() {
@@ -384,7 +384,7 @@ class PagosController extends AppController {
     $ambiente = $this->Ambiente->find('first', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.id' => $idAmbiente),
-      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'User.nombre')
+      'fields' => array('Ambiente.nombre', 'Piso.nombre', 'User.nombre','Representante.nombre')
     ));
     $this->Pago->virtualFields = array(
       'gestion' => "YEAR(Pago.fecha)"
@@ -394,7 +394,8 @@ class PagosController extends AppController {
       'group' => array('gestion'),
       'fields' => array('gestion')
     ));
-    $this->set(compact('idAmbiente', 'idConcepto', 'gestiones', 'ambiente'));
+    $concepto = $this->Concepto->findByid($idConcepto,null,null,-1);
+    $this->set(compact('idAmbiente', 'idConcepto', 'gestiones', 'ambiente','concepto'));
   }
 
   public function get_pag_ges($idAmbiente = null, $idConcepto = null, $gestion = null, $mes = null) {
@@ -425,6 +426,27 @@ class PagosController extends AppController {
     $this->Pago->save($dat);
     debug('sss');
     exit;
+  }
+  
+  public function edit_monto($idPago = NULL){
+    $this->layout = 'ajax';
+    $this->Pago->id = $idPago;
+    
+    if(!empty($this->request->data['Pago'])){
+      $this->Pago->save($this->request->data['Pago']);
+      $this->Session->setFlash("Se ha modificado correctamente el pago!!",'msgbueno');
+      $this->redirect($this->referer());
+    }
+    $this->request->data = $this->Pago->read();
+  }
+  
+  public function eliminar($idPago = null){
+    if($this->Pago->delete($idPago)){
+      $this->Session->setFlash("Se ha eliminado correctamente el pago!!",'msgbueno'); 
+    }else{
+      $this->Session->setFlash("No se ha podido eliminar el pago",'msgerror');
+    }
+    $this->redirect($this->referer());
   }
 
 }

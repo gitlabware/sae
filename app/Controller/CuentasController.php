@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class CuentasController extends AppController {
 
   public $layout = 'sae';
-  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto');
+  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto','Banco','Bancosmovimiento','Cuentasegreso');
 
   public function index() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -14,9 +14,14 @@ class CuentasController extends AppController {
       'conditions' => array('Cuenta.edificio_id' => $idEdificio)
     ));
     $conceptos = $this->Concepto->find('all');
-    /* debug($conceptos);
-      exit; */
-    $this->set(compact('cuentas', 'conceptos'));
+    $subconceptos = $this->Subconcepto->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('Subconcepto.edificio_id' => $idEdificio)
+    ));
+    $bancos = $this->Banco->find('all', array(
+      'conditions' => array('Banco.edificio_id' => $idEdificio)
+    ));
+    $this->set(compact('cuentas', 'conceptos','subconceptos','bancos'));
   }
 
   public function cuenta($idCuenta = null) {
@@ -44,12 +49,12 @@ class CuentasController extends AppController {
       'conditions' => array('Cuentasporcentaje.concepto_id' => $idConcepto),
       'fields' => array('Cuentasporcentaje.cuenta_id', 'Cuentasporcentaje.porcentaje', 'Cuentasporcentaje.id')
     ));
-    /*debug($porcentajes);
-    exit;*/
+    /* debug($porcentajes);
+      exit; */
     foreach ($cuentas as $key => $cu) {
       if (!empty(array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'))) {
         $key2 = array_search($cu['Cuenta']['id'], array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'));
-        
+
         if (isset($key2) && $key2 !== false) {
           $this->request->data['Cuentasporcentaje'][$key]['id'] = $porcentajes[$key2]['Cuentasporcentaje']['id'];
           $this->request->data['Cuentasporcentaje'][$key]['porcentaje'] = $porcentajes[$key2]['Cuentasporcentaje']['porcentaje'];
@@ -60,8 +65,20 @@ class CuentasController extends AppController {
   }
 
   public function guarda_porcentaje() {
-    /*debug($this->request->data);
-    exit;*/
+    /* debug($this->request->data);
+      exit; */
+    if (!empty($this->request->data['Cuentasporcentaje'])) {
+      foreach ($this->request->data['Cuentasporcentaje'] as $cu) {
+        $this->Cuentasporcentaje->create();
+        $this->Cuentasporcentaje->save($cu);
+      }
+      $this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
+    }
+    $this->redirect($this->referer());
+  }
+  public function guarda_porcentaje_s() {
+    /* debug($this->request->data);
+      exit; */
     if (!empty($this->request->data['Cuentasporcentaje'])) {
       foreach ($this->request->data['Cuentasporcentaje'] as $cu) {
         $this->Cuentasporcentaje->create();
@@ -84,10 +101,52 @@ class CuentasController extends AppController {
     );
     $ingresos = $this->Cuentasmonto->find('all', array(
       'recursive' => 0,
-      'conditions' => array('Cuentasmonto.cuenta_id' => $idCuenta,'Pago.estado' => 'Pagado'),
-      'fields' => array('Cuentasmonto.created', 'Cuentasmonto.concepto','Cuentasmonto.piso','Cuentasmonto.ambiente', 'Cuentasmonto.porcentaje', 'Pago.monto','Pago.fecha')
+      'conditions' => array('Cuentasmonto.cuenta_id' => $idCuenta, 'Pago.estado' => 'Pagado'),
+      'fields' => array('Cuentasmonto.created', 'Cuentasmonto.concepto', 'Cuentasmonto.piso', 'Cuentasmonto.ambiente','Cuentasmonto.monto', 'Cuentasmonto.porcentaje', 'Pago.monto', 'Pago.fecha')
     ));
-    $this->set(compact('ingresos'));
+    //$movimientos = $this->Bancosmovimiento->find('all',);
+    $egresos = $this->Cuentasegreso->find('all',array(
+      'recursive' => 0,
+      'conditions' => array('Cuentasegreso.cuenta_id' => $idCuenta),
+      'fields' => array('Cuentasegreso.*','Nomenclatura.nombre','Banco.nombre','Cuenta.nombre')
+    ));
+    $this->set(compact('ingresos','egresos'));
   }
+  
+  public function cuentas_porcentajes_s($idSubconcepto = null) {
+    $this->layout = 'ajax';
+    $subconcepto = $this->Subconcepto->findByid($idSubconcepto, null, null, -1);
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $cuentas = $this->Cuenta->find('all', array(
+      'conditions' => array('Cuenta.edificio_id' => $idEdificio)
+    ));
+    $porcentajes = $this->Cuentasporcentaje->find('all', array(
+      'recursive' => 0,
+      'conditions' => array('Cuentasporcentaje.subconcepto_id' => $idSubconcepto),
+      'fields' => array('Cuentasporcentaje.cuenta_id', 'Cuentasporcentaje.porcentaje', 'Cuentasporcentaje.id')
+    ));
+    /* debug($porcentajes);
+      exit; */
+    foreach ($cuentas as $key => $cu) {
+      if (!empty(array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'))) {
+        $key2 = array_search($cu['Cuenta']['id'], array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'));
+        if (isset($key2) && $key2 !== false) {
+          $this->request->data['Cuentasporcentaje'][$key]['id'] = $porcentajes[$key2]['Cuentasporcentaje']['id'];
+          $this->request->data['Cuentasporcentaje'][$key]['porcentaje'] = $porcentajes[$key2]['Cuentasporcentaje']['porcentaje'];
+        }
+      }
+    }
+    $this->set(compact('cuentas', 'subconcepto', 'porcentajes'));
+  }
+  
+  public function eliminar($idCuenta = null){
+    if($this->Cuenta->delete($idCuenta)){
+      $this->Session->setFlash("Se ha eliminado correctamente la cuenta!!",'msgbueno');
+    }else{
+      $this->Session->setFlash("No se ha podido eliminar la cuenta. Intente nuevamente!!",'msgerror');
+    }
+    $this->redirect($this->referer());
+  }
+  
 
 }

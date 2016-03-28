@@ -21,13 +21,7 @@ class EgresoTest extends CakeTestCase {
 		'app.categoriaspago',
 		'app.piso',
 		'app.user',
-		'app.ambienteconcepto',
-		'app.concepto',
-		'app.inquilino',
-		'app.pago',
-		'app.recibo',
-		'app.gasto',
-		'app.subgasto'
+		'app.nomenclatura'
 	);
 
 /**

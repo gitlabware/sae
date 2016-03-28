@@ -13,8 +13,7 @@ class EgresoFixture extends CakeTestFixture {
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'presupuesto_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'gasto_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'subgasto_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'nomenclatura_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'pres_anterior' => array('type' => 'decimal', 'null' => true, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
 		'ejec_anterior' => array('type' => 'decimal', 'null' => true, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
 		'presupuesto' => array('type' => 'decimal', 'null' => true, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
@@ -35,13 +34,12 @@ class EgresoFixture extends CakeTestFixture {
 		array(
 			'id' => 1,
 			'presupuesto_id' => 1,
-			'gasto_id' => 1,
-			'subgasto_id' => 1,
+			'nomenclatura_id' => 1,
 			'pres_anterior' => '',
 			'ejec_anterior' => '',
 			'presupuesto' => '',
-			'created' => '2015-09-11 18:07:48',
-			'modified' => '2015-09-11 18:07:48'
+			'created' => '2015-11-20 17:01:31',
+			'modified' => '2015-11-20 17:01:31'
 		),
 	);
 
