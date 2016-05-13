@@ -39,7 +39,7 @@
 
         <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
         <link rel="stylesheet" href="<?php echo $this->webroot; ?>css/themes.css">
-        
+
         <!-- END Stylesheets -->
 
         <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
@@ -52,7 +52,7 @@
           var urljsontablatrab = '';
           var filtro_c = [];
         </script>
-        <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot; ?>css/cssprint.css" media="print">
+        <!--<link rel="stylesheet" type="text/css" href="<?php echo $this->webroot; ?>css/cssprint.css" media="print"> -->
     </head>
     <!-- In the PHP version you can set the following options from inc/config file -->
     <!--
@@ -120,7 +120,7 @@
                         <div class="chat-talk display-none">
                             <!-- Chat Info -->
                             <div class="chat-talk-info sidebar-section">
-                                <img src="img/placeholders/avatars/avatar5.jpg" alt="avatar" class="img-circle pull-left">
+
                                 <strong>John</strong> Doe
                                 <button id="chat-talk-close-btn" class="btn btn-xs btn-default pull-right">
                                     <i class="fa fa-times"></i>
@@ -219,8 +219,13 @@
             ?>
             <!-- Main Container -->
             <div id="main-container">
-
-                <?php echo $this->element("menu/administrador"); ?>
+                <?php
+                if ($role == "Super Administrador") {
+                  echo $this->element("menu/super_administrador");
+                } elseif ($role == 'Administrador') {
+                  echo $this->element("menu/administrador");
+                }
+                ?>
                 <!-- END Header -->
 
                 <!-- Page content -->
@@ -304,8 +309,10 @@
 
         <script src="<?php echo $this->webroot; ?>js/pages/tablesDatatables.js"></script>
         <script src="<?php echo $this->webroot; ?>js/jquery.dataTables.columnFilter.js"></script>
+
+        
         <script>$(function () {
-            TablesDatatables.init();
+              TablesDatatables.init();
           });</script>
         <script>
           $('#form-edificio').validate();
@@ -328,6 +335,7 @@
               });
 
           }
+          
         </script>
 
         <script>
@@ -348,8 +356,17 @@
               });
 
           }
+          function pop_print() {
+              w = window.open(null, 'Print_Page', 'scrollbars=yes');
+              var myStyle = '<link rel="stylesheet" href="<?php echo $this->webroot; ?>css/cssprint.css" />';
+              w.document.write('<button class="no-imrprime-p" type="button" onclick="window.print();">Imprimir</button>');
+              w.document.write(myStyle + jQuery('#page-content').html());
+              w.document.close();
+              //w.print();
+          }
         </script>
-<?php echo $this->Session->flash(); ?>
+        <?php echo $this->fetch('addscript') ?>
+        <?php echo $this->Session->flash(); ?>
 
     </body>
 </html>

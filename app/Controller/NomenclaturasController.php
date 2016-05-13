@@ -187,6 +187,7 @@ class NomenclaturasController extends AppController {
 
   public function ajax_ambientes() {
     $this->layout = 'ajax';
+    $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $idPiso = $this->request->data['Piso']['id'];
     $idNomenclatura = $this->request->data['Nomenclatura']['id'];
     $ambientes_sel = $this->NomenclaturasAmbiente->find('list', array(
@@ -202,7 +203,8 @@ class NomenclaturasController extends AppController {
       'recursive' => 0,
       'conditions' => array(
         'Ambiente.piso_id' => $idPiso,
-        'Ambiente.id != ' => $ambientes_sel
+        'Ambiente.id != ' => $ambientes_sel,
+        'Ambiente.edificio_id' => $idEdificio
       ),
       'fields' => array('Ambiente.nombre', 'Representante.nombre', 'Ambiente.id')
     ));

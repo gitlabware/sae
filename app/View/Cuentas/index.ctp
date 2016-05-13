@@ -95,44 +95,17 @@
         </div>
     </div>
     <div class="col-md-7">
-        <div class="block">
-            <!-- Example Title -->
-            <div class="block-title">
-                <h2>Conceptos</h2>
-            </div>
-            <div class="row">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre de Concepto</th>
-                            <th>Descripcion</th>
-                            <th>Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($conceptos as $con): ?>
-                          <tr>
-                              <td><?php echo $con['Concepto']['nombre'] ?></td>
-                              <td><?php echo $con['Concepto']['descripcion'] ?></td>
-                              <td>
-                                  <a class="btn btn-info" title="Editar" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'cuentas_porcentajes', $con['Concepto']['id'])); ?>');"> <i class="gi gi-edit"></i> </a>  
-                              </td>
-                          </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-            <br>
-        </div>
+        
         <div class="block">
             <!-- Example Title -->
             <div class="block-title">
                 <h2>Sub-Conceptos</h2>
             </div>
             <div class="row">
-                <table class="table table-striped">
+                <table id="example-datatable" class="table table-striped">
                     <thead>
                         <tr>
+                            <th>Codigo</th>
                             <th>Nombre de Sub-Concepto</th>
                             <th>Tipo</th>
                             <th>Accion</th>
@@ -141,6 +114,7 @@
                     <tbody>
                         <?php foreach ($subconceptos as $con): ?>
                           <tr>
+                              <td><?php echo $con['Subconcepto']['codigo'] ?></td>
                               <td><?php echo $con['Subconcepto']['nombre'] ?></td>
                               <td><?php echo $con['Subconcepto']['tipo'] ?></td>
                               <td>

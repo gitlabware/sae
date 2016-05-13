@@ -276,11 +276,6 @@
             <td>Son: <?php echo $this->requestAction(array('action' => 'get_monto_literal', $total_i)); ?> Bolivianos</td>
         </tr>
     </table>
-    <br>
-    <div class="row ocultar-imp">
-        <div class="col-md-12">
-            <button type="button" class="btn btn-primary col-md-12" onclick="window.print();">IMPRIMIR</button>
-        </div>
-    </div>
-    <br>
 </div>
+
+

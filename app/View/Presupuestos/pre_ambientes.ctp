@@ -122,11 +122,11 @@
                           <td>
                               <button class="btn btn-info btn-sm" title="Detalle de Pagos" type="button" onclick="$('#tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').toggle(200);"><i class="gi gi-list"></i></button> 
                               <button class="btn btn-warning btn-sm" title="Quitar del presupuesto"  onclick="$('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').addClass('danger');
-                                        $('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').fadeOut(600, function () {
-                                          $('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').remove();
-                                          $('#tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').remove();
-                                          suma_todo();
-                                        });"type="button"><i class="gi gi-remove"></i></button>
+                                          $('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').fadeOut(600, function () {
+                                              $('#tr-oc-p-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').remove();
+                                              $('#tr-oc-<?= $no['Nomenclatura']['id'] . '-' . $am['Pago']['ambiente_id'] . '-' . $am['Pago']['gestion']; ?>').remove();
+                                              suma_todo();
+                                          });"type="button"><i class="gi gi-remove"></i></button>
 
                           </td>
                       </tr>
@@ -145,10 +145,10 @@
                                         <td align="center">
                                             <button class="btn btn-success btn-sm" title="Editar monto de este Pago" type="button" onclick="cargarmodal('<?= $this->Html->url(array('controller' => 'Pagos', 'action' => 'edit_monto', $pa['Pago']['id'])) ?>');"><i class="gi gi-edit"></i></button> 
                                             <button class="btn btn-warning btn-sm" title="Quitar del presupuesto" onclick="$('#tr-registro-<?= $i ?>').addClass('danger');
-                                                        $('#tr-registro-<?= $i ?>').fadeOut(600, function () {
-                                                          remover_registro(<?= $i ?>);
-                                                          suma_parcial(<?= $no['Nomenclatura']['id'] ?>,<?= $am['Pago']['ambiente_id'] ?>,<?= $am['Pago']['gestion'] ?>);
-                                                        });" type="button"><i class="gi gi-remove"></i></button>
+                                                          $('#tr-registro-<?= $i ?>').fadeOut(600, function () {
+                                                              remover_registro(<?= $i ?>);
+                                                              suma_parcial(<?= $no['Nomenclatura']['id'] ?>,<?= $am['Pago']['ambiente_id'] ?>,<?= $am['Pago']['gestion'] ?>);
+                                                          });" type="button"><i class="gi gi-remove"></i></button>
                                                 <?= $this->Html->link('<i class="gi gi-bin"></i>', array('controller' => 'Pagos', 'action' => 'eliminar', $pa['Pago']['id']), array('class' => 'btn btn-danger btn-sm', 'confirm' => 'Esta seguro de eliminar el pago??', 'escape' => FALSE)) ?>
                                         </td>
                                     </tr>
@@ -174,6 +174,7 @@
           if (isNaN(monto_to)) {
               $('#c-total-' + $(elemento).attr('numero')).val(0);
           } else {
+              monto_to = Math.round(monto_to * 100) / 100;
               $('#c-total-' + $(elemento).attr('numero')).val(monto_to);
           }
       });
@@ -185,6 +186,7 @@
       $('#ambientes-a .e-total').each(function (i, elemento) {
           total += parseFloat($(elemento).val());
       });
+      total = Math.round(total * 100) / 100;
       $('#c-ingreso').val(total);
   }
   function remover_registro(i) {

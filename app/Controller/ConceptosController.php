@@ -155,7 +155,7 @@ class ConceptosController extends AppController {
         if (!empty($this->request->data['Subconcepto']['nuevo_tipo'])) {
           $this->request->data['Subconcepto']['tipo'] = $this->request->data['Subconcepto']['nuevo_tipo'];
         }
-        
+        $this->request->data['Subconcepto']['parent_id'] = $this->request->data['Subconcepto']['subconcepto_id'];
         $this->Subconcepto->create();
         $this->Subconcepto->save($this->request->data['Subconcepto']);
         if (!empty($this->request->data['gestiones'])) {
@@ -190,6 +190,13 @@ class ConceptosController extends AppController {
   }
 
   public function subconceptos() {
+    /*$data = $this->Subconcepto->generateTreeList(
+      null, null, null, '---',-1
+    );
+    $resu = $this->Subconcepto->children(1,TRUE,['id','nombre']);
+    debug($resu);
+    debug($data);
+    die;*/
     $subconceptos = $this->Subconcepto->find('all', array(
       'recursive' => 0,
       'conditions' => array(

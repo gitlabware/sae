@@ -798,7 +798,7 @@ class AmbientesController extends AppController {
       $edificio = $this->Edificio->find('first', array(
         'recursive' => -1,
         'conditions' => array('id' => $idEdificio),
-        'fields' => array('tc_ufv')
+        'fields' => array('tc_ufv','tc_dolar')
       ));
       $d_comprobante['tipo'] = 'Ingreso';
       $d_comprobante['estado'] = 'No Comprobado';
@@ -807,6 +807,7 @@ class AmbientesController extends AppController {
       $d_comprobante['nota'] = $this->request->data['Recibo']['doc_respaldo'];
       $d_comprobante['concepto'] = "";
       $d_comprobante['tc_ufv'] = $edificio['Edificio']['tc_ufv'];
+      $d_comprobante['tc_dolar'] = $edificio['Edificio']['tc_dolar'];
       $d_comprobante['edificio_id'] = $idEdificio;
       $this->Comprobante->create();
       $this->Comprobante->save($d_comprobante);

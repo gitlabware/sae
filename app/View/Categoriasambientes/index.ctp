@@ -16,7 +16,7 @@
     <!-- END Example Title -->
     <div class="table-options clearfix">
         <div class="btn-group btn-group-sm pull-right">
-            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'categoria')); ?>');" class="btn btn-primary" title="Adicionar nuevo Usuario">NUEVO</a>
+            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'categoria')); ?>');" class="btn btn-primary" title="Adicionar nueva Categoria Ambiente">NUEVA CATEGORIA</a>
         </div>
     </div>
     <!-- Example Content -->
@@ -36,8 +36,8 @@
                         <td><?php echo $ca['Categoriasambiente']['constante']; ?></td>
                         <td class="text-center">
                             <div class="btn-group btn-group-xs">
-                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'categoria',$ca['Categoriasambiente']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$ca['Categoriasambiente']['id']),array('class' => 'btn btn-danger','title' => 'Eliminar Edificio','confirm' => 'Esta seguro de eliminar al edificio '.$ca['Categoriasambiente']['nombre'].'??','escape' => FALSE))?>
+                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'categoria',$ca['Categoriasambiente']['id'])); ?>');" title="Editar Categoria" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$ca['Categoriasambiente']['id']),array('class' => 'btn btn-danger','title' => 'Eliminar Categoria','confirm' => 'Esta seguro de eliminar la categoria '.$ca['Categoriasambiente']['nombre'].'??','escape' => FALSE))?>
                             </div>
                         </td>
                     </tr>

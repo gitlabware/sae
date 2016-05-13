@@ -1,0 +1,1 @@
+[10-May-2016 08:53:15 America/Denver] PHP Fatal error:  Can't use function return value in write context in /home1/cherrera/public_html/sae/app/Controller/CuentasController.php on line 55

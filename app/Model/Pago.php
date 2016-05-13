@@ -46,7 +46,7 @@ class Pago extends AppModel {
       $pago = $this->find('first', array(
         'recursive' => 0,
         'conditions' => array('Pago.id' => $idPago),
-        'fields' => array('Pago.*', 'Ambiente.nombre', 'Ambiente.piso_id', 'Pago.piso')
+        'fields' => array('Pago.*', 'Ambiente.nombre', 'Ambiente.piso_id', 'Pago.piso', 'Recibo.numero')
       ));
       //debug($this->data);exit;
       $banco = $this->data['Pago']['banco']['Banco'];
@@ -55,26 +55,45 @@ class Pago extends AppModel {
       $nomen_a = $Nomenclatura->find('first', array(
         'recursive' => 0,
         'conditions' => array('Nomenclatura.id' => $pago['Pago']['nomenclatura_id']),
-        'fields' => array('Nomenclatura.*','Subconcepto.*')
+        'fields' => array('Nomenclatura.*', 'Subconcepto.*')
       ));
-      
+
       $Comprobante = new Comprobante();
-      
-      $mi_comprobante = $Comprobante->find('first',array(
+
+      $mi_comprobante = $Comprobante->find('first', array(
         'recursive' => -1,
         'conditions' => array('Comprobante.id' => $this->data['Pago']['comprobante_id']),
         'fields' => array('Comprobante.concepto')
       ));
-      if(!empty($mi_comprobante['Comprobante']['concepto'])){
-        $d_compro['concepto'] = $mi_comprobante['Comprobante']['concepto'].'<br> Ingreso de '.$nomen_a['Nomenclatura']['nombre'].' de '.$pago['Ambiente']['nombre'] . '/' . $pago['Pago']['piso'] . ' (' . $pago['Pago']['fecha'] . ')';
-      }else{
-        $d_compro['concepto'] = ' Ingreso de '.$nomen_a['Nomenclatura']['nombre'].' de '.$pago['Ambiente']['nombre'] . '/' . $pago['Pago']['piso'] . ' (' . $pago['Pago']['fecha'] . ')';
+      if (!empty($mi_comprobante['Comprobante']['concepto'])) {
+        $d_compro['concepto'] = $mi_comprobante['Comprobante']['concepto'] . '<br> Ingreso de ' . $nomen_a['Nomenclatura']['nombre'] . ' de ' . $pago['Ambiente']['nombre'] . '/' . $pago['Pago']['piso'] . ' (' . $pago['Pago']['fecha'] . ')' . ' segun recibo #' . $pago['Recibo']['numero'];
+      } else {
+        $d_compro['concepto'] = ' Ingreso de ' . $nomen_a['Nomenclatura']['nombre'] . ' de ' . $pago['Ambiente']['nombre'] . '/' . $pago['Pago']['piso'] . ' (' . $pago['Pago']['fecha'] . ')' . ' segun recibo #' . $pago['Recibo']['numero'];
       }
-      
+
       $Comprobante->id = $this->data['Pago']['comprobante_id'];
       $Comprobante->save($d_compro);
-      
+
       $Comprobantescuenta = new Comprobantescuenta();
+
+      $d_com['cta_ctable'] = $banco['nombre'];
+      $d_com['haber'] = NULL;
+      $d_com['debe'] = $pago['Pago']['monto_total'];
+      $d_com['auxiliar'] = NULL;
+      $d_com['nomenclatura_id'] = $banco['nomenclatura_id'];
+      $d_com['comprobante_id'] = $this->data['Pago']['comprobante_id'];
+      $d_com['fecha'] = $pago['Pago']['fecha'];
+
+
+      if (!empty($this->data['Pago']['banco']['Nomenclatura']['codigo_completo'])) {
+        $d_com['codigo'] = $this->data['Pago']['banco']['Nomenclatura']['codigo_completo'];
+      } else {
+        $d_com['codigo'] = NULL;
+      }
+      $d_com['edificio_id'] = $idEdificio;
+
+      $Comprobantescuenta->create();
+      $Comprobantescuenta->save($d_com);
 
       $d_com['cta_ctable'] = $nomen_a['Nomenclatura']['nombre'];
       $d_com['haber'] = $pago['Pago']['monto_total'];
@@ -93,24 +112,7 @@ class Pago extends AppModel {
       $Comprobantescuenta->create();
       $Comprobantescuenta->save($d_com);
 
-      $d_com['cta_ctable'] = $banco['nombre'];
-      $d_com['haber'] = NULL;
-      $d_com['debe'] = $pago['Pago']['monto_total'];
-      $d_com['auxiliar'] = NULL;
-      $d_com['nomenclatura_id'] = $banco['nomenclatura_id'];
-      $d_com['comprobante_id'] = $this->data['Pago']['comprobante_id'];
-      $d_com['fecha'] = $pago['Pago']['fecha'];
-      
-      
-      if (!empty($this->data['Pago']['banco']['Nomenclatura']['codigo_completo'])) {
-        $d_com['codigo'] = $this->data['Pago']['banco']['Nomenclatura']['codigo_completo'];
-      } else {
-        $d_com['codigo'] = NULL;
-      }
-      $d_com['edificio_id'] = $idEdificio;
-      
-      $Comprobantescuenta->create();
-      $Comprobantescuenta->save($d_com);
+
 
 
       if (empty($banco['cuenta_id']) && !empty($pago['Pago']['nomenclatura_id'])) {

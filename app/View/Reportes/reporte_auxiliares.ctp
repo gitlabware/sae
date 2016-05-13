@@ -8,7 +8,8 @@
           });
           $('#comp-' + idAmbiente + '-' + idComprobante).attr('data-sw', 'TRUE');
       } else {
-
+          $('tr[data-clase="comp-c-' + idAmbiente + '-' + idComprobante + '"]').remove();
+          $('#comp-' + idAmbiente + '-' + idComprobante).attr('data-sw', 'FALSE');
       }
 
 
@@ -24,7 +25,7 @@
             </div>
             <div class="form-horizontal form-bordered">
                 <?php echo $this->Form->create('Reporte', array('id' => 'ajaxform')); ?>
-                <div class="form-group">
+                <div class="form-group no-imprime">
                     <div class="col-md-4">
                         <label class="control-label">Propietario</label>
                         <div id="divselectpropietario">
@@ -73,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group no-imprime">
                     <div class="col-md-3">
                         <label class="control-label">Auxiliar</label>
                         <?php echo $this->Form->text('auxiliar', array('class' => 'form-control')); ?>
@@ -138,10 +139,10 @@
                                       <?php $total = 0.00; ?>
 
                                       <?php foreach ($pagos as $pag): ?>
-
-                                        <tr class="warning text-success" data-sw="FALSE" id="comp-<?php echo $pag['Comprobantescuenta']['ambiente_id'] . '-' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>" onclick="cargardetalles(<?php echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);">
+                                        <?php $total = $total + $pag[0]['importe_total']; ?>
+                                        <tr style="cursor:pointer;"  class="warning text-success" data-sw="FALSE" id="comp-<?php echo $pag['Comprobantescuenta']['ambiente_id'] . '-' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>" onclick="cargardetalles(<?php echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);">
                                             <td><?php echo $pag['Comprobante']['fecha'] ?></td>
-                                            <td><?php //echo $pag['Comprobante']['numero']  ?></td>
+                                            <td><?php //echo $pag['Comprobante']['numero']     ?></td>
                                             <td><?php echo $pag['Comprobantescuenta']['codigo_subc'] ?></td>
                                             <td><?php echo $pag['Comprobantescuenta']['codigo'] ?></td>
                                             <td><?php echo $pag['Comprobantescuenta']['cta_ctable'] ?></td>
@@ -149,7 +150,7 @@
                                               <td><?php echo $pag['Ambiente']['nombre'] ?></td>
                                               <td><?php echo $pag['Comprobantescuenta']['piso'] ?></td>
                                             <?php endif; ?>
-                                            <td><?php //echo $pag['Comprobantescuenta']['auxiliar']  ?></td>
+                                            <td><?php //echo $pag['Comprobantescuenta']['auxiliar']     ?></td>
                                             <?php if (empty($propietario)): ?>
                                               <td><?php echo $pag['Comprobantescuenta']['propietario'] ?></td>
                                             <?php endif; ?>
@@ -157,7 +158,7 @@
                                             <td><?php echo $pag[0]['importe_total'] ?></td>
                                         </tr>
                                     <script>
-                                      //cargardetalles(<?php //echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);
+                                      //cargardetalles(<?php //echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id']    ?>);
                                     </script>
                                   <?php endforeach; ?>
                                   <tr>

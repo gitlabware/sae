@@ -1,7 +1,7 @@
 <?php $total = 0.00;?>
 <?php foreach ($pagos as $pag): ?>
 <?php $total = $total + $pag['Comprobantescuenta']['haber']?>
-  <tr onclick="cargardetalles(<?php echo $pag['Comprobantescuenta']['ambiente_id'] . ',' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>);">
+  <tr data-clase="comp-c-<?php echo $pag['Comprobantescuenta']['ambiente_id'] . '-' . $pag['Comprobantescuenta']['nomenclatura_id'] ?>">
       <td><?php echo $pag['Comprobante']['fecha'] ?></td>
       <td><?php echo $pag['Comprobante']['numero'] ?></td>
       <td><?php echo $pag['Comprobantescuenta']['codigo_subc'] ?></td>

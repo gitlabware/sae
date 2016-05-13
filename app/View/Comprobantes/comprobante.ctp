@@ -46,7 +46,20 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
         <div class="col-md-4">
             <label class="col-md-4 control-label" for="user-settings-email">T/C UFV:  </label>
             <div class="col-md-8">
-                <?php echo $this->Form->text('Comprobante.tc_ufv', array('class' => 'form-control', 'required', 'placeholder' => 'Tipo de Cambio')); ?>
+                <?php echo $this->Form->text('Comprobante.tc_ufv', array('class' => 'form-control', 'required', 'placeholder' => 'Tipo de Cambio UFV')); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label class="col-md-4 control-label" for="user-settings-email">T/C DOLAR:  </label>
+            <div class="col-md-8">
+                <?php echo $this->Form->text('Comprobante.tc_dolar', array('class' => 'form-control', 'required', 'placeholder' => 'Tipo de Cambio DOLAR')); ?>
             </div>
         </div>
     </div>
@@ -87,6 +100,7 @@ if ($this->request->data['Comprobante']['tipo'] == 'Ingreso') {
                   </tr>
                 <?php endforeach; ?>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td>TOTAL Bs.:</td>

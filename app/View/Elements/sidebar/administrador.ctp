@@ -63,6 +63,9 @@
                             <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'egresocuenta')); ?>');">Registro de Egreso</a>
                         </li>
                         <li>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'multi_egreso')); ?>">Registro de Egreso Var.</a>
+                        </li>
+                        <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'index')); ?>">Cuentas - Bancos/Cajas</a>
                         </li>
                         <li>
@@ -145,6 +148,9 @@
                 </li>
                 <li>
                     <a href="<?php echo $this->Html->url(array('controller' => 'Recibos', 'action' => 'index')); ?>"><i class="gi gi-notes sidebar-nav-icon"></i>Recibos</a>
+                </li>
+                <li>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Tutoriales', 'action' => 'index')); ?>"><i class="gi gi-film sidebar-nav-icon"></i>Tutoriales</a>
                 </li>
             </ul>
             <!-- END Sidebar Navigation -->

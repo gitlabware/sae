@@ -19,8 +19,9 @@ class BancosController extends AppController {
     $this->layout = 'ajax';
     $this->Banco->id = $idBanco;
     $this->request->data = $this->Banco->read();
-    $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre')));
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
+    $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre'),'conditions' => array('Cuenta.edificio_id' => $idEdificio)));
+    
     $this->Nomenclatura->virtualFields = array(
       'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
     );
@@ -122,6 +123,15 @@ class BancosController extends AppController {
     $this->Comprobante->create();
     $this->Comprobante->save($d_comprobante);
     $idConprobante = $this->Comprobante->getLastInsertID();
+    
+    $d_com['cta_ctable'] = $abanco['Banco']['nombre'];
+    $d_com['haber'] = NULL;
+    $d_com['debe'] = $this->request->data['Bancosmovimiento']['monto'];
+    $d_com['comprobante_id'] = $idConprobante;
+    $d_com['edificio_id'] = $idEdificio;
+
+    $this->Comprobantescuenta->create();
+    $this->Comprobantescuenta->save($d_com);
 
     $d_com['cta_ctable'] = $dbanco['Banco']['nombre'];
     $d_com['haber'] = $this->request->data['Bancosmovimiento']['monto'];
@@ -132,14 +142,7 @@ class BancosController extends AppController {
     $this->Comprobantescuenta->create();
     $this->Comprobantescuenta->save($d_com);
 
-    $d_com['cta_ctable'] = $abanco['Banco']['nombre'];
-    $d_com['haber'] = NULL;
-    $d_com['debe'] = $this->request->data['Bancosmovimiento']['monto'];
-    $d_com['comprobante_id'] = $idConprobante;
-    $d_com['edificio_id'] = $idEdificio;
-
-    $this->Comprobantescuenta->create();
-    $this->Comprobantescuenta->save($d_com);
+    
   }
 
   public function estado($idBanco = null) {

@@ -25,5 +25,10 @@
                 <i class="gi gi-justify"></i>
             </a>
         </li>
+        <li class="dropdown">
+            <a href="javascript:" title="Imprimir" onclick="pop_print();">
+                <i class="gi gi-print"></i>
+            </a>
+        </li>
     </ul>
 </header>

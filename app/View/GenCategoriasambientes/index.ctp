@@ -36,7 +36,7 @@
                         <td><?php echo $gen['GenCategoriasambiente']['descripcion']; ?></td>
                         <td class="text-center">
                             <div class="btn-group btn-group-xs">
-                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'gencategoria', $gen['GenCategoriasambiente']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'gencategoria', $gen['GenCategoriasambiente']['id'])); ?>');" title="Editar Categoria" class="btn btn-default"><i class="fa fa-pencil"></i></a>
                                     <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'delete', $gen['GenCategoriasambiente']['id']), array('class' => 'btn btn-danger', 'title' => 'Eliminar Categoria', 'confirm' => 'Esta seguro de eliminar la categoria ' . $gen['GenCategoriasambiente']['nombre'] . '??', 'escape' => FALSE)) ?>
                             </div>
                         </td>

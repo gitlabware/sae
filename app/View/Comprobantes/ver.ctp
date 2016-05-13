@@ -1,8 +1,4 @@
-<style type="text/css" media="print">
-    .no-imprime{
-        display: none !important;
-    }
-</style>
+
 
 <div class="block">
     <table class="table table-bordered">
@@ -19,7 +15,7 @@
             </td>
         </tr>
     </table>
-    <table class="table table-bordered" style="margin-top: -21px;">
+    <table class="table table-bordered">
         <?php
         $pagador = "";
         if ($comprobante['Comprobante']['tipo'] == 'Ingreso') {
@@ -42,8 +38,14 @@
             <td style="font-size: 16px; font-weight: bold;">T/C UFV: </td>
             <td><?php echo $comprobante['Comprobante']['tc_ufv'] ?></td>
         </tr>
+        <tr>
+            <td style="font-size: 16px; font-weight: bold;"></td>
+            <td></td>
+            <td style="font-size: 16px; font-weight: bold;">T/C DOLAR: </td>
+            <td><?php echo $comprobante['Comprobante']['tc_dolar'] ?></td>
+        </tr>
     </table>
-    <table class="table table-bordered" style="margin-top: -10px;">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Cod.Ap.</th>
@@ -82,7 +84,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered" style="margin-top: -10px;">
+    <table class="table table-bordered">
         <tr>
             <td style="height: 100px;">
                 Realizado por:
@@ -95,18 +97,11 @@
             </td>
         </tr>
     </table>
-    <table class="table table-bordered" style="margin-top: -10px;">
+    <table class="table table-bordered">
         <tr>
             <td style="font-size: 16px; font-weight: bold;">Glosa: </td>
             <td><?php echo nl2br($comprobante['Comprobante']['concepto']) ?></td>
         </tr>
     </table>
 
-</div>
-<div class="block no-imprime">
-    <div class="row">
-        <div class="col-md-12">
-            <button type="button" class="btn btn-block btn-primary" onclick="window.print();">IMPRIMIR</button><br>
-        </div>
-    </div>
 </div>
