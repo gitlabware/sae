@@ -12,8 +12,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Username</th>
-                    <th>Role</th>
-                    <th>Edificio</th>
+                    <th>Telefonos</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -22,11 +21,10 @@
                     <tr>
                         <td><?php echo $us['User']['nombre']; ?></td>
                         <td><?php echo $us['User']['username']; ?></td>
-                        <td><?php echo $us['User']['role']; ?></td>
-                        <td><?php echo $us['Edificio']['nombre']; ?></td>
+                        <td><?php echo $us['User']['telefonos']; ?></td>
                         <td class="text-center">
                             <div class="btn-group btn-group-xs">
-                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'usuario2',$us['User']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'usuario3',$us['User']['id'])); ?>');" title="Editar Usuario" class="btn btn-default"><i class="fa fa-pencil"></i></a>
                                 <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$us['User']['id']),array('class' => 'btn btn-danger','title' => 'Eliminar Usuario','confirm' => 'Esta seguro de eliminar al usuario '.$us['User']['username'].'??','escape' => FALSE))?>
                             </div>
                         </td>

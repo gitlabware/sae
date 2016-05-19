@@ -14,12 +14,22 @@ class NomenclaturaTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'app.nomenclatura',
+		'app.subconcepto',
 		'app.edificio',
 		'app.ambiente',
 		'app.categoriasambiente',
 		'app.categoriaspago',
 		'app.piso',
-		'app.user'
+		'app.user',
+		'app.representante',
+		'app.ambienteconcepto',
+		'app.concepto',
+		'app.comprobantescuenta',
+		'app.comprobante',
+		'app.inquilino',
+		'app.pago',
+		'app.recibo',
+		'app.nomenclaturas_ambiente'
 	);
 
 /**

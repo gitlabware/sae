@@ -46,6 +46,8 @@ class AmbientesController extends AppController {
   public function ambiente($idPiso = null, $idAmbiente = null, $idUsuario = NULL, $sw = 0) {
     $this->layout = 'ajax';
     $piso = $this->Piso->findByid($idPiso);
+    /*debug($piso);
+    exit;*/
     $inquilinos = array();
     if (empty($idAmbiente)) {
       if (!empty($idUsuario)) {

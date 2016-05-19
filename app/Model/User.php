@@ -51,6 +51,7 @@ class User extends AppModel {
     }
     if ($this->data['User']['role'] == 'Propietario') {
       $check['User.ci'] = $this->data['User']['ci'];
+      $check['User.nombre'] = $this->data['User']['nombre'];
       $check['User.role'] = $this->data['User']['role'];
       $check['User.edificio_id'] = $this->data['User']['edificio_id'];
       $existingPromoCount = $this->find('count', array(

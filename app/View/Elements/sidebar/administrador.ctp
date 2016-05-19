@@ -69,7 +69,7 @@
                             <a href="<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'index')); ?>">Cuentas - Bancos/Cajas</a>
                         </li>
                         <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Nomenclaturas', 'action' => 'index')); ?>">Nomenclatura de Cuentas</a>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Nomenclaturas', 'action' => 'lista_nomenclaturas')); ?>">Nomenclatura de Cuentas</a>
                         </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos', 'action' => 'index')); ?>">Listado de Presupuestos</a>
@@ -127,7 +127,10 @@
                             <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuario')); ?>');">Nuevo Inquilino/Propietario</a>
                         </li>
                         <li>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'usuarios', $this->Session->read('Auth.User.edificio_id'))); ?>');">Administradores</a>
+                            <a href="<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'lista_usuarios')); ?>" >Administradores</a>
+                        </li>
+                        <li>
+                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'usuario3')); ?>');">Nuevo Administrador</a>
                         </li>
                     </ul>
                 </li>

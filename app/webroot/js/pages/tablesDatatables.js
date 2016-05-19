@@ -16,8 +16,8 @@ var TablesDatatables = function () {
                 "aoColumnDefs": [{"bSortable": false
                                 //, "aTargets": [ 1, 5 ] 
                     }],
-                "iDisplayLength": 10
-                        //"aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
+                "iDisplayLength": 10,
+                        "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "Todo"]]
             }).columnFilter({
                 sPlaceHolder: "head:before",
                 aoColumns: filtro_c

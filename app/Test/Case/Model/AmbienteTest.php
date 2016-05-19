@@ -19,10 +19,17 @@ class AmbienteTest extends CakeTestCase {
 		'app.edificio',
 		'app.piso',
 		'app.user',
+		'app.representante',
 		'app.ambienteconcepto',
 		'app.concepto',
+		'app.comprobantescuenta',
+		'app.nomenclatura',
+		'app.subconcepto',
+		'app.comprobante',
 		'app.inquilino',
-		'app.pago'
+		'app.pago',
+		'app.recibo',
+		'app.nomenclaturas_ambiente'
 	);
 
 /**

@@ -18,33 +18,4 @@ class Edificio extends AppModel {
    */
   
 
-  public $hasMany = array(
-    'Ambiente' => array(
-      'className' => 'Ambiente',
-      'foreignKey' => 'edificio_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
-    'Piso' => array(
-      'className' => 'Piso',
-      'foreignKey' => 'edificio_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    )
-  );
-
 }

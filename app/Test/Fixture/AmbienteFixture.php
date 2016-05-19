@@ -19,9 +19,13 @@ class AmbienteFixture extends CakeTestFixture {
 		'nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'area_util' => array('type' => 'decimal', 'null' => false, 'default' => '0.00', 'length' => '15,2', 'unsigned' => false),
 		'area_comun' => array('type' => 'decimal', 'null' => false, 'default' => '0.00', 'length' => '15,2', 'unsigned' => false),
-		'mantenimiento' => array('type' => 'decimal', 'null' => false, 'default' => '0.00', 'length' => '15,2', 'unsigned' => false),
 		'user_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'descripcion' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 500, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'fecha_ocupacion' => array('type' => 'date', 'null' => true, 'default' => null),
+		'lista_inquilinos' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'saldo' => array('type' => 'decimal', 'null' => true, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
+		'representante_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'estado' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'created' => array('type' => 'date', 'null' => false, 'default' => null),
 		'modified' => array('type' => 'date', 'null' => false, 'default' => null),
 		'indexes' => array(
@@ -45,11 +49,15 @@ class AmbienteFixture extends CakeTestFixture {
 			'nombre' => 'Lorem ipsum dolor sit amet',
 			'area_util' => '',
 			'area_comun' => '',
-			'mantenimiento' => '',
 			'user_id' => 1,
 			'descripcion' => 'Lorem ipsum dolor sit amet',
-			'created' => '2015-03-04',
-			'modified' => '2015-03-04'
+			'fecha_ocupacion' => '2016-05-19',
+			'lista_inquilinos' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+			'saldo' => '',
+			'representante_id' => 1,
+			'estado' => 'Lorem ipsum dolor sit amet',
+			'created' => '2016-05-19',
+			'modified' => '2016-05-19'
 		),
 	);
 

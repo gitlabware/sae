@@ -30,7 +30,7 @@
                 <label class="col-md-4 control-label">Nombre</label>
                 <div class="col-md-8">
                     <?php echo $this->Form->hidden('User.id'); ?>
-                    <?php echo $this->Form->hidden('User.role', array('value' => 'Administrador')) ?>
+                    <?php //echo $this->Form->hidden('User.role', array('value' => 'Administrador')) ?>
                     <?php echo $this->Form->hidden('User.edificio_id', array('value' => $idEdificio)) ?>
                     <?php echo $this->Form->text('User.nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de Propietario', 'required')); ?>
                 </div>

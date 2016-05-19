@@ -33,4 +33,20 @@ class Nomenclatura extends AppModel {
 			'order' => ''
 		)
 	);
+
+	public $hasAndBelongsToMany = array(
+		'Ambiente' => array(
+			'className' => 'Ambiente',
+			'joinTable' => 'nomenclaturas_ambientes',
+			'foreignKey' => 'nomenclatura_id',
+			'associationForeignKey' => 'ambiente_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+		)
+	);
 }

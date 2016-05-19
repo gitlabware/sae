@@ -231,6 +231,7 @@ class EdificiosController extends AppController {
 
     public function datos() {
         $edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'));
+        //debug($edificio);exit;
         $nro_pisos = $this->Piso->find('count', array('conditions' => array('Piso.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
         $nro_ambientes = $this->Ambiente->find('count', array('conditions' => array('Ambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
         $nro_usuarios = $this->User->find('count', array('conditions' => array('User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
