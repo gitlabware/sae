@@ -321,7 +321,10 @@
           function cargarmodal(urll)
           {
               $("#div_barra_cargando").show();
-              $("#myModal").modal('show');
+              $("#myModal").modal({
+                  //backdrop: 'static',
+                  //keyboard: false
+              });
               $("#divmodal").show();
               $("#divmodal").load(urll, function (responseText, textStatus, req) {
                   if (textStatus == "error")

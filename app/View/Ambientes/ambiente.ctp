@@ -58,47 +58,68 @@
         <div class="form-group">
             <div id="selectpropietario">
                 <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Propietario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'usuario', $idPiso)); ?>')">Propietario</a></label>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <?php echo $this->Form->select('user_id', $usuarios, array('class' => 'form-control', 'id' => 'select-prop')); ?>
                 </div>
-                <div class="col-md-2">
+                <!--<div class="col-md-2">
                     <label for="favorite-color-r">
                         <?php
-                        $checked = '';
+                        /*$checked = '';
                         if (!empty($this->request->data['Ambiente']['representante_id']) && $this->request->data['Ambiente']['representante_id'] == $this->request->data['Ambiente']['user_id'] && $this->request->data['Ambiente']['user_id'] != NULL) {
                           $checked = 'checked';
-                        }
+                        }*/
                         ?>
-                        <input type="radio" name="data[Ambiente][representante_id]" required value="<?php echo $user_id ?>" style="color:red;" id="idrepprop" <?php echo $checked; ?>>
+                        <input type="radio" name="data[Ambiente][representante_id]" required value="<?php //echo $user_id ?>" style="color:red;" id="idrepprop" <?php //echo $checked; ?>>
                         Repre
                     </label>
-                </div>
+                </div>-->
             </div>
         </div>
-        <?php if (!empty($inquilinos)): ?>
-          <?php foreach ($inquilinos as $in): ?>
-            <div class="form-group">
+        <div class="form-group">
+            <div id="selectpropietario">
+                <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Propietario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'inquilino', $idPiso)); ?>')">Inquilino</a></label>
+                <div class="col-md-8">
+                    <?php echo $this->Form->select('inquilino_id', $select_inquilinos, array('class' => 'form-control', 'id' => 'select-prop')); ?>
+                </div>
+                <!--<div class="col-md-2">
+                    <label for="favorite-color-r">
+                        <?php
+                        /*$checked = '';
+                        if (!empty($this->request->data['Ambiente']['representante_id']) && $this->request->data['Ambiente']['representante_id'] == $this->request->data['Ambiente']['inquilino_id'] && $this->request->data['Ambiente']['inquilino_id'] != NULL) {
+                          $checked = 'checked';
+                        }*/
+                        ?>
+                        <input type="radio" name="data[Ambiente][representante_id]" required value="<?php //echo $user_id ?>" style="color:red;" id="idrepprop" <?php //echo $checked; ?>>
+                        Repre
+                    </label>
+                </div>-->
+            </div>
+        </div>
+        
+        <?php //if (!empty($inquilinos)): ?>
+          <?php //foreach ($inquilinos as $in): ?>
+           <!-- <div class="form-group">
                 <div id="selectpropietario">
                     <label class="col-md-4 control-label" for="user-settings-email">Inquilino</label>
                     <div class="col-md-6">
-                        <?php echo $this->Form->text('inquilino1', array('class' => 'form-control', 'value' => $in['User']['nombre'], 'disabled')); ?>
+                        <?php //echo $this->Form->text('inquilino1', array('class' => 'form-control', 'value' => $in['User']['nombre'], 'disabled')); ?>
                     </div>
                     <div class="col-md-2">  
                         <label for="favorite-color-r">
                             <?php
-                            $checked = '';
+                            /*$checked = '';
                             if ($this->request->data['Ambiente']['representante_id'] == $in['User']['id']) {
                               $checked = 'checked';
-                            }
+                            }*/
                             ?>
-                            <input type="radio" name="data[Ambiente][representante_id]" value="<?php echo $in['User']['id'] ?>" style="color:red;" id="favorite-color-r" <?php echo $checked; ?>>
+                            <input type="radio" name="data[Ambiente][representante_id]" value="<?php //echo $in['User']['id'] ?>" style="color:red;" id="favorite-color-r" <?php //echo $checked; ?>>
                             Repre
                         </label>
                     </div>
                 </div>
-            </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
+            </div>-->
+          <?php //endforeach; ?>
+        <?php //endif; ?>
         <script>
           $('#select-prop').change(function () {
               $('#idrepprop').val($('#select-prop').val());
@@ -113,7 +134,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label">Estado</label>
             <div class="col-md-8">
-                <?php echo $this->Form->select('estado', array('Activo' => 'Activo','Inactivo' => 'Inactivo'), array('class' => 'form-control', 'required', 'empty' => 'Seleccione el estado')); ?>
+                <?php echo $this->Form->select('estado', array('Activo' => 'Activo','Inactivo' => 'Inactivo'), array('class' => 'form-control', 'required', 'empty' => FALSE)); ?>
             </div>
         </div>
         <div class="form-group">
@@ -128,7 +149,7 @@
             <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cerrar</button>
             <?php if (!empty($idAmbiente)): ?>
               <button type="button" class="btn btn-sm btn-info" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'aservicios', $idAmbiente, $piso['Edificio']['id'])) ?>');">Servicios</button>
-              <button type="button" class="btn btn-sm btn-warning" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'inquilinos', $idAmbiente, $idPiso)) ?>');">Inquilinos</button>
+              <!--<button type="button" class="btn btn-sm btn-warning" onclick="cargarmodal('<?php //echo $this->Html->url(array('action' => 'inquilinos', $idAmbiente, $idPiso)) ?>');">Inquilinos</button>-->
               <!--<button type="button" class="btn btn-sm btn-success" onclick="window.location = ('<?php //echo $this->Html->url(array('action' => 'pagos', $idAmbiente))  ?>');">Pagos</button>-->
               <?php echo $this->Html->link("Por cobrar", array('action' => 'xcobrar', $idAmbiente), array('class' => 'btn btn-sm btn-success')) ?>
             <?php endif; ?>

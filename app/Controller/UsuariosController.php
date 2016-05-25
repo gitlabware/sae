@@ -118,6 +118,7 @@ class UsuariosController extends AppController {
     if (!empty($inquilino)) {
       $this->Inquilino->deleteAll(array('Inquilino.user_id' => $inquilino['Inquilino']['user_id']));
     }
+    //------------ usuario ------------
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => -1,
       'conditions' => array('user_id' => $idUsuario)
@@ -129,6 +130,21 @@ class UsuariosController extends AppController {
         $this->Ambiente->save($damb);
       }
     }
+    //-----------------------------------
+    
+    //------------ Inquilino ------------
+    $ambientes = $this->Ambiente->find('all', array(
+      'recursive' => -1,
+      'conditions' => array('inquilino_id' => $idUsuario)
+    ));
+    if (!empty($ambientes)) {
+      foreach ($ambientes as $amb) {
+        $damb['inquilino_id'] = NULL;
+        $this->Ambiente->id = $amb['Ambiente']['id'];
+        $this->Ambiente->save($damb);
+      }
+    }
+    //-----------------------------------
     
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => -1,

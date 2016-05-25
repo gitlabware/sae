@@ -26,7 +26,7 @@
                             <th id="piso">Piso</th>
                             <th id="ambiente">Ambiente</th>
                             <th id="propietario">Propietario</th>
-                            <th id="inquilinos">Inquilinos</th>
+                            <th id="inquilinos">Inquilino</th>
                             <th id="representante">Representante</th>
                             <th id="acciones">Accion</th>
                         </tr>

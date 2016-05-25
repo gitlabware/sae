@@ -16,9 +16,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
     <?php echo $this->Form->end(); ?>
     <?php echo $this->Form->create('Nomenclatura',array('action' => 'registra_ambientes','id' => 'ajax-reg')); ?>
     <?php echo $this->Form->hidden('id', array('value' => $idNomenclatura)) ?>

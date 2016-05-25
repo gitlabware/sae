@@ -64,6 +64,13 @@ class Ambiente extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => ''
+        ),
+        'Inquilino' => array(
+            'className' => 'User',
+            'foreignKey' => 'inquilino_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
         )
     );
 

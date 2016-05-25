@@ -1,6 +1,9 @@
+<?php 
+
+?>
 <!-- Modal Header -->
 <div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-user"></i> Propietario</h2>
+    <h2 class="modal-title"><i class="fa fa-user"></i> Inquilino</h2>
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
@@ -8,9 +11,9 @@
     <div id="idmensaje">
 
     </div>
-    <?php echo $this->Form->create('Ambiente', array('action' => 'guarda_propietario/' . $idPiso, 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
+    <?php echo $this->Form->create('Ambiente', array('action' => 'guarda_inqui/' . $idPiso, 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
     <fieldset>
-        <legend>Informacion de Propietario</legend>
+        <legend>Informacion de Inquilino</legend>
         <div class="form-group">
             <label class="col-md-4 control-label">Nombre</label>
             <div class="col-md-8">
@@ -77,6 +80,7 @@
                           mensaje($.parseJSON(data).mensaje);
                           $('div.modal-body').scrollTo(0, 800);
                       } else {
+                          
                           direccion = '<?php echo $this->Html->url(array('action' => 'ambiente', $idPiso, 0)) ?>/1';
                           cargarmodal(direccion);
                       }
