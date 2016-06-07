@@ -6,7 +6,8 @@ App::import('Vendor', 'PHPExcel_Reader_Excel2007', array('file' => 'PHPExcel/Exc
 App::import('Vendor', 'PHPExcel_IOFactory', array('file' => 'PHPExcel/PHPExcel/IOFactory.php'));
 
 class PagosController extends AppController {
-
+    
+    var $components = array('RequestHandler', 'DataTable');
     public $layout = 'sae';
     public $uses = array(
         'Pago', 'Excel', 'Ambiente', 'Concepto'
@@ -450,7 +451,7 @@ class PagosController extends AppController {
     }
 
     public function preavisos() {
-        $this->Pago->virtualFields = array(
+        /*$this->Pago->virtualFields = array(
             'deuda_mantenimiento' => "SUM( IF(Pago.concepto_id = 10,Pago.monto,0) )",
             'deuda_alquiler' => "SUM( IF(Pago.concepto_id = 11,Pago.monto,0) )",
             'ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)"
@@ -459,7 +460,7 @@ class PagosController extends AppController {
             'recursive' => 0,
             'conditions' => array('Pago.estado LIKE' => 'Debe'),
             'group' => array('Pago.ambiente_id'),
-            'fields' => array('Ambiente.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler','Pago.ambiente','Representante.nombre'),
+            'fields' => array('Ambiente.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler', 'Pago.ambiente', 'Representante.nombre'),
             'joins' => array(
                 array(
                     'table' => 'pisos',
@@ -478,8 +479,46 @@ class PagosController extends AppController {
                     ),
                 )
             ),
-        ));
-        
+        ));*/
+
+        if ($this->RequestHandler->responseType() == 'json') {
+            //$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="gi gi-parents"></i></button>';
+            
+            $this->Pago->virtualFields = array(
+                'deuda_mantenimiento' => "SUM( IF(Pago.concepto_id = 10,Pago.monto,0) )",
+                'deuda_alquiler' => "SUM( IF(Pago.concepto_id = 11,Pago.monto,0) )",
+                'ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)"
+            );
+            $this->paginate = array(
+                'recursive' => 0,
+                'conditions' => array('Pago.estado LIKE' => 'Debe'),
+                'group' => array('Pago.ambiente_id'),
+                'fields' => array( 'Piso.nombre','Ambiente.nombre', 'Representante.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler'),
+                'joins' => array(
+                    array(
+                        'table' => 'pisos',
+                        'alias' => 'Piso',
+                        'type' => 'LEFT',
+                        'conditions' => array(
+                            'Piso.id = Ambiente.piso_id',
+                        ),
+                    ),
+                    array(
+                        'table' => 'users',
+                        'alias' => 'Representante',
+                        'type' => 'LEFT',
+                        'conditions' => array(
+                            'Representante.id = Ambiente.representante_id',
+                        ),
+                    )
+                ),
+            );
+            $this->DataTable->fields = array( 'Piso.nombre','Ambiente.nombre', 'Representante.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler');
+            $this->DataTable->emptyEleget_usuarios_adminments = 1;
+            $this->set('ambientes', $this->DataTable->getResponse('Pagos', 'Pago'));
+            $this->set('_serialize', 'ambientes');
+        }
+
         $this->set(compact('pagos'));
     }
 
