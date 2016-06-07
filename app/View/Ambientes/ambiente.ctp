@@ -12,7 +12,7 @@
     <fieldset>
         <legend><?php echo "Edificio " . $piso['Edificio']['nombre'] . " | Piso " . $piso['Piso']['nombre'] ?></legend>
         <div class="form-group">
-            <label class="col-md-4 control-label" for="user-settings-email">Nombre</label>
+            <label class="col-md-4 control-label" for="user-settings-email">Identificador</label>
             <div class="col-md-8">
                 <?php echo $this->Form->hidden('edificio_id', array('value' => $piso['Edificio']['id'])); ?>
                 <?php echo $this->Form->hidden('piso_id', array('value' => $piso['Piso']['id'])); ?>

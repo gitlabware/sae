@@ -1,5 +1,4 @@
 <?php
-
 App::uses('AppController', 'Controller');
 
 class CuentasController extends AppController {
@@ -52,7 +51,9 @@ class CuentasController extends AppController {
     /* debug($porcentajes);
       exit; */
     foreach ($cuentas as $key => $cu) {
-      if (!empty(array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'))) {
+        
+        $array_colm = array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id');
+      if (!empty($array_colm)) {
         $key2 = array_search($cu['Cuenta']['id'], array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'));
 
         if (isset($key2) && $key2 !== false) {
@@ -128,7 +129,8 @@ class CuentasController extends AppController {
     /* debug($porcentajes);
       exit; */
     foreach ($cuentas as $key => $cu) {
-      if (!empty(array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'))) {
+        $array_colm = array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id');
+      if (!empty($array_colm)) {
         $key2 = array_search($cu['Cuenta']['id'], array_column(array_column($porcentajes, 'Cuentasporcentaje'), 'cuenta_id'));
         if (isset($key2) && $key2 !== false) {
           $this->request->data['Cuentasporcentaje'][$key]['id'] = $porcentajes[$key2]['Cuentasporcentaje']['id'];

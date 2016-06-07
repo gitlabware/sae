@@ -86,7 +86,8 @@ class UsersController extends AppController {
                     case 'Super Administrador':
                         $this->redirect(array('controller' => 'Users', 'action' => 'index'));
                     case 'Administrador':
-                        if (empty($this->Session->read('Auth.User.Edificio.nombre'))) {
+                        $nombre_edificio = $this->Session->read('Auth.User.Edificio.nombre');
+                        if (empty($nombre_edificio)) {
                             $this->Session->setFlash("Usted no esta asociado a ningun edificio!!", 'msgerror');
                             $this->salir();
                         }

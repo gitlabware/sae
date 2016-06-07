@@ -26,7 +26,7 @@
                         <td><?php echo $re['Recibo']['estado']; ?></td>
                         <td class="text-center">
                             <div class="btn-group btn-group-xs">
-                                <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'recibo',$re['Recibo']['id'],0)); ?>" title="Ver Recibo" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'recibo_pdf',$re['Recibo']['id'],0)); ?>" title="Ver Recibo" class="btn btn-default" target="_blanck"><i class="fa fa-eye"></i></a>
                                 <?php if($re['Recibo']['estado'] != 'Terminado'):?>
                                 <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'listadopago',$re['Recibo']['id'])); ?>" title="Modificar" class="btn btn-success"><i class="fa fa-edit"></i></a>
                                 <?php endif;?>

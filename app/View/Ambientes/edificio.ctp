@@ -13,15 +13,7 @@
         margin-top: 1em;
     }
 </style>
-<script>
-    window.onload = function () {
-        var pos = window.name || 0;
-        window.scrollTo(0, pos);
-    }
-    window.onunload = function () {
-        window.name = self.pageYOffset || (document.documentElement.scrollTop + document.body.scrollTop);
-    }
-</script>   
+
 <!--<div class="block">
     <div class="grid">
         <div class="well tile">A</div>
@@ -38,13 +30,14 @@
             <div class="block-title">
                 <!-- Interactive block controls (initialized in js/app.js -> interactiveBlocks()) -->
                 <div class="block-options pull-right">
-                    <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" onclick="$('#<?php echo 'idcont-' . $pi['Piso']['id'] ?>').toggle(400);"><i class="fa fa-arrows-v"></i></a>
-                    <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('controller' => 'Edificios', 'action' => 'elimina_piso', $pi['Piso']['id']), array('class' => 'btn btn-alt btn-sm btn-primary', 'confirm' => 'Esta seguro de eliminar el piso??', 'escape' => FALSE)); ?>
+                    <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" onclick="$('#<?php echo 'idcont-' . $pi['Piso']['id'] ?>').toggle(400);
+                                localStorage['piso'] = '<?php echo $pi['Piso']['id']; ?>';"><i class="fa fa-arrows-v"></i></a>
+                       <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('controller' => 'Edificios', 'action' => 'elimina_piso', $pi['Piso']['id']), array('class' => 'btn btn-alt btn-sm btn-primary', 'confirm' => 'Esta seguro de eliminar el piso??', 'escape' => FALSE)); ?>
                 </div>
                 <h2>
                     <div id="div-nombre-edi-<?php echo $pi['Piso']['id']; ?>">
                         <span id="idnombre-span-amb-<?php echo $pi['Piso']['id']; ?>" title="EDITAR" onclick="$('#div-nombre-edi-<?php echo $pi['Piso']['id']; ?>').toggle(200);
-                                $('#edita-edificio-<?php echo $pi['Piso']['id']; ?>').toggle(200);"><?php echo $pi['Piso']['nombre']; ?></span> - AMBIENTES <span id="iderror-amb-<?php echo $pi['Piso']['id']; ?>"></span>
+                                    $('#edita-edificio-<?php echo $pi['Piso']['id']; ?>').toggle(200);"><?php echo $pi['Piso']['nombre']; ?></span> - AMBIENTES <span id="iderror-amb-<?php echo $pi['Piso']['id']; ?>"></span>
                     </div>
                     <div id="edita-edificio-<?php echo $pi['Piso']['id']; ?>" style="display: none;">
                         <?php echo $this->Form->create('Ambiente', array('action' => 'registra_nombre', 'id' => 'form-ambiente-' . $pi['Piso']['id'])); ?>
@@ -198,7 +191,27 @@
                         });
             }
 
+            if (typeof localStorage['piso'] !== "undefined")
+            {
+                $('#idcont-' + localStorage['piso']).toggle(400);
+                $('html,body').animate({
+                    scrollTop: $('#idcont-' + localStorage['piso']).offset().top},
+                'slow');
+            }
 
 
 </script>
 
+<script>
+    /*window.onload = function () {
+        var pos = window.name || 0;
+        window.scrollTo(0, pos);
+
+        //alert(localStorage['piso']);
+    }
+    window.onunload = function () {
+        window.name = self.pageYOffset || (document.documentElement.scrollTop + document.body.scrollTop);
+        //localStorage['piso'] = 'somestring';
+
+    }*/
+</script>   

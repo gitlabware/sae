@@ -41,7 +41,7 @@
             <div id="select-tipo">
                 <label class="col-md-4 control-label">Tipo</label>
                 <div class="col-md-8">
-                    <?php echo $this->Form->select('Subconcepto.tipo', array('Ingreso' => 'Ingreso','Egreso' => 'Egreso'), array('class' => 'form-control select-tipo', 'empty' => 'Seleccione el Tipo', 'required')); ?>
+                    <?php echo $this->Form->select('Subconcepto.tipo', array('Ingreso' => 'Ingreso','Egreso' => 'Egreso'), array('class' => 'form-control select-tipo', 'empty' => false, 'required')); ?>
                 </div>
             </div>
         </div>

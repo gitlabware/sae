@@ -1,6 +1,6 @@
 <?php
-
 App::uses('AppController', 'Controller');
+App::import('Vendor', 'tcpdf/tcpdf');
 
 class AmbientesController extends AppController {
 
@@ -116,7 +116,7 @@ class AmbientesController extends AppController {
             'order' => array('User.nombre')
         ));
 
-        $select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Inquilino')));
+        $select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('User.role' => 'Inquilino','User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
 
         $this->set(compact('inquilinos', 'select_inquilinos', 'catambientes', 'piso', 'catpagos', 'usuarios', 'categoria_ambientes', 'categoria_pagos', 'idAmbiente', 'idPiso', 'sw'));
     }
@@ -684,6 +684,8 @@ class AmbientesController extends AppController {
                     $this->Pago->id = $dat['pago_id'];
                     if (!empty($dat['retencion'])) {
                         $dato_p['retencion'] = $dat['retencion'];
+                    }else{
+                        $dato_p['retencion'] = 0.00;
                     }
                     $dato_p['recibo_id'] = $idRecibo;
                     $dato_p['monto_tmp'] = $this->request->data['Dato']['total_to'];
@@ -835,8 +837,6 @@ class AmbientesController extends AppController {
     }
 
     public function recibo($idRecibo = null, $terminar = null) {
-        /* debug($this->request->data);
-          exit; */
         $pagos = $this->Pago->find('all', array(
             'recursive' => 0,
             'conditions' => array('Pago.recibo_id' => $idRecibo),
@@ -846,12 +846,98 @@ class AmbientesController extends AppController {
                 'Concepto.nombre',
                 "SUM(((IF((Pago.porcentaje_interes != 'NULL'),ROUND(Pago.monto*Pago.porcentaje_interes/100,2),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),ROUND((Pago.retencion/100)*Pago.monto,2),0)))) as imp_total"),
         ));
-        //debug($pagos);exit;
-        /* $todos_pagos = $this->Pago->find('all', array(
-          'recursive' => 0,
-          'conditions' => array('Pago.recibo_id' => $idRecibo),
-          'fields' => array('Pago.id'),
-          )); */
+        if ($terminar && !empty($this->request->data)) {
+            //debug($this->request->data);exit;
+            foreach ($this->request->data['Dato']['ambiente'] as $am) {
+                $this->Ambiente->id = $am['ambiente_id'];
+                $dambiente['saldo'] = $am['cambio'];
+                $this->Ambiente->save($dambiente);
+            }
+            $this->Recibo->id = $idRecibo;
+            $this->request->data['Recibo']['estado'] = 'Terminado';
+            $this->Recibo->save($this->request->data['Recibo']);
+            $this->request->data['Pago']['banco'] = $this->Banco->find('first', array(
+                'recursive' => 0,
+                'conditions' => array('Banco.id' => $this->request->data['Recibo']['banco_id']),
+                'fields' => array('Banco.*', 'Nomenclatura.*')
+            ));
+
+            $idEdificio = $this->Session->read('Auth.User.edificio_id');
+            $edificio = $this->Edificio->find('first', array(
+                'recursive' => -1,
+                'conditions' => array('id' => $idEdificio),
+                'fields' => array('tc_ufv', 'tc_dolar')
+            ));
+            $d_comprobante['tipo'] = 'Ingreso';
+            $d_comprobante['estado'] = 'No Comprobado';
+            $d_comprobante['fecha'] = date('Y-m-d');
+            $d_comprobante['nombre'] = $this->request->data['Recibo']['pagador'];
+            $d_comprobante['nota'] = $this->request->data['Recibo']['doc_respaldo'];
+            $d_comprobante['concepto'] = "";
+            $d_comprobante['tc_ufv'] = $edificio['Edificio']['tc_ufv'];
+            $d_comprobante['tc_dolar'] = $edificio['Edificio']['tc_dolar'];
+            $d_comprobante['edificio_id'] = $idEdificio;
+            $this->Comprobante->create();
+            $this->Comprobante->save($d_comprobante);
+            $idComprobante = $this->Comprobante->getLastInsertID();
+            $this->request->data['Pago']['comprobante_id'] = $idComprobante;
+            $this->request->data['Pago']['fecha_com'] = $d_comprobante['fecha'];
+
+            foreach ($this->request->data['Pagos'] as $pa) {
+                //$this->genera_comprobantes($idComprobante,$pa['nomenclatura_id']);
+                $this->Pago->id = $pa['pago_id'];
+                $this->request->data['Pago']['estado'] = 'Pagado';
+                $this->request->data['Pago']['nomenclatura_id'] = $pa['nomenclatura_id'];
+                $this->Pago->save($this->request->data['Pago']);
+            }
+            foreach ($pagos as $pa) {
+                $this->Banco->id = $this->request->data['Pago']['banco']['Banco']['id'];
+                $d_banco['monto'] = $this->request->data['Pago']['banco']['Banco']['monto'] + $pa[0]['imp_total'];
+                $this->Banco->save($d_banco);
+            }
+        }
+        $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
+        $detalles = $this->Pago->find('all', array(
+            'recursive' => 0,
+            'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) >=' => date('Y')),
+        ));
+        $detalles_a = $this->Pago->find('all', array(
+            'recursive' => 0,
+            'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) <' => date('Y')),
+        ));
+        $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a'));
+    }
+    
+    public function get_pagos_rec($idRecibo = null,$idConcepto = null){
+        $pagos = $this->Pago->find('all', array(
+            'recursive' => 0,
+            'conditions' => array('Pago.recibo_id' => $idRecibo,'Pago.concepto_id' => $idConcepto),
+            'group' => array('Pago.concepto_id'),
+            'fields' => array(
+                'Concepto.id',
+                'Concepto.nombre',
+                "SUM(((IF((Pago.porcentaje_interes != 'NULL'),ROUND(Pago.monto*Pago.porcentaje_interes/100,2),(Pago.monto)))    )) as imp_total",
+                "SUM( IF((Pago.retencion != 'NULL'), ROUND((Pago.retencion/100)*Pago.monto,2),0) ) as retencion"
+                ),
+        ));
+        
+        return $pagos;
+    }
+
+
+    public function recibo_pdf($idRecibo = null, $terminar = null){
+        
+        $pagos = $this->Pago->find('all', array(
+            'recursive' => 0,
+            'conditions' => array('Pago.recibo_id' => $idRecibo,'Pago.concepto_id' => array(10,11)),
+            'group' => array('Pago.concepto_id'),
+            'fields' => array(
+                'Concepto.id',
+                'Concepto.nombre',
+                "SUM(((IF((Pago.porcentaje_interes != 'NULL'),ROUND(Pago.monto*Pago.porcentaje_interes/100,2),(Pago.monto)))+(IF((Pago.retencion != 'NULL'),ROUND((Pago.retencion/100)*Pago.monto,2),0)))) as imp_total",
+                "SUM( IF((Pago.retencion != 'NULL'), ROUND((Pago.retencion/100)*Pago.monto,2),0) ) as retencion"
+                ),
+        ));
         //debug($pagos);exit;
         if ($terminar && !empty($this->request->data)) {
             //debug($this->request->data);exit;
@@ -897,19 +983,15 @@ class AmbientesController extends AppController {
                 $this->request->data['Pago']['nomenclatura_id'] = $pa['nomenclatura_id'];
                 $this->Pago->save($this->request->data['Pago']);
             }
-            //debug($pagos);
-            //debug($this->request->data['Pago']['banco']);
-
-
             foreach ($pagos as $pa) {
                 $this->Banco->id = $this->request->data['Pago']['banco']['Banco']['id'];
                 $d_banco['monto'] = $this->request->data['Pago']['banco']['Banco']['monto'] + $pa[0]['imp_total'];
                 $this->Banco->save($d_banco);
             }
+            $this->Session->setFlash("Se ha registrado el pago correctamente!!",'msgbueno');
+            $this->redirect(array('controller' => 'Recibos','action' => 'index'));
         }
-
         $recibo = $this->Recibo->findByid($idRecibo, null, null, 2);
-        //debug($recibo);exit;
         $detalles = $this->Pago->find('all', array(
             'recursive' => 0,
             'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) >=' => date('Y')),
@@ -918,9 +1000,37 @@ class AmbientesController extends AppController {
             'recursive' => 0,
             'conditions' => array('Pago.recibo_id' => $idRecibo, 'YEAR(Pago.fecha) <' => date('Y')),
         ));
-        //debug($recibo);exit;
-        //exit;
-        $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a'));
+        $conceptos = $this->Concepto->find('all',array(
+            'order' => 'Concepto.id ASC'
+        ));
+        $this->set(compact('recibo', 'pagos', 'detalles', 'detalles_a','conceptos','idRecibo'));
+        //$this->set(compact('conceptos'));
+
+        $this->layout = '/pdf/default';
+
+        $this->render('/Ambientes/recibo_pdf');
+    }
+    public function get_det_pagos($idRecibo = null,$idConcepto = null){
+        return $this->Pago->find('all', array(
+            'recursive' => 0,
+            'conditions' => array('Pago.recibo_id' => $idRecibo,'Pago.concepto_id' => $idConcepto),
+            'joins' => array(
+                array(
+                    'table' => 'pisos',
+                    'alias' => 'Piso',
+                    'type' => 'LEFT',
+                    'conditions' => array(
+                        'Piso.id = Ambiente.piso_id',
+                    ),
+                )
+            ),
+            'fields' => array(
+                'YEAR(Pago.fecha) AS gestion',
+                'MONTH(Pago.fecha) AS mes',
+                "CONCAT(Piso.nombre,' - ',Ambiente.nombre) AS ambiente",
+                "(Pago.monto + IF((Pago.retencion != 'NULL'), ROUND((Pago.retencion/100)*Pago.monto,2),0) )  AS pago"
+                )
+        ));
     }
 
     public function genera_comprobantes($idComprobante = NULL) {
@@ -928,7 +1038,7 @@ class AmbientesController extends AppController {
     }
 
     public function get_monto_literal($monto = null) {
-        return $this->Montoliteral->getMontoLiteral($monto);
+        return $this->Montoliteral->getMontoLiteral($monto,false,false);
     }
 
     public function cancelar_pago($idRecibo = NULL) {
