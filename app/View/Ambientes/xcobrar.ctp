@@ -158,7 +158,6 @@
                               )
                           </button>
                           <div class="table-responsive">
-
                               <table class="table table-bordered" id="gestion-<?php echo $gp[0]['gestion'] ?>" style="display:none;">
                                   <thead>
                                       <tr>
@@ -175,6 +174,7 @@
                                               echo $this->Form->text("todos_retencion", array('min' => 0, 'class' => 'form-control', 'type' => 'number', 'step' => 'any', 'id' => 'ret_todos-' . $gp[0]['gestion'], 'placeholder' => 'Retencion', ''));
                                               ?>
                                           </th>
+                                          
                                           <th>M. total</th>
                                           <th></th>
                                       </tr>

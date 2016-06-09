@@ -5,12 +5,14 @@ App::import('Vendor', 'PHPExcel', array('file' => 'PHPExcel.php'));
 App::import('Vendor', 'PHPExcel_Reader_Excel2007', array('file' => 'PHPExcel/Excel2007.php'));
 App::import('Vendor', 'PHPExcel_IOFactory', array('file' => 'PHPExcel/PHPExcel/IOFactory.php'));
 
+App::import('Vendor', 'tcpdf/tcpdf');
+
 class PagosController extends AppController {
-    
+
     var $components = array('RequestHandler', 'DataTable');
     public $layout = 'sae';
     public $uses = array(
-        'Pago', 'Excel', 'Ambiente', 'Concepto'
+        'Pago', 'Excel', 'Ambiente', 'Concepto', 'Ambienteconcepto'
     );
 
     public function index() {
@@ -451,49 +453,51 @@ class PagosController extends AppController {
     }
 
     public function preavisos() {
-        /*$this->Pago->virtualFields = array(
-            'deuda_mantenimiento' => "SUM( IF(Pago.concepto_id = 10,Pago.monto,0) )",
-            'deuda_alquiler' => "SUM( IF(Pago.concepto_id = 11,Pago.monto,0) )",
-            'ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)"
-        );
-        $pagos = $this->Pago->find('all', array(
-            'recursive' => 0,
-            'conditions' => array('Pago.estado LIKE' => 'Debe'),
-            'group' => array('Pago.ambiente_id'),
-            'fields' => array('Ambiente.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler', 'Pago.ambiente', 'Representante.nombre'),
-            'joins' => array(
-                array(
-                    'table' => 'pisos',
-                    'alias' => 'Piso',
-                    'type' => 'LEFT',
-                    'conditions' => array(
-                        'Piso.id = Ambiente.piso_id',
-                    ),
-                ),
-                array(
-                    'table' => 'users',
-                    'alias' => 'Representante',
-                    'type' => 'LEFT',
-                    'conditions' => array(
-                        'Representante.id = Ambiente.representante_id',
-                    ),
-                )
-            ),
-        ));*/
+        /* $this->Pago->virtualFields = array(
+          'deuda_mantenimiento' => "SUM( IF(Pago.concepto_id = 10,Pago.monto,0) )",
+          'deuda_alquiler' => "SUM( IF(Pago.concepto_id = 11,Pago.monto,0) )",
+          'ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)"
+          );
+          $pagos = $this->Pago->find('all', array(
+          'recursive' => 0,
+          'conditions' => array('Pago.estado LIKE' => 'Debe'),
+          'group' => array('Pago.ambiente_id'),
+          'fields' => array('Ambiente.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler', 'Pago.ambiente', 'Representante.nombre'),
+          'joins' => array(
+          array(
+          'table' => 'pisos',
+          'alias' => 'Piso',
+          'type' => 'LEFT',
+          'conditions' => array(
+          'Piso.id = Ambiente.piso_id',
+          ),
+          ),
+          array(
+          'table' => 'users',
+          'alias' => 'Representante',
+          'type' => 'LEFT',
+          'conditions' => array(
+          'Representante.id = Ambiente.representante_id',
+          ),
+          )
+          ),
+          )); */
 
         if ($this->RequestHandler->responseType() == 'json') {
             //$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="gi gi-parents"></i></button>';
-            
+            $idambiente = "',Ambiente.id,'";
+            $checkbox = '<input type="checkbox" name="data[Ambientes][' . $idambiente . '][marcado]" class="form-control" style="width: 20px !important;">';
             $this->Pago->virtualFields = array(
                 'deuda_mantenimiento' => "SUM( IF(Pago.concepto_id = 10,Pago.monto,0) )",
                 'deuda_alquiler' => "SUM( IF(Pago.concepto_id = 11,Pago.monto,0) )",
-                'ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)"
+                'ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)",
+                'checkbox' => "CONCAT('$checkbox')"
             );
             $this->paginate = array(
                 'recursive' => 0,
                 'conditions' => array('Pago.estado LIKE' => 'Debe'),
                 'group' => array('Pago.ambiente_id'),
-                'fields' => array( 'Piso.nombre','Ambiente.nombre', 'Representante.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler'),
+                'fields' => array('Pago.checkbox', 'Piso.nombre', 'Ambiente.nombre', 'Representante.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler'),
                 'joins' => array(
                     array(
                         'table' => 'pisos',
@@ -513,13 +517,89 @@ class PagosController extends AppController {
                     )
                 ),
             );
-            $this->DataTable->fields = array( 'Piso.nombre','Ambiente.nombre', 'Representante.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler');
+            $this->DataTable->fields = array('Pago.checkbox', 'Piso.nombre', 'Ambiente.nombre', 'Representante.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler');
             $this->DataTable->emptyEleget_usuarios_adminments = 1;
             $this->set('ambientes', $this->DataTable->getResponse('Pagos', 'Pago'));
             $this->set('_serialize', 'ambientes');
         }
 
         $this->set(compact('pagos'));
+    }
+
+    public function genera_preavisos($idConcepto = null) {
+        //debug(date('m'));exit;
+        $ambientes = array();
+        $idConcepto = $this->request->data['Pago']['concepto_id'];
+        $this->Ambiente->virtualFields = array(
+            'nombre_ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)"
+        );
+        $this->Pago->virtualFields = array(
+            'mes' => "MONTH(Pago.fecha)",
+            'anyo' => "YEAR(Pago.fecha)"
+        );
+        if ($idConcepto == 10) {
+            $nombre_concepto = 'Mantenimiento';
+        } else {
+            $nombre_concepto = 'Alquiler';
+        }
+        if (!empty($this->request->data['Ambientes'])) {
+            foreach ($this->request->data['Ambientes'] as $key => $am) {
+                
+                $ambientes[$key]['ambiente'] = $this->Ambienteconcepto->find('first', array(
+                    'recursive' => 0,
+                    'conditions' => array('Ambiente.id' => $key, 'Ambienteconcepto.concepto_id' => $idConcepto),
+                    'fields' => array('Ambiente.nombre', 'Piso.nombre', 'Ambienteconcepto.monto','User.nombre','Inquilino.nombre'),
+                    'joins' => array(
+                        array(
+                            'table' => 'pisos',
+                            'alias' => 'Piso',
+                            'type' => 'LEFT',
+                            'conditions' => array(
+                                'Piso.id = Ambiente.piso_id',
+                            ),
+                        ),
+                        array(
+                            'table' => 'users',
+                            'alias' => 'User',
+                            'type' => 'LEFT',
+                            'conditions' => array(
+                                'User.id = Ambiente.user_id',
+                            ),
+                        ),
+                        array(
+                            'table' => 'users',
+                            'alias' => 'Inquilino',
+                            'type' => 'LEFT',
+                            'conditions' => array(
+                                'Inquilino.id = Ambiente.inquilino_id',
+                            ),
+                        )
+                    ),
+                ));
+                
+                $ambientes[$key]['pagos'] = $this->Pago->find('list', array(
+                    'recursive' => -1,
+                    'conditions' => array('Pago.ambiente_id' => $key, 'Pago.concepto_id' => $idConcepto),
+                    'fields' => array('Pago.mes', 'Pago.monto', 'Pago.anyo'),
+                    'group' => array('Pago.fecha', 'Pago.concepto_id')
+                ));
+                if(empty($ambientes[$key]['ambiente'])){
+                    
+                    unset($ambientes[$key]);
+                }
+            }
+        }
+
+        /* foreach ($ambientes[56]['pagos'] as $ano => $pa){
+          debug($ano);
+          } */
+        //debug($ambientes[56]['pagos']);exit;
+        $this->set(compact('ambientes', 'nombre_concepto'));
+        //$this->set(compact('conceptos'));
+
+        $this->layout = '/pdf/default';
+
+        $this->render('/Pagos/genera_preavisos');
     }
 
 }
