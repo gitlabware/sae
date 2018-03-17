@@ -1,7 +1,9 @@
 <?php
 
 App::uses('AppController', 'Controller');
-
+/**
+ * @property NomenclaturaHelper $Nomenclatura
+ * */
 class NomenclaturasController extends AppController {
 
     public $uses = array('Nomenclatura', 'Concepto', 'Ambiente', 'Piso', 'NomenclaturasAmbiente', 'Subconcepto');
@@ -19,8 +21,9 @@ class NomenclaturasController extends AppController {
     }
 
     public function lista_nomenclaturas() {
+
         $idEdificio = $this->Session->read('Auth.User.edificio_id');
-        
+
         $this->Ambiente->unbindModel(array(
             'belongsTo' => array('Edificio','User','Categoriaspago','Categoriasambiente')
         ));
@@ -30,9 +33,11 @@ class NomenclaturasController extends AppController {
         $nomenclaturas = $this->Nomenclatura->find('all', array(
             'recursive' => 2,
             'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
-            'order' => array('Nomenclatura.codigo_completo ASC'),
+            'order' => array('Nomenclatura.codico_p_orden ASC'),
             'fields' => array('Nomenclatura.*','Subconcepto.nombre','Edificio.nombre')
         ));
+        //debug($nomenclaturas);exit;
+        //$nomenclaturas = $this->Nomenclatura->children(null,false,array('Nomenclatura.*','Subconcepto.nombre','Edificio.nombre'),null,null,null,2,array('Nomenclatura.edificio_id' => $idEdificio));
         //debug($nomenclaturas);exit;
         $this->set(compact('nomenclaturas'));
     }
@@ -98,6 +103,20 @@ class NomenclaturasController extends AppController {
 
     public function registra() {
         if (!empty($this->request->data['Nomenclatura'])) {
+
+            $cod_padre = $this->request->data['Nomenclatura']['codigo_padre'];
+            $idEdificio = $this->Session->read('Auth.User.edificio_id');
+            $nom_cod = $this->Nomenclatura->find('first',array(
+                'recursive' => -1,
+                'conditions' => array('Nomenclatura.codigo_completo LIKE' => $cod_padre,'Nomenclatura.edificio_id' => $idEdificio),
+                'fields' => array('Nomenclatura.id')
+            ));
+
+            if(!empty($nom_cod['Nomenclatura']['id'])){
+                $this->request->data['Nomenclatura']['nomenclatura_id'] = $nom_cod['Nomenclatura']['id'];
+                $this->request->data['Nomenclatura']['codigo_aux'] = $cod_padre;
+            }
+
             //debug($this->request->data);exit;
             $this->Nomenclatura->create();
             if (!empty($this->request->data['Nomenclatura']['codigo_aux'])) {
@@ -105,13 +124,18 @@ class NomenclaturasController extends AppController {
             } else {
                 $this->request->data['Nomenclatura']['codigo_completo'] = $this->request->data['Nomenclatura']['codigo'];
             }
+
+            $this->request->data['Nomenclatura']['codico_p_orden']=$this->gen_nu_cod_p($this->request->data['Nomenclatura']['codigo_completo']);
+
             /* debug($this->request->data);
               exit; */
             if (!empty($this->request->data['Nomenclatura']['subconcepto_id'])) {
                 $subconcepto = $this->Subconcepto->findByid($this->request->data['Nomenclatura']['subconcepto_id'], null, null, -1);
                 $this->request->data['Nomenclatura']['concepto_id'] = $subconcepto['Subconcepto']['concepto_id'];
             }
-
+            if(!empty($this->request->data['Nomenclatura']['nomenclatura_id'])){
+                $this->request->data['Nomenclatura']['parent_id'] = $this->request->data['Nomenclatura']['nomenclatura_id'];
+            }
             $this->Nomenclatura->save($this->request->data['Nomenclatura']);
             $this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
         } else {
@@ -190,7 +214,8 @@ class NomenclaturasController extends AppController {
         $pisos = $this->Piso->find('list', array(
             'recursive' => -1,
             'conditions' => array('edificio_id' => $idEdificio),
-            'fields' => array('id', 'nombre')
+            'fields' => array('id', 'nombre'),
+            'order' => array('Piso.orden ASC')
         ));
         $this->NomenclaturasAmbiente->virtualFields = array(
             'piso' => "(SELECT pisos.nombre FROM pisos WHERE pisos.id = Ambiente.piso_id)"
@@ -275,6 +300,109 @@ class NomenclaturasController extends AppController {
             'fields' => array('id', 'nombre')
         ));
         $this->set(compact('subconceptos'));
+    }
+
+
+    public function regulariza_nomen(){
+
+        /*debug(substr("1.1.1",0,-3));
+        exit;*/
+
+        $list = $this->Nomenclatura->find('list',array(
+            'recursive' => -1,
+            'conditions' => array('Nomenclatura.edificio_id' => 8),
+            'fields' => array('Nomenclatura.codigo_completo','Nomenclatura.id')
+        ));
+        //debug($list);exit;
+
+
+        foreach ($list as $codigo => $id_nom){
+            $s_codigo = substr($codigo,0,-2);
+
+            $s_codigo2 = substr($codigo,0,-3);
+
+            if($s_codigo != false){
+                if(isset($list[$s_codigo])){
+                    $dnom['nomenclatura_id'] = $list[$s_codigo];
+                    $dnom['parent_id'] = $list[$s_codigo];
+                    $this->Nomenclatura->id = $id_nom;
+                    $this->Nomenclatura->save($dnom);
+                }
+
+            }
+            if($s_codigo2 != false){
+                if(isset($list[$s_codigo2])){
+                    $dnom['nomenclatura_id'] = $list[$s_codigo2];
+                    $dnom['parent_id'] = $list[$s_codigo2];
+                    $this->Nomenclatura->id = $id_nom;
+                    $this->Nomenclatura->save($dnom);
+                }
+
+            }
+
+        }
+        debug('si');
+        exit;
+    }
+
+    public function regulariza_nome_cod(){
+
+        $list = $this->Nomenclatura->find('list',array(
+            'recursive' => -1,
+            'conditions' => array('Nomenclatura.edificio_id' => 8),
+            'fields' => array('Nomenclatura.codigo_completo','Nomenclatura.id')
+        ));
+        
+        foreach ($list as $codigo => $id_nom){
+            $codigo_f = explode(".",$codigo);
+            $dnom['codigo'] = end($codigo_f);
+            $this->Nomenclatura->id = $id_nom;
+            $this->Nomenclatura->save($dnom);
+
+        }
+        debug('si');
+        exit;
+    }
+
+    public function regulariza_nome_cod_2(){
+
+        $list = $this->Nomenclatura->find('list',array(
+            'recursive' => -1,
+            'conditions' => array('Nomenclatura.edificio_id' => 8),
+            'fields' => array('Nomenclatura.codigo_completo','Nomenclatura.id')
+        ));
+
+        foreach ($list as $codigo => $id_nom){
+            $codigo_f = explode(".",$codigo);
+            $nuevo_cod = "";
+            for ($i=0;$i<count($codigo_f);$i++){
+                if(count($codigo_f)-1 == $i){
+                    $nuevo_cod = $nuevo_cod."".sprintf('%03d', $codigo_f[$i]);
+                }else{
+                    $nuevo_cod = $nuevo_cod."".sprintf('%03d', $codigo_f[$i]).".";
+                }
+
+            }
+            $dnom['codico_p_orden'] = $nuevo_cod;
+            $this->Nomenclatura->id = $id_nom;
+            $this->Nomenclatura->save($dnom);
+        }
+        debug('si');
+        exit;
+    }
+
+    public function gen_nu_cod_p($codigo){
+        $codigo_f = explode(".",$codigo);
+        $nuevo_cod = "";
+        for ($i=0;$i<count($codigo_f);$i++){
+            if(count($codigo_f)-1 == $i){
+                $nuevo_cod = $nuevo_cod."".sprintf('%03d', $codigo_f[$i]);
+            }else{
+                $nuevo_cod = $nuevo_cod."".sprintf('%03d', $codigo_f[$i]).".";
+            }
+
+        }
+        return $nuevo_cod;
     }
 
 }

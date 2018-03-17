@@ -198,8 +198,6 @@
                     scrollTop: $('#idcont-' + localStorage['piso']).offset().top},
                 'slow');
             }
-
-
 </script>
 
 <script>

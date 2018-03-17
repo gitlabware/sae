@@ -274,7 +274,7 @@ class EdificiosController extends AppController {
             );
             $this->paginate = array(
                 'fields' => array('Ambiente.nombre', 'User.nombre', 'Inquilino.nombre', 'Representante.nombre', 'Piso.nombre', 'Ambiente.acciones'),
-                'conditions' => array('Ambiente.edificio_id' => $edificioId),
+                'conditions' => array('Ambiente.edificio_id' => $edificioId,'Piso.id <>' => null),
                 'recursive' => 0,
                 'order' => 'Ambiente.nombre ASC'
             );

@@ -91,7 +91,7 @@ foreach ($ambientes as $amb) {
     }
 
     if (!empty($imagen_logo)) {
-        $imagen = WWW_ROOT . 'imagenes' .DS.$imagen_logo;
+        $imagen = WWW_ROOT . 'imagenes' . DS . $imagen_logo;
         $pdf->Image($imagen, $x + 17, $y + 12, 26, 9, '', '', '', false, 300, '', false, false, 0, false, false, false);
     }
 
@@ -119,7 +119,7 @@ foreach ($ambientes as $amb) {
     $pdf->SetXY($x + 33, $y + 40.4);
     $pdf->MultiCell(8, 4.2, '', $mis_bordes, 'R', 1, 0, '', '', true, 0, false, true, 8, 'M');
 
-    $pdf->SetFont(null, '', 7);
+    $pdf->SetFont(null, '', 6);
     $pdf->SetXY($x + 42, $y + 32);
     $pdf->MultiCell(71, 4.2, $amb['ambiente']['User']['nombre'], $mis_bordes, 'L', 1, 0, '', '', true, 0, false, true, 4.2, 'M');
     $pdf->SetXY($x + 42, $y + 36.2);
@@ -131,7 +131,8 @@ foreach ($ambientes as $amb) {
     $pdf->MultiCell(22, 4.2, "Planta", $mis_bordes, 'C', 1, 0, '', '', true, 0, false, true, 4.2, 'M');
     $pdf->SetFont(null, '', 7);
     $pdf->SetXY($x + 91, $y + 40.4);
-    $pdf->MultiCell(22, 4.2, $amb['ambiente']['Piso']['nombre'], $mis_bordes, 'L', 1, 0, '', '', true, 0, false, true, 4.2, 'M');
+    $pdf->SetFont(null, '', 5);
+    $pdf->MultiCell(22, 4.2, substr($amb['ambiente']['Piso']['nombre'], 0, 17), $mis_bordes, 'L', 1, 0, '', '', true, 0, false, true, 4.2, 'M');
 
     $ya = $y + 45;
     $xa = $x + 6;

@@ -80,9 +80,12 @@ th.visible-print, td.visible-print {
 h1,h2,h3,h4,h5{
     text-align: center;
 }
+.no-imrprime-p{
+    display: none !important; 
+}
 
 @media print{
     .no-imrprime-p{
-       display: none !important; 
+        display: none !important; 
     }
 }

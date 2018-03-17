@@ -138,7 +138,7 @@ $pdf->MultiCell(18, 2.4, 'Observaciones: ', 0, 'L', 1, 0, '', '', true, 0, false
 $y = $y + 14.5;
 
 $pdf->setCellHeightRatio(0.5);
-$nume = 0 ;
+$nume = 0;
 
 $meses['1'] = 'Enero';
 $meses['2'] = 'Febrero';
@@ -154,8 +154,9 @@ $meses['11'] = 'Nomviembre';
 $meses['12'] = 'Diciembre';
 
 $total_t = 0.00;
+$pdf->Text(43, $y, '*Detalle de Pagos Efectuados');
 foreach ($pagos as $pa) {
-    $pdf->Text(43, $y, '*Detalle de ' . $pa['Concepto']['nombre']);
+
 
 
     $y = $y + 3;
@@ -182,7 +183,7 @@ foreach ($pagos as $pa) {
 
     $detalles = $this->requestAction(array('action' => 'get_det_pagos', $idRecibo, $pa['Concepto']['id']));
 
-    
+
     foreach ($detalles as $det) {
         $total_t = $total_t + $det[0]['pago'];
         $nume++;
@@ -237,14 +238,14 @@ $pdf->SetXY(31, 185);
 
 $monto_cob_t = ($total_i + $total_r);
 $lit_dec = explode('.', $monto_cob_t);
-if(!empty($lit_dec[1])){
+if (!empty($lit_dec[1])) {
     $decimal = $lit_dec[1];
-}else{
+} else {
     $decimal = 0.00;
 }
 
-$monto_lit = $this->requestAction(array('action' => 'get_monto_literal', $monto_cob_t)).' '.$decimal.'/100 BOLIVIANOS';
-$pdf->MultiCell(114.5, 5.5, 'Son: '.$monto_lit, $mis_bordes, 'L', 0, 0, '', '', true, 0, false, true, 5.5, 'M');
+$monto_lit = $this->requestAction(array('action' => 'get_monto_literal', $monto_cob_t)) . ' ' . $decimal . '/100 BOLIVIANOS';
+$pdf->MultiCell(114.5, 5.5, 'Son: ' . $monto_lit, $mis_bordes, 'L', 0, 0, '', '', true, 0, false, true, 5.5, 'M');
 
 $pdf->Output('credencial.pdf', 'I');
 exit;

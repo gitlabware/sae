@@ -12,7 +12,7 @@
     </div>    
     <!-- Example Content -->
     <div class="table-responsive">
-        <table id="example-datatable" class="table table-bordered table-vcenter table-hover">
+        <table id="example-datatable-2" class="table table-bordered table-vcenter table-hover">
             <thead>
                 <tr>
                     <th>Codigo</th>
@@ -49,7 +49,7 @@
                                     }
                                     echo ' (' . $am['Piso']['nombre'] . ' - ' . $am['nombre'] . ')';
                                     ?></td>
-                                <td><?php //echo $no['Subconcepto']['nombre'];  ?></td>
+                                <td><?php //echo $no['Subconcepto']['nombre'];         ?></td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-xs">
                                         <?php echo $this->Html->link('<i class="fa fa-trash-o"></i>', array('action' => 'quita_ambiente2', $am['NomenclaturasAmbiente']['id']), array('class' => 'btn btn-danger', 'escape' => false, 'confirm' => 'Esta seguro de eliminar el ambiente de la nomenclatura??')); ?>
@@ -67,3 +67,31 @@
     <!-- END Example Content -->
 </div>
 <!-- END Example Block -->
+
+<?php $this->start('addscript'); ?>
+<script>
+    $(function () {
+        var tablelength = 10;
+        if (typeof localStorage['tablelength'] !== "undefined")
+        {
+            tablelength = parseFloat(localStorage['tablelength']);
+        }
+        $('#example-datatable-2').dataTable({
+            "aoColumnDefs": [{"bSortable": false
+                            //, "aTargets": [ 1, 5 ] 
+                }],
+            "iDisplayLength": tablelength,
+            "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "Todo"]],
+            "order": []
+        }).columnFilter({
+            sPlaceHolder: "head:before",
+            aoColumns: filtro_c
+        });
+        $('select[name="example-datatable-2_length"]').change(function () {
+            //alert($(this).val());
+            localStorage['tablelength'] = $(this).val();
+        });
+
+    });
+</script>
+<?php $this->end(); ?>

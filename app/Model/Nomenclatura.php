@@ -43,10 +43,12 @@ class Nomenclatura extends AppModel {
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
+			'order' => 'codigo ASC',
 			'limit' => '',
 			'offset' => '',
 			'finderQuery' => '',
 		)
 	);
+        
+        public $actsAs = array('Tree');
 }

@@ -49,8 +49,8 @@
         <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
         <script src="<?php echo $this->webroot; ?>js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
         <script>
-          var urljsontablatrab = '';
-          var filtro_c = [];
+            var urljsontablatrab = '';
+            var filtro_c = [];
         </script>
         <!--<link rel="stylesheet" type="text/css" href="<?php echo $this->webroot; ?>css/cssprint.css" media="print"> -->
     </head>
@@ -210,20 +210,20 @@
             <?php $role = $this->Session->read('Auth.User.role'); ?>
             <?php
             if ($role == "Super Administrador") {
-              echo $this->element("sidebar/super_administrador");
+                echo $this->element("sidebar/super_administrador");
             } elseif ($role == 'Administrador') {
-              echo $this->element("sidebar/administrador");
+                echo $this->element("sidebar/administrador");
             } elseif ($role == 'Propietario' || $role == "Inquilino") {
-              echo $this->element("sidebar/usuarios");
+                echo $this->element("sidebar/usuarios");
             }
             ?>
             <!-- Main Container -->
             <div id="main-container">
                 <?php
                 if ($role == "Super Administrador") {
-                  echo $this->element("menu/super_administrador");
+                    echo $this->element("menu/super_administrador");
                 } elseif ($role == 'Administrador') {
-                  echo $this->element("menu/administrador");
+                    echo $this->element("menu/administrador");
                 }
                 ?>
                 <!-- END Header -->
@@ -310,66 +310,67 @@
         <script src="<?php echo $this->webroot; ?>js/pages/tablesDatatables.js"></script>
         <script src="<?php echo $this->webroot; ?>js/jquery.dataTables.columnFilter.js"></script>
 
-        
+
         <script>$(function () {
-              TablesDatatables.init();
-          });</script>
+                TablesDatatables.init();
+
+            });</script>
         <script>
-          $('#form-edificio').validate();
+            $('#form-edificio').validate();
         </script>
         <script>
-          function cargarmodal(urll)
-          {
-              $("#div_barra_cargando").show();
-              $("#myModal").modal({
-                  //backdrop: 'static',
-                  //keyboard: false
-              });
-              $("#divmodal").show();
-              $("#divmodal").load(urll, function (responseText, textStatus, req) {
-                  if (textStatus == "error")
-                  {
-                      $("#divmodal").hide();
-                      alert("error!!!");
-                  }
-                  else {
-                      $("#div_barra_cargando").hide(800);
-                  }
-              });
+            function cargarmodal(urll)
+            {
+                $("#div_barra_cargando").show();
+                $("#myModal").modal({
+                    //backdrop: 'static',
+                    //keyboard: false
+                });
+                $("#divmodal").show();
+                $("#divmodal").load(urll, function (responseText, textStatus, req) {
+                    if (textStatus == "error")
+                    {
+                        $("#divmodal").hide();
+                        alert("error!!!");
+                    }
+                    else {
+                        $("#div_barra_cargando").hide(800);
+                    }
+                });
 
-          }
-          
+            }
+
         </script>
 
         <script>
-          function cargarmodal2(urll)
-          {
-              $("#div_barra_cargando2").show();
-              $("#myModal2").modal('show');
-              $("#divmodal2").show();
-              $("#divmodal2").load(urll, function (responseText, textStatus, req) {
-                  if (textStatus == "error")
-                  {
-                      $("#divmodal2").hide();
-                      alert("error!!!");
-                  }
-                  else {
-                      $("#div_barra_cargando2").hide(800);
-                  }
-              });
+            function cargarmodal2(urll)
+            {
+                $("#div_barra_cargando2").show();
+                $("#myModal2").modal('show');
+                $("#divmodal2").show();
+                $("#divmodal2").load(urll, function (responseText, textStatus, req) {
+                    if (textStatus == "error")
+                    {
+                        $("#divmodal2").hide();
+                        alert("error!!!");
+                    }
+                    else {
+                        $("#div_barra_cargando2").hide(800);
+                    }
+                });
 
-          }
-          function pop_print() {
-              w = window.open(null, 'Print_Page', 'scrollbars=yes');
-              var myStyle = '<link rel="stylesheet" href="<?php echo $this->webroot; ?>css/cssprint.css" />';
-              w.document.write('<button class="no-imrprime-p" type="button" onclick="window.print();">Imprimir</button>');
-              w.document.write(myStyle + jQuery('#page-content').html());
-              w.document.close();
-              //w.print();
-          }
+            }
+            function pop_print() {
+                w = window.open(null, 'Print_Page', 'scrollbars=yes');
+                var myStyle = '<link rel="stylesheet" href="<?php echo $this->webroot; ?>css/cssprint.css" />';
+                w.document.write('<button class="no-imrprime-p" type="button" onclick="window.print();">Imprimir</button>');
+                w.document.write(myStyle + jQuery('#page-content').html());
+                w.document.close();
+                //w.print();
+            }
         </script>
         <?php echo $this->fetch('addscript') ?>
         <?php echo $this->Session->flash(); ?>
-
+        
     </body>
 </html>

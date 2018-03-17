@@ -453,38 +453,10 @@ class PagosController extends AppController {
     }
 
     public function preavisos() {
-        /* $this->Pago->virtualFields = array(
-          'deuda_mantenimiento' => "SUM( IF(Pago.concepto_id = 10,Pago.monto,0) )",
-          'deuda_alquiler' => "SUM( IF(Pago.concepto_id = 11,Pago.monto,0) )",
-          'ambiente' => "CONCAT(Piso.nombre,' - ',Ambiente.nombre)"
-          );
-          $pagos = $this->Pago->find('all', array(
-          'recursive' => 0,
-          'conditions' => array('Pago.estado LIKE' => 'Debe'),
-          'group' => array('Pago.ambiente_id'),
-          'fields' => array('Ambiente.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler', 'Pago.ambiente', 'Representante.nombre'),
-          'joins' => array(
-          array(
-          'table' => 'pisos',
-          'alias' => 'Piso',
-          'type' => 'LEFT',
-          'conditions' => array(
-          'Piso.id = Ambiente.piso_id',
-          ),
-          ),
-          array(
-          'table' => 'users',
-          'alias' => 'Representante',
-          'type' => 'LEFT',
-          'conditions' => array(
-          'Representante.id = Ambiente.representante_id',
-          ),
-          )
-          ),
-          )); */
 
         if ($this->RequestHandler->responseType() == 'json') {
             //$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="gi gi-parents"></i></button>';
+            $idEdificio = $this->Session->read('Auth.User.edificio_id');
             $idambiente = "',Ambiente.id,'";
             $checkbox = '<input type="checkbox" name="data[Ambientes][' . $idambiente . '][marcado]" class="form-control" style="width: 20px !important;">';
             $this->Pago->virtualFields = array(
@@ -495,7 +467,7 @@ class PagosController extends AppController {
             );
             $this->paginate = array(
                 'recursive' => 0,
-                'conditions' => array('Pago.estado LIKE' => 'Debe'),
+                'conditions' => array('Pago.estado LIKE' => 'Debe','Ambiente.edificio_id' => $idEdificio,'Piso.id <>' => null),
                 'group' => array('Pago.ambiente_id'),
                 'fields' => array('Pago.checkbox', 'Piso.nombre', 'Ambiente.nombre', 'Representante.nombre', 'Pago.deuda_mantenimiento', 'Pago.deuda_alquiler'),
                 'joins' => array(
