@@ -1,33 +1,26 @@
- <!-- Login Block -->
-            <div class="block push-bit">
-                <!-- Login Form -->
-                <?php echo $this->Form->create('User',array('class' => 'form-horizontal form-bordered form-control-borderless','id' => 'form-login'));?>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="gi gi-user"></i></span>
-                                <?php echo $this->Form->text('username',array('class' => 'form-control input-lg','placeholder' => 'Nombre de Usuario','required'));?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="gi gi-asterisk"></i></span>
-                                <?php echo $this->Form->password('password',array('class' => 'form-control input-lg','placeholder' => 'Password','required'));?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-actions">
-                        
-                        <div class="col-xs-8 text-right">
-                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Ingresar al Sistema</button>
-                        </div>
-                    </div>
-                <?php echo $this->Form->end();?>
-                <!-- END Login Form -->
-
-                
-
+<div class="login-box card">
+    <div class="card-block">
+        <?php echo $this->Form->create('User', array('class' => 'form-horizontal form-bordered form-control-borderless', 'id' => 'form-login')); ?>
+        <h3 class="box-title m-b-20">Administrador</h3>
+        <div class="form-group ">
+            <div class="col-xs-12">
+                <?php echo $this->Form->text('username', ['class' => 'form-control', 'placeholder' => 'Ingrese el usuario', 'required']); ?>
             </div>
-            <!-- END Login Block -->
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12">
+                <?php echo $this->Form->password('password', ['class' => 'form-control', 'placeholder' => 'Ingrese el password', 'required']); ?>
+            </div>
+        </div>
+        <div class="form-group text-center m-t-20">
+            <div class="col-xs-12">
+                <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">
+                    Ingresar
+                </button>
+            </div>
+        </div>
+
+
+        <?php echo $this->Form->end(); ?>
+    </div>
+</div>

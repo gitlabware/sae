@@ -77,7 +77,7 @@ class UsersController extends AppController {
     }
 
     public function login() {
-        $this->layout = 'login';
+        $this->layout = 'login_monster';
         if ($this->request->is('post')) {
             //debug($this->request->data);exit;
             if ($this->Auth->login()) {
