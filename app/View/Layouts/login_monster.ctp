@@ -39,7 +39,7 @@
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
 <section id="wrapper">
-    <div class="login-register" style="background: linear-gradient(to right, #318f94 0%, #5ec58c 100%);">
+    <div class="login-register" style="background: url('<?php echo $this->webroot; ?>img/edificio.jpg');">
         <?php echo $this->Session->flash(); ?>
         <?php echo $this->fetch('content'); ?>
     </div>
