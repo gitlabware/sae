@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
     public $uses = array('User');
-    public $layout = 'sae';
+    public $layout = 'monster';
 
     public function beforeFilter() {
         parent::beforeFilter();

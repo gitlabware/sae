@@ -22,10 +22,11 @@
 
     <?= $this->fetch('campo_css') ?>
 
+
     <!-- Custom CSS -->
     <link href="<?php echo $this->webroot; ?>template/main/css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="<?php echo $this->webroot; ?>template/main/css/colors/green-dark.css" id="theme"
+    <link href="<?php echo $this->webroot; ?>template/main/css/colors/megna-dark.css" id="theme"
           rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,6 +34,13 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .modal-content {
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body class="fix-header card-no-border">
@@ -48,16 +56,26 @@
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
 <div id="main-wrapper">
+    <?php $role = $this->Session->read('Auth.User.role'); ?>
+
     <?php
-    $role = $this->request->session()->read('Auth.User.role');
+    if ($role == "Super Administrador") {
+        echo $this->element("menu/super_administrador");
+    } elseif ($role == 'Administrador') {
+        echo $this->element("menu/administrador");
+    }
     ?>
-    <?php if ($role == 'Administrador'): ?>
-        <?php echo $this->element('menu/admin'); ?>
-        <?php echo $this->element('sidebar/admin'); ?>
-    <?php elseif ($role == 'Admin Edificio'): ?>
-        <?php echo $this->element('menu/admin_edif'); ?>
-        <?php echo $this->element('sidebar/admin_edif'); ?>
-    <?php endif; ?>
+
+    <?php
+    if ($role == "Super Administrador") {
+        echo $this->element("sidebar/super_administrador");
+    } elseif ($role == 'Administrador') {
+        echo $this->element("sidebar/administrador");
+    } elseif ($role == 'Propietario' || $role == "Inquilino") {
+        echo $this->element("sidebar/usuarios");
+    }
+    ?>
+
 
 
     <!-- ============================================================== -->
@@ -68,28 +86,9 @@
         <!-- Container fluid  -->
         <!-- ============================================================== -->
         <div class="container-fluid">
+            <?php echo $this->Session->flash(); ?>
+            <?php echo $this->fetch('content'); ?>
 
-            <?= $this->fetch('content') ?>
-            <!-- sample modal content -->
-            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                 aria-hidden="true" style="display: none;">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div id="div_barra_cargando">
-                            <div class="progress">
-                                <div class="progress-bar bg-info progress-bar-striped" role="progressbar"
-                                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                     style="width:100%;height:10px;"><span class="sr-only"></span></div>
-                            </div>
-                        </div>
-                        <div id="divmodal" style="display: none;">
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal -->
             <?= $this->fetch('dcontenido') ?>
 
         </div>
@@ -111,6 +110,28 @@
     <!-- ============================================================== -->
 </div>
 <div class="lanzador"></div>
+
+<!-- sample modal content -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="div_barra_cargando">
+                <div class="progress">
+                    <div class="progress-bar bg-info progress-bar-striped" role="progressbar"
+                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                         style="width:100%;height:10px;"><span class="sr-only"></span></div>
+                </div>
+            </div>
+            <div id="divmodal" style="display: none;">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- /.modal -->
+
 <!-- ============================================================== -->
 <!-- End Wrapper -->
 <!-- ============================================================== -->
@@ -119,8 +140,10 @@
 <!-- ============================================================== -->
 <script src="<?php echo $this->webroot; ?>template/assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap tether Core JavaScript -->
-<script src="<?php echo $this->webroot; ?>template/assets/plugins/bootstrap/js/tether.min.js"></script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/bootstrap/js/popper.min.js"></script>
+<!--<script src="--><?php //echo $this->webroot; ?><!--template/assets/plugins/bootstrap/js/tether.min.js"></script>-->
 <script src="<?php echo $this->webroot; ?>template/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
 <!-- slimscrollbar scrollbar JavaScript -->
 <script src="<?php echo $this->webroot; ?>template/main/js/jquery.slimscroll.js"></script>
 <!--Wave Effects -->
@@ -132,45 +155,44 @@
 <!--Custom JavaScript -->
 <script src="<?php echo $this->webroot; ?>template/main/js/custom.min.js"></script>
 
-
 <script src="<?php echo $this->webroot; ?>template/main/js/validation.js"></script>
 <!-- Sweet-Alert  -->
 <script src="<?php echo $this->webroot; ?>template/assets/plugins/sweetalert/sweetalert.min.js"></script>
 <!-- ============================================================== -->
 <!-- Style switcher -->
 <!-- ============================================================== -->
-<script src="<?php echo $this->webroot; ?>template/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+<!--<script src="-->
+<?php //echo $this->webroot; ?><!--template/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>-->
 
-<?= $this->fetch('campo_js') ?>
+
 
 <script>
 
 
-    function cargarmodal(urll,silargo) {
-        if(silargo){
-            $("#myModal").find('.modal-dialog').attr('class','modal-dialog modal-lg');
-        }else{
-            $("#myModal").find('.modal-dialog').attr('class','modal-dialog modal-md');
+    var sw_modal = false;
+    $('#myModal').on('show.bs.modal', function (e) {
+        sw_modal = true;
+    });
+    $('#myModal').on('hide.bs.modal', function (e) {
+        sw_modal = false;
+    });
+
+    function cargarmodal(urll, silargo) {
+        if (silargo) {
+            $("#myModal").find('.modal-dialog').attr('class', 'modal-dialog modal-lg');
+        } else {
+            $("#myModal").find('.modal-dialog').attr('class', 'modal-dialog modal-md');
         }
 
         $("#div_barra_cargando").show();
-        $("#myModal").modal({
-            //backdrop: 'static',
-            //keyboard: false
-        });
-        $("#divmodal").show();
 
-        /*$.ajax({
-            type: 'GET',
-            url: urll,
-            success: function(data){
-                $("#divmodal").append(data);
-                $("#div_barra_cargando").hide(800);
-            },
-            error: function(){
-                alert("Error!!");
-            }
-        });*/
+        if (!sw_modal) {
+            $("#myModal").modal({
+            });
+        }
+
+
+        $("#divmodal").show();
 
         $("#divmodal").load(urll, function (responseText, textStatus, req) {
             if (textStatus == "error") {
@@ -210,7 +232,13 @@
         }(window.jQuery);
 
     function alertabn(mensaje) {
-        swal("Excelente!", mensaje, 'success')
+        swal({
+            title: "Excelente!",
+            text: mensaje,
+            type: 'success'
+        }, function () {
+            $(".lanzador").trigger("click");
+        })
     }
 
     function alertaer(mensaje) {
@@ -239,12 +267,6 @@
                     {
                         url: urll,
                         type: "POST",
-                        /*beforeSend:function (XMLHttpRequest) {
-                         alert("antes de enviar");
-                         },
-                         complete:function (XMLHttpRequest, textStatus) {
-                         alert('despues de enviar');
-                         },*/
                         success: function (data, textStatus, jqXHR) {
                             if ($.parseJSON(data).estado) {
                                 alertabn($.parseJSON(data).respuesta);
@@ -266,7 +288,44 @@
     }
 
 
+    function notifyMe(usuario,texto) {
+        options = {
+            body: texto,
+            icon: '<?php echo $this->webroot.'template/assets/images/logo-icon.png' ?>'
+        };
+        // Let's check if the browser supports notifications
+        if (!("Notification" in window)) {
+            alert("This browser does not support desktop notification");
+        }
+
+        // Let's check whether notification permissions have already been granted
+        else if (Notification.permission === "granted") {
+            // If it's okay let's create a notification
+            var notification = new Notification(usuario,options);
+        }
+
+        // Otherwise, we need to ask the user for permission
+        else if (Notification.permission !== "denied") {
+            Notification.requestPermission(function (permission) {
+                // If the user accepts, let's create a notification
+
+
+
+                if (permission === "granted") {
+                    var notification = new Notification(usuario,options);
+                }
+            });
+        }
+
+        // At last, if the user has denied notifications, and you
+        // want to be respectful there is no need to bother them any more.
+    }
+    
+
+
 </script>
+<?= $this->fetch('campo_js') ?>
+
 </body>
 
 </html>
