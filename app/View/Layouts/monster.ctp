@@ -10,22 +10,22 @@
     <meta name="author" content="GOGHU">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16"
-          href="<?php echo $this->request->webroot; ?>template/assets/images/favicon.png">
+          href="<?php echo $this->webroot; ?>template/assets/images/favicon.png">
     <title>Sistema</title>
     <!-- Bootstrap Core CSS -->
-    <link href="<?php echo $this->request->webroot; ?>template/assets/plugins/bootstrap/css/bootstrap.min.css"
+    <link href="<?php echo $this->webroot; ?>template/assets/plugins/bootstrap/css/bootstrap.min.css"
           rel="stylesheet">
 
     <!--alerts CSS -->
-    <link href="<?php echo $this->request->webroot; ?>template/assets/plugins/sweetalert/sweetalert.css"
+    <link href="<?php echo $this->webroot; ?>template/assets/plugins/sweetalert/sweetalert.css"
           rel="stylesheet" type="text/css">
 
     <?= $this->fetch('campo_css') ?>
 
     <!-- Custom CSS -->
-    <link href="<?php echo $this->request->webroot; ?>template/main/css/style.css" rel="stylesheet">
+    <link href="<?php echo $this->webroot; ?>template/main/css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="<?php echo $this->request->webroot; ?>template/main/css/colors/green-dark.css" id="theme"
+    <link href="<?php echo $this->webroot; ?>template/main/css/colors/green-dark.css" id="theme"
           rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -117,29 +117,29 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
-<script src="<?php echo $this->request->webroot; ?>template/assets/plugins/jquery/jquery.min.js"></script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap tether Core JavaScript -->
-<script src="<?php echo $this->request->webroot; ?>template/assets/plugins/bootstrap/js/tether.min.js"></script>
-<script src="<?php echo $this->request->webroot; ?>template/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/bootstrap/js/tether.min.js"></script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 <!-- slimscrollbar scrollbar JavaScript -->
-<script src="<?php echo $this->request->webroot; ?>template/main/js/jquery.slimscroll.js"></script>
+<script src="<?php echo $this->webroot; ?>template/main/js/jquery.slimscroll.js"></script>
 <!--Wave Effects -->
-<script src="<?php echo $this->request->webroot; ?>template/main/js/waves.js"></script>
+<script src="<?php echo $this->webroot; ?>template/main/js/waves.js"></script>
 <!--Menu sidebar -->
-<script src="<?php echo $this->request->webroot; ?>template/main/js/sidebarmenu.js"></script>
+<script src="<?php echo $this->webroot; ?>template/main/js/sidebarmenu.js"></script>
 <!--stickey kit -->
-<script src="<?php echo $this->request->webroot; ?>template/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
 <!--Custom JavaScript -->
-<script src="<?php echo $this->request->webroot; ?>template/main/js/custom.min.js"></script>
+<script src="<?php echo $this->webroot; ?>template/main/js/custom.min.js"></script>
 
 
-<script src="<?php echo $this->request->webroot; ?>template/main/js/validation.js"></script>
+<script src="<?php echo $this->webroot; ?>template/main/js/validation.js"></script>
 <!-- Sweet-Alert  -->
-<script src="<?php echo $this->request->webroot; ?>template/assets/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/sweetalert/sweetalert.min.js"></script>
 <!-- ============================================================== -->
 <!-- Style switcher -->
 <!-- ============================================================== -->
-<script src="<?php echo $this->request->webroot; ?>template/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
 
 <?= $this->fetch('campo_js') ?>
 
