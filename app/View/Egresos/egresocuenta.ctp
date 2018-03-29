@@ -81,7 +81,7 @@
 
 $("#ajaxform").submit(function(e){
     if($("#requ").val()==''){
-        $('#requ_chosen').after('<span id="texto_requ" style="color: red;">texto</span>');
+        $('#requ_chosen').after('<span id="texto_requ" style="color: red;">Es necesario el Tipo de Egreso</span>');
         
         e.preventDefault();
     }else{
