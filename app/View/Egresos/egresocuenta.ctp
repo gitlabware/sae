@@ -23,8 +23,9 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="user-settings-email">Tipo de Egreso</label>
             <div class="col-md-8">
-                <?php echo $this->Form->select('Cuentasegreso.nomenclatura_id', $nomenclaturas, array('class' => 'select-chosen', 'required','empty' => 'Seleccione el tipo de egreso')); ?>
+                <?php echo $this->Form->select('Cuentasegreso.nomenclatura_id', $nomenclaturas, array('class' => 'select-chosen' , 'id'=>'requ','empty' => 'Seleccione el tipo de egreso')); ?>
             </div>
+            <span> </span>
         </div>
         <div class="form-group">
             <label class="col-md-4 control-label" for="user-settings-email">Caja/Banco</label>
@@ -57,15 +58,39 @@
             </div>
         </div>
     </fieldset>
-    <div class="form-group form-actions">
+    <div class="form-group form-actions activa">
         <div class="col-xs-12 text-right">
             <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
         </div>
     </div>
+
+
     <?php echo $this->Form->end(); ?>
 </div>
 <!-- END Modal Body -->
 
 <script>
-$('.select-chosen').chosen({width: "100%"});
+
+ $('.select-chosen').chosen({width: "100%"});
+// $(document).ready(function(){
+//     $( "#ajaxform" ).on("submit",function() {
+//       alert( "Handler for .submit() called." );
+
+//   });
+// });
+
+$("#ajaxform").submit(function(e){
+    if($("#requ").val()==''){
+        $('#requ_chosen').after('<span id="texto_requ" style="color: red;">Es necesario el Tipo de Egreso</span>');
+        
+        e.preventDefault();
+    }else{
+        $("#texto_requ").remove() ;
+    }    
+    
+});
+
+
 </script>
+
+
