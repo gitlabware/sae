@@ -6,7 +6,7 @@ class EdificiosController extends AppController {
 
     var $components = array('RequestHandler', 'DataTable');
     public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User', 'Edificioconcepto', 'Ambienteconcepto', 'Retencione', 'GenCategoriasambiente', 'GenCategoriaspago');
-    public $layout = 'sae';
+    public $layout = 'monster';
 
     public function beforeFilter() {
         parent::beforeFilter();
