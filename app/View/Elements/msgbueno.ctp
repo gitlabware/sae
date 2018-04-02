@@ -1,14 +1,19 @@
-<!--<div class="alert alert-success alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h4><i class="fa fa-check-circle"></i> Excelente </h4> <?php //echo $message; ?>
-</div>-->
-<script>
-  var growlType = 'success';
-  $.bootstrapGrowl('<h4>Excelente!</h4> <p><?php echo $message; ?></p>', {
-      type: growlType,
-      delay: 2500,
-      width: 400,
-      allow_dismiss: true
-  });
-  $(this).prop('disabled', true);
-</script>
+<?php $this->append('campo_js_ant'); ?>
+    <script src="<?php echo $this->webroot; ?>template/assets/plugins/toast-master/js/jquery.toast.js"></script>
+    <script>
+        $.toast({
+            heading: 'Excelente!!',
+            text: '<?= h($message) ?>',
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'success',
+            hideAfter: 3500,
+            stack: 6
+        });
+    </script>
+<?php $this->end() ?>
+
+<?php $this->append('campo_css_ant'); ?>
+    <link href="<?php echo $this->webroot; ?>template/assets/plugins/toast-master/css/jquery.toast.css"
+          rel="stylesheet">
+<?php $this->end(); ?>

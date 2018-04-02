@@ -21,7 +21,7 @@
                                 <td><?php echo $ed['Edificio']['telefonos']; ?></td>
                                 <td class="text-center">
                                     <a href="javascript:void(0)"
-                                       onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'edificio', $ed['Edificio']['id'])); ?>');"
+                                       onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'edificio', $ed['Edificio']['id'])); ?>',true);"
                                        title="Editar Edificio" class="btn btn-secondary btn-sm"><i
                                                 class="fa fa-pencil"></i></a>
                                     <a href="javascript:void(0)"

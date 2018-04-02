@@ -36,7 +36,7 @@
                     <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Edificios </span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'index')); ?>">Listado</a></li>
-                        <li><a href=javascript:"  onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'edificio')); ?>');">Nuevo</a></li>
+                        <li><a href=javascript:"  onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'edificio')); ?>',true);">Nuevo</a></li>
                     </ul>
                 </li>
                 <li>

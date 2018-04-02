@@ -13,9 +13,11 @@
           href="<?php echo $this->webroot; ?>template/assets/images/favicon.png">
     <title>Sistema</title>
     <!-- Bootstrap Core CSS -->
+    <?php echo $this->Session->flash(); ?>
     <link href="<?php echo $this->webroot; ?>template/assets/plugins/bootstrap/css/bootstrap.min.css"
           rel="stylesheet">
-
+    <?= $this->fetch('campo_css_ant') ?>
+<!--    <link href="--><?php //echo $this->webroot; ?><!--template/assets/plugins/toast-master/css/jquery.toast.css" rel="stylesheet">-->
     <!--alerts CSS -->
     <link href="<?php echo $this->webroot; ?>template/assets/plugins/sweetalert/sweetalert.css"
           rel="stylesheet" type="text/css">
@@ -26,7 +28,7 @@
     <!-- Custom CSS -->
     <link href="<?php echo $this->webroot; ?>template/main/css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="<?php echo $this->webroot; ?>template/main/css/colors/megna-dark.css" id="theme"
+    <link href="<?php echo $this->webroot; ?>template/main/css/colors/green-dark.css" id="theme"
           rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -86,7 +88,7 @@
         <!-- Container fluid  -->
         <!-- ============================================================== -->
         <div class="container-fluid">
-            <?php echo $this->Session->flash(); ?>
+
             <?php echo $this->fetch('content'); ?>
 
             <?= $this->fetch('dcontenido') ?>
@@ -155,6 +157,8 @@
 <!--Custom JavaScript -->
 <script src="<?php echo $this->webroot; ?>template/main/js/custom.min.js"></script>
 
+
+<?php echo $this->fetch('campo_js_ant') ?>
 <script src="<?php echo $this->webroot; ?>template/main/js/validation.js"></script>
 <!-- Sweet-Alert  -->
 <script src="<?php echo $this->webroot; ?>template/assets/plugins/sweetalert/sweetalert.min.js"></script>
@@ -163,7 +167,6 @@
 <!-- ============================================================== -->
 <!--<script src="-->
 <?php //echo $this->webroot; ?><!--template/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>-->
-
 
 
 <script>
