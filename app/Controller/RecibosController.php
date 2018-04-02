@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class RecibosController extends AppController {
 
-  public $layout = 'sae';
+  public $layout = 'monster';
   public $uses = array(
     'Recibo', 'Pago'
   );

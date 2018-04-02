@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class PresupuestosController extends AppController {
 
     public $uses = array('Presupuesto', 'Concepto', 'Subconcepto', 'Ingreso', 'Gasto', 'Subgasto', 'Egreso', 'Nomenclatura', 'NomenclaturasAmbiente', 'Cuentasmonto', 'SubcGestione', 'Pago', 'Comprobantescuenta');
-    public $layout = 'sae';
+    public $layout = 'monster';
     public $components = array('RequestHandler');
 
     public function index() {

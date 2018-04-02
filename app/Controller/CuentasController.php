@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 
 class CuentasController extends AppController {
 
-  public $layout = 'sae';
+  public $layout = 'monster';
   public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto','Banco','Bancosmovimiento','Cuentasegreso');
 
   public function index() {

@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 class CategoriasambientesController extends AppController {
 
     public $uses = array('Categoriasambiente');
-    public $layout = 'sae';
+    public $layout = 'monster';
 
     public function beforeFilter() {
         parent::beforeFilter();

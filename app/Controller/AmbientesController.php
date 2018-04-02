@@ -6,7 +6,7 @@ class AmbientesController extends AppController {
 
     var $components = array('RequestHandler', 'DataTable', 'Montoliteral');
     public $uses = array('Ambiente', 'Edificio', 'Piso', 'Categoriasambiente', 'Categoriaspago', 'User', 'Inquilino', 'Pago', 'Ambienteconcepto', 'Concepto', 'Recibo', 'Banco', 'Nomenclatura', 'Comprobante', 'Comprobantescuenta');
-    public $layout = 'sae';
+    public $layout = 'monster';
 
     public function beforeFilter() {
         parent::beforeFilter();

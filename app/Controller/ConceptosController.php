@@ -6,7 +6,7 @@ class ConceptosController extends AppController {
 
   public $uses = array('Concepto', 'Edificioconcepto', 'Ambienteconcepto', 'User', 'Ambiente', 'Subconcepto', 'SubcGestione');
   var $components = array('RequestHandler');
-  public $layout = 'sae';
+  public $layout = 'monster';
 
   public function beforeFilter() {
     parent::beforeFilter();

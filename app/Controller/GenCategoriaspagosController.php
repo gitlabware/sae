@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class GenCategoriaspagosController extends AppController {
 
     public $uses = 'GenCategoriaspago';
-    public $layout = 'sae';
+    public $layout = 'monster';
 
     public function beforeFilter() {
         parent::beforeFilter();

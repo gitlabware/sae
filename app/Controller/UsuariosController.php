@@ -6,7 +6,7 @@ class UsuariosController extends AppController {
 
   var $uses = array('Pago', 'Inquilino', 'User', 'Ambiente');
   var $components = array('RequestHandler', 'DataTable');
-  var $layout = 'sae';
+  var $layout = 'monster';
 
   public function beforeFilter() {
     parent::beforeFilter();
