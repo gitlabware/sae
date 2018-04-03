@@ -1,4 +1,21 @@
 <style>
+    div.card-pisos .ocu-d {
+        display: none;
+    }
+
+    div.card-pisos .ver-d {
+        display: block;
+    }
+
+    .oculto {
+        display: none;
+    }
+
+    .card-block {
+        padding: 0px !important;
+    }
+</style>
+<style>
     .placeholder {
         border: 1px solid green;
         background-color: white;
@@ -13,92 +30,111 @@
         margin-top: 1em;
     }
 </style>
-
-<!--<div class="block">
-    <div class="grid">
-        <div class="well tile">A</div>
-        <div class="well tile">B</div>
-        <div class="well tile">C</div>
-        <div class="well tile">D</div>
+<div class="row page-titles">
+    <div class="col-md-6 col-8 align-self-center">
+        <h3 class="text-themecolor m-b-0 m-t-0">
+            Ambientes por piso
+        </h3>
     </div>
-</div>-->
-<div class="grid">
-    <?php foreach ($pisos as $pi): ?>
-        <div class="block well tile" data-id="<?php echo $pi['Piso']['id']; ?>">
-
-            <!-- Interactive Title -->
-            <div class="block-title">
-                <!-- Interactive block controls (initialized in js/app.js -> interactiveBlocks()) -->
-                <div class="block-options pull-right">
-                    <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" onclick="$('#<?php echo 'idcont-' . $pi['Piso']['id'] ?>').toggle(400);
-                                localStorage['piso'] = '<?php echo $pi['Piso']['id']; ?>';"><i class="fa fa-arrows-v"></i></a>
-                       <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('controller' => 'Edificios', 'action' => 'elimina_piso', $pi['Piso']['id']), array('class' => 'btn btn-alt btn-sm btn-primary', 'confirm' => 'Esta seguro de eliminar el piso??', 'escape' => FALSE)); ?>
+    <div class="col-md-6 col-4 align-self-center">
+        <button class="btn pull-right btn-success" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'piso')); ?>')">
+            <i class="mdi mdi-plus-circle">
+            </i>
+            Adicionar piso
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 d-pisos " id="c-pisos">
+        <?php foreach ($pisos as $pi): ?>
+        <div class="card card-outline-inverse card-pisos" data-id="<?php echo $pi['Piso']['id']; ?>">
+            <div class="card-header">
+                <div aria-label="Toolbar with button groups" class="btn-toolbar justify-content-between" role="toolbar">
+                    <div class="input-group">
+                        <h4 class="m-b-0 text-white ti-piso" dato-texto="<?= $pi['Piso']['nombre']?>">
+                            <?= $pi['Piso']['nombre']?>
+                        </h4>
+                    </div>
+                    <div aria-label="First group" class="btn-group" role="group">
+                        <button class="btn btn-secondary add-ambiente" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'])); ?>');" title="Adicionar ambiente en este piso" type="button">
+                            <i class="fa fa-plus">
+                            </i>
+                        </button>
+                        <button class="btn btn-secondary guard-piso oculto" title="Guardar" type="button">
+                            <i class="mdi mdi-content-save">
+                            </i>
+                        </button>
+                        <button class="btn btn-secondary edit-piso" title="Editar" type="button">
+                            <i class="mdi mdi-lead-pencil">
+                            </i>
+                        </button>
+                        <button class="btn btn-secondary btn-circle elim-piso" title="Eliminar Piso" type="button">
+                            <i class="mdi mdi-delete">
+                            </i>
+                        </button>
+                        <button class="btn btn-secondary btn-circle b-ver-oc" title="Ver/Ocultar Ambientes" type="button">
+                            <i class="fa fa-reorder">
+                            </i>
+                        </button>
+                    </div>
                 </div>
-                <h2>
-                    <div id="div-nombre-edi-<?php echo $pi['Piso']['id']; ?>">
-                        <span id="idnombre-span-amb-<?php echo $pi['Piso']['id']; ?>" title="EDITAR" onclick="$('#div-nombre-edi-<?php echo $pi['Piso']['id']; ?>').toggle(200);
-                                    $('#edita-edificio-<?php echo $pi['Piso']['id']; ?>').toggle(200);"><?php echo $pi['Piso']['nombre']; ?></span> - AMBIENTES <span id="iderror-amb-<?php echo $pi['Piso']['id']; ?>"></span>
-                    </div>
-                    <div id="edita-edificio-<?php echo $pi['Piso']['id']; ?>" style="display: none;">
-                        <?php echo $this->Form->create('Ambiente', array('action' => 'registra_nombre', 'id' => 'form-ambiente-' . $pi['Piso']['id'])); ?>
-                        <?php echo $this->Form->hidden('Piso.id', array('value' => $pi['Piso']['id'])); ?>
-                        <?php echo $this->Form->hidden('Piso.edificio_id', array('value' => $pi['Piso']['edificio_id'])); ?>
-                        <?php echo $this->Form->text('Piso.nombre', array('placeholder' => 'Nombre del ambiente', 'id' => 'idnombret-' . $pi['Piso']['id'], 'value' => $pi['Piso']['nombre'])); ?> 
-                        <button class="btn btn-xs btn-success" type="button" onclick="guarda_edificio(<?php echo $pi['Piso']['id']; ?>);">Guardar</button>  - AMBIENTES
-                        <?php echo $this->Form->end(); ?>
-                    </div>
-                    <div id="idloadnombre-<?php echo $pi['Piso']['id']; ?>" style="display: none;">
-                        <i class="fa fa-asterisk fa-spin fa-2x text-info"></i>
-                    </div>
-                </h2>
             </div>
-            <!-- END Interactive Title -->
-
-            <!-- Interactive Content -->
-            <!-- The content you will put inside div.block-content, will be toggled -->
-            <div class="block-content" id="<?php echo 'idcont-' . $pi['Piso']['id'] ?>" style="display: none;">
-                <div class="row">
-                    <table class="table table-striped" style="font-size: 15px; font-weight: bold;">
+            <div class="card-block ocu-d" id="<?php echo 'idcont-' . $pi['Piso']['id'] ?>">
+                <div class="table-responsive">
+                    <table class="table table-bordered" style="font-size: 15px; font-weight: bold;">
                         <thead>
                             <tr>
-                                <th>Inquilino</th>
-                                <th>Propietario</th>
-                                <th>Ambiente</th>
-                                <th>Accion</th>
+                                <th>
+                                    Inquilino
+                                </th>
+                                <th>
+                                    Propietario
+                                </th>
+                                <th>
+                                    Ambiente
+                                </th>
+                                <th>
+                                    Accion
+                                </th>
                             </tr>
                         </thead>
-                        <?php $ambientes = $this->requestAction(array('action' => 'get_ambientes', $edificio['Edificio']['id'], $pi['Piso']['id'])) ?>
+                        <?php $ambientes = $this->
+                        requestAction(array('action' => 'get_ambientes', $edificio['Edificio']['id'], $pi['Piso']['id']))?>
                         <?php foreach ($ambientes as $am): ?>
-                            <tr>
-                                <td class="success"><?php echo $am['Inquilino']['nombre'] ?></td>
-                                <td class="success"><?php echo $am['User']['nombre'] ?></td>
-                                <td class="info"><?php echo $am['Ambiente']['nombre'] ?></td>
-                                <td class="warning">
-                                    <a class="btn btn-info" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'], $am['Ambiente']['id'])); ?>');"> <i class="gi gi-edit"></i> </a>  
-                                    <?php echo $this->Html->link('<i class="gi gi-circle_remove"></i>', array('action' => 'eliminar', $am['Ambiente']['id']), array('class' => 'btn btn-danger', 'escape' => FALSE, 'confirm' => 'Esta seguro de quitar el ambiente', 'title' => 'Quitar ambiente')) ?> 
-
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+                        <tr>
+                            <td class="success">
+                                <?php echo $am['Inquilino']['nombre'] ?>
+                            </td>
+                            <td class="success">
+                                <?php echo $am['User']['nombre'] ?>
+                            </td>
+                            <td class="info">
+                                <?php echo $am['Ambiente']['nombre'] ?>
+                            </td>
+                            <td class="warning">
+                                <a class="btn btn-info" href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'], $am['Ambiente']['id'])); ?>');">
+                                    <i class="fa fa-edit">
+                                    </i>
+                                </a>
+                                <?php echo $this->Html->link('
+                                <i class="fa fa-remove">
+                                </i>
+                                ', array('action' => 'eliminar', $am['Ambiente']['id']), array('class' => 'btn btn-danger', 'escape' => false, 'confirm' => 'Esta seguro de quitar el ambiente', 'title' => 'Quitar ambiente')) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach;?>
                     </table>
-                    <div class="col-md-3">
-                        <a class="btn btn-success col-md-12" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'])); ?>');">ADICIONAR</a>
-                    </div> 
                 </div>
             </div>
         </div>
-    <?php endforeach; ?>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <a class="btn btn-success col-md-12" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'piso')); ?>');">ADICIONAR PISO</a>
+        <?php endforeach;?>
     </div>
 </div>
-<script src="<?php echo $this->webroot; ?>js/pages/uiProgress.js"></script>
-<script src="<?php echo $this->webroot; ?>js/jquery-sortable.js"></script>
+<?php $this->start('campo_js'); ?>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
+</script>
 <script>
-            function guarda_edificio(id_piso) {
+    function guarda_edificio(id_piso) {
                 var postData = $('#form-ambiente-' + id_piso).serializeArray();
                 var formURL = $('#form-ambiente-' + id_piso).attr("action");
                 $.ajax(
@@ -110,9 +146,6 @@
                                 $('#edita-edificio-' + id_piso).toggle();
                                 $('#idloadnombre-<?php echo $pi['Piso']['id']; ?>').toggle();
                             },
-                            /*complete: function (XMLHttpRequest, textStatus) {
-                             //alert('despues de enviar');
-                             },*/
                             success: function (data, textStatus, jqXHR)
                             {
                                 if ($.parseJSON(data).msgerror == '') {
@@ -138,30 +171,29 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown)
                             {
-                                //if fails   
+                                //if fails
                                 alert("error");
                             }
                         });
             }
 
+            
             $(function () {
-                $(".grid").sortable({
-                    tolerance: 'pointer',
-                    revert: 'invalid',
-                    placeholder: 'span2 well placeholder tile',
-                    forceHelperSize: true,
-                    update: function (event, ui) {
-
-                        //console.log(event);
-                        //console.log(ui);
-                        revisa_tabla();
-                    }
+                    $(".d-pisos").sortable({
+                        tolerance: 'pointer',
+                        revert: 'invalid',
+                        cursor: "move",
+                        forceHelperSize: true,
+                        update: function (event, ui) {
+                            revisa_tabla();
+                        }
+                    });
                 });
-            });
+
             function revisa_tabla() {
                 var postData = "";
                 var cont = 0;
-                $('.grid div').each(function (ey, eva) {
+                $('.d-pisos div.card-pisos').each(function (ey, eva) {
                     cont++;
                     postData += " pisos[" + $(eva).attr('data-id') + ']=' + cont + '&';
                     //console.log($(eva).attr('data-id'));
@@ -185,31 +217,110 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown)
                             {
-                                //if fails   
+                                //if fails
                                 alert("error");
                             }
                         });
             }
-
-            if (typeof localStorage['piso'] !== "undefined")
-            {
-                $('#idcont-' + localStorage['piso']).toggle(400);
-                $('html,body').animate({
-                    scrollTop: $('#idcont-' + localStorage['piso']).offset().top},
-                'slow');
-            }
 </script>
-
 <script>
-    /*window.onload = function () {
-        var pos = window.name || 0;
-        window.scrollTo(0, pos);
 
-        //alert(localStorage['piso']);
+
+    if (typeof localStorage['piso'] !== "undefined")
+    {
+        $('#idcont-' + localStorage['piso']).toggle(400);
+        $('html,body').animate({
+            scrollTop: $('#idcont-' + localStorage['piso']).offset().top
+        },'slow');
     }
-    window.onunload = function () {
-        window.name = self.pageYOffset || (document.documentElement.scrollTop + document.body.scrollTop);
-        //localStorage['piso'] = 'somestring';
+    $(document).on('click','.b-ver-oc',function () {
+        e_elem = $(this).parents('div.card-pisos');
+        e_elem.children('div.card-block').toggle(200);
+        localStorage['piso'] = e_elem.attr('data-id');
+    });
 
-    }*/
-</script>   
+    $('#c-pisos').on('click','.edit-piso',function () {
+        editarpiso($(this).parents('div.card-pisos').find('h4.ti-piso'));
+    });
+    $('#c-pisos').on('click','.guard-piso',function () {
+        guardapiso($(this).parents('div.card-pisos'));
+    });
+    function editarpiso(elemento) {
+
+        $(elemento).parents('div.card-pisos').find('button.edit-piso').hide(200);
+        $(elemento).parents('div.card-pisos').find('button.guard-piso').show(200);
+        contenidoti = '<input type="text" class="form-control fnom-piso" placeholder="Nombre del Piso" value="' + $(elemento).attr('dato-texto') + '">';
+
+        $(elemento).html("");
+        $(elemento).parent(".input-group").append(contenidoti);
+        $(elemento).parents('div.card-pisos').find('input').focus().select();
+    }
+    function guardapiso(elemento) {
+        var postData = $(elemento).find('form').serializeArray();
+
+        $.ajax({
+            url: '<?= $this->Html->url(['controller' => 'Ambientes', 'action' => 'registra_nombre']); ?>',
+            type: "POST",
+            data: {
+                id: $(elemento).attr('data-id'),
+                nombre: $(elemento).find('input.fnom-piso').val()
+            },
+            success: function (data) {
+                if ($.parseJSON(data).estado) {
+                    alertabn($.parseJSON(data).respuesta);
+                    $(elemento).find('button.edit-piso').show(200);
+                    $(elemento).find('button.guard-piso').hide(200);
+                    contenidoti = '<h4 class="m-b-0 text-white ti-piso">' + $(elemento).find('input.fnom-piso').val() + '</h4>';
+                    $(elemento).find(".input-group").html(contenidoti);
+                } else {
+                    alertaer($.parseJSON(data).respuesta);
+                }
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    }
+    $('#c-pisos').on('click','.elim-piso',function () {
+        e_elemento = $(this).parents('div.card-pisos');
+        idPiso = e_elemento.attr('data-id');
+        nombre_p = e_elemento.find('.ti-piso').html();
+        texto = 'Se eliminara al piso: ' + nombre_p + '?';
+        swal({
+            title: "Esta seguro?",
+            text: texto,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Si",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                
+                $.ajax(
+                    {
+                        url: '<?php echo $this->Html->url(['controller' => 'Edificios', 'action' => 'elimina_piso']);  ?>/' + idPiso,
+                        type: "POST",
+                        success: function (data, textStatus, jqXHR) {
+                            if ($.parseJSON(data).estado) {
+                                alertabn($.parseJSON(data).respuesta);
+                                e_elemento.remove();
+                            } else {
+                                alertaer($.parseJSON(data).respuesta);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            //if fails
+                            alert("error");
+                        }
+                    });
+
+            } else {
+                swal("Cancelado", "(DE " + texto + ')', "error");
+            }
+        });
+    });
+</script>
+<?php $this->end(); ?>
