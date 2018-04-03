@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class ReportesController extends AppController {
 
   public $uses = array('Concepto', 'Pago', 'Ambiente', 'User', 'Inquilino', 'Banco', 'Cuentasegreso', 'Bancosmovimiento', 'Comprobantescuenta', 'Comprobante', 'Nomenclatura');
-  public $layout = 'sae';
+  public $layout = 'monster';
 
   public function reporte_pagos() {
     $conceptos = $this->Concepto->find('list', array('fields' => 'Concepto.nombre'));

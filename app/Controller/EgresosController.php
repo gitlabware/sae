@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class EgresosController extends AppController {
 
   public $uses = array('Egreso', 'Cuentasegreso', 'Banco', 'Cuenta', 'Nomenclatura', 'Edificio', 'Comprobante', 'Comprobantescuenta');
-  public $layout = 'sae';
+  public $layout = 'monster';
 
   public function egresocuenta() {
     $this->layout = 'ajax';

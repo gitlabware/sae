@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
 class NomenclaturasController extends AppController {
 
     public $uses = array('Nomenclatura', 'Concepto', 'Ambiente', 'Piso', 'NomenclaturasAmbiente', 'Subconcepto');
-    public $layout = 'sae';
+    public $layout = 'monster';
 
     public function index() {
         $idEdificio = $this->Session->read('Auth.User.edificio_id');

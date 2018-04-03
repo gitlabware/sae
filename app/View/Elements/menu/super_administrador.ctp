@@ -60,7 +60,7 @@
                             <li><a href="javascript:"  onclick="cargarmodal('<?php echo $this->Html->url(['controller' => 'Users','action' => 'usuario', $this->Session->read('Auth.User.id')]) ?>');"><i class="ti-user"></i> Mi cuenta</a></li>
 
                             <li role="separator" class="divider"></li>
-                            <li><a href="<?= $this->Html->url(['controller' => 'Users','action' => 'logout']);?>"><i class="fa fa-power-off"></i> Salir</a></li>
+                            <li><a href="<?= $this->Html->url(['controller' => 'Users','action' => 'salir']);?>"><i class="fa fa-power-off"></i> Salir</a></li>
                         </ul>
                     </div>
                 </li>

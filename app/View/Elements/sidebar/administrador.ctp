@@ -1,38 +1,40 @@
-<!-- Main Sidebar -->
-<div id="sidebar">
-    <!-- Wrapper for scrolling functionality -->
-    <div class="sidebar-scroll">
-        <!-- Sidebar Content -->
-        <div class="sidebar-content">
-            <!-- Brand -->
-            <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'datos')); ?>" class="sidebar-brand">
-                <i class="gi gi-flash"></i><strong>SAE</strong>lw
-            </a>
-            <!-- END Brand -->
-
-            <!-- User Info -->
-            <div class="sidebar-section sidebar-user clearfix">
-                <div class="sidebar-user-avatar">
-                    <a href="javascript:">
-                        <img src="<?php echo $this->webroot; ?>img/placeholders/avatars/avatar2.jpg" alt="avatar">
-                    </a>
-                </div>
-                <div class="sidebar-user-name"><?php echo $this->Session->read('Auth.User.username'); ?></div>
-                <div class="sidebar-user-links">
-                    <a href="javascript:" data-toggle="tooltip" data-placement="bottom" title="Perfil" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'usuario', $this->Session->read('Auth.User.id'))) ?>');"><i class="gi gi-user"></i></a>
-                    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Configuraciones"  onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>');"><i class="fa fa-cog"></i></a>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'salir')); ?>" data-toggle="tooltip" data-placement="bottom" title="Cerrar"><i class="gi gi-exit"></i></a>
+<!-- ============================================================== -->
+<!-- Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+        <!-- User profile -->
+        <div class="user-profile">
+            <!-- User profile image -->
+            <div class="profile-img"><img src="<?php echo $this->request->webroot; ?>img/user.jpg" alt="user"/></div>
+            <!-- User profile text-->
+            <div class="profile-text"><a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown"
+                                         role="button" aria-haspopup="true"
+                                         aria-expanded="true"><?php echo $this->Session->read('Auth.User.nombre') ?>
+                    <span class="caret"></span></a>
+                <div class="dropdown-menu animated flipInY">
+                    <a href="javascript:"
+                       onclick="cargarmodal('<?php echo $this->Html->url(['controller' => 'Users', 'action' => 'usuario', $this->Session->read('Auth.User.id')]) ?>');"
+                       class="dropdown-item"><i class="ti-user"></i> Mi cuenta</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="<?= $this->Html->url(['controller' => 'Users', 'action' => 'salir']); ?>"
+                       class="dropdown-item"><i class="fa fa-power-off"></i> Salir</a>
                 </div>
             </div>
-            <!-- END User Info -->
+        </div>
+        <!-- Sidebar navigation Administrador-->
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+                <li class="nav-small-cap"></li>
 
-            <!-- Sidebar Navigation -->
-            <ul class="sidebar-nav">
+
+
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'datos')); ?>"><i class="gi gi-charts sidebar-nav-icon"></i>Panel de Control</a>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'datos')); ?>"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Panel de Control</span></a>
                 </li>
                 <li>
-                    <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-settings sidebar-nav-icon"></i>Configuraciones</a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Configuraciones</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Categoriasambientes', 'action' => 'index')); ?>">Categoria de Ambiente</a>
@@ -43,7 +45,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-tags sidebar-nav-icon"></i>Ambientes</a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Ambientes</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>">Ambientes Piso</a>
@@ -54,7 +56,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a  href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-money sidebar-nav-icon"></i>Pagos</a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Pagos</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Adeudos - Excel</a>
@@ -82,17 +84,9 @@
                         </li>
                     </ul>
                 </li>
-                <!--<li>
-                    <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'eservicios', $this->Session->read('Auth.User.edificio_id'))); ?>');"><i class="gi gi-briefcase sidebar-nav-icon"></i>Servicios</a>
-                </li>-->
-                <!--<li>
-                    <a  href="<?php echo $this->Html->url(array('controller' => 'Categoriasambientes', 'action' => 'index')); ?>"><i class="gi gi-vector_path_all sidebar-nav-icon"></i>Categoria de Ambiente</a>
-                </li>
+
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Categoriaspagos', 'action' => 'index')); ?>"><i class="gi gi-money sidebar-nav-icon"></i>Categoria de Pagos</a>
-                </li>-->
-                <li>
-                    <a href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-notes_2 sidebar-nav-icon"></i>Reportes</a>
+                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Reportes</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos', 'action' => 'reporte_balance')); ?>">Reporte de Balance</a>
@@ -114,17 +108,17 @@
                         </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'reporte_auxiliares')); ?>">Reporte de Auxiliares</a>
-                        </li> 
+                        </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'comprobantes_pago_meses')); ?>">Reporte de Auxiliares por meses</a>
-                        </li> 
+                        </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Reportes', 'action' => 'comprobantes_pago_gestiones')); ?>">Reporte de Auxiliares por gestiones</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-user sidebar-nav-icon"></i>Usuarios</a>
+                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Usuarios</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuarios')); ?>">Listado Inquilinos/Propietarios</a>
@@ -141,7 +135,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator"></i><i class="gi gi-sort sidebar-nav-icon"></i>Conceptos</a>
+                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Conceptos</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'ambientes')); ?>">Asignacion de conceptos</a>
@@ -156,16 +150,21 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Recibos', 'action' => 'index')); ?>"><i class="gi gi-notes sidebar-nav-icon"></i>Recibos</a>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Recibos', 'action' => 'index')); ?>"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Recibos</span></a>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Tutoriales', 'action' => 'index')); ?>"><i class="gi gi-film sidebar-nav-icon"></i>Tutoriales</a>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Tutoriales', 'action' => 'index')); ?>"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Tutoriales</span></a>
                 </li>
+
+
             </ul>
-            <!-- END Sidebar Navigation -->
-        </div>
-        <!-- END Sidebar Content -->
+        </nav>
+        <!-- End Sidebar navigation Administrador -->
     </div>
-    <!-- END Wrapper for scrolling functionality -->
-</div>
-<!-- END Main Sidebar -->
+    <!-- End Sidebar scroll-->
+
+</aside>
+<!-- ============================================================== -->
+<!-- End Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+

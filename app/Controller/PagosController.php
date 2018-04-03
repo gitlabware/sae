@@ -10,7 +10,7 @@ App::import('Vendor', 'tcpdf/tcpdf');
 class PagosController extends AppController {
 
     var $components = array('RequestHandler', 'DataTable');
-    public $layout = 'sae';
+    public $layout = 'monster';
     public $uses = array(
         'Pago', 'Excel', 'Ambiente', 'Concepto', 'Ambienteconcepto'
     );

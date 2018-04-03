@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class BancosController extends AppController {
 
   public $uses = array('Banco', 'Cuenta', 'Bancosmovimiento', 'Cuentasmonto', 'Cuentasegreso', 'Nomenclatura', 'Comprobante', 'Comprobantescuenta', 'Edificio');
-  public $layout = 'sae';
+  public $layout = 'monster';
 
   public function index() {
     $idEficio = $this->Session->read('Auth.User.edificio_id');

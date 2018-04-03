@@ -2,7 +2,7 @@
 
 class TutorialesController extends AppController {
 
-  public $layout = 'sae';
+  public $layout = 'monster';
   public function index(){
     
   }

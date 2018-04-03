@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class ComprobantesController extends AppController {
 
   public $uses = array('Comprobante', 'Comprobantescuenta', 'Edificio');
-  public $layout = 'sae';
+  public $layout = 'monster';
 
   public function index() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
