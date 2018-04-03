@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title">Edificio</h4>
+    <h4 class="modal-title">Informacion de Edificio</h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 
@@ -7,8 +7,7 @@
 <?php echo $this->Form->create('Edificio', array('action' => 'guarda_edificio', 'class' => 'form-horizontal form-bordered', 'id' => 'form-edificio', 'enctype' => 'multipart/form-data')); ?>
 <div class="modal-body">
 
-    <h3 class="card-title">Informacion de Edificio</h3>
-    <hr>
+    
     <div class="form-group">
         <div class="row">
             <label class="col-md-4 control-label">Nombre</label>
