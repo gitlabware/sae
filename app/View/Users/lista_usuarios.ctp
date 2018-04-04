@@ -24,8 +24,8 @@
                                     <td><?php echo $us['User']['telefonos']; ?></td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-xs">
-                                        <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'usuario3',$us['User']['id'])); ?>');" title="Editar Usuario" class="btn btn-secondary "><i class="fa fa-pencil"></i></a>
-                                            <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$us['User']['id']),array('class' => 'btn btn-danger','title' => 'Eliminar Usuario','confirm' => 'Esta seguro de eliminar al usuario '.$us['User']['username'].'??','escape' => FALSE))?>
+                                        <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'usuario3',$us['User']['id'])); ?>');" title="Editar Usuario" class="btn btn-secondary btn-sm "><i class="fa fa-pencil"></i></a>
+                                            <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$us['User']['id']),array('class' => 'btn btn-danger btn-sm','title' => 'Eliminar Usuario','confirm' => 'Esta seguro de eliminar al usuario '.$us['User']['username'].'??','escape' => FALSE))?>
                                         </div>
                                     </td>
                                 </tr>
