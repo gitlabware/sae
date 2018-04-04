@@ -1,12 +1,13 @@
-<!-- Example Block -->
+<div class="col-md-6 col-8 align-self-center">
+    <h2 class="text-themecolor m-b-0 m-t-0">Listado de inquilinos y propietarios</h2>
+</div>
 <div class="row">
-    <!-- Interactive Block -->
-    <div class="block">
-        <!-- Interactive Title -->
-        <div class="block-title">
-            <h2><strong>Listado de inquilinos y propietarios</strong></h2>
-            <div class="table-responsive">
-                <table id="tabla-json" class="table table-vcenter table-condensed table-bordered">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Example Content -->
+                <div class="table-responsive m-t-40">
+                <table id="general-table" class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -27,6 +28,17 @@
 
     </div>
 </div>
+</div>
+
+
+<?php $this->start('campo_js') ?>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<!--<script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>-->
+<script>
+    $('#general-table').DataTable();
+</script>
+<?php $this->end() ?>
+
 
 <script>
   urljsontablatrab = '<?php echo $this->Html->url(array('action' => 'usuarios.json')); ?>';

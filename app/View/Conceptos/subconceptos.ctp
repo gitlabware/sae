@@ -1,14 +1,20 @@
-<!-- Example Block -->
-<div class="block">
+<div class="col-md-6 col-8 align-self-center">
+    <h2 class="text-themecolor m-b-0 m-t-0">Listado de Sub-conceptos</h2>
+</div>
+
+<div class="row">
     <!-- Example Title -->
-    <div class="block-title">
+    <div class="col-12">
         <div class="block-options pull-right">
             <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-success" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconcepto')); ?>');" title="Nuevo Subconcepto"><i class="fa fa-plus"></i></a>
         </div>
-        <h2>Listado de Sub-conceptos</h2>
+        
     </div>    
     <!-- Example Content -->
-    <div class="table-responsive">
+<div class="col-12">
+        <div class="card">
+            <div class="card-body">
+             <div class="table-responsive m-t-40">
         <table id="general-table" class="table table-bordered">
             <thead>
                 <tr>
@@ -28,8 +34,8 @@
                       <td style="width: 10%;"><?php echo $sub['Subconcepto']['tipo'] ?></td>
                       <td style="width: 20%;"><?php echo $sub['Concepto']['nombre'] ?></td>
                       <td style="width: 15%;">
-                          <a class="btn btn-info" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'subconcepto', $sub['Subconcepto']['id'])); ?>');"> <i class="gi gi-edit"></i> </a>  
-                          <?php echo $this->Html->link('<i class="gi gi-circle_remove"></i>', array('action' => 'eliminar_subconcepto', $sub['Subconcepto']['id']), array('class' => 'btn btn-danger', 'escape' => FALSE, 'confirm' => 'Esta seguro de quitar el subconcepto!!', 'title' => 'Quitar subconcepto')) ?> 
+                          <a class="btn btn-secondary btn-sm" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'subconcepto', $sub['Subconcepto']['id'])); ?>');"><i class="fa fa-pencil"></i> </a>  
+                          <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'eliminar_subconcepto', $sub['Subconcepto']['id']), array('class' => 'btn btn-danger btn-sm', 'escape' => FALSE, 'confirm' => 'Esta seguro de quitar el subconcepto!!', 'title' => 'Quitar subconcepto')) ?> 
 
                       </td>
                   </tr>
@@ -47,3 +53,13 @@
     </div>
     <!-- END Example Content -->
 </div>
+   </div>
+</div> 
+</div>
+<?php $this->start('campo_js') ?>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<!--<script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>-->
+<script>
+    $('#general-table').DataTable();
+</script>
+<?php $this->end() ?>
