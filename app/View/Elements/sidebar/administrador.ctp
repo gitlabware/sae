@@ -65,7 +65,7 @@
                             <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'preavisos')); ?>">Pre-avisos</a>
                         </li>
                         <li>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'egresocuenta')); ?>');">Registro de Egreso</a>
+                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'egresocuenta')); ?>',true);">Registro de Egreso</a>
                         </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'multi_egreso')); ?>">Registro de Egreso Var.</a>

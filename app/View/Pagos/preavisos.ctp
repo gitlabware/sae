@@ -15,16 +15,16 @@
         }
     </style>
     <!-- Interactive Block -->
-    <div class="block">
+    <div class="card card-outline-inverse">
         <!-- Interactive Title -->
-        <div class="block-title">
-            <h2><strong>Listado de Pre-avisos por ambientes</strong></h2>
-            <div class="block-options pull-right">
-                <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-primary" title="Generar preavisos de mantenimiento" onclick="$('#idconcepto').val(10);$('#form-preavisos').submit();"><i class="fa fa-clipboard"></i></a>
+        <div class="card-header">
+            <span class="m-b-0 text-white "><strong>Listado de Pre-avisos por ambientes</strong></span>
+            <div class="pull-right">
+                <a href="javascript:" class="btn btn-alt btn-sm btn-primary" title="Generar preavisos de mantenimiento" onclick="$('#idconcepto').val(10);$('#form-preavisos').submit();"><i class="fa fa-clipboard"></i></a>
                 <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-success" title="Generar preavisos de alquiler" onclick="$('#idconcepto').val(11);$('#form-preavisos').submit();"><i class="fa fa-clipboard"></i></a>
             </div>
         </div>
-        <div class="block-content" >
+        <div class="card-body" >
             <?php echo $this->Form->create('Pago',array('action' => 'genera_preavisos','id' => 'form-preavisos'));?>
             <?php echo $this->Form->hidden('concepto_id',array('id' => 'idconcepto'));?>
             <div class="table-responsive">

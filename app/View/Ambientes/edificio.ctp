@@ -56,7 +56,7 @@
                         </h4>
                     </div>
                     <div aria-label="First group" class="btn-group" role="group">
-                        <button class="btn btn-secondary add-ambiente" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'])); ?>');" title="Adicionar ambiente en este piso" type="button">
+                        <button class="btn btn-secondary add-ambiente" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'])); ?>',true);" title="Adicionar ambiente en este piso" type="button">
                             <i class="fa fa-plus">
                             </i>
                         </button>
@@ -224,9 +224,7 @@
             }
 </script>
 <script>
-
-
-    if (typeof localStorage['piso'] !== "undefined")
+    if (localStorage['piso'] !== "undefined")
     {
         $('#idcont-' + localStorage['piso']).toggle(400);
         $('html,body').animate({
@@ -236,7 +234,11 @@
     $(document).on('click','.b-ver-oc',function () {
         e_elem = $(this).parents('div.card-pisos');
         e_elem.children('div.card-block').toggle(200);
-        localStorage['piso'] = e_elem.attr('data-id');
+        if(e_elem.attr('data-id') != localStorage['piso']){
+            localStorage['piso'] = e_elem.attr('data-id');
+        }else{
+            localStorage['piso'] = undefined;
+        }
     });
 
     $('#c-pisos').on('click','.edit-piso',function () {
@@ -285,7 +287,7 @@
         e_elemento = $(this).parents('div.card-pisos');
         idPiso = e_elemento.attr('data-id');
         nombre_p = e_elemento.find('.ti-piso').html();
-        texto = 'Se eliminara al piso: ' + nombre_p + '?';
+        texto = 'Se eliminara el piso: ' + nombre_p + '?';
         swal({
             title: "Esta seguro?",
             text: texto,
@@ -298,25 +300,7 @@
             closeOnCancel: false
         }, function (isConfirm) {
             if (isConfirm) {
-                
-                $.ajax(
-                    {
-                        url: '<?php echo $this->Html->url(['controller' => 'Edificios', 'action' => 'elimina_piso']);  ?>/' + idPiso,
-                        type: "POST",
-                        success: function (data, textStatus, jqXHR) {
-                            if ($.parseJSON(data).estado) {
-                                alertabn($.parseJSON(data).respuesta);
-                                e_elemento.remove();
-                            } else {
-                                alertaer($.parseJSON(data).respuesta);
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            //if fails
-                            alert("error");
-                        }
-                    });
-
+                window.location.href = '<?php echo $this->Html->url(['controller' => 'Edificios', 'action' => 'elimina_piso']);  ?>/' + idPiso
             } else {
                 swal("Cancelado", "(DE " + texto + ')', "error");
             }

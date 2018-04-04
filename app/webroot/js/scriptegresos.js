@@ -17,7 +17,7 @@ function adiciona() {
 
     $(elemento_aux).attr('class', '');
     $(elemento_aux).attr('id', '');
-    $('#idnomen-' + n_detalles).chosen({width: "100%"});
+    $('#idnomen-' + n_detalles).select2();
 }
 function quita() {
     if (n_detalles != 1) {
