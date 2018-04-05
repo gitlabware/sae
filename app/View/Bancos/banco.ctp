@@ -1,67 +1,60 @@
-<!-- Modal Header -->
-<div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-building"></i> Banco/caja</h2>
+<div class="modal-header">
+    <h2 class="modal-title"><i class="fa fa-bank"></i>Banco/caja</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span>
+    </button>
 </div>
-<!-- END Modal Header -->
-<!-- Modal Body -->
-<div class="modal-body">
-    <?php echo $this->Form->create('Banco', array('action' => 'registra', 'class' => 'form-horizontal form-bordered', 'id' => 'form-edificio', 'enctype' => 'multipart/form-data'));?>
 
-    <div class="row">
-        <div class="col-md-12">
-            <fieldset>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Codigo</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->hidden('id');?>
-                        <?php echo $this->Form->text('codigo_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo de cuenta '));?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Nombre</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->text('nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre', 'required'));?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Plan de Cuentas</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->select('nomenclatura_id',$nomenclaturas, array('class' => 'select-chosen', 'empty' => 'Seleccione el Plan de Cuenta','required'));?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Numero de cuenta</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->text('numero_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el numero de cuenta'));?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Fondo</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->select('cuenta_id',$cuentas, array('class' => 'form-control', 'empty' => 'Seleccione Fondo'));?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="user-settings-email">Monto</label>
-                    <div class="col-md-8">
-                        <?php echo $this->Form->text('monto', array('class' => 'form-control', 'placeholder' => 'Monto en caja/banco','step' => 'any','type' => 'number'));?>
-                    </div>
-                </div>
-                
-            </fieldset>
-            
-        </div>
+<?php echo $this->Form->create('Banco', array('action' => 'registra', 'id' => 'form-edificio', 'enctype' => 'multipart/form-data'));?>
+
+<div class="modal-body">            
+    <div class="form-group">
+        <label class="col-md-4 control-label">Codigo</label>
+
+        <?php echo $this->Form->hidden('id');?>
+        <?php echo $this->Form->text('codigo_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo de cuenta '));?>      
     </div>
-    <div class="form-group form-actions">
-        <div class="col-xs-12 text-right">
-            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
-        </div>
+    <div class="form-group">
+        <label class="col-md-10 control-label" for="user-settings-email">Nombre</label>
+
+        <?php echo $this->Form->text('nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre', 'required'));?>
     </div>
-    <?php echo $this->Form->end();?>
+    <div class="form-group">
+        <label class="col-md-10 control-label" for="user-settings-email">Plan de Cuentas</label>
+
+        <?php echo $this->Form->select('nomenclatura_id',$nomenclaturas, array('class' => 'form-control', 'empty' => 'Seleccione el Plan de Cuenta','required'));?>                   
+    </div>
+    <div class="form-group">
+        <label class="col-md-10 control-label" for="user-settings-email">Numero de cuenta</label>
+
+        <?php echo $this->Form->text('numero_cuenta', array('class' => 'form-control', 'placeholder' => 'Ingrese el numero de cuenta'));?>                    
+    </div>
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-settings-email">Fondo</label>
+
+        <?php echo $this->Form->select('cuenta_id',$cuentas, array('class' => 'form-control', 'empty' => 'Seleccione Fondo'));?>    
+    </div>
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="user-settings-email">Monto</label>
+
+        <?php echo $this->Form->text('monto', array('class' => 'form-control', 'placeholder' => 'Monto en caja/banco','step' => 'any','type' => 'number','required'));?>   
+    </div>
+
+
+
 </div>
-<!-- END Modal Body -->
+
+<div class="form-group modal-footer">
+
+    <button type="button" class="btn btn-white waves-effectt" data-dismiss="modal">Cerrar</button>
+    <button type="submit" class="btn btn-danger waves-effect waves-light">Guardar</button>
+
+</div>
+
+
+<?php echo $this->Form->end();?>
+<!-- Plan de Cuentas  
+php echo $this->Form->select(array('class' => ' select-chosen', 'empty' => 'Seleccione el Plan de Cuenta','required')) -->
 
 <script>
-$('.select-chosen').chosen({width: "100%"});
+    $('.select-chosen').chosen({width: "100%"});
 </script>

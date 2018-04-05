@@ -1,16 +1,13 @@
 <!-- Modal Header -->
-<div class="modal-header">
+<div class="modal-header text-center">
     <h2 class="modal-title"><i class="fa fa-building"></i>Categoria de Ambiente</h2>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span>
     </button>
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
-<?php echo $this->Form->create('Categoriaspago', array('action' => 'guarda_categoria', 'class' => 'form-horizontal form-bordered')); ?>
+<?php echo $this->Form->create('Categoriaspago', array('action' => 'guarda_categoria')); ?>
 <div class="modal-body">
-
-
-
     <div class="form-group">
         <label class="col-md-4 control-label">Nombre</label>
 
