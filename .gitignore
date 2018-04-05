@@ -11,6 +11,9 @@
 /lib/Cake
 *.mo
 
+/untitled.sublime-project
+/untitled.sublime-workspace
+
 # IDE and editor specific files #
 #################################
 /nbproject

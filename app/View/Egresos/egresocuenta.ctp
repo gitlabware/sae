@@ -1,4 +1,4 @@
-
+<link href="<?php echo $this->webroot; ?>template/assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
 <div class="modal-header">
     <h2 class="modal-title"><i class="fa fa-money"></i> Egreso</h2>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -10,7 +10,6 @@
     <?php echo $this->Form->hidden('Cuentasegreso.id'); ?>
     <div class="form-group">
         <div class="row">
-
             <label class="col-md-4 control-label" for="user-settings-email">Detalle</label>
             <div class="col-md-8">
                 <?php echo $this->Form->text('Cuentasegreso.detalle', array('class' => 'form-control', 'required','placeholder' => 'Ingrese el detalle del egreso')); ?>
@@ -31,7 +30,7 @@
 
             <label class="col-md-4 control-label" for="user-settings-email">Tipo de Egreso</label>
             <div class="col-md-8">
-                <?php echo $this->Form->select('Cuentasegreso.nomenclatura_id', $nomenclaturas, array('class' => 'select-chosen' , 'id'=>'requ','empty' => 'Seleccione el tipo de egreso')); ?>
+                <?php echo $this->Form->select('Cuentasegreso.nomenclatura_id', $nomenclaturas, array('class' => ' select2' , 'id'=>'requ','empty' => 'Seleccione el tipo de egreso','style' => 'width: 100%;')); ?>
             </div>
         </div>
 
@@ -90,10 +89,10 @@
 </div>
 <?php echo $this->Form->end(); ?>
 <!-- END Modal Body -->
-
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
 <script>
-
- $('.select-chosen').chosen({width: "100%"});
+$('.select2').select2();
+ // $('.select-chosen').chosen({width: "100%"});
 // $(document).ready(function(){
 //     $( "#ajaxform" ).on("submit",function() {
 //       alert( "Handler for .submit() called." );
@@ -111,6 +110,7 @@ $("#ajaxform").submit(function(e){
     }    
     
 });
+
 
 
 </script>

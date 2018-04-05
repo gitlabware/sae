@@ -54,7 +54,7 @@
   var idEdificio = <?php echo $this->Session->read('Auth.User.edificio_id');?>;
   urljsontablatrab = '<?php echo $this->Html->url(array('action' => 'ambientes.json')); ?>';
   function editar(idPiso, idAmbiente) {
-      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'ambiente')); ?>/' + idPiso + '/' + idAmbiente);
+      cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'ambiente')); ?>/' + idPiso + '/' + idAmbiente,true);
   }
   function servicios(idAmbiente) {
       cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'aservicios')); ?>/' + idAmbiente + '/' + idEdificio);
