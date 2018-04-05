@@ -1,26 +1,29 @@
+<div class="col-md-6 col-8 align-self-center">
+    <h2 class="text-themecolor m-b-0 m-t-0">DETALLES SOBRE <b><?php echo $banco['Banco']['nombre']?> (TOTAL: <?php echo $banco['Banco']['monto']?>)</b></h2>
+</div>
+
 <div class="row">
     <div class="col-md-12">
-        <!-- Basic Form Elements Block -->
-        <div class="block">
+       <div class="card">
+        <div class="card-body">
+           <div class="table-responsive m-t-40">
             <!-- Basic Form Elements Title -->
-            <div class="block-title">
-                <h2>DETALLES SOBRE <b><?php echo $banco['Banco']['nombre']?> (TOTAL: <?php echo $banco['Banco']['monto']?>)</b></h2>
-            </div>
+            
             <div class="form-horizontal form-bordered">
                 <?php echo $this->Form->create('Reporte', array('id' => 'ajaxform')); ?>
                 <div class="form-group">
                     <div class="col-md-4">
-                        <label class="control-label">Fecha_Inicio</label>
+                        <label class="control-label"><b>Fecha_Inicio</b></label>
                         <?php echo $this->Form->date('fecha_ini', array('class' => 'form-control', 'required')); ?>
                     </div>
                     <div class="col-md-4">
-                        <label class="control-label">Fecha_Fin</label>
+                        <label class="control-label"><b>Fecha_Fin</b></label>
                         <?php echo $this->Form->date('fecha_fin', array('class' => 'form-control', 'required')); ?>
                     </div>
 
                     <div class="col-md-4">
                         <label class="control-label">&nbsp;</label>
-                        <button class="btn btn-primary form-control">GENERAR</button>
+                        <button class="btn btn-block btn-danger">GENERAR</button>
                     </div>
                 </div>
                 <?php echo $this->Form->end(); ?>
@@ -29,13 +32,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <!-- Basic Form Elements Block -->
-        <div class="block">
-            <!-- Basic Form Elements Title -->
-            <div class="block-title">
-                <h2>REPORTE DE EGRESOS BANCO/CAJA ()</h2>
-            </div>
+    
+  <div class="col-md-6 col-8 align-self-center">
+    <h2 class="text-themecolor m-b-0 m-t-0">REPORTE DE EGRESOS BANCO/CAJA ()</h2>
+  </div>        
             <div class="form-horizontal form-bordered">
                 <?php if (!empty($egresos)): ?>
                   <div class="form-group">
