@@ -1,3 +1,5 @@
+<link href="<?php echo $this->webroot; ?>template/assets/plugins/toast-master/css/jquery.toast.css" rel="stylesheet">
+<link href="<?php echo $this->webroot; ?>template/assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
 <div class="modal-header">
   <h2 class="modal-title"><i class="fa fa-sort"></i>Sub-concepto</h2>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span>
@@ -8,9 +10,7 @@
 
 <!-- Modal Body -->
 <div class="modal-body">
-
   <?php echo $this->Form->create('Concepto', array('id' => 'ajaxform')); ?>
-
   <div class="form-group">
     <label class="control-label">Codigo</label>
 
@@ -34,7 +34,7 @@
   <div class="form-group">
     <label class="control-label">Es parte de</label>
 
-    <?php echo $this->Form->select('Subconcepto.subconcepto_id', $subconceptos, array('class' => 'form-control', 'empty' => 'Seleccione el subconcepto')); ?>
+    <?php echo $this->Form->select('Subconcepto.subconcepto_id', $subconceptos, array('class' => 'form-control select2', 'empty' => 'Seleccione el subconcepto', 'style' => 'width: 100%;')); ?>
 
   </div>
   <div class="form-group">
@@ -72,7 +72,7 @@
           <?php if (empty($this->request->data['Subconcepto']['id'])): ?>
             <button class="btn btn-success" type="button" onclick="add_gestion();"><i class="fa fa-plus"></i></button>
           <?php else: ?>
-            <button class="btn btn-success" type="submit"><i class="fa fa-plus"></i></button>
+            <button class="btn btn-success" type="button" onclick="enviaformu_gestion();"><i class="fa fa-plus"></i></button>
           <?php endif; ?>
         </div>
       </div>
@@ -80,7 +80,6 @@
     </div>
     <?= $this->Form->end(); ?>
     <div class="row">
-      
       <div class="col-md-12">
         <table class="table table-bordered">
           <thead>
@@ -108,18 +107,18 @@
     <br>
   </div>
 
-  <div class="form-group form-actions">
-    <div class="col-xs-12 text-right">
-      <button type="button" class="btn btn-white waves-effectt" data-dismiss="modal">Cerrar</button>
-      <button type="button" class="btn btn-danger waves-effect waves-light" onclick="enviar_form();">Guardar</button>
-    </div>
-  </div>
-
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+  <button type="button" class="btn btn-danger waves-effect waves-light" onclick="enviar_form();">Guardar</button>
 </div>
 
 <!-- END Modal Body -->
-<script>
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/toast-master/js/jquery.toast.js"></script>
 
+<script src="<?php echo $this->webroot; ?>template/assets/plugins/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
+<script>
+  $('.select2').select2();
   function enviar_form() {
     $('#ajaxform').find('[type="submit"]').trigger('click');
   }
@@ -128,7 +127,8 @@
 
   function add_gestion() {
       //alert($('#form-gestion').valid());
-      if ($('#form-gestion').valid()) {
+      // $("#form-gestion input").jqBootstrapValidation();
+      if ($('#id-ges-ini').val() != '' && $('#id-ges-fin').val() != '') {
         cont_gen++;
         var ges_ini = $('#id-ges-ini').val();
         var ges_fin = $('#id-ges-fin').val();
@@ -143,6 +143,9 @@
         + '<input type="hidden" class="clase-g-' + cont_gen + '" name="data[gestiones][' + cont_gen + '][gestion_fin]" value="' + ges_fin + '">';
         $('#ajaxform').append(campos_f_g);
         $('#body-gestiones').append(contenido_g);
+        enviaformu_gestion();
+      }else{
+        alert("Ambos campos deben estar llenos");
       }
     }
     function quitar_gestion(numero) {
@@ -229,8 +232,10 @@
     $('#idmensaje').html(divmensaje3);
   }
 
-  $("#form-gestion").submit(function (e)
-  {
+
+
+
+  function enviaformu_gestion(){
     $('#ajaxform :input').not(':submit').clone().hide().appendTo('#form-gestion');
     var postData = $("#form-gestion").serializeArray();
     var formURL = $("#form-gestion").attr("action");
@@ -241,40 +246,45 @@
       data: postData,
       success: function (data, textStatus, jqXHR)
       {
-                      //data: return data from server
-                      //$("#parte").html(data);
-                      if ($.parseJSON(data).mensaje != '')
-                      {
-                        mensaje($.parseJSON(data).mensaje);
-                        $('div.modal-body').scrollTo(0, 800);
-                      } else {
-                        var growlType = 'success';
-                        $.bootstrapGrowl('<h4>Excelente!</h4> <p>Se registro todos los datos correctamente!!</p>', {
-                          type: growlType,
-                          delay: 2500,
-                          allow_dismiss: true
-                        });
-                        cargarmodal('<?= $this->Html->url(array('action' => 'subconcepto', $this->request->data['Subconcepto']['id'])); ?>');
-                      }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown)
-                    {
-                      //if fails   
-                      alert("error");
-                    }
-                  });
-      e.preventDefault(); //STOP default action
-      //e.unbind(); //unbind. to stop multiple form submit.
+
+        if ($.parseJSON(data).mensaje != '')
+        {
+          mensaje($.parseJSON(data).mensaje);
+          $('div.modal-body').scrollTo(0, 800);
+        } else {
+          $.toast({
+            heading: 'Excelente!!',
+            text: 'Se registro todos los datos correctamente!!',
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'success',
+            hideAfter: 3500,
+            stack: 6
+        });
+          cargarmodal('<?= $this->Html->url(array('action' => 'subconcepto', $this->request->data['Subconcepto']['id'])); ?>');
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown)
+      {
+
+        alert("error");
+      }
     });
+  }
+
+
 
   function quitar_ajax_sg(ids) {
     cargarmodal('<?= $this->Html->url(array('action' => 'elimina_subgestion', $this->request->data['Subconcepto']['id'])); ?>/' + ids);
-    var growlType = 'success';
-    $.bootstrapGrowl('<h4>Excelente!</h4> <p>Se elimino correctamente!!</p>', {
-      type: growlType,
-      delay: 2500,
-      allow_dismiss: true
-    });
+    $.toast({
+            heading: 'Excelente!!',
+            text: 'Se elimino correctamente!!',
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'success',
+            hideAfter: 3500,
+            stack: 6
+        });
   }
 
 </script>

@@ -100,7 +100,7 @@
     order: []
   });
 </script>
-<?php $this->end() ?>
+
 
 <!-- END Example Content -->
 
@@ -135,3 +135,5 @@
     });
 
   </script>
+
+  <?php $this->end() ?>
