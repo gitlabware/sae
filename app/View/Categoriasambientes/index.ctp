@@ -1,9 +1,9 @@
-<div class="col-md-6 col-8 align-self-center">
+<div class="row">
+<div class="col-6 col-8 align-self-center">
     <h2 class="text-themecolor m-b-0 m-t-0">Listado de Categorias Ambiente</h2>
-</div><!-- Blank Header -->
+</div>
+</div>
 
-<!-- END Blank Header -->
-<!-- Example Block -->
 
 <div class="row">
     <div class="col-12">

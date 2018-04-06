@@ -16,7 +16,7 @@
 
             <label class="col-md-4 control-label">Unir al comprobante:</label>
             <div class="col-md-4">
-                <?php echo $this->Form->select('Aux.comprobante_id', $comprobantes, array('class' => 'form-control', 'empty' => 'Comprobante ID','id' => 'a-comprobantes')); ?>
+                <?php echo $this->Form->select('Aux.comprobante_id', $comprobantes, array('class' => 'form-control', 'empty' => 'Comprobante ID','id' => 'a-comprobantes','required')); ?>
             </div>
             <div class="col-md-4">
                 <button type="button" class="btn btn-block btn-success" onclick="$('#f-comprobantes').submit();">Unir</button>

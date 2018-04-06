@@ -59,6 +59,7 @@
     </div>
 
 </div>
+
 <script>
   $('#a-comprobantes').change(function () {
       $('#s-comprobante-id').val($('#a-comprobantes').val());

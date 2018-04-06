@@ -1,6 +1,11 @@
-<div class="col-md-6 col-8 align-self-center">
+<div class="row">
+  
+<div class="col-6 col-8 align-self-center">
   <h2 class="text-themecolor m-b-0 m-t-0">DETALLES SOBRE <b><?php echo $banco['Banco']['nombre']?> (TOTAL: <?php echo $banco['Banco']['monto']?>)</b></h2>
 </div>
+
+</div>
+
 
 <div class="row">
   <div class="col-md-12">
@@ -94,9 +99,9 @@
           <?php foreach ($cuentas as $cu): ?>
             <?php $total+= $cu[0]['monto']; ?>
             <tr>
-              <td class="warning"><?php echo $cu['Nomenclatura']['codigo_completo'] ?></td>
-              <td class="success"><?php echo $cu['Nomenclatura']['nombre'] ?></td>
-              <td class="info"><?php echo $cu[0]['monto'] ?></td>
+              <td class="warning"><i><?php echo $cu['Nomenclatura']['codigo_completo'] ?></i></td>
+              <td class="success"><i><?php echo $cu['Nomenclatura']['nombre'] ?></i></td>
+              <td class="info"><i><?php echo $cu[0]['monto'] ?></i></td>
             </tr>
           <?php endforeach; ?>
           <tr>
@@ -123,7 +128,5 @@
 
 <?php endif; ?>
 </div>
-</div>
-</div>
-</div>
+
 

@@ -10,7 +10,7 @@
     
     <div class="table-options clearfix">
       <div class="btn-group btn-group-sm pull-right">
-        <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'gestion')); ?>');" class="btn btn-primary" title="Adicionar nuevo Usuario">NUEVO</a>
+        <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'gestion')); ?>');" class="btn btn-warning" title="Adicionar nuevo Usuario">NUEVO</a>
       </div>
     </div>
     <!-- Example Content -->
