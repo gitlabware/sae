@@ -224,8 +224,9 @@
             }
 </script>
 <script>
-    if (localStorage['piso'] !== "undefined")
+    if (localStorage['piso'] !== "undefined" && localStorage['piso'] !== undefined)
     {
+        // console.log(localStorage['piso']);
         $('#idcont-' + localStorage['piso']).toggle(400);
         $('html,body').animate({
             scrollTop: $('#idcont-' + localStorage['piso']).offset().top

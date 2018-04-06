@@ -34,18 +34,22 @@
                     <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'datos')); ?>"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Panel de Control</span></a>
                 </li>
                 <li>
-                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Configuraciones</span></a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-cogs"></i><span class="hide-menu">Configuraciones</span></a>
                     <ul>
+                        <li>
+                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'edificio',$this->Session->read('Auth.User.edificio_id'))); ?>',true);">Informacion Basica</a>
+                        </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Categoriasambientes', 'action' => 'index')); ?>">Categoria de Ambiente</a>
                         </li>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Categoriaspagos', 'action' => 'index')); ?>">Categoria de Pagos</a>
                         </li>
+                        
                     </ul>
                 </li>
                 <li>
-                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Ambientes</span></a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-tags"></i><span class="hide-menu">Ambientes</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>">Ambientes Piso</a>
@@ -56,7 +60,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Pagos</span></a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-dollar"></i><span class="hide-menu">Pagos</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Adeudos - Excel</a>
@@ -86,7 +90,7 @@
                 </li>
 
                 <li>
-                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Reportes</span></a>
+                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-bar-chart-o"></i><span class="hide-menu">Reportes</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos', 'action' => 'reporte_balance')); ?>">Reporte de Balance</a>
@@ -118,7 +122,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Usuarios</span></a>
+                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Usuarios</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuarios')); ?>">Listado Inquilinos/Propietarios</a>
@@ -135,7 +139,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Conceptos</span></a>
+                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-cube"></i><span class="hide-menu">Conceptos</span></a>
                     <ul>
                         <li>
                             <a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'ambientes')); ?>">Asignacion de conceptos</a>
@@ -150,10 +154,10 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Recibos', 'action' => 'index')); ?>"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Recibos</span></a>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Recibos', 'action' => 'index')); ?>"><i class="fa fa-file-text-o"></i><span class="hide-menu">Recibos</span></a>
                 </li>
                 <li>
-                    <a href="<?php echo $this->Html->url(array('controller' => 'Tutoriales', 'action' => 'index')); ?>"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Tutoriales</span></a>
+                    <a href="<?php echo $this->Html->url(array('controller' => 'Tutoriales', 'action' => 'index')); ?>"><i class="fa fa-life-saver"></i><span class="hide-menu">Tutoriales</span></a>
                 </li>
 
 

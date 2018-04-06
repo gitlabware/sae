@@ -17,13 +17,13 @@
     </div>
 
     <div class="form-group"> 
-        <label class="control-label" for="user-settings-email">Nombre de usuario</label>
+        <label class="control-label">Nombre de usuario</label>
 
         <?php echo $this->Form->text('username', array('class' => 'form-control', 'placeholder' => 'Ingrese el Username', 'required')); ?>
     </div>
 
     <div class="form-group"> 
-        <label class="control-label" for="user-settings-email">Role</label>
+        <label class="control-label" >Role</label>
 
         <?php echo $this->Form->select('role', array('Super Administrador' => 'Super Administrador','Administrador' => 'Administrador'), array('class' => 'form-control', 'required')); ?>
     </div>

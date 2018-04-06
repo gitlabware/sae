@@ -1,31 +1,34 @@
-<div class="content-header">
-    <div class="header-section">
-        <h1>
-            <i class="gi gi-film"></i>Tutoriales<br><small>Manual de usuario para el Sistema.</small>
-        </h1>
-    </div>
+<div class="row">
+
+    <div class="col-md-12  align-self-center">
+      <h1 class="text-themecolor m-b-0 m-t-0">Tutoriales <br><small>Manual de usuario para el Sistema.</small></h1>
+  </div>
 </div>
 <!-- Advanced Widgets Row -->
 <div class="row">
     <div class="col-md-4">
         <!-- Advanced Active Theme Color Widget -->
-        <div class="widget">
-            <div class="widget-advanced">
+        <div class="">
+            <div class="card card-outline-inverse" >
                 <!-- Widget Header -->
-                <div class="widget-header text-center themed-background-dark">
-                    <h3 class="widget-content-light">
-                        <a href="javascript:void(0)" class="themed-color">Primera Parte</a><br>
-                        <small>Inicio en el sistema</small>
+                <div class="card-header">
+                    <h3 class="m-b-0 text-white">
+                        Primera Parte
                     </h3>
+
                 </div>
                 <!-- END Widget Header -->
 
                 <!-- Widget Main -->
-                <div class="widget-main">
-                    <a href="javascript:void(0)" class="widget-image-container animation-bigEntrance">
-                        <span class="widget-icon themed-background"><i class="gi gi-film"></i></span>
-                    </a>
-                    <table class="table table-borderless table-striped table-condensed table-vcenter">
+                <div class="card-body">
+                    <div class="d-flex align-items-center flex-row">
+                        <div class="p-2 display-5 text-inverse"><i class="fa fa-film"></i> </sup></span>
+                        </div>
+                        <div class="p-2">
+                            <h3 class="m-b-0">Inicio del sistema</h3>
+                        </div>
+                    </div>
+                    <table class="table table-borderless table-condensed table-vcenter">
                         <tbody>
                             <tr>
                                 <td style="width: 10px;">01</td>
@@ -97,22 +100,25 @@
     </div>
     <div class="col-md-4">
         <!-- Advanced Specific Theme Color Widget -->
-        <div class="widget">
-            <div class="widget-advanced">
+        <div class="">
+            <div class="card  card-outline-danger">
                 <!-- Widget Header -->
-                <div class="widget-header text-center themed-background-dark-fire">
-                    <h3 class="widget-content-light">
-                        <a href="javascript:void(0)" class="themed-color-fire">Segunda Parte</a><br>
-                        <small>Configuraciones requeridas</small>
+                <div class="card-header">
+                    <h3 class="m-b-0 text-white">
+                        Segunda Parte
                     </h3>
                 </div>
                 <!-- END Widget Header -->
 
                 <!-- Widget Main -->
-                <div class="widget-main">
-                    <a href="javascript:void(0)" class="widget-image-container animation-bigEntrance">
-                        <span class="widget-icon themed-background-fire"><i class="gi gi-film"></i></span>
-                    </a>
+                <div class="card-body">
+                    <div class="d-flex align-items-center flex-row">
+                        <div class="p-2 display-5 text-danger"><i class="fa fa-film"></i> </sup></span>
+                        </div>
+                        <div class="p-2">
+                            <h3 class="m-b-0">Configuraciones requeridas</h3>
+                        </div>
+                    </div>
                     <table class="table table-borderless table-striped table-condensed table-vcenter">
                         <tbody>
                             <tr>
@@ -225,22 +231,25 @@
     </div>
     <div class="col-md-4">
         <!-- Advanced Specific Theme Color Widget -->
-        <div class="widget">
-            <div class="widget-advanced">
+        <div class="">
+            <div class="card card-outline-success">
                 <!-- Widget Header -->
-                <div class="widget-header text-center themed-background-dark-night">
-                    <h3 class="widget-content-light">
-                        <a href="javascript:void(0)" class="themed-color-night">Tercera Parte</a><br>
-                        <small>Uso del sistema</small>
+                <div class="card-header">
+                    <h3 class="m-b-0 text-white">
+                        Tercera Parte
                     </h3>
                 </div>
                 <!-- END Widget Header -->
 
                 <!-- Widget Main -->
-                <div class="widget-main">
-                    <a href="javascript:void(0)" class="widget-image-container animation-bigEntrance">
-                        <span class="widget-icon themed-background-night"><i class="gi gi-film"></i></span>
-                    </a>
+                <div class="card-body">
+                    <div class="d-flex align-items-center flex-row">
+                        <div class="p-2 display-5 text-success"><i class="fa fa-film"></i> </sup></span>
+                        </div>
+                        <div class="p-2">
+                            <h3 class="m-b-0">Uso del sistema</h3>
+                        </div>
+                    </div>
                     <table class="table table-borderless table-striped table-condensed table-vcenter">
                         <tbody>
                             <tr>
