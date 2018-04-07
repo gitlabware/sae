@@ -112,7 +112,7 @@
                                 <?php echo $am['Ambiente']['nombre'] ?>
                             </td>
                             <td class="warning">
-                                <a class="btn btn-info" href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'], $am['Ambiente']['id'])); ?>');">
+                                <a class="btn btn-info" href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $pi['Piso']['id'], $am['Ambiente']['id'])); ?>',true);">
                                     <i class="fa fa-edit">
                                     </i>
                                 </a>

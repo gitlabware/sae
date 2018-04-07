@@ -61,7 +61,7 @@
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-default waves-effect"   onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $idPiso, 0, 1)); ?>',true)">Cancelar</button>
+  <button type="button" class="btn btn-default waves-effect"   onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $idPiso, 0, 1)); ?>',true)">Ambiente</button>
   <button type="submit" class="btn btn-danger waves-effect waves-light">Guardar</button>
 </div>
 <!-- END Modal Body -->
