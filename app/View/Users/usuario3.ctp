@@ -16,7 +16,7 @@
     <div class="form-group">
         <label class="control-label" for="user-settings-email">Telefonos</label>
 
-        <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
+        <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control','type'=>'number', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
 
     </div>
     <div class="form-group">
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
         <label class="control-label" for="user-settings-email">E-mail</label>                
-        <?php echo $this->Form->text('User.email', array('class' => 'form-control', 'placeholder' => 'Ingrese correo electronico')); ?>                
+        <?php echo $this->Form->text('User.email', array('class' => 'form-control','type' => 'email','placeholder' => 'Ingrese correo electronico')); ?>                
     </div>
     <div class="form-group">
         <label class="control-label" for="user-settings-email">Usuario</label>                

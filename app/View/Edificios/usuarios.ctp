@@ -37,10 +37,10 @@
     <div id="divformusuario" style="display: none;">
         <?php echo $this->Form->create('Edificio', array('action' => 'guarda_nuevo_usuario',  'id' => 'ajaxform')); ?>
         <fieldset>
-            <legend>Nuevo Usuario</legend>
+            <legend><b> Nuevo Administrador Edificio</b></legend>
             <div class="form-group">
-                <label class="col-md-4 control-label">Nombre</label>
-                <div class="col-md-8">
+                <label class="col-md-10 control-label">Nombre</label>
+                <div class="col-md-12">
                     <?php echo $this->Form->hidden('User.id'); ?>
                     <?php //echo $this->Form->hidden('User.role', array('value' => 'Administrador')) ?>
                     <?php echo $this->Form->hidden('User.edificio_id', array('value' => $idEdificio)) ?>
@@ -48,32 +48,32 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">Telefonos</label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
+                <label class="col-md-10 control-label" for="user-settings-email">Telefonos</label>
+                <div class="col-md-12">
+                    <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control','type'=>'number', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">Direccion</label>
-                <div class="col-md-8">
+                <label class="col-md-10 control-label" for="user-settings-email">Direccion</label>
+                <div class="col-md-12">
                     <?php echo $this->Form->text('User.direccion', array('class' => 'form-control', 'placeholder' => 'Ingrese la direccion')); ?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">E-mail</label>
-                <div class="col-md-8">
-                    <?php echo $this->Form->text('User.email', array('class' => 'form-control', 'placeholder' => 'Ingrese correo electronico')); ?>
+                <label class="col-md-10 control-label" for="user-settings-email">E-mail</label>
+                <div class="col-md-12">
+                    <?php echo $this->Form->text('User.email', array('class' => 'form-control','type' => 'email','placeholder' => 'Ingrese correo electronico')); ?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">Usuario</label>
-                <div class="col-md-8">
+                <label class="col-md-10 control-label" for="user-settings-email">Usuario</label>
+                <div class="col-md-12">
                     <?php echo $this->Form->text('User.username', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de usuario', 'required')); ?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="user-settings-email">Contrase&ntilde;a</label>
-                <div class="col-md-8">
+                <label class="col-md-10 control-label" for="user-settings-email">Contrase&ntilde;a</label>
+                <div class="col-md-12">
                     <?php echo $this->Form->password('User.password', array('class' => 'form-control', 'placeholder' => 'Ingrese un password')); ?>
                 </div>
             </div>

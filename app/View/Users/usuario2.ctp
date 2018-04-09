@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="recipient-name" class="control-label">Telefonos</label>
 
-            <?php echo $this->Form->text('User.telefonos', array('id' => 'recipient-name', 'class' => 'form-control', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
+            <?php echo $this->Form->text('User.telefonos', array('id' => 'recipient-name','type'=>'number', 'class' => 'form-control', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
 
         </div>
         <div class="form-group">
