@@ -10,6 +10,7 @@
 /tags
 /lib/Cake
 *.mo
+/.phpintel
 
 /untitled.sublime-project
 /untitled.sublime-workspace
