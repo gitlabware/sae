@@ -1,144 +1,162 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
     <h2 class="modal-title"><i class="fa fa-users"></i> Usuarios para el Edifcio</h2>
-   
+
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
 <div align="right">
     <button class="btn btn-sm btn-warning" onclick="$('#divformusuario').toggle(400);" title="Nuevo Usuario"><b> Nuevo Usuario para el Edificio</b> </button>
 </div>
- 
+
 
 <div class="modal-body" id="idmodal-contenido">
     <div id="idmensaje">
 
     </div>
     <?php echo $this->Form->create('Edificio', array('action' => 'guarda_usurio', 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxformusuario')); ?>
-
-
     <div class="form-group">
         <div class="row">
-
-         <div class="col-md-6"><b>Seleccione Usuario</b></div>   
-
-         <div class="col-9">
+         <div class="col-md-12">
+            <b>Seleccione Usuario</b>
+        </div>   
+        <div class="col-md-9">
             <?php echo $this->Form->hidden('User.edificio_id', array('value' => $idEdificio)) ?>
             <?php echo $this->Form->select('User.id', $select_usuarios, array('class' => 'form-control', 'required')); ?>
         </div>
-        <div class="col-2">
+        <div class="col-md-2">
             <button class="btn btn-success" type="submit">agregar</button>
-
         </div>    
     </div>
 </div>
-    
+
+<?php echo $this->Form->end(); ?>
+<div id="divformusuario" style="display: none;">
+    <?php echo $this->Form->create('Edificio', array('action' => 'guarda_nuevo_usuario',  'id' => 'ajaxform')); ?>
+
+    <legend><b> Nuevo Administrador Edificio</b></legend>
+    <div class="form-group">
+        <div class="row">
+
+            <label class="col-md-10 control-label">Nombre</label>
+            <div class="col-md-12">
+                <?php echo $this->Form->hidden('User.id'); ?>
+                <?php echo $this->Form->hidden('User.role', array('value' => 'Administrador')) ?>
+                <?php echo $this->Form->hidden('User.edificio_id', array('value' => $idEdificio)) ?>
+                <?php echo $this->Form->text('User.nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de Propietario', 'required')); ?>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+
+            <label class="col-md-10 control-label" for="user-settings-email">Telefonos</label>
+            <div class="col-md-12">
+                <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control','type'=>'number', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+
+            <label class="col-md-10 control-label" for="user-settings-email">Direccion</label>
+            <div class="col-md-12">
+                <?php echo $this->Form->text('User.direccion', array('class' => 'form-control', 'placeholder' => 'Ingrese la direccion')); ?>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+
+            <label class="col-md-10 control-label" for="user-settings-email">E-mail</label>
+            <div class="col-md-12">
+                <?php echo $this->Form->text('User.email', array('class' => 'form-control','type' => 'email','placeholder' => 'Ingrese correo electronico')); ?>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+
+            <label class="col-md-10 control-label" for="user-settings-email">Usuario</label>
+            <div class="col-md-12">
+                <?php echo $this->Form->text('User.username', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de usuario', 'required')); ?>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+
+            <label class="col-md-10 control-label" for="user-settings-email">Contrase&ntilde;a</label>
+            <div class="col-md-12">
+                <?php echo $this->Form->password('User.password', array('class' => 'form-control', 'placeholder' => 'Ingrese un password')); ?>
+            </div>
+        </div>
+    </div>
+    <div class="form-group form-actions">
+        <div class="row">
+
+            <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-danger">Registrar</button>
+            </div>
+        </div>
+    </div>
     <?php echo $this->Form->end(); ?>
-    <div id="divformusuario" style="display: none;">
-        <?php echo $this->Form->create('Edificio', array('action' => 'guarda_nuevo_usuario',  'id' => 'ajaxform')); ?>
-        <fieldset>
-            <legend><b> Nuevo Administrador Edificio</b></legend>
-            <div class="form-group">
-                <label class="col-md-10 control-label">Nombre</label>
-                <div class="col-md-12">
-                    <?php echo $this->Form->hidden('User.id'); ?>
-                    <?php //echo $this->Form->hidden('User.role', array('value' => 'Administrador')) ?>
-                    <?php echo $this->Form->hidden('User.edificio_id', array('value' => $idEdificio)) ?>
-                    <?php echo $this->Form->text('User.nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de Propietario', 'required')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-10 control-label" for="user-settings-email">Telefonos</label>
-                <div class="col-md-12">
-                    <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control','type'=>'number', 'placeholder' => 'Ingrese los telefonos', 'required')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-10 control-label" for="user-settings-email">Direccion</label>
-                <div class="col-md-12">
-                    <?php echo $this->Form->text('User.direccion', array('class' => 'form-control', 'placeholder' => 'Ingrese la direccion')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-10 control-label" for="user-settings-email">E-mail</label>
-                <div class="col-md-12">
-                    <?php echo $this->Form->text('User.email', array('class' => 'form-control','type' => 'email','placeholder' => 'Ingrese correo electronico')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-10 control-label" for="user-settings-email">Usuario</label>
-                <div class="col-md-12">
-                    <?php echo $this->Form->text('User.username', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de usuario', 'required')); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-10 control-label" for="user-settings-email">Contrase&ntilde;a</label>
-                <div class="col-md-12">
-                    <?php echo $this->Form->password('User.password', array('class' => 'form-control', 'placeholder' => 'Ingrese un password')); ?>
-                </div>
-            </div>
-        </fieldset>
-        <div class="form-group form-actions">
-            <div class="col-xs-12 text-right">
-                <button type="submit" class="btn btn-sm btn-danger">Registrar</button>
-            </div>
-        </div>
-        <?php echo $this->Form->end(); ?>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table id="general-table" class="table table-striped table-vcenter table-hover">
-                    <thead>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="general-table" class="table table-striped table-vcenter table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Quitar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($usuarios as $us): ?>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Quitar</th>
+                            <td><?php echo $us['User']['nombre'] ?></td>
+                            <td><a title="Quitar inquilino" href="javascript:" class="label label-danger" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'quita_usuario', $us['User']['id'],$idEdificio)) ?>');">Quitar</a></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($usuarios as $us): ?>
-                            <tr>
-                                <td><?php echo $us['User']['nombre'] ?></td>
-                                <td><a title="Quitar inquilino" href="javascript:" class="label label-danger" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'quita_usuario', $us['User']['id'],$idEdificio)) ?>');">Quitar</a></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
 </div>
 <!-- END Modal Body -->
+<script type="text/javascript" src="<?php echo $this->webroot; ?>js/jquery.scrollTo.js"></script>
 <script>
     $("#ajaxform").submit(function (e)
     {
         var postData = $(this).serializeArray();
         var formURL = $(this).attr("action");
         $.ajax(
-                {
-                    url: formURL,
-                    type: "POST",
-                    data: postData,
+        {
+            url: formURL,
+            type: "POST",
+            data: postData,
                     /*beforeSend:function (XMLHttpRequest) {
                      alert("antes de enviar");
                      },
                      complete:function (XMLHttpRequest, textStatus) {
                      alert('despues de enviar');
-                     },*/
-                    success: function (data, textStatus, jqXHR)
+                 },*/
+                 success: function (data, textStatus, jqXHR)
+                 {
+                    if ($.parseJSON(data).mensaje != '')
                     {
-                        if ($.parseJSON(data).mensaje != '')
-                        {
-                            mensaje($.parseJSON(data).mensaje);
-                            $('div.modal-body').scrollTo( 0 , 800 );
-                        } else {
-                            direccion = '<?php echo $this->Html->url(array('action' => 'usuarios', $idEdificio)) ?>';
-                            cargarmodal(direccion);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown)
-                    {
+                        mensaje($.parseJSON(data).mensaje);
+                        $('div.modal-body').scrollTo( 0 , 800 );
+                    } else {
+                        direccion = '<?php echo $this->Html->url(array('action' => 'usuarios', $idEdificio)) ?>';
+                        cargarmodal(direccion);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
                         //if fails   
                         alert("error");
                     }
@@ -154,23 +172,23 @@
         var postData = $(this).serializeArray();
         var formURL = $(this).attr("action");
         $.ajax(
-                {
-                    url: formURL,
-                    type: "POST",
-                    data: postData,
+        {
+            url: formURL,
+            type: "POST",
+            data: postData,
                     /*beforeSend:function (XMLHttpRequest) {
                      alert("antes de enviar");
                      },
                      complete:function (XMLHttpRequest, textStatus) {
                      alert('despues de enviar');
-                     },*/
-                    success: function (data, textStatus, jqXHR)
-                    {
-                        direccion = '<?php echo $this->Html->url(array('action' => 'usuarios', $idEdificio)) ?>';
-                        cargarmodal(direccion);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown)
-                    {
+                 },*/
+                 success: function (data, textStatus, jqXHR)
+                 {
+                    direccion = '<?php echo $this->Html->url(array('action' => 'usuarios', $idEdificio)) ?>';
+                    cargarmodal(direccion);
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
                         //if fails   
                         alert("error");
                     }
