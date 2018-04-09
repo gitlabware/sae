@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title">Informacion de Edificio</h4>
+    <h2 class="modal-title"><i class="fa fa-building"></i>Informacion de Edificio</h2>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 
@@ -41,6 +41,26 @@
             </div>
         </div>
     </div>
+
+    <?php if (!empty($this->request->data['Edificio']['id'])): ?>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-4 control-label">T/C UFV</label>
+                <div class="col-md-8">
+                    <?php echo $this->Form->text('tc_ufv', array('class' => 'form-control', 'placeholder' => 'T/C UFV', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-4 control-label">T/C DOLAR</label>
+                <div class="col-md-8">
+                    <?php echo $this->Form->text('tc_dolar', array('class' => 'form-control', 'placeholder' => 'T/C DOLAR', 'type' => 'number', 'step' => 'any', 'min' => 0)); ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <!-- solo cuando sea nuevo edificio -->
     <?php if (empty($this->request->data['Edificio']['id']) || $pisos == 0): ?>
         <div class="form-group">
