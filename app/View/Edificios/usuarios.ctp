@@ -1,29 +1,41 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-users"></i> Usuarios</h2>
+    <h2 class="modal-title"><i class="fa fa-users"></i> Usuarios para el Edifcio</h2>
+   
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
+<div align="right">
+    <button class="btn btn-sm btn-warning" onclick="$('#divformusuario').toggle(400);" title="Nuevo Usuario"><b> Nuevo Usuario para el Edificio</b> </button>
+</div>
+ 
+
 <div class="modal-body" id="idmodal-contenido">
     <div id="idmensaje">
 
     </div>
     <?php echo $this->Form->create('Edificio', array('action' => 'guarda_usurio', 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxformusuario')); ?>
-    <fieldset>
-        <div class="form-group">
-            <label class="col-md-2 control-label" onclick="$('#divformusuario').toggle(400);" title="Nuevo Usuario">Usuario</label>
-            <div class="col-md-8">
-                <?php echo $this->Form->hidden('User.edificio_id', array('value' => $idEdificio)) ?>
-                <?php echo $this->Form->select('User.id', $select_usuarios, array('class' => 'form-control', 'required')); ?>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-success" type="submit">ADD</button>
-            </div>
+
+
+    <div class="form-group">
+        <div class="row">
+
+         <div class="col-md-6"><b>Seleccione Usuario</b></div>   
+
+         <div class="col-9">
+            <?php echo $this->Form->hidden('User.edificio_id', array('value' => $idEdificio)) ?>
+            <?php echo $this->Form->select('User.id', $select_usuarios, array('class' => 'form-control', 'required')); ?>
         </div>
-    </fieldset>
+        <div class="col-2">
+            <button class="btn btn-success" type="submit">agregar</button>
+
+        </div>    
+    </div>
+</div>
+    
     <?php echo $this->Form->end(); ?>
     <div id="divformusuario" style="display: none;">
-        <?php echo $this->Form->create('Edificio', array('action' => 'guarda_nuevo_usuario', 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
+        <?php echo $this->Form->create('Edificio', array('action' => 'guarda_nuevo_usuario',  'id' => 'ajaxform')); ?>
         <fieldset>
             <legend>Nuevo Usuario</legend>
             <div class="form-group">
@@ -68,7 +80,7 @@
         </fieldset>
         <div class="form-group form-actions">
             <div class="col-xs-12 text-right">
-                <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
+                <button type="submit" class="btn btn-sm btn-danger">Registrar</button>
             </div>
         </div>
         <?php echo $this->Form->end(); ?>
