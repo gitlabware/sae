@@ -13,10 +13,15 @@
     }
 </style>
 <div class="row">
+<div class="col-8 align-self-center">
+    <h2 class="text-themecolor m-b-0 m-t-0">Listado de Ambientes</h2>
+</div>
+    
+</div>
+<div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Listado de Ambientes</h4>
+            <div class="card-body">              
                 <div class="table-responsive m-t-40">
                     <table id="tabla-json" class="table table-bordered ">
                         <thead>
