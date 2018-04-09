@@ -1,6 +1,7 @@
 <!-- Modal Header -->
 <div class="modal-header">
     <h2 class="modal-title"><i class="fa fa-briefcase"></i> Servicios</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
@@ -95,8 +96,7 @@
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-default waves-effect"   onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $idPiso, 0, 1)); ?>',true)">Cerrar</button>
-  <button type="button" class="btn btn-danger waves-effect waves-light" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'ambiente', $idPiso, $idAmbiente)) ?>',true);">Ambiente</button>
+  <button type="button" class="btn btn-default waves-effect waves-light" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'ambiente', $idPiso, $idAmbiente)) ?>',true);">Ambiente</button>
 </div>
 
 <!-- END Modal Body -->
