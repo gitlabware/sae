@@ -109,14 +109,14 @@ class AmbientesController extends AppController {
 		$usuarios = $this->User->find('list', array(
 			'fields' => 'User.nombre',
 			'conditions' => array(
-				'ISNULL(User.deleted)'
+				'ISNULL(User.deleted)',
 				'User.role' => 'Propietario',
 				'User.edificio_id' => $this->Session->read('Auth.User.edificio_id'),
 			),
 			'order' => array('User.nombre'),
 		));
 
-		$select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('ISNULL(User.deleted)','User.role' => 'Inquilino', 'User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
+		$select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('ISNULL(User.deleted)', 'User.role' => 'Inquilino', 'User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
 
 		$this->set(compact('inquilinos', 'select_inquilinos', 'catambientes', 'piso', 'catpagos', 'usuarios', 'categoria_ambientes', 'categoria_pagos', 'idAmbiente', 'idPiso', 'sw'));
 	}
@@ -293,7 +293,7 @@ class AmbientesController extends AppController {
 			. " AS Inquilino WHERE 1 GROUP BY user_id";
 		$sql2 = "SELECT * FROM ($sql) AS Inquilino LEFT JOIN users AS User ON(Inquilino.user_id = User.id) WHERE (Inquilino.estado = 1)";
 		$inquilinos = $this->Inquilino->query($sql2);
-		$select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('ISNULL(User.deleted)','User.role' => 'Inquilino')));
+		$select_inquilinos = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('ISNULL(User.deleted)', 'User.role' => 'Inquilino')));
 		$this->set(compact('inquilinos', 'select_inquilinos', 'idAmbiente', 'idPiso'));
 	}
 
@@ -304,7 +304,7 @@ class AmbientesController extends AppController {
 		$nombre = $this->request->data['Inquilino']['user'];
 		$usuarios = $this->User->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('ISNULL(User.deleted)','User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role IN' => array('Inquilino', 'Propietario')),
+			'conditions' => array('ISNULL(User.deleted)', 'User.edificio_id' => $idEdificio, 'User.nombre LIKE' => "%$nombre%", 'User.role IN' => array('Inquilino', 'Propietario')),
 			'fields' => array('User.id', 'User.ci', 'User.nombre'),
 			'limit' => 5,
 			'order' => 'User.nombre',
