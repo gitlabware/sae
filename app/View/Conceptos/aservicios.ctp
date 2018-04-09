@@ -95,7 +95,6 @@
     </div>
 </div>
 
-
 <div class="modal-footer">
   <button type="button" class="btn btn-default waves-effect waves-light" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'ambiente', $idPiso, $idAmbiente)) ?>',true);">Ambiente</button>
 </div>
