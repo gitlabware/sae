@@ -118,11 +118,13 @@ table.tsinf th{
                             <?php
                     //$ingresos = $this->requestAction();
                             ?>
+                            <?php $this->append('campo_js') ?>
                             <script>
                         $.get('<?php echo $this->Html->url(array('action' => 'get_ingresos', $presupuesto['Presupuesto']['id'], $tin[0]['idsub'])); ?>', function (data) { // Loads content into the 'data' variable.
                             $('#a-ajax-ing-<?php echo $tin[0]['idsub'] . '-' . $tin['ingresos']['subge_id'] ?>').after(data); // Injects 'data' after the #mydiv element.
                         });
                     </script>
+                    <?php $this->end() ?>
 
                 <?php endforeach; ?>
                 <tr class="text-uppercase" style="font-size: 14px;">
@@ -218,11 +220,14 @@ table.tsinf th{
                         <td id="total-eg-<?php echo $gas[0]['idsub'] ?>"> <?php echo number_format($gas[0]['ejecutado_actual'], $formato_num[0], $formato_num[1], $formato_num[2]) ?></td>
                         <td></td>
                     </tr>
+<?php $this->append('campo_js') ?>
                     <script>
                         $.get('<?php echo $this->Html->url(array('action' => 'get_egresos', $presupuesto['Presupuesto']['id'], $gas[0]['idsub'])); ?>', function (data) { // Loads content into the 'data' variable.
                             $('#a-ajax-eg-<?php echo $gas[0]['idsub'] ?>').after(data); // Injects 'data' after the #mydiv element.
                         });
                     </script>
+<?php $this->end() ?>
+
                 <?php endforeach; ?>
                 <tr class="text-uppercase" style=" font-size: 14px;">
                     <td></td>

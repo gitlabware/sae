@@ -1,54 +1,60 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-calendar"></i> Egreso</h2>
+  <h2 class="modal-title"><i class="fa fa-calendar"></i> Egreso</h2>
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
+<?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_egreso', $this->request->data['Egreso']['presupuesto_id'])); ?>
 <div class="modal-body">
-    <?php echo $this->Form->create('Presupuesto', array('action' => 'guarda_egreso', $this->request->data['Egreso']['presupuesto_id'])); ?>
-    <?php echo $this->Form->hidden('Egreso.id'); ?>
-    <div class="form-horizontal form-bordered">
-        <div class="form-group">
-
-            <div class="col-md-12">
-                <div id="gasto-select2">
-                    <label>Tipo de Egreso</label>
-                    <?php echo $this->Form->select('Egreso.subconcepto_id', $subconceptos_e, array('class' => 'select-chosen f-subgasto2', 'empty' => 'Seleccione el tipo de egreso', 'required')); ?>
-                </div>
-            </div>
+  <?php echo $this->Form->hidden('Egreso.id'); ?>
+  <div class="form-horizontal form-bordered">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="gasto-select2">
+            <label>Tipo de Egreso</label>
+            <?php echo $this->Form->select('Egreso.subconcepto_id', $subconceptos_e, array('class' => 'select2 f-subgasto2','style' => 'width: 100%;', 'empty' => 'Seleccione el tipo de egreso', 'required')); ?>
+          </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-6">
-                <label>Presupuesto anterior</label>
-                <?php echo $this->Form->text('Egreso.pres_anterior', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
-            </div>
-            <div class="col-md-6">
-                <label>Ejecutado anterior</label>
-                <?php echo $this->Form->text('Egreso.ejec_anterior', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
-            </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <label>Presupuesto anterior</label>
+          <?php echo $this->Form->text('Egreso.pres_anterior', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
         </div>
-        <div class="form-group">
-            <div class="col-md-6">
-                <label>Presupuesto</label>
-                <?php echo $this->Form->text('Egreso.presupuesto', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
-            </div>
-            <div class="col-md-6">
-                <label>Ejecutado</label>
-                <?php echo $this->Form->text('Egreso.ejecutado', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
-            </div>
+        <div class="col-md-6">
+          <label>Ejecutado anterior</label>
+          <?php echo $this->Form->text('Egreso.ejec_anterior', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
         </div>
-        <div class="form-group">
-            <div class="col-md-12">
-                <button class="btn btn-alt btn-primary col-md-12" type="submit">REGISTRAR</button>
-            </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <label>Presupuesto</label>
+          <?php echo $this->Form->text('Egreso.presupuesto', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
         </div>
+        <div class="col-md-6">
+          <label>Ejecutado</label>
+          <?php echo $this->Form->text('Egreso.ejecutado', array('class' => 'form-control', 'type' => 'number', 'step' => 'any', 'min' => 0, 'placeholder' => '0.00')); ?>
+        </div>
+      </div>
     </div>
 
-    <?php echo $this->Form->end(); ?>
+  </div>
+
 </div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+  <button type="submit" class="btn btn-danger waves-effect waves-light">REGISTRAR</button>
+</div>
+<?php echo $this->Form->end(); ?>
 <!-- END Modal Body -->
 <script>
-  $('.select-chosen').chosen({width: "100%"});
+  $('.select2').select2();
 </script>
 <script>
   /*
@@ -113,5 +119,5 @@
       $('.c-gasto-s-g2').each(function (i, val) {
           $(val).prop('required', true);
       });
-  }*/
-</script>
+    }*/
+  </script>

@@ -48,16 +48,16 @@ class UsuariosController extends AppController {
 	public function usuarios() {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		if ($this->RequestHandler->responseType() == 'json') {
-			$editar = '<a href="javascript:" class="btn btn-info" title="Editar" onclick="editar(' . "',User.id,'" . ');"><i class="gi gi-edit"></i></a>';
-			$eliminar = '<a href="javascript:" class="btn btn-danger" title="Eliminar" onclick="eliminar(' . "',User.id,'" . ');"><i class="gi gi-remove"></i></a>';
+			$editar = '<a href="javascript:" class="btn btn-secondary" title="Editar" onclick="editar(' . "',User.id,'" . ');"><i class="fa fa-pencil"></i></a>';
+			$eliminar = '<a href="javascript:" class="btn btn-danger" title="Eliminar" onclick="eliminar(' . "',User.id,'" . ');"><i class="fa fa-remove"></i></a>';
 			$this->User->virtualFields = array(
 				'acciones' => "CONCAT('$editar $eliminar')",
 			);
 			$this->paginate = array(
 				'fields' => array('User.id', 'User.nombre', 'User.ci', 'User.role', 'User.email', 'User.acciones'),
-				'conditions' => array('User.edificio_id' => $idEdificio, 'User.role' => array('Propietario', 'Inquilino')),
+				'conditions' => array('ISNULL(User.deleted)', 'User.edificio_id' => $idEdificio, 'User.role' => array('Propietario', 'Inquilino')),
 				'recursive' => -1,
-				'order' => 'User.nombre ASC',
+				'order' => 'User.id DESC',
 			);
 			$this->DataTable->fields = array('User.id', 'User.nombre', 'User.ci', 'User.role', 'User.email', 'User.acciones');
 			$this->DataTable->emptyEleget_usuarios_adminments = 1;
@@ -78,6 +78,9 @@ class UsuariosController extends AppController {
 				$this->request->data['User']['password'] = $this->request->data['User']['password2'];
 			}
 			$this->request->data['User']['edificio_id'] = $this->Session->read('Auth.User.edificio_id');
+			if (empty($this->request->data['User']['id'])) {
+				$this->request->data['User']['role'] = 'Propietario';
+			}
 			$this->User->create();
 			$this->User->save($this->request->data);
 			$this->Session->setFlash("Se regsitro correctamente!!", 'msgbueno');

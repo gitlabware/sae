@@ -28,8 +28,8 @@ $formato_num[2] = ".";
         <td id="total-eg-<?php echo $teg[0]['idsub'] ?>"><?php echo number_format($teg[0]['ejecutado_actual'],$formato_num[0],$formato_num[1],$formato_num[2]) ?></td>
         <td>
             <?php if ($teg[0]['idsub'] == $teg['egresos']['subconcepto_id']): ?>
-              <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'egreso', $teg['egresos']['id'])) ?>');" class="btn btn-sm btn-primary" title="Editar"><i class="gi gi-edit"></i></a> 
-                  <?php echo $this->Html->link('<i class="gi gi-remove_2"></i>', array('action' => 'elimina_egreso', $teg['egresos']['id']), array('class' => 'btn btn-sm btn-danger', 'title' => 'Eliminar', 'confirm' => 'Esta seguro de eliminar el Egreso??', 'escape' => FALSE)) ?>
+              <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'egreso', $teg['egresos']['id'])) ?>');" class="btn btn-sm btn-secondary" title="Editar"><i class="fa fa-pencil"></i></a> 
+                  <?php echo $this->Html->link('<i class="fa fa-remove"></i>', array('action' => 'elimina_egreso', $teg['egresos']['id']), array('class' => 'btn btn-sm btn-danger', 'title' => 'Eliminar', 'confirm' => 'Esta seguro de eliminar el Egreso??', 'escape' => FALSE)) ?>
                 <?php endif; ?>
         </td>
     </tr>
