@@ -11,7 +11,7 @@ class CategoriaspagosController extends AppController {
     }
     public function index() {
         $idEdificio = $this->Session->read('Auth.User.edificio_id');
-        $categorias = $this->Categoriaspago->findAllByedificio_id($idEdificio);
+        $categorias = $this->Categoriaspago->find('all',array('conditions'=>array('Categoriaspago.edificio_id'=>$idEdificio,'ISNULL(Categoriaspago.deleted)')));
         $this->set(compact('categorias'));
     }
     public function categoria($idCategoria = NULL) {
@@ -40,7 +40,9 @@ class CategoriaspagosController extends AppController {
         $this->redirect($this->referer());
     }
     public function eliminar($idCategoriaspago = null) {
-        if ($this->Categoriaspago->delete($idCategoriaspago)) {
+        $this->Categoriaspago->id=$idCategoriaspago;
+        $pcategoria['deleted']=date("Y-m-d H:i:s");
+        if ($this->Categoriaspago->save($pcategoria)) {
             $this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
         } else {
             $this->Session->setFlash('No se pudo eliminar, verifique que la categoria exista!!!', 'msgerror');

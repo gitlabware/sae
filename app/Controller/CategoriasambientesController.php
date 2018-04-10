@@ -11,7 +11,9 @@ class CategoriasambientesController extends AppController {
     }
     public function index() {
         $idEdificio = $this->Session->read('Auth.User.edificio_id');
-        $categorias = $this->Categoriasambiente->findAllByedificio_id($idEdificio);
+        $categorias = $this->Categoriasambiente->find('all',array('conditions'=>array('Categoriasambiente.edificio_id'=>$idEdificio,'ISNULL(Categoriasambiente.deleted)')));
+//debug($categorias);exit;
+
         $this->set(compact('categorias'));
     }
     public function categoria($idCategoria = NULL) {
@@ -40,7 +42,9 @@ class CategoriasambientesController extends AppController {
         $this->redirect($this->referer());
     }
     public function eliminar($idCategoriasambiente = null) {
-        if ($this->Categoriasambiente->delete($idCategoriasambiente)) {
+        $this->Categoriasambiente->id=$idCategoriasambiente;
+        $acategoria['deleted']=date("Y-m-d H:i:s");
+        if ($this->Categoriasambiente->save($acategoria)) {
             $this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
         } else {
             $this->Session->setFlash('No se pudo eliminar, verifique que la categoria exista!!!', 'msgerror');

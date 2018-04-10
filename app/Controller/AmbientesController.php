@@ -99,13 +99,13 @@ class AmbientesController extends AppController {
 			//debug($inquilinos);exit;
 		}
 		$catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre_completo',
-			'conditions' => array('Categoriasambiente.edificio_id' => $piso['Edificio']['id']),
+			'conditions' => array('ISNULL(Categoriasambiente.deleted)','Categoriasambiente.edificio_id' => $piso['Edificio']['id']),
 		));
 		$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre_completo',
-			'conditions' => array('Categoriaspago.edificio_id' => $piso['Edificio']['id']),
+			'conditions' => array('ISNULL(Categoriaspago.deleted)','Categoriaspago.edificio_id' => $piso['Edificio']['id']),
 		));
-		$categoria_ambientes = $this->Categoriasambiente->find('all');
-		$categoria_pagos = $this->Categoriaspago->find('all');
+		$categoria_ambientes = $this->Categoriasambiente->find('all','conditions'=>array('ISNULL(Categoriasambiente.deleted)'));
+		$categoria_pagos = $this->Categoriaspago->find('all','conditions' => array('ISNULL(Categoriaspago.deleted)'));
 		$usuarios = $this->User->find('list', array(
 			'fields' => 'User.nombre',
 			'conditions' => array(
