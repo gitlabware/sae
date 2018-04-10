@@ -47,7 +47,9 @@ class BancosController extends AppController {
   }
 
   public function eliminar($idBanco = null) {
-    if ($this->Banco->delete($idBanco)) {
+    $this->Banco->id=$idBanco;
+    $ebanco['deleted']=date("Y-m-d H:i:s");
+    if ($this->Banco->save($ebanco)) {
       $this->Session->setFlash("Se ha eliminado correctamente!!", 'msgbueno');
     } else {
       $this->Session->setFlash("No se ha podido eliminar, intente nuevamente!!", 'msgerror');

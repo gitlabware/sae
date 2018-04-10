@@ -487,7 +487,7 @@ class AmbientesController extends AppController {
 
 	public function pay($idAmbiente = null) {
 		$datosAmbiente = $this->Ambiente->findById($idAmbiente, null, null, 0);
-		//debug($datosAmbiente);
+		
 		$ultimoPago_mantenimiento = $this->Pago->find('first', array(
 			'recursive' => -1,
 			'fields' => array('Pago.fecha'),
@@ -607,7 +607,7 @@ class AmbientesController extends AppController {
 		}
 		$ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
 		//debug($recibo);exit;
-		$bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
+		$bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'),'ISNULL(Banco.deleted)')));
 		$this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m', 'bancos'));
 	}
 
