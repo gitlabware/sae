@@ -24,7 +24,7 @@ class AmbientesController extends AppController {
 	public function edificio($idEdificio = NULL) {
 		$edificio = $this->Edificio->findByid($idEdificio, NULL, NULL, -1);
 		$pisos = $this->Piso->find('all', array(
-			'conditions' => array('Piso.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Piso.deleted)', 'Piso.edificio_id' => $idEdificio),
 			'order' => array('Piso.orden ASC'),
 		));
 		$this->set(compact('pisos', 'edificio'));

@@ -31,7 +31,7 @@ class EdificiosController extends AppController {
 			$catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre', 'conditions' => array('Categoriasambiente.edificio_id' => $idEdificio)));
 			$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre', 'conditions' => array('Categoriaspago.edificio_id' => $idEdificio)));
 		}
-		$pisos = $this->Piso->find('count', array('conditions' => array('Piso.edificio_id' => $idEdificio)));
+		$pisos = $this->Piso->find('count', array('conditions' => array('ISNULL(Piso.deleted)', 'Piso.edificio_id' => $idEdificio)));
 		$this->set(compact('catambientes', 'catpagos', 'pisos'));
 	}
 
@@ -55,7 +55,7 @@ class EdificiosController extends AppController {
 			}
 
 			/* debug($this->request->data);
-              exit; */
+			exit; */
 			$this->Edificio->create();
 			$valida = $this->validar('Edificio');
 			if (empty($valida)) {
@@ -232,7 +232,7 @@ class EdificiosController extends AppController {
 	public function datos() {
 		$edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'));
 		//debug($edificio);exit;
-		$nro_pisos = $this->Piso->find('count', array('conditions' => array('Piso.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
+		$nro_pisos = $this->Piso->find('count', array('conditions' => array('ISNULL(Piso.deleted)', 'Piso.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
 		$nro_ambientes = $this->Ambiente->find('count', array('conditions' => array('Ambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
 		$nro_usuarios = $this->User->find('count', array('conditions' => array('ISNULL(User.deleted)', 'User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
 		$this->set(compact('edificio', 'nro_pisos', 'nro_ambientes', 'nro_usuarios'));
@@ -251,7 +251,9 @@ class EdificiosController extends AppController {
 	}
 
 	public function elimina_piso($idPiso = null) {
-		if ($this->Piso->delete($idPiso)) {
+		$this->Piso->id = $idPiso;
+		$dpiso['deleted'] = date("Y-m-d H:i:s");
+		if ($this->Piso->save($dpiso)) {
 			$this->Session->setFlash("Se ha eliminado correctamente el piso!!", 'msgbueno');
 		} else {
 			$this->Session->setFlash("No se ha podido eliminar el piso intentelo nuevamente!!", 'msgerror');
