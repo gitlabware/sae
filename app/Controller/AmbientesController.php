@@ -24,8 +24,8 @@ class AmbientesController extends AppController {
 	public function edificio($idEdificio = NULL) {
 		$edificio = $this->Edificio->findByid($idEdificio, NULL, NULL, -1);
 		$pisos = $this->Piso->find('all', array(
-			'conditions' => array('ISNULL(Piso.deleted)', 'Piso.edificio_id' => $idEdificio),
-			'order' => array('Piso.orden ASC'),
+			'conditions' => array('Piso.edificio_id' => $idEdificio,'ISNULL(Piso.deleted)'),
+			'order' => array('Piso.orden ASC')
 		));
 		$this->set(compact('pisos', 'edificio'));
 	}
@@ -104,8 +104,8 @@ class AmbientesController extends AppController {
 		$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre_completo',
 			'conditions' => array('ISNULL(Categoriaspago.deleted)','Categoriaspago.edificio_id' => $piso['Edificio']['id']),
 		));
-		$categoria_ambientes = $this->Categoriasambiente->find('all','conditions'=>array('ISNULL(Categoriasambiente.deleted)'));
-		$categoria_pagos = $this->Categoriaspago->find('all','conditions' => array('ISNULL(Categoriaspago.deleted)'));
+		$categoria_ambientes = $this->Categoriasambiente->find('all',array('conditions' => array('ISNULL(Categoriasambiente.deleted)')));
+		$categoria_pagos = $this->Categoriaspago->find('all',array('conditions' => array('ISNULL(Categoriaspago.deleted)')));
 		$usuarios = $this->User->find('list', array(
 			'fields' => 'User.nombre',
 			'conditions' => array(

@@ -10,7 +10,7 @@ class CuentasController extends AppController {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $cuentas = $this->Cuenta->find('all', array(
       'recursive' => 0,
-      'conditions' => array('Cuenta.edificio_id' => $idEdificio)
+      'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio)
     ));
     $conceptos = $this->Concepto->find('all');
     $subconceptos = $this->Subconcepto->find('all', array(
@@ -41,7 +41,7 @@ class CuentasController extends AppController {
     $concepto = $this->Concepto->findByid($idConcepto, null, null, -1);
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $cuentas = $this->Cuenta->find('all', array(
-      'conditions' => array('Cuenta.edificio_id' => $idEdificio)
+      'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio)
     ));
     $porcentajes = $this->Cuentasporcentaje->find('all', array(
       'recursive' => 0,
@@ -119,7 +119,7 @@ class CuentasController extends AppController {
     $subconcepto = $this->Subconcepto->findByid($idSubconcepto, null, null, -1);
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $cuentas = $this->Cuenta->find('all', array(
-      'conditions' => array('Cuenta.edificio_id' => $idEdificio)
+      'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio)
     ));
     $porcentajes = $this->Cuentasporcentaje->find('all', array(
       'recursive' => 0,
@@ -142,7 +142,9 @@ class CuentasController extends AppController {
   }
   
   public function eliminar($idCuenta = null){
-    if($this->Cuenta->delete($idCuenta)){
+    $this->Cuenta->id=$idCuenta;
+    $ecuenta['deleted']=date("Y-m-d H:i:s");
+    if($this->Cuenta->save($ecuenta)){
       $this->Session->setFlash("Se ha eliminado correctamente la cuenta!!",'msgbueno');
     }else{
       $this->Session->setFlash("No se ha podido eliminar la cuenta. Intente nuevamente!!",'msgerror');

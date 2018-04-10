@@ -40,7 +40,7 @@ class EgresosController extends AppController {
       'nombre_completo' => "CONCAT(Cuenta.nombre,' (disponible: ',Cuenta.monto,' Bs)')"
     );
     $cuentas = $this->Cuenta->find('list', array(
-      'conditions' => array('Cuenta.edificio_id' => $idEdificio),
+      'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio),
       'fields' => array('Cuenta.id', 'Cuenta.nombre_completo')
     ));
     $this->Nomenclatura->virtualFields = array(
@@ -218,7 +218,7 @@ class EgresosController extends AppController {
       'nombre_completo' => "CONCAT(Cuenta.nombre,' (disponible: ',Cuenta.monto,' Bs)')"
     );
     $cuentas = $this->Cuenta->find('list', array(
-      'conditions' => array('Cuenta.edificio_id' => $idEdificio),
+      'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio),
       'fields' => array('Cuenta.id', 'Cuenta.nombre_completo')
     ));
     $this->Nomenclatura->virtualFields = array(

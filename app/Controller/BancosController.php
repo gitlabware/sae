@@ -20,7 +20,7 @@ class BancosController extends AppController {
     $this->Banco->id = $idBanco;
     $this->request->data = $this->Banco->read();
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
-    $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre'),'conditions' => array('Cuenta.edificio_id' => $idEdificio)));
+    $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre'),'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio)));
     
     $this->Nomenclatura->virtualFields = array(
       'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)"
@@ -100,7 +100,7 @@ class BancosController extends AppController {
     $this->Cuenta->virtualFields = array(
       'nombre_completo' => "CONCAT(Cuenta.nombre,' (Disponibilidad: ',Cuenta.monto,')')"
     );
-    $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('Cuenta.edificio_id' => $idEdificio)));
+    $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio)));
     $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('Banco.edificio_id' => $idEdificio)));
     $this->set(compact('bancos', 'cuentas'));
   }
