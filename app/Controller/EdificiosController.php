@@ -275,12 +275,12 @@ class EdificiosController extends AppController {
 				'acciones' => "CONCAT('$acciones')",
 			);
 			$this->paginate = array(
-				'fields' => array('Ambiente.nombre', 'User.nombre', 'Inquilino.nombre', 'Representante.nombre', 'Piso.nombre', 'Ambiente.acciones'),
+				'fields' => array('Ambiente.nombre', 'User.nombre', 'Inquilino.nombre', 'Piso.nombre', 'Ambiente.acciones'),
 				'conditions' => array('Ambiente.edificio_id' => $edificioId, 'Piso.id <>' => null),
 				'recursive' => 0,
 				'order' => 'Ambiente.nombre ASC',
 			);
-			$this->DataTable->fields = array('Piso.nombre', 'Ambiente.nombre', 'User.nombre', 'Inquilino.nombre', 'Representante.nombre', 'Ambiente.acciones');
+			$this->DataTable->fields = array('Piso.nombre', 'Ambiente.nombre', 'User.nombre', 'Inquilino.nombre', 'Ambiente.acciones');
 			$this->DataTable->emptyEleget_usuarios_adminments = 1;
 			$this->set('ambientes', $this->DataTable->getResponse('Edificios', 'Ambiente'));
 			$this->set('_serialize', 'ambientes');

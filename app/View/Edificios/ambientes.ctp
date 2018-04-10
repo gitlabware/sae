@@ -30,7 +30,6 @@
                             <th class="busqda">Ambiente</th>
                             <th class="busqda">Propietario</th>
                             <th class="busqda">Inquilino</th>
-                            <th class="busqda">Representante</th>
                             <th></th>
                         </tr>
                         <tr>
@@ -38,7 +37,6 @@
                             <th id="ambiente">Ambiente</th>
                             <th id="propietario">Propietario</th>
                             <th id="inquilinos">Inquilino</th>
-                            <th id="representante">Representante</th>
                             <th id="acciones">Accion</th>
                         </tr>
                         </thead>
@@ -83,7 +81,6 @@
 
 
   filtro_c = [
-      {type: "text"},
       {type: "text"},
       {type: "text"},
       {type: "text"},
