@@ -10,7 +10,7 @@ class BancosController extends AppController {
   public function index() {
     $idEficio = $this->Session->read('Auth.User.edificio_id');
     $bancos = $this->Banco->find('all', array(
-      'conditions' => array('Banco.edificio_id' => $idEficio)
+      'conditions' => array('Banco.edificio_id' => $idEficio,'ISNULL(Banco.deleted)')
     ));
     $this->set(compact('bancos'));
   }
@@ -103,7 +103,7 @@ class BancosController extends AppController {
       'nombre_completo' => "CONCAT(Cuenta.nombre,' (Disponibilidad: ',Cuenta.monto,')')"
     );
     $cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio)));
-    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('Banco.edificio_id' => $idEdificio)));
+    $bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre_completo'), 'conditions' => array('Banco.edificio_id' => $idEdificio,'ISNULL(Banco.deleted)')));
     $this->set(compact('bancos', 'cuentas'));
   }
 
@@ -178,7 +178,7 @@ class BancosController extends AppController {
     ));
     $banco = $this->Banco->find('first', array(
       'recursive' => -1,
-      'conditions' => array('id' => $idBanco),
+      'conditions' => array('id' => $idBanco,'ISNULL(Banco.deleted)'),
       'fields' => array('id', 'nombre', 'monto')
     ));
     $this->set(compact('banco', 'egresos', 'cuentas'));

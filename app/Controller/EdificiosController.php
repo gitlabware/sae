@@ -16,7 +16,7 @@ class EdificiosController extends AppController {
 	}
 
 	public function index() {
-		$edificios = $this->Edificio->find('all');
+		$edificios = $this->Edificio->find('all',array('conditions'=>array('ISNULL(Edificio.deleted)')));
 		$this->set(compact('edificios'));
 	}
 
@@ -150,7 +150,9 @@ class EdificiosController extends AppController {
 	}
 
 	public function eliminar($idEdificio = null) {
-		if ($this->Edificio->delete($idEdificio)) {
+		 $this->Edificio->id=$idEdificio;
+    $dedificio['deleted']=date("Y-m-d H:i:s");
+		if ($this->Edificio->save($dedificio)) {
 			$this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
 		} else {
 			$this->Session->setFlash('No se pudo eliminar, verifique que el edificio exista!!!', 'msgerror');

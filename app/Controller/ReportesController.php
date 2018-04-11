@@ -409,7 +409,7 @@ class ReportesController extends AppController {
 		}
 		$bancos = $this->Banco->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio),
+			'conditions' => array('edificio_id' => $idEdificio,'ISNULL(Banco.deleted)'),
 			'fields' => array('id', 'nombre'),
 		));
 		$this->set(compact('bancos', 'egresos', 'movimientos', 'cuentas'));

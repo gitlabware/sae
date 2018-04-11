@@ -18,7 +18,7 @@ class CuentasController extends AppController {
       'conditions' => array('Subconcepto.edificio_id' => $idEdificio)
     ));
     $bancos = $this->Banco->find('all', array(
-      'conditions' => array('Banco.edificio_id' => $idEdificio)
+      'conditions' => array('Banco.edificio_id' => $idEdificio,'ISNULL(Banco.deleted)')
     ));
     $this->set(compact('cuentas', 'conceptos','subconceptos','bancos'));
   }
