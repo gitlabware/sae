@@ -554,7 +554,7 @@ class AmbientesController extends AppController {
 		$edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'), null, null, -1);
 		$edificio['Edificio']['retencion_mantenimiento'];
 		$recibos = $this->Recibo->find('list', array(
-			'conditions' => array('Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
+			'conditions' => array('ISNULL(Recibo.deleted)','Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
 			'fields' => array('Recibo.id', 'Recibo.numero'),
 		));
 		$this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'deuda_tot_man', 'deuda_tot_alq', 'ultimos_pagos', 'intereses', 'edificio', 'recibos'));
@@ -1254,7 +1254,7 @@ class AmbientesController extends AppController {
 			'fields' => array('SUM(Pago.monto) as total_alq'),
 		));
 		$recibos = $this->Recibo->find('list', array(
-			'conditions' => array('Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
+			'conditions' => array('ISNULL(Recibo.deleted)','Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
 			'fields' => array('Recibo.id', 'Recibo.numero'),
 		));
 		$edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'), null, null, -1);

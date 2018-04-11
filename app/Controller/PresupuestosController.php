@@ -55,12 +55,12 @@ class PresupuestosController extends AppController {
         );
         $subconceptos = $this->Subconcepto->find('list', array(
             'order' => array('Subconcepto.codigo ASC'),
-            'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso'),
+            'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso'),
             'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
         ));
         $subconceptos_e = $this->Subconcepto->find('list', array(
             'order' => array('Subconcepto.codigo ASC'),
-            'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso'),
+            'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso'),
             'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
         ));
 
@@ -137,7 +137,7 @@ class PresupuestosController extends AppController {
         );
         $subconceptos = $this->Subconcepto->find('list', array(
             'order' => array('Subconcepto.codigo ASC'),
-            'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso'),
+            'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso'),
             'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
         ));
         $tipos = $this->Subconcepto->find('list', array(
@@ -158,7 +158,7 @@ class PresupuestosController extends AppController {
         );
         $subconceptos_e = $this->Subconcepto->find('list', array(
             'order' => array('Subconcepto.codigo ASC'),
-            'conditions' => array('Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso'),
+            'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso'),
             'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo')
         ));
         $this->set(compact('nomenclaturas', 'subconceptos_e'));

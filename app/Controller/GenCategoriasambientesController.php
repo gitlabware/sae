@@ -13,7 +13,7 @@ class GenCategoriasambientesController extends AppController {
     }
 
     public function index() {
-        $gen_ambientes = $this->GenCategoriasambiente->find('all');
+        $gen_ambientes = $this->GenCategoriasambiente->find('all',array('conditions'=>array('ISNULL(GenCategoriasambiente.deleted)')));
         $this->set(compact('gen_ambientes'));
     }
 
@@ -43,7 +43,9 @@ class GenCategoriasambientesController extends AppController {
     }
 
     public function delete ($idGenCategoriasambiente = null) {
-        if ($this->GenCategoriasambiente->delete($idGenCategoriasambiente)) {
+        $this->GenCategoriasambiente->id=$idGenCategoriasambiente;
+        $egencategoria['deleted']=date("Y-m-d H:i:s");
+        if ($this->GenCategoriasambiente->save($egencategoria)) {
             $this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
         } else {
             $this->Session->setFlash('No se pudo eliminar, verifique que la categoria exista!!!', 'msgerror');

@@ -93,7 +93,7 @@ class NomenclaturasController extends AppController {
 		);
 		$subconceptos = $this->Subconcepto->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Subconcepto.deleted)','edificio_id' => $idEdificio),
 			'fields' => array('id', 'nombre_completo'),
 		));
 
@@ -295,7 +295,7 @@ class NomenclaturasController extends AppController {
 		$this->layout = 'ajax';
 		$subconceptos = $this->Subconcepto->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('concepto_id' => $idConcepto),
+			'conditions' => array('ISNULL(Subconcepto.deleted)','concepto_id' => $idConcepto),
 			'fields' => array('id', 'nombre'),
 		));
 		$this->set(compact('subconceptos'));

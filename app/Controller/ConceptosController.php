@@ -182,7 +182,7 @@ class ConceptosController extends AppController {
     );
     $subconceptos = $this->Subconcepto->find('list',array(
       'recursive' => -1,
-      'conditions' => array('Subconcepto.edificio_id' => $idEdificio,'Subconcepto.id !=' => $idSubconcepto),
+      'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio,'Subconcepto.id !=' => $idSubconcepto),
       'fields' => array('Subconcepto.id','Subconcepto.nombre_completo')
     ));
     $generaciones = $this->SubcGestione->findAllBysubconcepto_id($idSubconcepto, null, null, null, null, -1);
@@ -201,7 +201,7 @@ class ConceptosController extends AppController {
       'recursive' => 0,
       'conditions' => array(
         'Subconcepto.edificio_id' => $this->Session->read('Auth.User.edificio_id'),
-        "Subconcepto.subconcepto_id" => NULL
+        "Subconcepto.subconcepto_id" => NULL,'ISNULL(Subconcepto.deleted)'
       ),
       'fields' => array('Subconcepto.codigo','Subconcepto.nombre', 'Concepto.nombre', 'Subconcepto.tipo', 'Subconcepto.id')
     ));
@@ -210,7 +210,9 @@ class ConceptosController extends AppController {
   }
 
   public function eliminar_subconcepto($idSubconcepto = null) {
-    if ($this->Subconcepto->delete($idSubconcepto)) {
+    $this->Subconcepto->id=$idSubconcepto;
+    $esubconcepto['deleted']=date("Y-m-d H:i:s");
+    if ($this->Subconcepto->save($esubconcepto)) {
       $this->Session->setFlash("Se elimino correctamente el subconcepto!!", 'msgbueno');
     } else {
       $this->Session->setFlash("No se pudo eliminar intente nuevamente!!", 'msgerror');
@@ -263,7 +265,7 @@ class ConceptosController extends AppController {
     $this->layout = 'ajax';
     $subconceptos = $this->Subconcepto->find('all',array(
       'recursive' => 0,
-      'conditions' => array('Subconcepto.subconcepto_id' => $idSubconcepto),
+      'conditions' => array('Subconcepto.subconcepto_id' => $idSubconcepto,'ISNULL(Subconcepto.deleted)'),
       'fields' => array('Subconcepto.*','Concepto.nombre')
     ));
     $this->set(compact('subconceptos','sw'));

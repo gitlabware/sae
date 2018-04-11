@@ -15,7 +15,7 @@ class CuentasController extends AppController {
     $conceptos = $this->Concepto->find('all');
     $subconceptos = $this->Subconcepto->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Subconcepto.edificio_id' => $idEdificio)
+      'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio)
     ));
     $bancos = $this->Banco->find('all', array(
       'conditions' => array('Banco.edificio_id' => $idEdificio,'ISNULL(Banco.deleted)')

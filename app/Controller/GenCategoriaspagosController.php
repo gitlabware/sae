@@ -13,7 +13,7 @@ class GenCategoriaspagosController extends AppController {
     }
 
     public function index() {
-        $gen_pago = $this->GenCategoriaspago->find('all');
+        $gen_pago = $this->GenCategoriaspago->find('all',array('conditions'=>array('ISNULL(GenCategoriaspago.deleted)')));
         $this->set(compact('gen_pago'));
     }
 
@@ -43,7 +43,9 @@ class GenCategoriaspagosController extends AppController {
     }
 
     public function delete ($idGenCategoriaspago = null) {
-        if ($this->GenCategoriaspago->delete($idGenCategoriaspago)) {
+        $this->GenCategoriaspago->id=$idGenCategoriaspago;
+        $egencategoriap['deleted']=date("Y-m-d H:i:s");
+        if ($this->GenCategoriaspago->save($egencategoriap)) {
             $this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
         } else {
             $this->Session->setFlash('No se pudo eliminar, verifique que la categoria exista!!!', 'msgerror');

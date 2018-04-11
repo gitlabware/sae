@@ -13,14 +13,16 @@ class RecibosController extends AppController {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
     $recibos = $this->Recibo->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Recibo.edificio_id' => $idEdificio),
+      'conditions' => array('Recibo.edificio_id' => $idEdificio,'ISNULL(Recibo.deleted)'),
       'order' => array('modified DESC')
     ));
     $this->set(compact('recibos'));
   }
 
   public function eliminar($idRecibo = null) {
-    $this->Recibo->delete($idRecibo);
+    $this->Recibo->id=$idRecibo;
+        $erecibo['deleted']=date("Y-m-d H:i:s");
+    $this->Recibo->save($erecibo);
     $pagos = $this->Pago->find('all', array(
       'recursive' => -1,
       'conditions' => array('Pago.recibo_id' => $idRecibo),

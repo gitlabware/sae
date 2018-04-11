@@ -25,8 +25,8 @@ class EdificiosController extends AppController {
 		$this->Edificio->id = $idEdificio;
 		$this->request->data = $this->Edificio->read();
 		if (empty($idEdificio)) {
-			$catambientes = $this->GenCategoriasambiente->find('list', array('fields' => 'GenCategoriasambiente.nombre'));
-			$catpagos = $this->GenCategoriaspago->find('list', array('fields' => 'GenCategoriaspago.nombre'));
+			$catambientes = $this->GenCategoriasambiente->find('list', array('fields' => 'GenCategoriasambiente.nombre','conditions'=>'ISNULL(GenCategoriasambiente.deleted)'));
+			$catpagos = $this->GenCategoriaspago->find('list', array('fields' => 'GenCategoriaspago.nombre','conditions'=>'ISNULL(GenCategoriaspago.deleted)'));
 		} else {
 			$catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre', 'conditions' => array('Categoriasambiente.edificio_id' => $idEdificio,'ISNULL(Categoriasambiente.deleted)')));
 			$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre', 'conditions' => array('Categoriaspago.edificio_id' => $idEdificio,'ISNULL(Categoriaspago.deleted)')));
