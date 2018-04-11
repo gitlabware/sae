@@ -14,7 +14,7 @@ class NomenclaturasController extends AppController {
 
 		$nomenclaturas = $this->Nomenclatura->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio, 'nomenclatura_id' => 0),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'edificio_id' => $idEdificio, 'nomenclatura_id' => 0),
 		));
 
 		$this->set(compact('nomenclaturas'));
@@ -32,7 +32,7 @@ class NomenclaturasController extends AppController {
 		*/
 		$nomenclaturas = $this->Nomenclatura->find('all', array(
 			'recursive' => 2,
-			'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => $idEdificio),
 			'order' => array('Nomenclatura.codico_p_orden ASC'),
 			'fields' => array('Nomenclatura.*', 'Subconcepto.nombre', 'Edificio.nombre'),
 		));
@@ -47,7 +47,7 @@ class NomenclaturasController extends AppController {
 
 		$nomenclaturas = $this->Nomenclatura->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio, 'nomenclatura_id' => 0),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'edificio_id' => $idEdificio, 'nomenclatura_id' => 0),
 		));
 
 		$this->set(compact('nomenclaturas'));
@@ -59,7 +59,7 @@ class NomenclaturasController extends AppController {
 		if (empty($idNomenclatura)) {
 			$ultimo = $this->Nomenclatura->find('first', array(
 				'recursive' => -1,
-				'conditions' => array('edificio_id' => $idEdificio, 'nomenclatura_id' => 0),
+				'conditions' => array('ISNULL(Nomenclatura.deleted)', 'edificio_id' => $idEdificio, 'nomenclatura_id' => 0),
 				'order' => array('codigo DESC'),
 				'fields' => array('codigo'),
 			));
@@ -93,7 +93,7 @@ class NomenclaturasController extends AppController {
 		);
 		$subconceptos = $this->Subconcepto->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('ISNULL(Subconcepto.deleted)','edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Subconcepto.deleted)', 'edificio_id' => $idEdificio),
 			'fields' => array('id', 'nombre_completo'),
 		));
 
@@ -107,7 +107,7 @@ class NomenclaturasController extends AppController {
 			$idEdificio = $this->Session->read('Auth.User.edificio_id');
 			$nom_cod = $this->Nomenclatura->find('first', array(
 				'recursive' => -1,
-				'conditions' => array('Nomenclatura.codigo_completo LIKE' => $cod_padre, 'Nomenclatura.edificio_id' => $idEdificio),
+				'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.codigo_completo LIKE' => $cod_padre, 'Nomenclatura.edificio_id' => $idEdificio),
 				'fields' => array('Nomenclatura.id'),
 			));
 
@@ -148,7 +148,7 @@ class NomenclaturasController extends AppController {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$nomenclaturas = $this->Nomenclatura->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio, 'nomenclatura_id' => $idNomenclatura),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'edificio_id' => $idEdificio, 'nomenclatura_id' => $idNomenclatura),
 			'order' => array('codigo ASC'),
 		));
 
@@ -160,7 +160,7 @@ class NomenclaturasController extends AppController {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$nomenclaturas = $this->Nomenclatura->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio, 'nomenclatura_id' => $idNomenclatura),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'edificio_id' => $idEdificio, 'nomenclatura_id' => $idNomenclatura),
 			'order' => array('codigo ASC'),
 		));
 
@@ -190,10 +190,11 @@ class NomenclaturasController extends AppController {
 	public function eliminar($idNomenclatura = null, $sw = TRUE) {
 		$nomenclaturas = $this->Nomenclatura->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('nomenclatura_id' => $idNomenclatura),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'nomenclatura_id' => $idNomenclatura),
 			'fields' => array('id'),
 		));
-		$this->Nomenclatura->delete($idNomenclatura);
+		$d_nom['deleted'] = date("Y-m-d H:i:s");
+		$this->Nomenclatura->save($d_nom);
 
 		if (!empty($nomenclaturas)) {
 			foreach ($nomenclaturas as $nom) {
@@ -295,7 +296,7 @@ class NomenclaturasController extends AppController {
 		$this->layout = 'ajax';
 		$subconceptos = $this->Subconcepto->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('ISNULL(Subconcepto.deleted)','concepto_id' => $idConcepto),
+			'conditions' => array('ISNULL(Subconcepto.deleted)', 'concepto_id' => $idConcepto),
 			'fields' => array('id', 'nombre'),
 		));
 		$this->set(compact('subconceptos'));
@@ -308,7 +309,7 @@ class NomenclaturasController extends AppController {
 
 		$list = $this->Nomenclatura->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('Nomenclatura.edificio_id' => 8),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => 8),
 			'fields' => array('Nomenclatura.codigo_completo', 'Nomenclatura.id'),
 		));
 		//debug($list);exit;
@@ -346,7 +347,7 @@ class NomenclaturasController extends AppController {
 
 		$list = $this->Nomenclatura->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('Nomenclatura.edificio_id' => 8),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => 8),
 			'fields' => array('Nomenclatura.codigo_completo', 'Nomenclatura.id'),
 		));
 
@@ -365,7 +366,7 @@ class NomenclaturasController extends AppController {
 
 		$list = $this->Nomenclatura->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('Nomenclatura.edificio_id' => 8),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => 8),
 			'fields' => array('Nomenclatura.codigo_completo', 'Nomenclatura.id'),
 		));
 

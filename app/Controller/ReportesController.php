@@ -409,7 +409,7 @@ class ReportesController extends AppController {
 		}
 		$bancos = $this->Banco->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio,'ISNULL(Banco.deleted)'),
+			'conditions' => array('edificio_id' => $idEdificio, 'ISNULL(Banco.deleted)'),
 			'fields' => array('id', 'nombre'),
 		));
 		$this->set(compact('bancos', 'egresos', 'movimientos', 'cuentas'));
@@ -576,7 +576,7 @@ class ReportesController extends AppController {
 		);
 		$nomenclaturas = $this->Nomenclatura->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('Nomenclatura.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => $idEdificio),
 			'fields' => array('Nomenclatura.id', 'Nomenclatura.nombre_completo'),
 		));
 		if (!empty($this->request->data)) {
