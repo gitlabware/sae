@@ -24,8 +24,8 @@ class AmbientesController extends AppController {
 	public function edificio($idEdificio = NULL) {
 		$edificio = $this->Edificio->findByid($idEdificio, NULL, NULL, -1);
 		$pisos = $this->Piso->find('all', array(
-			'conditions' => array('Piso.edificio_id' => $idEdificio,'ISNULL(Piso.deleted)'),
-			'order' => array('Piso.orden ASC')
+			'conditions' => array('Piso.edificio_id' => $idEdificio, 'ISNULL(Piso.deleted)'),
+			'order' => array('Piso.orden ASC'),
 		));
 		$this->set(compact('pisos', 'edificio'));
 	}
@@ -99,13 +99,13 @@ class AmbientesController extends AppController {
 			//debug($inquilinos);exit;
 		}
 		$catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre_completo',
-			'conditions' => array('ISNULL(Categoriasambiente.deleted)','Categoriasambiente.edificio_id' => $piso['Edificio']['id']),
+			'conditions' => array('ISNULL(Categoriasambiente.deleted)', 'Categoriasambiente.edificio_id' => $piso['Edificio']['id']),
 		));
 		$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre_completo',
-			'conditions' => array('ISNULL(Categoriaspago.deleted)','Categoriaspago.edificio_id' => $piso['Edificio']['id']),
+			'conditions' => array('ISNULL(Categoriaspago.deleted)', 'Categoriaspago.edificio_id' => $piso['Edificio']['id']),
 		));
-		$categoria_ambientes = $this->Categoriasambiente->find('all',array('conditions' => array('ISNULL(Categoriasambiente.deleted)')));
-		$categoria_pagos = $this->Categoriaspago->find('all',array('conditions' => array('ISNULL(Categoriaspago.deleted)')));
+		$categoria_ambientes = $this->Categoriasambiente->find('all', array('conditions' => array('ISNULL(Categoriasambiente.deleted)')));
+		$categoria_pagos = $this->Categoriaspago->find('all', array('conditions' => array('ISNULL(Categoriaspago.deleted)')));
 		$usuarios = $this->User->find('list', array(
 			'fields' => 'User.nombre',
 			'conditions' => array(
@@ -422,7 +422,9 @@ class AmbientesController extends AppController {
 	}
 
 	public function elimina_pago($idPago = null, $idAmbiente = null) {
-		$this->Pago->delete($idPago);
+		$this->Pago->id = $idPago;
+		$d_pago['deleted'] = date("Y-m-d H:i:s");
+		$this->Pago->save($d_pago);
 		$this->Session->setFlash("Se elimino correctamente!!", 'msgbueno');
 		$this->redirect(array('action' => 'pagos', $idAmbiente));
 	}
@@ -487,7 +489,7 @@ class AmbientesController extends AppController {
 
 	public function pay($idAmbiente = null) {
 		$datosAmbiente = $this->Ambiente->findById($idAmbiente, null, null, 0);
-		
+
 		$ultimoPago_mantenimiento = $this->Pago->find('first', array(
 			'recursive' => -1,
 			'fields' => array('Pago.fecha'),
@@ -554,7 +556,7 @@ class AmbientesController extends AppController {
 		$edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'), null, null, -1);
 		$edificio['Edificio']['retencion_mantenimiento'];
 		$recibos = $this->Recibo->find('list', array(
-			'conditions' => array('ISNULL(Recibo.deleted)','Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
+			'conditions' => array('ISNULL(Recibo.deleted)', 'Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
 			'fields' => array('Recibo.id', 'Recibo.numero'),
 		));
 		$this->set(compact('datosAmbiente', 'ultimoPago_mantenimiento', 'inquilinos', 'conceptos', 'idAmbiente', 'fecha_mantenimiento', 'fecha_alquiler', 'ultimoPago_alquiler', 'deuda_tot_man', 'deuda_tot_alq', 'ultimos_pagos', 'intereses', 'edificio', 'recibos'));
@@ -607,7 +609,7 @@ class AmbientesController extends AppController {
 		}
 		$ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
 		//debug($recibo);exit;
-		$bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'),'ISNULL(Banco.deleted)')));
+		$bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'), 'ISNULL(Banco.deleted)')));
 		$this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m', 'bancos'));
 	}
 
@@ -1044,7 +1046,9 @@ class AmbientesController extends AppController {
 		$pagos = $this->Pago->find('all', array('conditions' => array('Pago.recibo_id' => $idRecibo)));
 		foreach ($pagos as $pa) {
 			if ($pa['Pago']['estado'] == 'Por pagar') {
-				$this->Pago->delete($pa['Pago']['id']);
+				$this->Pago->id = $pa['Pago']['id'];
+				$d_pago['deleted'] = date("y-m-d H:i:s");
+				$this->Pago->save($d_pago);
 			} else {
 				$this->Pago->id = $pa['Pago']['id'];
 				$this->request->data['Pago']['recibo_id'] = NULL;
@@ -1254,7 +1258,7 @@ class AmbientesController extends AppController {
 			'fields' => array('SUM(Pago.monto) as total_alq'),
 		));
 		$recibos = $this->Recibo->find('list', array(
-			'conditions' => array('ISNULL(Recibo.deleted)','Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
+			'conditions' => array('ISNULL(Recibo.deleted)', 'Recibo.estado' => 'Creado', 'Recibo.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
 			'fields' => array('Recibo.id', 'Recibo.numero'),
 		));
 		$edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'), null, null, -1);

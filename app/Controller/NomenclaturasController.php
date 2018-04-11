@@ -193,6 +193,7 @@ class NomenclaturasController extends AppController {
 			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'nomenclatura_id' => $idNomenclatura),
 			'fields' => array('id'),
 		));
+		$this->Nomenclatura->id = $idNomenclatura;
 		$d_nom['deleted'] = date("Y-m-d H:i:s");
 		$this->Nomenclatura->save($d_nom);
 
