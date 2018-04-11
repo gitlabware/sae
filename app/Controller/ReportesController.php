@@ -496,7 +496,7 @@ class ReportesController extends AppController {
 			'gestion' => "YEAR(Comprobante.fecha)",
 		);
 		$gestiones = $this->Comprobante->find('list', array(
-			'conditions' => array('Comprobante.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Comprobante.deleted)','Comprobante.edificio_id' => $idEdificio),
 			'fields' => array('Comprobante.gestion', 'Comprobante.gestion'),
 			'group' => array('YEAR(Comprobante.fecha)'),
 		));
@@ -561,7 +561,7 @@ class ReportesController extends AppController {
 			'gestion' => "YEAR(Comprobante.fecha)",
 		);
 		$gestiones = $this->Comprobante->find('list', array(
-			'conditions' => array('Comprobante.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Comprobante.deleted)','Comprobante.edificio_id' => $idEdificio),
 			'fields' => array('Comprobante.gestion', 'Comprobante.gestion'),
 			'group' => array('YEAR(Comprobante.fecha)'),
 		));

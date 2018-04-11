@@ -31,7 +31,7 @@ class ComprobantesController extends AppController {
     );
     $comprobantes = $this->Comprobante->find('all', array(
       'recursive' => -1,
-      'conditions' => array('Comprobante.edificio_id' => $idEdificio, 'Comprobante.estado' => 'No Comprobado', 'Comprobante.estado !=' => 'Anulado'),
+      'conditions' => array('ISNULL(Comprobante.deleted) ','Comprobante.edificio_id' => $idEdificio, 'Comprobante.estado' => 'No Comprobado', 'Comprobante.estado !=' => 'Anulado'),
       'order' => array('Comprobante.fecha DESC'),
       'fields' => array('Comprobante.*')
     ));
@@ -114,7 +114,7 @@ class ComprobantesController extends AppController {
     );
     $comprobantes = $this->Comprobante->find('list', array(
       'recursive' => -1,
-      'conditions' => array(
+      'conditions' => array('ISNULL(Comprobante.deleted)',
         'Comprobante.edificio_id' => $idEdificio,
         'Comprobante.estado LIKE' => 'No Comprobado',
         'Comprobante.id !=' => $comprobante_u['Comprobantescuenta']['comprobante_id'],
@@ -134,7 +134,7 @@ class ComprobantesController extends AppController {
     );
     $comprobantes = $this->Comprobante->find('list', array(
       'recursive' => -1,
-      'conditions' => array('Comprobante.edificio_id' => $idEdificio, 'Comprobante.estado LIKE' => 'No Comprobado'),
+      'conditions' => array('ISNULL(Comprobante.deleted)','Comprobante.edificio_id' => $idEdificio, 'Comprobante.estado LIKE' => 'No Comprobado'),
       'fields' => array('id', 'id_completo')
     ));
     $this->set(compact('comprobantes'));
@@ -276,7 +276,9 @@ class ComprobantesController extends AppController {
 
   public function eliminar($idComprobante = null) {
     $this->Comprobantescuenta->deleteAll(array('Comprobantescuenta.comprobante_id' => $idComprobante));
-    $this->Comprobante->delete($idComprobante);
+    $this->Comprobante->id=$idComprobante;
+    $ecomprobante['deleted']=date("Y-m-d H:i:s");
+    $this->Comprobante->save($ecomprobante);
     $this->Session->setFlash("Se ha eliminado correctamente el comprobante!!", 'msgbueno');
     $this->redirect(array('action' => 'no_comprobados'));
   }

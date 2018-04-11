@@ -118,7 +118,7 @@ class ConceptosController extends AppController {
     $ambientes = $this->Ambiente->find('all', array(
       'recursive' => 0,
       'conditions' => array('Ambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id')),
-      'fields' => array('Ambiente.id', 'Ambiente.nombre', 'Piso.nombre', 'Representante.nombre')
+      'fields' => array('Ambiente.id', 'Ambiente.nombre', 'Piso.nombre', 'User.nombre')
     ));
     $conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre'), 'order' => array('nombre')));
     $subconceptos = $this->Subconcepto->find('list', array('fields' => array('id', 'nombre'), 'order' => array('nombre')));
@@ -255,7 +255,7 @@ class ConceptosController extends AppController {
     );
     $subgestiones = $this->SubcGestione->find('list', array(
       'recursive' => -1,
-      'conditions' => array('subconcepto_id' => $idSuconcepto),
+      'conditions' => array('ISNULL(Subconcepto.deleted)','subconcepto_id' => $idSuconcepto),
       'fields' => array('id', 'nombre')
     ));
     $this->set(compact('subgestiones'));

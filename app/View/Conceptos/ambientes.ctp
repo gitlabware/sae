@@ -51,7 +51,7 @@
               </th>
               <th>Ambiente</th>
               <th>Piso</th>
-              <th>Representante</th>
+              <th>Propietario</th>
               <th>servicios</th>
             </tr>
           </thead>
@@ -66,7 +66,7 @@
                 </td>
                 <td><?php echo $amb['Ambiente']['nombre'] ?></td>
                 <td><?php echo $amb['Piso']['nombre'] ?></td>
-                <td><?php echo $amb['Representante']['nombre'] ?></td>
+                <td><?php echo $amb['User']['nombre'] ?></td>
 
                 <td>
                   <?php
