@@ -27,6 +27,7 @@ $modeloInquilino = new Inquilino();
                       $inquilinos = $modeloInquilino->find('all', array(
                         'recursive' => 0,
                         'conditions' => array(
+                          'ISNULL(Inquilino.deleted)',
                           'Inquilino.ambiente_id' => $idAmbiente
                         )
                       ));

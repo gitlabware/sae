@@ -155,7 +155,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -172,7 +172,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -189,7 +189,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -206,7 +206,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -223,7 +223,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -240,7 +240,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -257,7 +257,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -274,7 +274,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -291,7 +291,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -308,7 +308,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -325,7 +325,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -342,7 +342,7 @@ class PagosController extends AppController {
 
 					$existe = $this->Pago->find('first', array(
 						'recursive' => -1,
-						'conditions' => array('ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
+						'conditions' => array('ISNULL(Pago.deleted)', 'ambiente_id' => $dpago['ambiente_id'], 'fecha' => $dpago['fecha'], 'concepto_id' => 10),
 						'fields' => array('id'),
 					));
 					if (!empty($existe)) {
@@ -372,7 +372,7 @@ class PagosController extends AppController {
 		);
 		$pagos = $this->Pago->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Pago.excel_id' => $idExcel),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.excel_id' => $idExcel),
 			'fields' => array('Pago.*', 'Ambiente.nombre', 'Pago.piso'),
 		));
 		$this->set(compact('pagos', 'excel'));
@@ -382,7 +382,7 @@ class PagosController extends AppController {
 
 		$pagos = $this->Pago->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('Pago.excel_id' => $idExcel, 'ISNULL(Pago.deleted)'),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.excel_id' => $idExcel, 'ISNULL(Pago.deleted)'),
 		));
 		foreach ($pagos as $mpago) {
 			$this->Pago->id = $mpago['Pago']['id'];
@@ -406,7 +406,7 @@ class PagosController extends AppController {
 			'gestion' => "YEAR(Pago.fecha)",
 		);
 		$gestiones = $this->Pago->find('all', array(
-			'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.concepto_id' => $idConcepto),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiente, 'Pago.concepto_id' => $idConcepto),
 			'group' => array('gestion'),
 			'fields' => array('gestion'),
 		));
@@ -418,6 +418,7 @@ class PagosController extends AppController {
 		$pago = $this->Pago->find('first', array(
 			'recursive' => -1,
 			'conditions' => array(
+				'ISNULL(Pago.deleted)',
 				'Pago.ambiente_id' => $idAmbiente,
 				'YEAR(Pago.fecha)' => $gestion,
 				'MONTH(Pago.fecha)' => $mes,
@@ -566,7 +567,7 @@ class PagosController extends AppController {
 
 				$ambientes[$key]['pagos'] = $this->Pago->find('list', array(
 					'recursive' => -1,
-					'conditions' => array('Pago.ambiente_id' => $key, 'Pago.concepto_id' => $idConcepto),
+					'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $key, 'Pago.concepto_id' => $idConcepto),
 					'fields' => array('Pago.mes', 'Pago.monto', 'Pago.anyo'),
 					'group' => array('Pago.fecha', 'Pago.concepto_id'),
 				));

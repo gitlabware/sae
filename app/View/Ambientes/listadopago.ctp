@@ -83,7 +83,7 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
 
                 <?php
                 $pagos = $Pago->find('all', array(
-                    'conditions' => array('Pago.recibo_id' => $recibo['Recibo']['id'], 'Pago.ambiente_id' => $rm['Pago']['ambiente_id'])
+                    'conditions' => array('ISNULL(Pago.deleted)','Pago.recibo_id' => $recibo['Recibo']['id'], 'Pago.ambiente_id' => $rm['Pago']['ambiente_id'])
                 ));
                     //debug($pagos);exit;
                 ?>
@@ -108,7 +108,7 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
                         <?php
                         $nomenclaturas = $NomenclaturasAmbiente->find('list', array(
                             'recursive' => 0,
-                            'conditions' => array('NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'], 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']),
+                            'conditions' => array('ISNULL(NomenclaturasAmbiente.deleted)','NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'], 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']),
                             'fields' => array('Nomenclatura.id', 'Nomenclatura.nombre')
                         ));
                         $c_seleccion = '';
@@ -116,6 +116,7 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
                         $ant_nomen = $NomenclaturasAmbiente->find('first', array(
                             'recursive' => 0,
                             'conditions' => array(
+                                'ISNULL(NomenclaturasAmbiente.deleted)',
                                 '(EXISTS(SELECT * FROM subconceptos WHERE subconceptos.id = Nomenclatura.subconcepto_id AND subconceptos.gestiones_anteriores = 1))',
                                 'NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'],
                                 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']
@@ -130,7 +131,7 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
 
                             $nomenclatura_aux = $NomenclaturasAmbiente->find('first', array(
                                 'recursive' => 0,
-                                'conditions' => array('NomenclaturasAmbiente.id != ' => $ant_nomen['Nomenclatura']['id'], 'Nomenclatura.id !=' => $ant_nomen['Nomenclatura']['id'], 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']),
+                                'conditions' => array('ISNULL(NomenclaturasAmbiente.deleted)','NomenclaturasAmbiente.id != ' => $ant_nomen['Nomenclatura']['id'], 'Nomenclatura.id !=' => $ant_nomen['Nomenclatura']['id'], 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']),
                                 'fields' => array('Nomenclatura.id')
                             ));
 

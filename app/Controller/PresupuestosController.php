@@ -405,6 +405,7 @@ class PresupuestosController extends AppController {
 		$condiciones['Pago.concepto_id'] = $idConcepto;
 		$condiciones['Pago.ambiente_id'] = $l_ambientes;
 		$condiciones['Pago.estado'] = 'Debe';
+		$condiciones['ISNULL(Pago.deleted)'] = true;
 		if (!empty($subcGes)) {
 			$condiciones['YEAR(Pago.fecha) >='] = $subcGes['SubcGestione']['gestion_ini'];
 			$condiciones['YEAR(Pago.fecha) <='] = $subcGes['SubcGestione']['gestion_fin'];
@@ -433,6 +434,7 @@ class PresupuestosController extends AppController {
 		return $this->Pago->find('all', array(
 			'recursive' => 0,
 			'conditions' => array(
+				'ISNULL(Pago.deleted)',
 				'Pago.ambiente_id' => $idAmbiente,
 				'Pago.concepto_id' => $idConcepto,
 				'YEAR(Pago.fecha)' => $gestion,

@@ -43,6 +43,7 @@ class ReportesController extends AppController {
 		if ($id_concepto != 'Todos') {
 			$condiciones['Pago.concepto_id'] = $id_concepto;
 		}
+		$condiciones['ISNULL(Pago.deleted)'] = true;
 		$condiciones['DATE(Pago.fecha) BETWEEN ? AND ?'] = array($fecha_ini, $fecha_fin);
 		$sql1 = "SELECT nombre FROM pisos WHERE (pisos.id = Ambiente.piso_id)";
 		//$sql2 = "SELECT nombre FROM users WHERE (users.id = (SELECT user_id FROM `inquilinos` WHERE (inquilinos.id = Pago.inquilino_id)))";
@@ -65,6 +66,7 @@ class ReportesController extends AppController {
 			$condiciones2['Pago.ambiente_id'] = $pa['Pago']['ambiente_id'];
 			$condiciones2['Pago.estado'] = $pa['Pago']['estado'];
 			$condiciones2['Pago.concepto_id'] = $pa['Pago']['concepto_id'];
+			$condiciones2['ISNULL(Pago.deleted)'] = true;
 			$pagos[$key]['Pago']['pagos'] = $this->Pago->find('all', array(
 				'recursive' => 0,
 				'conditions' => $condiciones2
@@ -112,6 +114,7 @@ class ReportesController extends AppController {
 		if ($id_concepto != 'Todos') {
 			$condiciones['Pago.concepto_id'] = $id_concepto;
 		}
+		$condiciones['ISNULL(Pago.deleted)'] = true;
 		$condiciones['DATE(Pago.fecha) BETWEEN ? AND ?'] = array($fecha_ini, $fecha_fin);
 		$sql1 = "SELECT nombre FROM pisos WHERE (pisos.id = Ambiente.piso_id)";
 		//$sql2 = "SELECT nombre FROM users WHERE (users.id = (SELECT user_id FROM `inquilinos` WHERE (inquilinos.id = Pago.inquilino_id)))";
@@ -226,6 +229,7 @@ class ReportesController extends AppController {
 		}
 		$condiciones['DATE(Pago.fecha) BETWEEN ? AND ?'] = array($fecha_ini, $fecha_fin);
 		$condiciones['Ambiente.edificio_id'] = $this->Session->read('Auth.User.edificio_id');
+		$condiciones['ISNULL(Pago.deleted)'] = true;
 		$sql1 = "SELECT nombre FROM pisos WHERE (pisos.id = Ambiente.piso_id)";
 		//$sql2 = "SELECT nombre FROM users WHERE (users.id = (SELECT user_id FROM `inquilinos` WHERE (inquilinos.id = Pago.inquilino_id)))";
 		$this->Pago->virtualFields = array(
@@ -247,6 +251,7 @@ class ReportesController extends AppController {
 			'gestion' => "YEAR(Pago.fecha)",
 		);
 		$gestiones = $this->Pago->find('list', array(
+			'conditions' => array('ISNULL(Pago.deleted)'),
 			'group' => array('gestion'),
 			'fields' => array('gestion', 'gestion'),
 		));
@@ -273,7 +278,7 @@ class ReportesController extends AppController {
 	public function get_monto_amb($idAmbiete = null, $ano = null, $fecha = null, $tipo = NULL) {
 		$pago = $this->Pago->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
 			'group' => array('Pago.ambiente_id'),
 			'fields' => array('SUM(Pago.monto) as total_g'),
 		));
@@ -315,7 +320,7 @@ class ReportesController extends AppController {
 	public function get_monto_amb_m($idAmbiete = null, $fecha = null, $ano = null, $mes = null, $tipo = null) {
 		$pago = $this->Pago->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo, 'Pago.concepto_id' => 10),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo, 'Pago.concepto_id' => 10),
 			'group' => array('Pago.ambiente_id'),
 			'fields' => array('SUM(Pago.monto) as total_g'),
 		));
@@ -329,7 +334,7 @@ class ReportesController extends AppController {
 	public function get_monto_amb_m_g($idAmbiete = null, $ano = null, $mes = null, $tipo = null) {
 		$pago = $this->Pago->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'Pago.estado' => $tipo, 'Pago.concepto_id' => 10),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiete, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'Pago.estado' => $tipo, 'Pago.concepto_id' => 10),
 			'group' => array('Pago.ambiente_id'),
 			'fields' => array('SUM(Pago.monto) as total_g'),
 		));
@@ -357,7 +362,7 @@ class ReportesController extends AppController {
 	public function gen_xcobrar_amb_a($idAmbiente = null, $fecha = null, $tipo = null) {
 
 		$anos = $this->Pago->find('all', array(
-			'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiente, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
 			'group' => array('YEAR(Pago.fecha)'),
 			'fields' => array('YEAR(Pago.fecha) as ano'),
 		));
@@ -371,7 +376,7 @@ class ReportesController extends AppController {
 	public function get_xcobrar_amb_s($idAmbiente = null, $fecha = null, $ano = null, $mes = null, $tipo = null) {
 		$pago = $this->Pago->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiente, 'YEAR(Pago.fecha)' => $ano, 'MONTH(Pago.fecha)' => $mes, 'DATE(Pago.fecha) <=' => $fecha, 'Pago.estado' => $tipo),
 			'group' => array('Pago.ambiente_id'),
 			'fields' => array('SUM(Pago.monto) as total_g'),
 		));
@@ -496,7 +501,7 @@ class ReportesController extends AppController {
 			'gestion' => "YEAR(Comprobante.fecha)",
 		);
 		$gestiones = $this->Comprobante->find('list', array(
-			'conditions' => array('ISNULL(Comprobante.deleted)','Comprobante.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Comprobante.deleted)', 'Comprobante.edificio_id' => $idEdificio),
 			'fields' => array('Comprobante.gestion', 'Comprobante.gestion'),
 			'group' => array('YEAR(Comprobante.fecha)'),
 		));
@@ -561,7 +566,7 @@ class ReportesController extends AppController {
 			'gestion' => "YEAR(Comprobante.fecha)",
 		);
 		$gestiones = $this->Comprobante->find('list', array(
-			'conditions' => array('ISNULL(Comprobante.deleted)','Comprobante.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Comprobante.deleted)', 'Comprobante.edificio_id' => $idEdificio),
 			'fields' => array('Comprobante.gestion', 'Comprobante.gestion'),
 			'group' => array('YEAR(Comprobante.fecha)'),
 		));

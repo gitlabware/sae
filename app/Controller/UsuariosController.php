@@ -97,7 +97,7 @@ class UsuariosController extends AppController {
 		);
 		$pagados = $this->Pago->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado LIKE' => 'Pagado'),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiente, 'Pago.estado LIKE' => 'Pagado'),
 			'fields' => array('Pago.modified', 'Concepto.nombre', 'Pago.fecha', 'Pago.monto', 'Pago.monto_ret', 'Pago.monto_total'),
 			'order' => array('Pago.modified DESC', 'Pago.fecha DESC'),
 		));
@@ -109,7 +109,7 @@ class UsuariosController extends AppController {
 	public function nopagados($idAmbiente = null) {
 		$nopagados = $this->Pago->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Pago.ambiente_id' => $idAmbiente, 'Pago.estado LIKE' => 'Debe'),
+			'conditions' => array('ISNULL(Pago.deleted)', 'Pago.ambiente_id' => $idAmbiente, 'Pago.estado LIKE' => 'Debe'),
 			'fields' => array('Concepto.nombre', 'Pago.fecha', 'Pago.monto'),
 			'order' => array('Pago.fecha DESC'),
 		));
