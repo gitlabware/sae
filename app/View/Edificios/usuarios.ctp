@@ -1,12 +1,13 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-users"></i> Usuarios para el Edifcio</h2>
+    <h2 class="modal-title"><i class="fa fa-users"></i> Administrador para el Edifcio <br>
+    <b align='center' style="text-transform: uppercase;"><?php echo $edificio_nom['Edificio']['nombre']?></b></h2>
 
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
 <div align="right">
-    <button class="btn btn-sm btn-warning" onclick="$('#divformusuario').toggle(400);" title="Nuevo Usuario"><b> Nuevo Usuario para el Edificio</b> </button>
+    <button class="btn btn-sm btn-warning" onclick="$('#divformusuario').toggle(400);" title="Nuevo Usuario"><b> Nuevo Administrador para el Edificio</b> </button>
 </div>
 
 
@@ -34,7 +35,7 @@
 <div id="divformusuario" style="display: none;">
     <?php echo $this->Form->create('Edificio', array('action' => 'guarda_nuevo_usuario',  'id' => 'ajaxform')); ?>
 
-    <legend><b> Nuevo Administrador Edificio</b></legend>
+    <legend><b> Nuevo Administrador</b></legend>
     <div class="form-group">
         <div class="row">
 

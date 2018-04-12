@@ -29,7 +29,7 @@ class EdificiosController extends AppController {
 			$catpagos = $this->GenCategoriaspago->find('list', array('fields' => 'GenCategoriaspago.nombre','conditions'=>'ISNULL(GenCategoriaspago.deleted)'));
 		} else {
 			$catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre', 'conditions' => array('Categoriasambiente.edificio_id' => $idEdificio,'ISNULL(Categoriasambiente.deleted)')));
-			$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre', 'conditions' => array('Categoriaspago.edificio_id' => $idEdificio,'ISNULL(Categoriaspago.deleted)')));
+			$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre', 'conditions' => array('Categoriaspago.edificio_id' => $idEdificio,'ISNULL(Categoriaspago.deleted)')));			
 		}
 		$pisos = $this->Piso->find('count', array('conditions' => array('ISNULL(Piso.deleted)', 'Piso.edificio_id' => $idEdificio)));
 		$this->set(compact('catambientes', 'catpagos', 'pisos'));
@@ -175,7 +175,9 @@ class EdificiosController extends AppController {
 		$this->layout = 'ajax';
 		$select_usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('ISNULL(User.deleted)', 'User.role' => 'Administrador', 'User.edificio_id' => NULL)));
 		$usuarios = $this->User->find('all', array('conditions' => array('ISNULL(User.deleted)', 'User.role' => 'Administrador', 'User.edificio_id' => $idEdificio)));
-		$this->set(compact('idEdificio', 'select_usuarios', 'usuarios'));
+		$edificio_nom = $this->Edificio->find('first',array('fields'=>'Edificio.nombre','conditions'=>array('Edificio.id'=>$idEdificio)));
+	//	debug($edificio_nom);exit;
+		$this->set(compact('idEdificio', 'select_usuarios', 'usuarios','edificio_nom'));
 	}
 
 	public function guarda_nuevo_usuario() {
