@@ -153,7 +153,7 @@ class ReportesController extends AppController {
 		$this->layout = 'ajax';
 		if (!empty($this->request->data['Ambiente']['nombre'])) {
 			$lista = $this->Ambiente->find('all', array('recursive' => 0,
-				'conditions' => array('Ambiente.nombre LIKE' => '%' . $this->request->data['Ambiente']['nombre'] . "%"),
+				'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.nombre LIKE' => '%' . $this->request->data['Ambiente']['nombre'] . "%"),
 				'limit' => 8,
 				'order' => 'Ambiente.nombre ASC',
 			));
@@ -182,7 +182,7 @@ class ReportesController extends AppController {
 		$this->layout = 'ajax';
 		if (!empty($this->request->data['Inquilino']['nombre'])) {
 			$lista = $this->Inquilino->find('all', array('recursive' => 0,
-				'conditions' => array('User.nombre LIKE' => '%' . $this->request->data['Inquilino']['nombre'] . "%"),
+				'conditions' => array('ISNULL(Inquilino.deleted)', 'User.nombre LIKE' => '%' . $this->request->data['Inquilino']['nombre'] . "%"),
 				'limit' => 8,
 				'order' => 'User.nombre ASC',
 			));
@@ -268,7 +268,7 @@ class ReportesController extends AppController {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Ambiente.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.edificio_id' => $idEdificio),
 			'fields' => array('Ambiente.nombre', 'Ambiente.id', 'User.nombre', 'Piso.nombre', 'Representante.nombre'),
 		));
 		//debug($ambientes);exit;
@@ -299,7 +299,7 @@ class ReportesController extends AppController {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Ambiente.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.edificio_id' => $idEdificio),
 			'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre', 'Piso.nombre'),
 		));
 		$this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));
@@ -311,7 +311,7 @@ class ReportesController extends AppController {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Ambiente.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.edificio_id' => $idEdificio),
 			'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre', 'Piso.nombre'),
 		));
 		$this->set(compact('ambientes', 'ano', 'tipo', 'gestion'));
@@ -353,7 +353,7 @@ class ReportesController extends AppController {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Ambiente.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.edificio_id' => $idEdificio),
 			'fields' => array('Ambiente.nombre', 'Ambiente.id', 'Representante.nombre', 'Piso.nombre'),
 		));
 		$this->set(compact('ambientes', 'ano', 'fecha', 'tipo'));

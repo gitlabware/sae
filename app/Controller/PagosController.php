@@ -128,6 +128,7 @@ class PagosController extends AppController {
 				$ambiente_a = $this->Ambiente->find('first', array(
 					'recursive' => 0,
 					'conditions' => array(
+						'ISNULL(Ambiente.deleted)',
 						'Ambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'),
 						'Piso.nombre' => $d['A'],
 						'Ambiente.nombre' => $d['B'],

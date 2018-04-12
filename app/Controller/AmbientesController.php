@@ -17,7 +17,10 @@ class AmbientesController extends AppController {
 	}
 
 	public function index() {
-		$ambientes = $this->Ambiente->find('all');
+		$ambientes = $this->Ambiente->find('all', array(
+			'recursive' => -1,
+			'conditions' => array('ISNULL(Ambiente.deleted)'),
+		));
 		$this->set(compact('ambientes'));
 	}
 
@@ -45,7 +48,7 @@ class AmbientesController extends AppController {
 
 	public function lista_ambientes() {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
-		$ambientes = $this->Ambiente->find('all', array('recursive' => 0, 'conditions' => array('Piso.edificio_id' => $idEdificio)));
+		$ambientes = $this->Ambiente->find('all', array('recursive' => 0, 'conditions' => array('ISNULL(Ambiente.deleted)', 'Piso.edificio_id' => $idEdificio)));
 		$edificio = $this->Edificio->findByid($idEdificio, NULL, NULL, -1);
 		/* debug($ambientes);
           exit; */
@@ -55,7 +58,7 @@ class AmbientesController extends AppController {
 	public function get_ambientes($idEdificio = NULL, $idPiso = NULL) {
 		return $this->Ambiente->find('all', array(
 			'recursive' => 0, 'order' => 'Ambiente.id ASC',
-			'conditions' => array('Ambiente.edificio_id' => $idEdificio, 'Ambiente.piso_id' => $idPiso),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.edificio_id' => $idEdificio, 'Ambiente.piso_id' => $idPiso),
 		));
 	}
 
@@ -188,7 +191,9 @@ class AmbientesController extends AppController {
 	}
 
 	public function eliminar($idAmbiente = null) {
-		if ($this->Ambiente->delete($idAmbiente)) {
+		$this->Ambiente->id = $idAmbiente;
+		$d_amb['deleted'] = date("Y-m-d H:i:s");
+		if ($this->Ambiente->save($d_amb)) {
 			$this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
 		} else {
 			$this->Session->setFlash('No se pudo eliminar, verifique que el ambiente exista!!!', 'msgerror');
@@ -395,7 +400,7 @@ class AmbientesController extends AppController {
 	public function pago($idAmbiente = null) {
 		$ambiente = $this->Ambiente->find('first', array('recursive' => -1, 'conditions' => array('Ambiente.id' => $idAmbiente)));
 		//$conceptos = $this->Ambienteconcepto->find('list', array('recursive' => 0, 'conditions' => array('Ambienteconcepto.ambiente_id' => $idAmbiente), 'fields' => 'Concepto.nombre'));
-		$inquilinos = $this->Inquilino->find('list', array('recursive' => 0, 'fields' => 'User.nombre', 'conditions' => array('Inquilino.ambiente_id' => $idAmbiente)));
+		$inquilinos = $this->Inquilino->find('list', array('recursive' => 0, 'fields' => 'User.nombre', 'conditions' => array('ISNULL(Inquilino.deleted)', 'Inquilino.ambiente_id' => $idAmbiente)));
 		//debug($inquilinos);exit;
 		$conceptos = $this->Concepto->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('id !=' => array(10, 11))));
 		$this->set(compact('inquilinos', 'ambiente', 'conceptos', 'idAmbiente'));
@@ -465,6 +470,7 @@ class AmbientesController extends AppController {
 				$ambientes = $this->Ambiente->find('all', array(
 					'recursive' => 0,
 					'conditions' => array(
+						'ISNULL(Ambiente.deleted)',
 						'Ambiente.edificio_id' => $edificioId,
 						'Ambiente.nombre LIKE' => "%$criterio%",
 					),
@@ -476,6 +482,7 @@ class AmbientesController extends AppController {
 				$ambientes = $this->Ambiente->find('all', array(
 					'recursive' => 0,
 					'conditions' => array(
+						'ISNULL(Ambiente.deleted)',
 						'Ambiente.edificio_id' => $edificioId,
 						'Ambiente.nombre LIKE' => "%$criterio%",
 					),
@@ -568,6 +575,7 @@ class AmbientesController extends AppController {
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => 0,
 			'conditions' => array(
+				'ISNULL(Ambiente.deleted)',
 				'Ambiente.user_id' => $idPropietario,
 			),
 		));
@@ -582,6 +590,7 @@ class AmbientesController extends AppController {
 		$propietarios = $this->Ambiente->find('all', array(
 			'recursive' => 0,
 			'conditions' => array(
+				'ISNULL(Ambiente.deleted)',
 				'Ambiente.edificio_id' => $edificioId,
 				'User.nombre LIKE' => "%$criterio%",
 			),
@@ -1067,7 +1076,7 @@ class AmbientesController extends AppController {
 	public function generar_pagos() {
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => -1,
-			'fields' => array('Ambiente.id', 'Ambiente.fecha_ocupacion', 'Ambiente.user_id')
+			'fields' => array('ISNULL(Ambiente.deleted)', 'Ambiente.id', 'Ambiente.fecha_ocupacion', 'Ambiente.user_id')
 			, 'conditions' => array('Ambiente.fecha_ocupacion !=' => NULL),
 		));
 		foreach ($ambientes as $am) {

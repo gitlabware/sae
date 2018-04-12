@@ -12,7 +12,7 @@ class PresupuestosController extends AppController {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$presupuestos = $this->Presupuesto->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Presupuesto.deleted)', 'edificio_id' => $idEdificio),
 			'order' => array('Presupuesto.gestion DESC'),
 		));
 		$this->set(compact('idEdificio', 'presupuestos'));
@@ -39,7 +39,9 @@ class PresupuestosController extends AppController {
 	}
 
 	public function eliminar($idPresupuesto = null) {
-		if ($this->Presupuesto->delete($idPresupuesto)) {
+		$this->Presupuesto->id = $idPresupuesto;
+		$d_presu['deleted'] = date("Y-m-d H:i:s");
+		if ($this->Presupuesto->save($d_presu)) {
 			$this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
 		} else {
 			$this->Session->setFlash('No se pudo eliminar, verifique que la presupuesto exista!!!', 'msgerror');

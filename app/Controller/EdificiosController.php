@@ -16,7 +16,7 @@ class EdificiosController extends AppController {
 	}
 
 	public function index() {
-		$edificios = $this->Edificio->find('all',array('conditions'=>array('ISNULL(Edificio.deleted)')));
+		$edificios = $this->Edificio->find('all', array('conditions' => array('ISNULL(Edificio.deleted)')));
 		$this->set(compact('edificios'));
 	}
 
@@ -25,11 +25,11 @@ class EdificiosController extends AppController {
 		$this->Edificio->id = $idEdificio;
 		$this->request->data = $this->Edificio->read();
 		if (empty($idEdificio)) {
-			$catambientes = $this->GenCategoriasambiente->find('list', array('fields' => 'GenCategoriasambiente.nombre','conditions'=>'ISNULL(GenCategoriasambiente.deleted)'));
-			$catpagos = $this->GenCategoriaspago->find('list', array('fields' => 'GenCategoriaspago.nombre','conditions'=>'ISNULL(GenCategoriaspago.deleted)'));
+			$catambientes = $this->GenCategoriasambiente->find('list', array('fields' => 'GenCategoriasambiente.nombre', 'conditions' => 'ISNULL(GenCategoriasambiente.deleted)'));
+			$catpagos = $this->GenCategoriaspago->find('list', array('fields' => 'GenCategoriaspago.nombre', 'conditions' => 'ISNULL(GenCategoriaspago.deleted)'));
 		} else {
-			$catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre', 'conditions' => array('Categoriasambiente.edificio_id' => $idEdificio,'ISNULL(Categoriasambiente.deleted)')));
-			$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre', 'conditions' => array('Categoriaspago.edificio_id' => $idEdificio,'ISNULL(Categoriaspago.deleted)')));			
+			$catambientes = $this->Categoriasambiente->find('list', array('fields' => 'Categoriasambiente.nombre', 'conditions' => array('Categoriasambiente.edificio_id' => $idEdificio, 'ISNULL(Categoriasambiente.deleted)')));
+			$catpagos = $this->Categoriaspago->find('list', array('fields' => 'Categoriaspago.nombre', 'conditions' => array('Categoriaspago.edificio_id' => $idEdificio, 'ISNULL(Categoriaspago.deleted)')));
 		}
 		$pisos = $this->Piso->find('count', array('conditions' => array('ISNULL(Piso.deleted)', 'Piso.edificio_id' => $idEdificio)));
 		$this->set(compact('catambientes', 'catpagos', 'pisos'));
@@ -150,8 +150,8 @@ class EdificiosController extends AppController {
 	}
 
 	public function eliminar($idEdificio = null) {
-		 $this->Edificio->id=$idEdificio;
-    $dedificio['deleted']=date("Y-m-d H:i:s");
+		$this->Edificio->id = $idEdificio;
+		$dedificio['deleted'] = date("Y-m-d H:i:s");
 		if ($this->Edificio->save($dedificio)) {
 			$this->Session->setFlash('Se elimino correctamente!!!', 'msgbueno');
 		} else {
@@ -175,9 +175,9 @@ class EdificiosController extends AppController {
 		$this->layout = 'ajax';
 		$select_usuarios = $this->User->find('list', array('fields' => 'User.nombre', 'conditions' => array('ISNULL(User.deleted)', 'User.role' => 'Administrador', 'User.edificio_id' => NULL)));
 		$usuarios = $this->User->find('all', array('conditions' => array('ISNULL(User.deleted)', 'User.role' => 'Administrador', 'User.edificio_id' => $idEdificio)));
-		$edificio_nom = $this->Edificio->find('first',array('fields'=>'Edificio.nombre','conditions'=>array('Edificio.id'=>$idEdificio)));
-	//	debug($edificio_nom);exit;
-		$this->set(compact('idEdificio', 'select_usuarios', 'usuarios','edificio_nom'));
+		$edificio_nom = $this->Edificio->find('first', array('fields' => 'Edificio.nombre', 'conditions' => array('Edificio.id' => $idEdificio)));
+		//	debug($edificio_nom);exit;
+		$this->set(compact('idEdificio', 'select_usuarios', 'usuarios', 'edificio_nom'));
 	}
 
 	public function guarda_nuevo_usuario() {
@@ -220,7 +220,7 @@ class EdificiosController extends AppController {
 	public function genera_servicio_ambientes($idEdificio = NULL) {
 		$edi_serv = $this->Edificioconcepto->find('all', array('recursive' => -1, 'conditions' => array('Edificioconcepto.edificio_id' => $idEdificio)));
 		if (!empty($edi_serv)) {
-			$ambientes = $this->Ambiente->find('all', array('recursive' => -1, 'conditions' => array('Ambiente.edificio_id' => $idEdificio)));
+			$ambientes = $this->Ambiente->find('all', array('recursive' => -1, 'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.edificio_id' => $idEdificio)));
 			foreach ($ambientes as $am) {
 				foreach ($edi_serv as $ed) {
 					$this->Ambienteconcepto->create();
@@ -237,7 +237,7 @@ class EdificiosController extends AppController {
 		$edificio = $this->Edificio->findByid($this->Session->read('Auth.User.edificio_id'));
 		//debug($edificio);exit;
 		$nro_pisos = $this->Piso->find('count', array('conditions' => array('ISNULL(Piso.deleted)', 'Piso.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
-		$nro_ambientes = $this->Ambiente->find('count', array('conditions' => array('Ambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
+		$nro_ambientes = $this->Ambiente->find('count', array('conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
 		$nro_usuarios = $this->User->find('count', array('conditions' => array('ISNULL(User.deleted)', 'User.edificio_id' => $this->Session->read('Auth.User.edificio_id'))));
 		$this->set(compact('edificio', 'nro_pisos', 'nro_ambientes', 'nro_usuarios'));
 	}

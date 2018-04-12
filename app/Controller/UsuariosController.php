@@ -33,12 +33,12 @@ class UsuariosController extends AppController {
 		);
 		$ambientes_inq = $this->Inquilino->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Inquilino.user_id' => $idUser),
+			'conditions' => array('ISNULL(Inquilino.deleted)', 'Inquilino.user_id' => $idUser),
 			'fields' => array('Ambiente.id', 'Ambiente.nombre', 'Inquilino.piso'),
 		));
 		$ambientes_prop = $this->Ambiente->find('all', array(
 			'recursive' => 0,
-			'conditions' => array('Ambiente.user_id' => $idUser),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'Ambiente.user_id' => $idUser),
 			'fields' => array('Ambiente.id', 'Ambiente.nombre', 'Piso.nombre'),
 		));
 		//debug($ambientes_inq);exit;
@@ -117,14 +117,16 @@ class UsuariosController extends AppController {
 	}
 
 	public function elimina_usuario($idUsuario = null) {
-		$inquilino = $this->Inquilino->findByuser_id($idUsuario, null, null, -1);
-		if (!empty($inquilino)) {
-			$this->Inquilino->deleteAll(array('Inquilino.user_id' => $inquilino['Inquilino']['user_id']));
+
+		foreach ($inquilinos as $inquilino) {
+			$this->Inquilino->id = $inquilino['Inquilino']['id'];
+			$d_inq['deleted'] = date("Y-m-d H:i:s");
+			$this->Inquilino->save($d_inq);
 		}
 		//------------ usuario ------------
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('user_id' => $idUsuario),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'user_id' => $idUsuario),
 		));
 		if (!empty($ambientes)) {
 			foreach ($ambientes as $amb) {
@@ -138,7 +140,7 @@ class UsuariosController extends AppController {
 		//------------ Inquilino ------------
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('inquilino_id' => $idUsuario),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'inquilino_id' => $idUsuario),
 		));
 		if (!empty($ambientes)) {
 			foreach ($ambientes as $amb) {
@@ -151,7 +153,7 @@ class UsuariosController extends AppController {
 
 		$ambientes = $this->Ambiente->find('all', array(
 			'recursive' => -1,
-			'conditions' => array('representante_id' => $idUsuario),
+			'conditions' => array('ISNULL(Ambiente.deleted)', 'representante_id' => $idUsuario),
 		));
 		if (!empty($ambientes)) {
 			foreach ($ambientes as $amb) {
