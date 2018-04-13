@@ -270,7 +270,7 @@ class EdificiosController extends AppController {
 		if ($this->RequestHandler->responseType() == 'json') {
 			//$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="gi gi-parents"></i></button>';
 			$servicios = '<button class="btn btn-warning" type="button" title="Servicios" onclick="servicios(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="fa fa-bars"></i></button>';
-			$editar = '<button class="btn btn-info" type="button" title="Editar" onclick="editar(' . "',Ambiente.piso_id,'" . ',' . "',Ambiente.id,'" . ')"><i class="fa fa-edit"></i></button>';
+			$editar = '<button class="btn btn-secondary" type="button" title="Editar" onclick="editar(' . "',Ambiente.piso_id,'" . ',' . "',Ambiente.id,'" . ')"><i class="fa fa-pencil"></i></button>';
 			$pagos = '<button class="btn btn-success" type="button" title="Pagos" onclick="ir_pagos(' . "',Ambiente.id,'" . ')"><i class="fa fa-dollar"></i></button>';
 			$xcobrar = '<button class="btn btn-primary" type="button" title="Regularizacion pagos" onclick="xcobrar(' . "',Ambiente.id,'" . ')"><i class="fa fa-money"></i></button>';
 			$eliminar = '<button class="btn btn-danger" type="button" title="Eliminar" onclick="eliminar(' . "',Ambiente.id,'" . ')"><i class="fa fa-remove"></i></button>';

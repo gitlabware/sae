@@ -38,9 +38,9 @@
                                         <table class="table table-striped table-vcenter">
                                             <thead>
                                                 <tr>
-                                                    <td>Codigo</td>
-                                                    <td>Nombre</td>
-                                                    <td>Bolivianos</td>
+                                                    <td><b> Codigo</b></td>
+                                                    <td><b>Nombre</b></td>
+                                                    <td><b>Bolivianos</b></td>
                                                 </tr>
                                             </thead>
                                             <tbody>
