@@ -21,12 +21,12 @@
 
             <div class="col-md-4">
               <label class="control-label">Banco/Caja</label>
-              <?php echo $this->Form->select('banco_id', $bancos, array('class' => 'form-control', 'requied')); ?>
+              <?php echo $this->Form->select('banco_id', $bancos, array('class' => 'form-control', 'required')); ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 ">
               <label class="control-label">&nbsp;</label>
-              <button class="btn btn-primary form-control">BUSCAR</button>
-            </div>
+              <button class="btn btn-block btn-primary ">BUSCAR</button>
+            </div>            
           </div>
         </div>
         <?php echo $this->Form->end(); ?>
