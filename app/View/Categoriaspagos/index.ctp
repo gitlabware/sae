@@ -5,7 +5,7 @@
     <div class="col-12">
 
         <div class="btn-group btn-group-sm pull-right">
-            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'categoria')); ?>');" class="btn btn-rounded btn-block btn-warning" title="Adicionar nueva Categoria">NUEVO</a>
+            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'categoria')); ?>');" class="btn btn-rounded btn-block btn-warning" title="Adicionar nueva Categoria">NUEVO CATEGORIA PAGO</a>
         </div>
     </div>
     

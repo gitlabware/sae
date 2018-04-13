@@ -1,6 +1,6 @@
 <!-- Modal Header -->
 <div class="modal-header text-center">
-    <h2 class="modal-title"><i class="fa fa-building"></i>Categoria de Ambiente</h2>
+    <h2 class="modal-title"><i class="fa fa-building"></i>Categoria Pago</h2>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span>
     </button>
 </div>
