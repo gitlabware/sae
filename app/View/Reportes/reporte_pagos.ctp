@@ -78,6 +78,8 @@
     </div>
   </div>
 </div>
+
+<?php $this->start('campo_js') ?>
 <script>
   $("#ajaxform").submit(function (e)
   {
@@ -109,3 +111,5 @@
       //e.unbind(); //unbind. to stop multiple form submit.
     });
   </script>
+
+  <?php $this->end() ?>
