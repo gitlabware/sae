@@ -11,11 +11,11 @@
                     <?php echo $this->Form->create('Presupuesto'); ?>
                     <div class="form-group no-imrprime-p">
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label class="control-label">Fecha_Inicio</label>
                                 <?php echo $this->Form->date('Dato.fecha_ini', array('class' => 'form-control no-imrprime-p', 'required')); ?>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label class="control-label">Fecha_Fin</label>
                                 <?php echo $this->Form->date('Dato.fecha_fin', array('class' => 'form-control no-imrprime-p', 'required', 'value' => date('Y-m-d'))); ?>
                             </div>
@@ -23,7 +23,7 @@
                                 <label class="control-label">Nivel</label>
                                 <?php echo $this->Form->select('Dato.nivel', array(0 => 1, 1 => 2, 2 => 3, 3 => 4, 4 => 5, 5 => 6, 6 => 7), array('class' => 'form-control', 'empty' => false, 'required')); ?>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label class="control-label">&nbsp;</label>
                                 <button type="submit" class="btn btn-primary form-control text-white">GENERAR</button>
                             </div>
