@@ -42,6 +42,12 @@
             max-height: calc(100vh - 100px);
             overflow-y: auto;
         }
+
+        @media print{
+            aside.left-sidebar{
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -87,7 +93,7 @@
         <!-- ============================================================== -->
         <!-- Container fluid  -->
         <!-- ============================================================== -->
-        <div class="container-fluid">
+        <div class="container-fluid" id="page-content">
 
             <?php echo $this->fetch('content'); ?>
 
@@ -325,7 +331,14 @@
     }
     
 
-
+function pop_print() {
+                w = window.open(null, 'Print_Page', 'scrollbars=yes');
+                var myStyle = '<link rel="stylesheet" href="<?php echo $this->webroot; ?>css/cssprint.css" />';
+                w.document.write('<button class="no-imrprime-p" type="button" onclick="window.print();">Imprimir</button>');
+                w.document.write(myStyle + jQuery('#page-content').html());
+                w.document.close();
+                //w.print();
+            }
 </script>
 <?= $this->fetch('campo_js') ?>
 

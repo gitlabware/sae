@@ -33,7 +33,7 @@
                                     <a href="javascript:void(0)"
                                        onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'usuarios', $ed['Edificio']['id'])); ?>');"
                                        title="Usuarios" class="btn btn-success btn-sm"><i class="fa fa-users"></i></a>
-                                    <?php echo $this->Html->link('<i class="fa fa-tags"></i>', array('controller' => 'Ambientes', 'action' => 'edificio', $ed['Edificio']['id']), array('class' => 'btn btn-info btn-sm', 'title' => 'Ambientes', 'escape' => FALSE)) ?>
+                                
                                     <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'eliminar', $ed['Edificio']['id']), array('class' => 'btn btn-danger btn-sm', 'title' => 'Eliminar Edificio', 'confirm' => 'Esta seguro de eliminar al edificio ' . $ed['Edificio']['nombre'] . '??', 'escape' => FALSE)) ?>
                                 </td>
                             </tr>

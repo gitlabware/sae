@@ -9,7 +9,7 @@
       <div class="card-body">
         <?php echo $this->Form->create('Reporte', array('action' => 'ajax_reporte_pagos_totales', 'id' => 'ajaxform')); ?>
 
-        <div class="form-group">
+        <div class="form-group no-imrprime-p">
           <div class="row">
             <div class="col-md-2">
               <label class="control-label">Fecha_Inicio</label>
