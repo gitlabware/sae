@@ -9,7 +9,7 @@
 
       <div class="card-body">
         <div class="form-horizontal form-bordered">
-          <?php echo $this->Form->create('Reporte', array('action' => 'ajax_reporte_pagos', 'id' => 'ajaxform')); ?>
+          <?php echo $this->Form->create('Reporte', array('action' => 'ajax_reporte_pagos', 'id' => 'ajaxform','class' => 'no-imrprime-p')); ?>
           <div class="form-group">
             <div class="row">
               <div class="col-md-4">

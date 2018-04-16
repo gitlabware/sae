@@ -58,7 +58,7 @@ select {
     width: 100% !important;
 }
 .table-bordered th, .table-bordered td {
-    border: 1px solid #000 !important
+    border: 1px solid black !important
 }
 
 
@@ -88,4 +88,5 @@ h1,h2,h3,h4,h5{
     .no-imrprime-p{
         display: none !important; 
     }
+
 }
