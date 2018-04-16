@@ -7,7 +7,7 @@
         <h4>REPORTE DE EGRESOS SEGUN BANCO/CAJA</h4>
       </div>
       <div class="card-body">
-        <?php echo $this->Form->create('Reporte', array('id' => 'ajaxform')); ?>
+        <?php echo $this->Form->create('Reporte', array('id' => 'ajaxform','class' => 'no-imrprime-p')); ?>
         <div class="form-group">
           <div class="row">
             <div class="col-md-3">
