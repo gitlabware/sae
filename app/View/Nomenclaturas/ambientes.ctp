@@ -4,8 +4,8 @@
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
-<?php echo $this->Form->create('Nomenclatura', array('action' => 'ajax_ambientes', 'class' => 'form-horizontal form-bordered', 'id' => 'ajax-ambientes')); ?>
 <div class="modal-body">
+<?php echo $this->Form->create('Nomenclatura', array('action' => 'ajax_ambientes', 'class' => 'form-horizontal form-bordered', 'id' => 'ajax-ambientes')); ?>
   <?php echo $this->Form->hidden('id', array('value' => $idNomenclatura)) ?>
   <div class="row">
     <div class="col-md-12">
@@ -49,12 +49,16 @@
       </div>
     </div>
   </div>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
   <button type="submit" class="btn btn-danger waves-effect waves-light">Guardar</button>
+    </div>
+  </div>
+  <?php echo $this->Form->end();?>
 </div>
-<?php echo $this->Form->end();?>
+
+
 <!-- END Modal Body -->
 
 <script>
