@@ -7,7 +7,7 @@
         <h4>REPORTE AUXILIARES POR GESTIONES</h4>
       </div>
       <div class="card-body">
-        <?php echo $this->Form->create('Reporte'); ?>
+        <?php echo $this->Form->create('Reporte',array('class' => 'no-imrprime-p')); ?>
         <div class="form-group">
           <div class="row">
             <div class="col-md-3">

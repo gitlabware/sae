@@ -8,7 +8,7 @@
       </div>
 
       <div class="card-body">
-        <?php echo $this->Form->create('Reporte', array('action' => 'ajax_reporte_pagos_a', 'id' => 'ajaxform')); ?>
+        <?php echo $this->Form->create('Reporte', array('action' => 'ajax_reporte_pagos_a', 'id' => 'ajaxform','class' => 'no-imrprime-p')); ?>
         <div class="form-group">
           <div class="row">
 
