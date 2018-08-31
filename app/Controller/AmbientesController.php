@@ -66,25 +66,10 @@ class AmbientesController extends AppController {
 		$this->layout = 'ajax';
 		$piso = $this->Piso->findByid($idPiso);
 		/* debug($piso);
-          exit; */
+		  exit; */
+		  $this->Ambiente->query("SET sql_mode = '';");
 		$inquilinos = array();
 		if (empty($idAmbiente)) {
-			/* if (!empty($idUsuario)) {
-				              if ($sw) {
-				              $this->request->data = $this->Session->read('fambiente');
-				              $this->Session->delete('fambiente');
-				              }
-				              $this->request->data['Ambiente']['user_id'] = $idUsuario;
-				              } else {
-				              $this->request->data['Ambiente'] = $piso['Edificio'];
-				              $this->request->data['Ambiente']['nombre'] = "";
-				              $this->request->data['Ambiente']['id'] = NULL;
-				              if ($sw) {
-				              $this->request->data = $this->Session->read('fambiente');
-				              $this->Session->delete('fambiente');
-				              }
-			*/
-
 			if ($sw) {
 				if ($this->Session->check('fambiente')) {
 					$this->request->data = $this->Session->read('fambiente');
