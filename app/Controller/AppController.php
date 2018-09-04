@@ -20,6 +20,7 @@
  */
 
 App::uses('Controller', 'Controller');
+App::uses('ConnectionManager', 'Model'); 
 
 /**
  * Application Controller
@@ -45,4 +46,10 @@ class AppController extends Controller {
         }
         return $devuelve;
     }
+
+    // public function __construct(){
+        
+    //     // $db = ConnectionManager::getDataSource("default");
+    //     // $places_of_interest = $db->fetchAll("SET sql_mode = '';");
+    // }
 }

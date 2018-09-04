@@ -67,7 +67,7 @@ class AmbientesController extends AppController {
 		$piso = $this->Piso->findByid($idPiso);
 		/* debug($piso);
 		  exit; */
-		  $this->Ambiente->query("SET sql_mode = '';");
+		//   $this->Ambiente->query("SET sql_mode = '';");
 		$inquilinos = array();
 		if (empty($idAmbiente)) {
 			if ($sw) {
