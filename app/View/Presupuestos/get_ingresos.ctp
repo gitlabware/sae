@@ -31,7 +31,7 @@ $formato_num[2] = ".";
                 }
                 ?>
             </td>
-            <td><?php echo number_format($tin[0]['porcentaje'],$formato_num[0],$formato_num[1],$formato_num[2]) ?></td>
+            <td><?php echo number_format(floatval($tin[0]['porcentaje']),$formato_num[0],$formato_num[1],$formato_num[2]) ?></td>
             <td><?php echo number_format($tin[0]['ingreso'],$formato_num[0],$formato_num[1],$formato_num[2]) ?></td>
             <td><?php echo number_format($tin[0]['pres_anterior'],$formato_num[0],$formato_num[1],$formato_num[2]) ?></td>
             <td><?php echo number_format($tin[0]['ejec_anterior'],$formato_num[0],$formato_num[1],$formato_num[2]) ?></td>

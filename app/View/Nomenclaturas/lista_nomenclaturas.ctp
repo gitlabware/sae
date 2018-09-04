@@ -70,7 +70,8 @@
     </div>
     <!-- END Example Block -->
 
-    <?php $this->start('addscript'); ?>
+    <?php $this->start('campo_js'); ?>
+    <script src="<?php echo $this->webroot; ?>template/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script>
         $(function () {
             var tablelength = 10;
