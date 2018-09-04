@@ -9,7 +9,7 @@
             <div class="card-body">
                 <!-- Example Content -->
                 <div class="table-responsive m-t-40">
-                <table id="general-table" class="table table-bordered">
+                <table id="generdal-table" class="table table-bordered" style="fontFamily">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -27,11 +27,11 @@
                                     <td><?php echo $us['User']['role']; ?></td>
                                     <td><?php echo $us['Edificio']['nombre']; ?></td>
                                     <td class="text-center">
-                                        
+
                                             <a href="javascript:void(0)" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'usuario2',$us['User']['id'])); ?>');" title="Editar Usuario" class="btn btn-secondary btn-sm">
                                             <i class="fa fa-pencil"></i></a>
                                             <?php echo $this->Html->link('<i class="fa fa-times"></i>',array('action' => 'eliminar',$us['User']['id']),array('class' => 'btn btn-danger btn-sm','title' => 'Eliminar Usuario','confirm' => 'Esta seguro de eliminar al usuario '.$us['User']['username'].'??','escape' => FALSE))?>
-                                        
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

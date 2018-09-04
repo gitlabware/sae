@@ -3,111 +3,161 @@
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <?php echo $this->Form->create('Ambiente', array('action' => 'guarda_ambiente', 'class' => 'form-horizontal form-bordered', 'id' => 'formambiente')); ?>
+
 <div class="modal-body">
+
   <legend><?php echo "Edificio " . $piso['Edificio']['nombre'] . " | Piso " . $piso['Piso']['nombre'] ?></legend>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label" for="user-settings-email">Identificador</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->hidden('edificio_id', array('value' => $piso['Edificio']['id'])); ?>
-        <?php echo $this->Form->hidden('piso_id', array('value' => $piso['Piso']['id'])); ?>
-        <?php echo $this->Form->hidden('id'); ?>
-        <?php echo $this->Form->text('nombre', array('class' => 'form-control', 'required', 'placeholder' => 'Nombre del ambiente')); ?>
+
+  <div class="row">
+
+    <div class="col-md-8">
+      <div class="form-group">
+        <label class="control-label">Identificador</label>
+        <div class="controls">
+          <?php echo $this->Form->hidden('edificio_id', array('value' => $piso['Edificio']['id'])); ?>
+          <?php echo $this->Form->hidden('piso_id', array('value' => $piso['Piso']['id'])); ?>
+          <?php echo $this->Form->hidden('id'); ?>
+          <?php echo $this->Form->text('nombre', array('class' => 'form-control', 'required', 'placeholder' => 'Nombre del ambiente')); ?>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label" for="user-settings-email">Area Util</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->text('area_util', array('class' => 'form-control', 'required', 'placeholder' => 'Area Util', 'type' => 'number', 'step' => 'any', 'id' => 'idareautil')); ?>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <label class="control-label">Areal Util</label>
+        <div class="controls">
+          <?php echo $this->Form->text('area_util', array('class' => 'form-control', 'required', 'placeholder' => 'Ej: 30', 'type' => 'number', 'step' => 'any', 'id' => 'idareautil')); ?>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label" for="user-settings-email">Area Comun</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->text('area_comun', array('class' => 'form-control', 'required', 'placeholder' => 'Area Comun', 'type' => 'number', 'step' => 'any', 'id' => 'idareacomun')); ?>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <label class="control-label">Area Comun</label>
+        <div class="controls">
+          <?php echo $this->Form->text('area_comun', array('class' => 'form-control', 'required', 'placeholder' => 'Ej: 5', 'type' => 'number', 'step' => 'any', 'id' => 'idareacomun')); ?>
+        </div>
       </div>
     </div>
+
   </div>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label" for="user-settings-email">Categoria Ambiente</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->select('categoriasambiente_id', $catambientes, array('class' => 'form-control', 'required', 'id' => 'idcatambientes')); ?>
+
+  <div class="row">
+
+    <div class="col-md-8">
+      <div class="form-group">
+        <label class="control-label">Categoria Ambiente</label>
+        <div class="controls">
+          <?php echo $this->Form->select('categoriasambiente_id', $catambientes, array('class' => 'form-control', 'required', 'id' => 'idcatambientes')); ?>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label" for="user-settings-email">Categoria Pago</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control', 'required', 'id' => 'idcatpagos')); ?>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="control-label">Categoria Pago</label>
+        <div class="controls">
+          <?php echo $this->Form->select('categoriaspago_id', $catpagos, array('class' => 'form-control', 'required', 'id' => 'idcatpagos')); ?>
+        </div>
       </div>
     </div>
+
   </div>
+
   <?php
   $representante_id = '';
   if (!empty($this->request->data['Ambiente']['representante_id'])) {
-  $representante_id = $this->request->data['Ambiente']['representante_id'];
+    $representante_id = $this->request->data['Ambiente']['representante_id'];
   }
   $user_id = '';
   if (!empty($this->request->data['Ambiente']['user_id'])) {
-  $user_id = $this->request->data['Ambiente']['user_id'];
+    $user_id = $this->request->data['Ambiente']['user_id'];
   }
   ?>
   <input type="hidden" name="data[Ambiente][representante_id]" id="idrepresen" value="<?php echo $representante_id ?>">
-  <div class="form-group">
-    <div id="selectpropietario">
-      <div class="row">
-        <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Propietario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'usuario', $idPiso)); ?>')">Propietario</a></label>
-        <div class="col-md-8">
+  
+  <div class="row">
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label">
+          Propietario
+          <button 
+            type="button" 
+            class="btn btn-sm btn-success"
+            onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'usuario', $idPiso)); ?>')" >
+            Nuevo
+          </button>
+        </label>
+        <div class="controls">
           <?php echo $this->Form->select('user_id', $usuarios, array('class' => 'form-control', 'id' => 'select-prop')); ?>
         </div>
       </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div id="selectpropietario">
-      <div class="row">
-        <label class="col-md-4 control-label" for="user-settings-email"><a href="javascript:" title="Nuevo Propietario" onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'inquilino', $idPiso)); ?>')">Inquilino</a></label>
-        <div class="col-md-8">
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label">
+          Inquilino
+          <button 
+            type="button" 
+            class="btn btn-sm btn-success"
+            onclick="cargarmodal_amb('<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'inquilino', $idPiso)); ?>')" >
+            Nuevo
+          </button>
+        </label>
+        <div class="controls">
           <?php echo $this->Form->select('inquilino_id', $select_inquilinos, array('class' => 'form-control', 'id' => 'select-prop')); ?>
         </div>
       </div>
     </div>
   </div>
+
   <script>
   $('#select-prop').change(function () {
-  $('#idrepprop').val($('#select-prop').val());
+    $('#idrepprop').val($('#select-prop').val());
   });
   </script>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label" for="user-settings-email">Fecha de Ocupacion</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->date('fecha_ocupacion', array('class' => 'form-control', 'placeholder' => 'ejemplo: 2014-12-01')); ?>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label">
+          Fecha de Ocupacion
+        </label>
+        <div class="controls">
+          <?php echo $this->Form->date('fecha_ocupacion', array('class' => 'form-control', 'placeholder' => 'ejemplo: 2014-12-01')); ?>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label">
+          Estado
+        </label>
+        <div class="controls">
+          <?php echo $this->Form->select('estado', 
+            array('Activo' => 'Activo', 'Inactivo' => 'Inactivo'), 
+            array('class' => 'form-control', 'required', 'empty' => false)); ?>
+        </div>
       </div>
     </div>
   </div>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label">Estado</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->select('estado', array('Activo' => 'Activo', 'Inactivo' => 'Inactivo'), array('class' => 'form-control', 'required', 'empty' => false)); ?>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label class="control-label">
+          Descripcion
+        </label>
+        <div class="controls">
+          <?php echo $this->Form->text('descripcion', array('class' => 'form-control', 'placeholder' => 'Descripcion')); ?>
+        </div>
       </div>
     </div>
   </div>
-  <div class="form-group">
-    <div class="row">
-      <label class="col-md-4 control-label" for="user-settings-email">Descripcion</label>
-      <div class="col-md-8">
-        <?php echo $this->Form->textarea('descripcion', array('class' => 'form-control', 'placeholder' => 'Descripcion')); ?>
-      </div>
-    </div>
-  </div>
+
 </div>
 <!-- END Modal Body -->
 <div class="modal-footer">
