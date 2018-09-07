@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class ConceptosController extends AppController {
 
-	public $uses = array('Concepto', 'Edificioconcepto', 'Ambienteconcepto', 'User', 'Ambiente', 'Subconcepto', 'SubcGestione');
+	public $uses = array('Concepto', 'Edificioconcepto', 'Ambienteconcepto', 'User', 'Ambiente', 'Subconcepto', 'SubcGestione','Edificio');
 	var $components = array('RequestHandler');
 	public $layout = 'monster';
 
@@ -197,11 +197,15 @@ class ConceptosController extends AppController {
 			    debug($resu);
 			    debug($data);
 		*/
+		$idEdificio = $this->Session->read('Auth.User.edificio_id');
+		$edificio = $this->Edificio->findById($idEdificio);
+
 		$subconceptos = $this->Subconcepto->find('all', array(
 			'recursive' => 0,
 			'conditions' => array(
 				'Subconcepto.edificio_id' => $this->Session->read('Auth.User.edificio_id'),
 				"Subconcepto.subconcepto_id" => NULL, 'ISNULL(Subconcepto.deleted)',
+				'Subconcepto.gestion' => $edificio['Edificio']['gestion']
 			),
 			'fields' => array('Subconcepto.codigo', 'Subconcepto.nombre', 'Concepto.nombre', 'Subconcepto.tipo', 'Subconcepto.id'),
 		));

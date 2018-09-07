@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class BancosController extends AppController {
 
-	public $uses = array('Banco', 'Cuenta', 'Bancosmovimiento', 'Cuentasmonto', 'Cuentasegreso', 'Nomenclatura', 'Comprobante', 'Comprobantescuenta', 'Edificio');
+	public $uses = array('Edificio','Banco', 'Cuenta', 'Bancosmovimiento', 'Cuentasmonto', 'Cuentasegreso', 'Nomenclatura', 'Comprobante', 'Comprobantescuenta', 'Edificio');
 	public $layout = 'monster';
 
 	public function index() {
@@ -21,13 +21,13 @@ class BancosController extends AppController {
 		$this->request->data = $this->Banco->read();
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 		$cuentas = $this->Cuenta->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('ISNULL(Cuenta.deleted)', 'Cuenta.edificio_id' => $idEdificio)));
-
+		$edificio = $this->Edificio->findById($idEdificio);
 		$this->Nomenclatura->virtualFields = array(
 			'nombre_completo' => "CONCAT(Nomenclatura.codigo_completo,' - ',Nomenclatura.nombre)",
 		);
 		$nomenclaturas = $this->Nomenclatura->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => $idEdificio,'Nomenclatura.gestion' => $edificio['Edificio']['gestion']),
 			'fields' => array('id', 'nombre_completo'),
 		));
 		$this->set(compact('cuentas', 'nomenclaturas'));

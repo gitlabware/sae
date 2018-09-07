@@ -5,7 +5,15 @@ App::uses('AppController', 'Controller');
 class EdificiosController extends AppController {
 
 	var $components = array('RequestHandler', 'DataTable');
-	public $uses = array('Edificio', 'Piso', 'Ambiente', 'Categoriasambiente', 'Categoriaspago', 'User', 'Edificioconcepto', 'Ambienteconcepto', 'Retencione', 'GenCategoriasambiente', 'GenCategoriaspago');
+	public $uses = array(
+		'Edificio', 'Piso', 
+		'Ambiente', 'Categoriasambiente', 
+		'Categoriaspago', 'User', 'Edificioconcepto', 
+		'Ambienteconcepto', 'Retencione', 
+		'GenCategoriasambiente', 
+		'GenCategoriaspago',
+		'Nomenclatura','Subconcepto'
+	);
 	public $layout = 'monster';
 
 	public function beforeFilter() {
@@ -37,7 +45,7 @@ class EdificiosController extends AppController {
 
 	public function guarda_edificio() {
 		if (!empty($this->request->data)) {
-			//debug($this->request->data);exit;
+			// debug($this->request->data);exit;
 			if (!empty($this->request->data['Edificio']['imagen_up']['name'])) {
 				$archivo = $this->request->data['Edificio']['imagen_up'];
 				$extension = explode('.', $archivo['name']);
@@ -56,6 +64,7 @@ class EdificiosController extends AppController {
 
 			/* debug($this->request->data);
 			exit; */
+			$this->request->data['Edificio']['gestion'] = $this->request->data['Edificio']['gestion']['year'];
 			$this->Edificio->create();
 			$valida = $this->validar('Edificio');
 			if (empty($valida)) {
@@ -289,6 +298,17 @@ class EdificiosController extends AppController {
 			$this->set('ambientes', $this->DataTable->getResponse('Edificios', 'Ambiente'));
 			$this->set('_serialize', 'ambientes');
 		}
+	}
+
+	public function regulariza_gestion(){
+		$this->Nomenclatura->updateAll(
+			array('Nomenclatura.gestion' => 2018)
+		);
+		$this->Subconcepto->updateAll(
+			array('Subconcepto.gestion' => 2018)
+		);
+		debug("Ya se regularizo");
+		exit;
 	}
 
 }

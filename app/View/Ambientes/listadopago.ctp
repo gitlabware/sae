@@ -106,9 +106,10 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
                             <?php echo $man['Pago']['monto_total']; ?>
                         </td>
                         <?php
+
                         $nomenclaturas = $NomenclaturasAmbiente->find('list', array(
                             'recursive' => 0,
-                            'conditions' => array('ISNULL(NomenclaturasAmbiente.deleted)','NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'], 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']),
+                            'conditions' => array('ISNULL(NomenclaturasAmbiente.deleted)','NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'], 'Nomenclatura.concepto_id' => $man['Pago']['concepto_id'],'Nomenclatura.gestion' => $edificio['Edificio']['gestion']),
                             'fields' => array('Nomenclatura.id', 'Nomenclatura.nombre')
                         ));
                         $c_seleccion = '';
@@ -119,7 +120,8 @@ $NomenclaturasAmbiente = new NomenclaturasAmbiente();
                                 'ISNULL(NomenclaturasAmbiente.deleted)',
                                 '(EXISTS(SELECT * FROM subconceptos WHERE subconceptos.id = Nomenclatura.subconcepto_id AND subconceptos.gestiones_anteriores = 1))',
                                 'NomenclaturasAmbiente.ambiente_id' => $man['Ambiente']['id'],
-                                'Nomenclatura.concepto_id' => $man['Pago']['concepto_id']
+                                'Nomenclatura.concepto_id' => $man['Pago']['concepto_id'],
+                                'Nomenclatura.gestion' => $edificio['Edificio']['gestion']
                             ),
                             'fields' => array('Nomenclatura.id')
                         ));

@@ -33,6 +33,15 @@
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        <div class="row">
+            <label class="col-md-4 control-label" for="user-settings-email">Gestión</label>
+            <div class="col-md-8">
+                <?php echo $this->Form->year('gestion',date('Y')-25,null,array('class' => 'form-control', 'required')); ?>
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <div class="row">
             <label class="col-md-4 control-label" for="user-settings-email">Imagen logo o firma</label>

@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class CuentasController extends AppController {
 
   public $layout = 'monster';
-  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto','Banco','Bancosmovimiento','Cuentasegreso');
+  public $uses = array('Cuenta', 'Concepto', 'Cuentasporcentaje', 'Cuentasmonto', 'Subconcepto','Banco','Bancosmovimiento','Cuentasegreso','Edificio');
 
   public function index() {
     $idEdificio = $this->Session->read('Auth.User.edificio_id');
@@ -13,9 +13,10 @@ class CuentasController extends AppController {
       'conditions' => array('ISNULL(Cuenta.deleted)','Cuenta.edificio_id' => $idEdificio)
     ));
     $conceptos = $this->Concepto->find('all');
+		$edificio = $this->Edificio->findById($idEdificio);
     $subconceptos = $this->Subconcepto->find('all', array(
       'recursive' => -1,
-      'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio)
+      'conditions' => array('ISNULL(Subconcepto.deleted)','Subconcepto.edificio_id' => $idEdificio,'Subconcepto.gestion' => $edificio['Edificio']['gestion'])
     ));
     $bancos = $this->Banco->find('all', array(
       'conditions' => array('Banco.edificio_id' => $idEdificio,'ISNULL(Banco.deleted)')
