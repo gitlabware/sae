@@ -108,6 +108,7 @@ class NomenclaturasController extends AppController {
 
 			$cod_padre = $this->request->data['Nomenclatura']['codigo_padre'];
 			$idEdificio = $this->Session->read('Auth.User.edificio_id');
+			$edificio = $this->Edificio->findById($idEdificio);
 			$nom_cod = $this->Nomenclatura->find('first', array(
 				'recursive' => -1,
 				'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.codigo_completo LIKE' => $cod_padre, 'Nomenclatura.edificio_id' => $idEdificio),
@@ -128,7 +129,7 @@ class NomenclaturasController extends AppController {
 			}
 
 			$this->request->data['Nomenclatura']['codico_p_orden'] = $this->gen_nu_cod_p($this->request->data['Nomenclatura']['codigo_completo']);
-
+			
 			/* debug($this->request->data);
               exit; */
 			if (!empty($this->request->data['Nomenclatura']['subconcepto_id'])) {
@@ -138,6 +139,7 @@ class NomenclaturasController extends AppController {
 			if (!empty($this->request->data['Nomenclatura']['nomenclatura_id'])) {
 				$this->request->data['Nomenclatura']['parent_id'] = $this->request->data['Nomenclatura']['nomenclatura_id'];
 			}
+			$this->request->data['Nomenclatura']['gestion'] = $edificio['Edificio']['gestion'];
 			$this->Nomenclatura->save($this->request->data['Nomenclatura']);
 			$this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
 		} else {

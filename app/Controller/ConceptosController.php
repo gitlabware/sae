@@ -149,6 +149,7 @@ class ConceptosController extends AppController {
 	public function subconcepto($idSubconcepto = null) {
 		$this->layout = 'ajax';
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
+		$edificio = $this->Edificio->findById($idEdificio);
 		if (!empty($this->request->data)) {
 			$valida = $this->validar('Subconcepto');
 			if (empty($valida)) {
@@ -156,6 +157,7 @@ class ConceptosController extends AppController {
 					$this->request->data['Subconcepto']['tipo'] = $this->request->data['Subconcepto']['nuevo_tipo'];
 				}
 				$this->request->data['Subconcepto']['parent_id'] = $this->request->data['Subconcepto']['subconcepto_id'];
+				$this->request->data['Subconcepto']['gestion'] = $edificio['Edificio']['gestion'];
 				$this->Subconcepto->create();
 				$this->Subconcepto->save($this->request->data['Subconcepto']);
 				if (!empty($this->request->data['gestiones'])) {
