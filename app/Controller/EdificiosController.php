@@ -277,23 +277,23 @@ class EdificiosController extends AppController {
 	public function ambientes() {
 		$edificioId = $this->Session->read('Auth.User.edificio_id');
 		if ($this->RequestHandler->responseType() == 'json') {
-			//$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="gi gi-parents"></i></button>';
+			$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="gi gi-parents"></i></button>';
 			$servicios = '<button class="btn btn-warning" type="button" title="Servicios" onclick="servicios(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="fa fa-bars"></i></button>';
 			$editar = '<button class="btn btn-secondary" type="button" title="Editar" onclick="editar(' . "',Ambiente.piso_id,'" . ',' . "',Ambiente.id,'" . ')"><i class="fa fa-pencil"></i></button>';
 			$pagos = '<button class="btn btn-success" type="button" title="Pagos" onclick="ir_pagos(' . "',Ambiente.id,'" . ')"><i class="fa fa-dollar"></i></button>';
 			$xcobrar = '<button class="btn btn-primary" type="button" title="Regularizacion pagos" onclick="xcobrar(' . "',Ambiente.id,'" . ')"><i class="fa fa-money"></i></button>';
 			$eliminar = '<button class="btn btn-danger" type="button" title="Eliminar" onclick="eliminar(' . "',Ambiente.id,'" . ')"><i class="fa fa-remove"></i></button>';
-			$acciones = '<div class="btn-group btn-group-sm"> ' . $editar . ' ' . $servicios . ' ' . $pagos . ' ' . $xcobrar . ' ' . $eliminar . ' </div>';
+			$acciones = '<div class="btn-group btn-group-sm"> ' . $editar . ' ' . $servicios . ' '.$inquilinos.' ' . $pagos . ' ' . $xcobrar . ' ' . $eliminar . ' </div>';
 			$this->Ambiente->virtualFields = array(
 				'acciones' => "CONCAT('$acciones')",
 			);
 			$this->paginate = array(
-				'fields' => array('Ambiente.nombre', 'User.nombre', 'Inquilino.nombre', 'Piso.nombre', 'Ambiente.acciones'),
+				'fields' => array('Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Piso.nombre', 'Ambiente.acciones'),
 				'conditions' => array('Ambiente.edificio_id' => $edificioId, 'Piso.id <>' => null),
 				'recursive' => 0,
 				'order' => 'Ambiente.nombre ASC',
 			);
-			$this->DataTable->fields = array('Piso.nombre', 'Ambiente.nombre', 'User.nombre', 'Inquilino.nombre', 'Ambiente.acciones');
+			$this->DataTable->fields = array('Piso.nombre', 'Ambiente.nombre', 'User.nombre', 'Ambiente.lista_inquilinos', 'Ambiente.acciones');
 			$this->DataTable->emptyEleget_usuarios_adminments = 1;
 			$this->set('ambientes', $this->DataTable->getResponse('Edificios', 'Ambiente'));
 			$this->set('_serialize', 'ambientes');

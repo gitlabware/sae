@@ -78,7 +78,7 @@
   
   <div class="row">
 
-    <div class="col-md-6">
+    <div class="col-md-12">
       <div class="form-group">
         <label class="control-label">
           Propietario
@@ -95,7 +95,7 @@
       </div>
     </div>
 
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
       <div class="form-group">
         <label class="control-label">
           Inquilino
@@ -110,7 +110,8 @@
           <?php echo $this->Form->select('inquilino_id', $select_inquilinos, array('class' => 'form-control', 'id' => 'select-prop')); ?>
         </div>
       </div>
-    </div>
+    </div> -->
+
   </div>
 
   <script>
@@ -164,6 +165,7 @@
   <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
   <?php if (!empty($idAmbiente)): ?>
   <button type="button" class="btn btn-info" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'aservicios', $idAmbiente, $piso['Edificio']['id'])) ?>');">Servicios</button>
+  <button type="button" class="btn btn-warning" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'inquilinos', $idAmbiente, $idPiso)) ?>');">Inquilinos</button>
   <?php echo $this->Html->link("Por cobrar", array('action' => 'xcobrar', $idAmbiente), array('class' => 'btn btn-success')) ?>
   <?php endif;?>
   <button type="submit" class="btn btn-danger waves-effect waves-light">Guardar</button>

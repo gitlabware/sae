@@ -4,10 +4,12 @@
 </div>
 <!-- END Modal Header -->
 <!-- Modal Body -->
+
 <div class="modal-body">
-    <?php echo $this->Form->create('Ambiente', array('action' => 'guarda_inquilino', 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxforminquilino')); ?>
-    <fieldset>
-        <div class="form-group">
+
+ <?php echo $this->Form->create('Ambiente', array('action' => 'guarda_inquilino', 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxforminquilino')); ?>
+        
+            <div class="row">
             <label class="col-md-2 control-label">Inquilino</label>
             <div class="col-md-8">
                 <?php echo $this->Form->hidden('Inquilino.ambiente_id', array('value' => $idAmbiente)) ?>
@@ -16,10 +18,13 @@
                 <?php echo $this->Form->text('Inquilino.user', array('class' => 'form-control', 'required', 'id' => 'id-nombre-user', 'placeholder' => 'Escriba el nombre del usuario')); ?>
             </div>
             <div class="col-md-2">
+            <div class="form-group">
                 <button class="btn btn-success" type="button" onclick="$('#divforminquilino').toggle(400);">Nuevo</button>
+                </div>
             </div>
-        </div>
-    </fieldset>
+            </div>
+        
+
     <?php echo $this->Form->end(); ?>
     <div class="row">
         <div class="col-md-12" id="div-usuarios">
@@ -29,9 +34,9 @@
     <div class="row" id="divforminquilino" style="display: none;">
         <div class="col-md-12">
             <?php echo $this->Form->create('Ambiente', array('action' => "guarda_nuevo_inquilino", 'class' => 'form-horizontal form-bordered', 'id' => 'ajaxform')); ?>
-            <fieldset>
                 <legend>Nuevo Inquilino</legend>
                 <div class="form-group">
+                  <div class="row">
                     <label class="col-md-4 control-label">Nombre</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->hidden('User.id'); ?>
@@ -40,32 +45,48 @@
                         <?php echo $this->Form->hidden('Inquilino.estado', array('value' => 1)) ?>
                         <?php echo $this->Form->text('User.nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre de Propietario', 'required')); ?>
                     </div>
+                  </div>
+
+                    
                 </div>
                 <div class="form-group">
+                  <div class="row">
+                    
                     <label class="col-md-4 control-label" for="user-settings-email">C.I.:</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->text('User.ci', array('class' => 'form-control', 'placeholder' => 'Ingrese el C.I.', 'required')); ?>
                     </div>
+                  </div>
                 </div>
                 <div class="form-group">
+
+                  <div class="row">
+                    
                     <label class="col-md-4 control-label" for="user-settings-email">Telefonos</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->text('User.telefonos', array('class' => 'form-control', 'placeholder' => 'Ingrese los telefonos')); ?>
                     </div>
+                  </div>
+
                 </div>
                 <div class="form-group">
+                  <div class="row">
+                    
                     <label class="col-md-4 control-label" for="user-settings-email">Direccion</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->text('User.direccion', array('class' => 'form-control', 'placeholder' => 'Ingrese la direccion')); ?>
                     </div>
+                  </div>
                 </div>
                 <div class="form-group">
+                  <div class="row">
+                    
                     <label class="col-md-4 control-label" for="user-settings-email">E-mail</label>
                     <div class="col-md-8">
                         <?php echo $this->Form->text('User.email', array('class' => 'form-control', 'placeholder' => 'Ingrese correo electronico')); ?>
                     </div>
+                  </div>
                 </div>
-            </fieldset>
             <div class="form-group form-actions">
                 <div class="col-xs-12 text-right">
                     <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
@@ -97,12 +118,11 @@
             </div>
         </div>
     </div>
-    <div class="form-group form-actions">
-        <div class="col-xs-12 text-right">
-            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-sm btn-primary" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $idPiso, $idAmbiente)) ?>');">Atras</button>
-        </div>
-    </div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn  btn-default" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'ambiente', $idPiso, $idAmbiente)) ?>',true);">Atras</button>
+
 </div>
 <!-- END Modal Body -->
 <script>
