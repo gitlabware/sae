@@ -36,7 +36,6 @@
                 <td style="width: 15%;">
                   <a class="btn btn-secondary btn-sm" onclick="cargarmodal('<?php echo $this->Html->url(array('action' => 'subconcepto', $sub['Subconcepto']['id'])); ?>');"><i class="fa fa-pencil"></i> </a>  
                   <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'eliminar_subconcepto', $sub['Subconcepto']['id']), array('class' => 'btn btn-danger btn-sm', 'escape' => FALSE, 'confirm' => 'Esta seguro de quitar el subconcepto!!', 'title' => 'Quitar subconcepto')) ?> 
-
                 </td>
               </tr>
               <tr>
