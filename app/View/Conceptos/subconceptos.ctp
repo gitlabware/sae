@@ -15,7 +15,7 @@
     <div class="card">
       <div class="card-body">
        <div class="table-responsive m-t-40">
-        <table id="general-table" class="table table-bordered">
+        <table id="general-tableee" class="table table-bordered">
           <thead>
             <tr>
               <th style="width: 10%;">Codigo</th>
@@ -28,7 +28,7 @@
           <tbody>
             <?php foreach ($subconceptos as $sub): ?>
 
-              <tr class="table-success">
+              <tr class="table-success" id="subconcepto-<?php echo $sub['Subconcepto']['id']; ?>">
                 <td style="width: 10%;"><?php echo $sub['Subconcepto']['codigo'] ?></td>
                 <td style="width: 45%;"><?php echo $sub['Subconcepto']['nombre'] ?></td>
                 <td style="width: 10%;"><?php echo $sub['Subconcepto']['tipo'] ?></td>
@@ -38,14 +38,15 @@
                   <?php echo $this->Html->link('<i class="fa fa-times"></i>', array('action' => 'eliminar_subconcepto', $sub['Subconcepto']['id']), array('class' => 'btn btn-danger btn-sm', 'escape' => FALSE, 'confirm' => 'Esta seguro de quitar el subconcepto!!', 'title' => 'Quitar subconcepto')) ?> 
                 </td>
               </tr>
-              <tr>
-                <td style="padding: 0px;" colspan="5" id="subconcepto-<?php echo $sub['Subconcepto']['id']; ?>">
-
-                </td>
-              </tr>
               <?php $this->append('campo_js') ?>
               <script>
-                $('#subconcepto-<?php echo $sub['Subconcepto']['id']; ?>').load('<?php echo $this->Html->url(array('action' => 'ajax_subconceptos', $sub['Subconcepto']['id'])) ?>');
+                $.ajax({
+                  type: 'GET',
+                  url: '<?php echo $this->Html->url(array('action' => 'ajax_subconceptos', $sub['Subconcepto']['id'])) ?>',
+                  success: function(data){
+                    $('#subconcepto-<?php echo $sub['Subconcepto']['id']; ?>').after(data);
+                  }
+                });
               </script>
               <?php $this->end() ?>
             <?php endforeach; ?>
@@ -57,4 +58,13 @@
   </div>
 </div> 
 </div>
+<?php $this->start('campo_js'); ?>
+<script src="<?php echo $this->request->webroot; ?>template/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script>
 
+$(document).ajaxStop(function() {
+  $('#general-tableee').DataTable();
+});
+</script>
+
+<?php $this->end(); ?>

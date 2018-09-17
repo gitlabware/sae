@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
  * */
 class NomenclaturasController extends AppController {
 
-	public $uses = array('Nomenclatura', 'Concepto', 'Ambiente', 'Piso', 'NomenclaturasAmbiente', 'Subconcepto');
+	public $uses = array('Nomenclatura', 'Concepto', 'Ambiente', 'Piso', 'NomenclaturasAmbiente', 'Subconcepto','Edificio');
 	public $layout = 'monster';
 
 	public function index() {
@@ -24,6 +24,8 @@ class NomenclaturasController extends AppController {
 
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
 
+		$edificio = $this->Edificio->findById($idEdificio);
+
 		$this->Ambiente->unbindModel(array(
 			'belongsTo' => array('Edificio', 'User', 'Categoriaspago', 'Categoriasambiente'),
 		));
@@ -32,7 +34,7 @@ class NomenclaturasController extends AppController {
 		*/
 		$nomenclaturas = $this->Nomenclatura->find('all', array(
 			'recursive' => 2,
-			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.edificio_id' => $idEdificio,'Nomenclatura.gestion' => $edificio['Edificio']['gestion']),
 			'order' => array('Nomenclatura.codico_p_orden ASC'),
 			'fields' => array('Nomenclatura.*', 'Subconcepto.nombre', 'Edificio.nombre'),
 		));
@@ -56,17 +58,18 @@ class NomenclaturasController extends AppController {
 	public function nomenclatura($idNomenclatura = null, $id = null) {
 		$this->layout = 'ajax';
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
+		$edificio = $this->Edificio->findById($idEdificio);
 		if (empty($idNomenclatura)) {
 			$ultimo = $this->Nomenclatura->find('first', array(
 				'recursive' => -1,
-				'conditions' => array('ISNULL(Nomenclatura.deleted)', 'edificio_id' => $idEdificio, 'nomenclatura_id' => 0),
+				'conditions' => array('ISNULL(Nomenclatura.deleted)', 'edificio_id' => $idEdificio, 'nomenclatura_id' => 0,'Nomenclatura.gestion' => $edificio['Edificio']['gestion']),
 				'order' => array('codigo DESC'),
 				'fields' => array('codigo'),
 			));
 		} else {
 			$ultimo = $this->Nomenclatura->find('first', array(
 				'recursive' => -1,
-				'conditions' => array('edificio_id' => $idEdificio, 'nomenclatura_id' => $idNomenclatura),
+				'conditions' => array('edificio_id' => $idEdificio, 'nomenclatura_id' => $idNomenclatura,'Nomenclatura.gestion' => $edificio['Edificio']['gestion']),
 				'order' => array('codigo DESC'),
 				'fields' => array('codigo'),
 			));
@@ -93,7 +96,7 @@ class NomenclaturasController extends AppController {
 		);
 		$subconceptos = $this->Subconcepto->find('list', array(
 			'recursive' => -1,
-			'conditions' => array('ISNULL(Subconcepto.deleted)', 'edificio_id' => $idEdificio),
+			'conditions' => array('ISNULL(Subconcepto.deleted)', 'edificio_id' => $idEdificio,'Subconcepto.gestion' => $edificio['Edificio']['gestion']),
 			'fields' => array('id', 'nombre_completo'),
 		));
 
@@ -105,6 +108,7 @@ class NomenclaturasController extends AppController {
 
 			$cod_padre = $this->request->data['Nomenclatura']['codigo_padre'];
 			$idEdificio = $this->Session->read('Auth.User.edificio_id');
+			$edificio = $this->Edificio->findById($idEdificio);
 			$nom_cod = $this->Nomenclatura->find('first', array(
 				'recursive' => -1,
 				'conditions' => array('ISNULL(Nomenclatura.deleted)', 'Nomenclatura.codigo_completo LIKE' => $cod_padre, 'Nomenclatura.edificio_id' => $idEdificio),
@@ -125,7 +129,7 @@ class NomenclaturasController extends AppController {
 			}
 
 			$this->request->data['Nomenclatura']['codico_p_orden'] = $this->gen_nu_cod_p($this->request->data['Nomenclatura']['codigo_completo']);
-
+			
 			/* debug($this->request->data);
               exit; */
 			if (!empty($this->request->data['Nomenclatura']['subconcepto_id'])) {
@@ -135,6 +139,7 @@ class NomenclaturasController extends AppController {
 			if (!empty($this->request->data['Nomenclatura']['nomenclatura_id'])) {
 				$this->request->data['Nomenclatura']['parent_id'] = $this->request->data['Nomenclatura']['nomenclatura_id'];
 			}
+			$this->request->data['Nomenclatura']['gestion'] = $edificio['Edificio']['gestion'];
 			$this->Nomenclatura->save($this->request->data['Nomenclatura']);
 			$this->Session->setFlash("Se registro correctamente!!", 'msgbueno');
 		} else {

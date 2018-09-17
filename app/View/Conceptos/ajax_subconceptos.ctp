@@ -6,10 +6,10 @@
     $clase_r = '';
   }
   ?>
-<table class="table table-bordered" style="margin-bottom: 0px;">
+
 
       <?php foreach ($subconceptos as $sub): ?>
-        <tr class="<?php echo $clase_r ?>">
+        <tr class="<?php echo $clase_r ?>" id="subconcepto-<?php echo $sub['Subconcepto']['id']; ?>" >
             <td style="width: 10%;"><?php echo $sub['Subconcepto']['codigo'] ?></td>
             <td style="width: 45%;"><?php echo $sub['Subconcepto']['nombre'] ?></td>
             <td style="width: 10%;"><?php echo $sub['Subconcepto']['tipo'] ?></td>
@@ -20,15 +20,16 @@
 
             </td>
         </tr>
-        <tr>
-            <td style="padding: 0px;" colspan="5" id="subconcepto-<?php echo $sub['Subconcepto']['id']; ?>">
+<script>
+                $.ajax({
+                  type: 'GET',
+                  url: '<?php echo $this->Html->url(array('action' => 'ajax_subconceptos', $sub['Subconcepto']['id'],1)) ?>',
+                  success: function(data){
+                    $('#subconcepto-<?php echo $sub['Subconcepto']['id']; ?>').after(data);
+                  }
+                });
+              </script>
 
-            </td>
-        </tr>
-
-        <script>
-          $('#subconcepto-<?php echo $sub['Subconcepto']['id']; ?>').load('<?php echo $this->Html->url(array('action' => 'ajax_subconceptos', $sub['Subconcepto']['id'], 1)) ?>');
-        </script>
       <?php endforeach; ?>
-  </table>
+
 <?php endif; ?>

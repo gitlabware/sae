@@ -604,7 +604,9 @@ class AmbientesController extends AppController {
 		$ambiente = $this->Ambiente->findByid($idAmbiente, null, null, -1);
 		//debug($recibo);exit;
 		$bancos = $this->Banco->find('list', array('fields' => array('id', 'nombre'), 'conditions' => array('Banco.edificio_id' => $this->Session->read('Auth.User.edificio_id'), 'ISNULL(Banco.deleted)')));
-		$this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m', 'bancos'));
+		$idEdificio = $this->Session->read('Auth.User.edificio_id');
+		$edificio = $this->Edificio->findById($idEdificio);
+		$this->set(compact('recibo', 'idAmbiente', 'monto_tmp', 'saldo_tmp', 'ambiente', 'recibo_m', 'bancos','edificio'));
 	}
 
 	public function registra_pagos() {

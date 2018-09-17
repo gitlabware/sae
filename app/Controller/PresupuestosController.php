@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class PresupuestosController extends AppController {
 
-	public $uses = array('Presupuesto', 'Concepto', 'Subconcepto', 'Ingreso', 'Gasto', 'Subgasto', 'Egreso', 'Nomenclatura', 'NomenclaturasAmbiente', 'Cuentasmonto', 'SubcGestione', 'Pago', 'Comprobantescuenta');
+	public $uses = array('Edificio','Presupuesto', 'Concepto', 'Subconcepto', 'Ingreso', 'Gasto', 'Subgasto', 'Egreso', 'Nomenclatura', 'NomenclaturasAmbiente', 'Cuentasmonto', 'SubcGestione', 'Pago', 'Comprobantescuenta');
 	public $layout = 'monster';
 	public $components = array('RequestHandler');
 
@@ -51,18 +51,19 @@ class PresupuestosController extends AppController {
 
 	public function presupuesto($idPresupuesto = null) {
 		$idEdificio = $this->Session->read('Auth.User.edificio_id');
+		$edificio = $this->Edificio->findById($idEdificio);
 		$presupuesto = $this->Presupuesto->findByid($idPresupuesto);
 		$this->Subconcepto->virtualFields = array(
 			'nombre_completo' => "CONCAT(Subconcepto.codigo,' - ',Subconcepto.nombre)",
 		);
 		$subconceptos = $this->Subconcepto->find('list', array(
 			'order' => array('Subconcepto.codigo ASC'),
-			'conditions' => array('ISNULL(Subconcepto.deleted)', 'Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso'),
+			'conditions' => array('ISNULL(Subconcepto.deleted)', 'Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Ingreso','Subconcepto.gestion' => $edificio['Edificio']['gestion']),
 			'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo'),
 		));
 		$subconceptos_e = $this->Subconcepto->find('list', array(
 			'order' => array('Subconcepto.codigo ASC'),
-			'conditions' => array('ISNULL(Subconcepto.deleted)', 'Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso'),
+			'conditions' => array('ISNULL(Subconcepto.deleted)', 'Subconcepto.edificio_id' => $idEdificio, 'Subconcepto.tipo' => 'Egreso','Subconcepto.gestion' => $edificio['Edificio']['gestion']),
 			'fields' => array('Subconcepto.id', 'Subconcepto.nombre_completo'),
 		));
 
