@@ -11,26 +11,35 @@
 <!-- Modal Body -->
 <div class="modal-body">
   <?php echo $this->Form->create('Concepto', array('id' => 'ajaxform')); ?>
-  <div class="form-group">
-    <label class="control-label">Codigo</label>
+  <div class="row">
 
-    <?php echo $this->Form->text('Subconcepto.codigo', array('class' => 'form-control', 'placeholder' => 'Ingrese el codigo del subconcepto', 'required')); ?>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="control-label">Codigo</label>
+        <?php echo $this->Form->text('Subconcepto.codigo', array('class' => 'form-control', 'placeholder' => 'Ej: 2', 'required')); ?>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="form-group">
+        <label class="control-label">Concepto</label>
+        <?php echo $this->Form->hidden('Subconcepto.id'); ?>
+        <?php echo $this->Form->hidden('Subconcepto.edificio_id', array('value' => $this->Session->read('Auth.User.edificio_id'))); ?>
+        <?php echo $this->Form->select('Subconcepto.concepto_id', $conceptos, array('class' => 'form-control', 'empty' => 'Seleccione el concepto')); ?>
+      </div>      
+    </div>
 
   </div>
-  <div class="form-group">
-    <label class="control-label">Nombre</label>
 
-    <?php echo $this->Form->text('Subconcepto.nombre', array('class' => 'form-control', 'placeholder' => 'Ingrese el nombre del subconcepto', 'required')); ?>
-
+  <div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">Nombre</label>
+            <?php echo $this->Form->text('Subconcepto.nombre', array('class' => 'form-control', 'placeholder' => 'Ej: Ingresos Corritentes', 'required')); ?>
+        </div>
+    </div>
   </div>
-  <div class="form-group">
-    <label class="control-label">Concepto</label>
 
-    <?php echo $this->Form->hidden('Subconcepto.id'); ?>
-    <?php echo $this->Form->hidden('Subconcepto.edificio_id', array('value' => $this->Session->read('Auth.User.edificio_id'))); ?>
-    <?php echo $this->Form->select('Subconcepto.concepto_id', $conceptos, array('class' => 'form-control', 'empty' => 'Seleccione el concepto')); ?>
-
-  </div>
   <div class="form-group">
     <label class="control-label">Es parte de</label>
 

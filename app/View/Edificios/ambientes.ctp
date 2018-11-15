@@ -19,39 +19,36 @@
     
 </div>
 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">              
-                <div class="table-responsive m-t-40">
-                    <table id="tabla-json" class="table table-bordered ">
-                        <thead>
-                        <tr>
-                            <th class="busqda">Piso</th>
-                            <th class="busqda">Ambiente</th>
-                            <th class="busqda">Propietario</th>
-                            <th class="busqda">Inquilino</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <th id="piso">Piso</th>
-                            <th id="ambiente">Ambiente</th>
-                            <th id="propietario">Propietario</th>
-                            <th id="inquilinos">Inquilino</th>
-                            <th id="acciones">Accion</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">              
+        <div class="table-responsive m-t-40">
+          <table id="tabla-json" class="table table-bordered ">
+            <thead>
+              <tr>
+                <th class="busqda">Piso</th>
+                <th class="busqda">Ambiente</th>
+                <th class="busqda">Propietario</th>
+                <th class="busqda">Inquilino</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th id="piso">Piso</th>
+                <th id="ambiente">Ambiente</th>
+                <th id="propietario">Propietario</th>
+                <th id="inquilinos">Inquilino</th>
+                <th id="acciones">Accion</th>
+              </tr>
+            </thead>
+            <tbody>
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-
-
-
 
 <script>
   var idEdificio = <?php echo $this->Session->read('Auth.User.edificio_id');?>;
@@ -79,7 +76,6 @@
     window.location = '<?php echo $this->Html->url(array('controller' => 'Ambientes','action' => 'xcobrar'));?>/'+idAmbiente;
   }
 
-
   filtro_c = [
       {type: "text"},
       {type: "text"},
@@ -92,12 +88,10 @@
 <script src="<?php echo $this->request->webroot; ?>template/assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script>
 
-
     $('#tabla-json thead th.busqda').each(function() {
         var title = $('#tabla-articulos thead th').eq($(this).index()).text();
         $(this).html('<input type="text" class="form-control" placeholder="Buscar ' + title + '" />');
     });
-
 
     var table5 = $('#tabla-json').DataTable({
         "aoColumnDefs": [{
@@ -142,7 +136,6 @@
                 .draw();
         });
     });
-
 
 </script>
 <?php $this->end(); ?>

@@ -27,64 +27,55 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
                 <li class="nav-small-cap"></li>
-
-
-
                 <li>
                     <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'datos')); ?>"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Panel de Control</span></a>
                 </li>
                 <li>
-                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-cogs"></i><span class="hide-menu">Configuraciones</span></a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-tags"></i><span class="hide-menu">Mi Edificio</span></a>
                     <ul>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>">Pisos</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'ambientes')); ?>">Ambientes</a></li>
+
                         <li>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'edificio',$this->Session->read('Auth.User.edificio_id'))); ?>',true);">Informacion Basica</a>
+                            <a class="has-arrow" href="#" aria-expanded="false">Configuraciones</a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'edificio',$this->Session->read('Auth.User.edificio_id'))); ?>',true);">Datos Generales</a></li>
+                                <li><a href="<?php echo $this->Html->url(array('controller' => 'Categoriasambientes', 'action' => 'index')); ?>">Cat. Ambientes</a></li>
+                                <li><a href="<?php echo $this->Html->url(array('controller' => 'Categoriaspagos', 'action' => 'index')); ?>">Cat. Pagos</a></li>
+                            </ul>
                         </li>
+
                         <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Categoriasambientes', 'action' => 'index')); ?>">Categoria de Ambiente</a>
+                            <a class="has-arrow" href="#" aria-expanded="false">Usuarios</a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuarios')); ?>">Inquilinos/Propietarios</a></li>
+                                <li><a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuario')); ?>');">Nuevo Inquilino/Propietario</a></li>
+                                <li><a href="<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'lista_usuarios')); ?>" >Administradores</a></li>
+                                <li><a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'usuario3')); ?>');">Nuevo Administrador</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Categoriaspagos', 'action' => 'index')); ?>">Categoria de Pagos</a>
-                        </li>
-                        
+
                     </ul>
                 </li>
+
                 <li>
-                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-tags"></i><span class="hide-menu">Ambientes</span></a>
+                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-list-ol"></i><span class="hide-menu">Contabilidad</span></a>
                     <ul>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos', 'action' => 'index')); ?>">Presupuestos</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Nomenclaturas', 'action' => 'lista_nomenclaturas')); ?>">Nomenclatura Cuentas</a></li>
+                        <!-- <li><a href="javascript:" onclick="cargarmodal('<?php // echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'egresocuenta')); ?>',true);">Registro de Egreso</a></li> -->
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'multi_egreso')); ?>">Nuevo Egreso</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'index')); ?>">Bancos/Cajas</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Comprobantes', 'action' => 'index')); ?>">Comprobantes</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'preavisos')); ?>">Pre-avisos</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Adeudos - Excel</a></li>
                         <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Ambientes', 'action' => 'edificio', $this->Session->read('Auth.User.edificio_id'))); ?>">Ambientes Piso</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Edificios', 'action' => 'ambientes')); ?>">Listado de ambientes</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a  href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-dollar"></i><span class="hide-menu">Pagos</span></a>
-                    <ul>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'excels')); ?>">Adeudos - Excel</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Pagos', 'action' => 'preavisos')); ?>">Pre-avisos</a>
-                        </li>
-                        <li>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'egresocuenta')); ?>',true);">Registro de Egreso</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Egresos', 'action' => 'multi_egreso')); ?>">Registro de Egreso Var.</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Cuentas', 'action' => 'index')); ?>">Cuentas - Bancos/Cajas</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Nomenclaturas', 'action' => 'lista_nomenclaturas')); ?>">Nomenclatura de Cuentas</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Presupuestos', 'action' => 'index')); ?>">Listado de Presupuestos</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Comprobantes', 'action' => 'index')); ?>">Listado de Comprobantes</a>
+                            <a class="has-arrow" href="#" aria-expanded="false">Configuraciones</a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'ambientes')); ?>">Conceptos</a></li>
+                                <!-- <li><a href="javascript:" onclick="cargarmodal('<?php // echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconcepto')); ?>');">Nuevo Sub-Concepto</a></li> -->
+                                <li><a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconceptos')); ?>">Subconceptos</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -121,38 +112,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Usuarios</span></a>
-                    <ul>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuarios')); ?>">Listado Inquilinos/Propietarios</a>
-                        </li>
-                        <li>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Usuarios', 'action' => 'usuario')); ?>');">Nuevo Inquilino/Propietario</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'lista_usuarios')); ?>" >Administradores</a>
-                        </li>
-                        <li>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'usuario3')); ?>');">Nuevo Administrador</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:" class="has-arrow" aria-expanded="false"><i class="fa fa-cube"></i><span class="hide-menu">Conceptos</span></a>
-                    <ul>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'ambientes')); ?>">Asignacion de conceptos</a>
 
-                        </li>
-                        <li>
-                            <a href="javascript:" onclick="cargarmodal('<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconcepto')); ?>');">Nuevo Sub-Concepto</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->Html->url(array('controller' => 'Conceptos', 'action' => 'subconceptos')); ?>">Subconceptos</a>
-                        </li>
-                    </ul>
-                </li>
                 <li>
                     <a href="<?php echo $this->Html->url(array('controller' => 'Recibos', 'action' => 'index')); ?>"><i class="fa fa-file-text-o"></i><span class="hide-menu">Recibos</span></a>
                 </li>

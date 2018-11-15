@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8">
 
-        <title>Mesi Gestion Edificios</title>
+        <title>Messi </title>
 
         <meta name="description" content="Mesi">
         <meta name="author" content="pixelcave">
@@ -37,6 +37,7 @@
 
         <!-- Include a specific file here from css/themes/ folder to alter the default theme of the template -->
 
+        <link href="<?php echo $this->webroot; ?>template/main/css/colors/blue-dark.css" id="theme" rel="stylesheet">
         <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
         <link rel="stylesheet" href="<?php echo $this->webroot; ?>css/themes.css">
 

@@ -277,7 +277,7 @@ class EdificiosController extends AppController {
 	public function ambientes() {
 		$edificioId = $this->Session->read('Auth.User.edificio_id');
 		if ($this->RequestHandler->responseType() == 'json') {
-			$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="gi gi-parents"></i></button>';
+			$inquilinos = '<button class="btn btn-primary" type="button" title="Inquilinos" onclick="inquilinos(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="fa fa-address-book-o"></i></button>';
 			$servicios = '<button class="btn btn-warning" type="button" title="Servicios" onclick="servicios(' . "',Ambiente.id,'" . ',' . "',Ambiente.piso_id,'" . ')"><i class="fa fa-bars"></i></button>';
 			$editar = '<button class="btn btn-secondary" type="button" title="Editar" onclick="editar(' . "',Ambiente.piso_id,'" . ',' . "',Ambiente.id,'" . ')"><i class="fa fa-pencil"></i></button>';
 			$pagos = '<button class="btn btn-success" type="button" title="Pagos" onclick="ir_pagos(' . "',Ambiente.id,'" . ')"><i class="fa fa-dollar"></i></button>';
